@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ncd_screening_mobile/config/config.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
-import 'package:ncd_screening_mobile/feature/home/bloc/websocket/websocket_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
@@ -19,7 +17,6 @@ import 'package:ncd_screening_mobile/shared/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await loadEnv();
   await initLocator();
 
   runApp(
@@ -35,7 +32,6 @@ Future<void> main() async {
           create: (context) => locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
         ),
         BlocProvider<AccessibilityCubit>(create: (context) => locator<AccessibilityCubit>()),
-        BlocProvider<WebsocketBloc>(create: (context) => locator<WebsocketBloc>()),
         BlocProvider<LanguageBloc>(create: (context) => locator<LanguageBloc>()),
       ],
       child: const NcdScreeningApp(),

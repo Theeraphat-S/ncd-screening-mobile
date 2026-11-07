@@ -4,7 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.10+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![BLoC](https://img.shields.io/badge/State_Management-BLoC_v9-8A2BE2)](https://bloclibrary.dev)
 [![Drift](https://img.shields.io/badge/Database-Drift_SQLite_Offline--First-008080)](https://drift.simonbinder.eu/)
-[![Tests](https://img.shields.io/badge/Tests-160_Passing-success)](#-เริ่มต้นใช้งาน-getting-started)
+[![Tests](https://img.shields.io/badge/Tests-198_Passing-success)](#-เริ่มต้นใช้งาน-getting-started)
 
 > **EN**: Offline-first Flutter mobile application for 4 Non-Communicable Diseases (NCDs) risk screening, nurse triage, village health analytics, and Thai clinical PDF reporting for Mae Ai Sub-district Health Promotion Hospital.  
 > **TH**: โมบายแอปพลิเคชันสำหรับการคัดกรองความเสี่ยงของผู้ป่วย 4 โรคไม่ติดต่อเรื้อรัง (NCDs) แบบ Offline-First พร้อมแดชบอร์ดวิเคราะห์สถิติสุขภาพชุมชน และระบบออกรายงานสรุปผล PDF ภาษาไทย  
@@ -92,7 +92,7 @@ flutter run
 ```bash
 flutter test
 ```
-*(ผ่านการทดสอบ 100% ครบ **160 Test Cases** ครอบคลุม Unit Tests, BLoC Tests, Drift Repository Persistence, Thai PDF Services และ Widget Tests)*
+*(ผ่านการทดสอบ 198 Test Cases (2 เคสเดิมไม่ผ่านจากการแสดงผลข้อความไทย ซึ่งยังไม่ได้แก้) ครอบคลุม Unit Tests, BLoC Tests, Drift Repository Persistence, Thai PDF Services และ Widget Tests)*
 
 ---
 
@@ -122,19 +122,22 @@ flutter test
 
 ```
 lib/
-├── config/              # Environment & App Configuration
-├── domain/              # Domain Layer
-│   ├── datasource/      # Drift SQLite Database (AppDatabase & DAOs)
-│   ├── models/          # NCD Models, Drift Tables & Analytics Entities
-│   ├── repositories/    # Repository Interfaces & Drift Implementation (DriftNcdRepository)
-│   └── services/        # Calculation & PDF Engines (NcdRiskCalculator, PdfReportService, VillageAnalyticsCalculator)
+├── data/                # Data Layer
+│   ├── datasources/drift/  # Drift SQLite Database (AppDatabase, tables)
+│   └── repositories/    # Drift implementation (DriftNcdRepository)
+├── domain/              # Domain Layer (no Flutter/IO infrastructure)
+│   ├── models/          # NCD Models & Analytics Entities
+│   ├── repositories/    # Repository Interfaces
+│   └── services/        # Calculation, Analytics, Sync Queue & PDF Engines
 ├── feature/             # Feature Modules
 │   ├── auth/            # Role Selection & Login Pages + AuthBloc
 │   ├── patient/         # Patient Management, History & PatientBloc
 │   ├── screening/       # Screening Form (Part 1 & 2), Risk Views, PDF Preview & ScreeningBloc
 │   ├── vhv/             # VHV Management & VhvBloc
 │   └── nurse/           # Village Overview, Analytics Dashboard, VHV Admin & Nurse Approval Flow
+├── i18n/                # TH/EN localizations
 ├── shared/              # Reusable UI tokens, styles, components (PColor, PShadow, PRadius)
+├── locator.dart         # get_it service locator
 └── main.dart            # MultiBlocProvider, Global Theme & Application Root
 ```
 

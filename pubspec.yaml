@@ -37,22 +37,12 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.2
   cupertino_icons: ^1.0.8
-  path_provider: ^2.1.5
   get_it: ^8.0.3
   flutter_bloc: ^9.1.1
   equatable: ^2.0.7
   intl: ^0.20.2
-  web_socket_channel: ^3.0.1
-  flutter_dotenv: ^6.0.0
-  auto_route: ^10.1.0+1
-  flutter_tailwind_colors: ^0.0.3
   toastification: ^3.0.2
-  dio: ^5.8.0+1
   dropdown_button2: ^2.3.9
-  skeletonizer: ^2.1.2
-  flutter_hooks: ^0.21.2
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +51,6 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.23.1
   build_runner: ^2.4.14
-  auto_route_generator: ^10.0.1
   flutter_launcher_icons: ^0.14.3
 
 flutter_launcher_icons:
@@ -77,5 +66,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
     - assets/icons/

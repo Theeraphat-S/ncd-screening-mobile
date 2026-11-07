@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
@@ -25,7 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // Pre-fill demo defaults for convenience during review
+    // Pre-fill demo defaults for development only (never in release builds)
+    if (!kDebugMode) return;
     if (widget.role == UserRole.patient) {
       _idController.text = '1234567890123';
     } else if (widget.role == UserRole.vhv) {

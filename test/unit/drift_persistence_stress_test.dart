@@ -6,6 +6,7 @@ import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/locator.dart';
+import '../support/test_citizen_ids.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,10 @@ void main() {
     late DriftNcdRepository repository;
 
     setUp(() async {
-      db = AppDatabase(NativeDatabase.memory());
+      db = AppDatabase(
+        citizenIds: testCitizenIds(),
+        executor: NativeDatabase.memory(),
+      );
       repository = DriftNcdRepository(db);
     });
 
@@ -553,7 +557,10 @@ void main() {
 
           try {
             // Session 1: Open DB, seed baseline, insert a custom patient and screening
-            final firstDb = AppDatabase(NativeDatabase(dbFile));
+            final firstDb = AppDatabase(
+              citizenIds: testCitizenIds(),
+              executor: NativeDatabase(dbFile),
+            );
             final firstRepo = DriftNcdRepository(firstDb);
 
             final initialVillages = await firstRepo.getVillages();
@@ -599,7 +606,10 @@ void main() {
             await firstDb.close();
 
             // Session 2: Reopen DB file from disk
-            final secondDb = AppDatabase(NativeDatabase(dbFile));
+            final secondDb = AppDatabase(
+              citizenIds: testCitizenIds(),
+              executor: NativeDatabase(dbFile),
+            );
             final secondRepo = DriftNcdRepository(secondDb);
 
             // Verify seeded data AND our newly created patient + screening persist intact
@@ -634,7 +644,10 @@ void main() {
         () async {
           await locator.reset();
           locator.registerLazySingleton<AppDatabase>(
-            () => AppDatabase(NativeDatabase.memory()),
+            () => AppDatabase(
+              citizenIds: testCitizenIds(),
+              executor: NativeDatabase.memory(),
+            ),
           );
           locator.registerLazySingleton<NcdRepositoryInterface>(
             () => DriftNcdRepository(locator<AppDatabase>()),

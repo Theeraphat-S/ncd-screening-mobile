@@ -19,19 +19,20 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     String? password,
   }) async {
     final trimmedId = identifier.trim();
+    final citizenIndex = await db.citizenIds.indexOf(trimmedId);
     if (role == UserRole.patient) {
       final query = db.select(db.patientsTable)
-        ..where((t) => t.patientCitizenId.equals(trimmedId));
+        ..where((t) => t.patientCitizenIdIndex.equals(citizenIndex));
       final row = await query.getSingleOrNull();
       if (row == null) {
         throw Exception('รหัสบัตรประชาชนไม่ถูกต้อง');
       }
-      return _mapPatient(row);
+      return await _mapPatient(row);
     } else if (role == UserRole.vhv) {
       final query = db.select(db.vhvsTable)
         ..where(
           (t) =>
-              t.vhvCitizenId.equals(trimmedId) |
+              t.vhvCitizenIdIndex.equals(citizenIndex) |
               t.vhvMobile.equals(trimmedId) |
               t.vhvId.equals(trimmedId),
         );
@@ -42,7 +43,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       if (!await _passwordMatches(password, row.vhvPasswordHash)) {
         throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }
-      return _mapVhv(row);
+      return await _mapVhv(row);
     } else if (role == UserRole.nurse) {
       final query = db.select(db.nursesTable)
         ..where(
@@ -110,7 +111,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       query = query..where((t) => t.villageId.equals(villageId));
     }
     final rows = await query.get();
-    var list = rows.map(_mapPatient).toList();
+    var list = await Future.wait(rows.map(_mapPatient));
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
       final q = searchQuery.trim().toLowerCase();
       list = list.where((p) {
@@ -128,15 +129,16 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     final query = db.select(db.patientsTable)
       ..where((t) => t.patientId.equals(patientId));
     final row = await query.getSingleOrNull();
-    return row != null ? _mapPatient(row) : null;
+    return row != null ? await _mapPatient(row) : null;
   }
 
   @override
   Future<Patient?> getPatientByCitizenId(String citizenId) async {
+    final index = await db.citizenIds.indexOf(citizenId);
     final query = db.select(db.patientsTable)
-      ..where((t) => t.patientCitizenId.equals(citizenId.trim()));
+      ..where((t) => t.patientCitizenIdIndex.equals(index));
     final row = await query.getSingleOrNull();
-    return row != null ? _mapPatient(row) : null;
+    return row != null ? await _mapPatient(row) : null;
   }
 
   @override
@@ -147,12 +149,15 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       newId = 'P${(count + 1).toString().padLeft(3, '0')}';
     }
     final created = patient.copyWith(patientId: newId);
+    final cid = await db.citizenIds.encrypt(created.patientCitizenId);
+    final cidIndex = await db.citizenIds.indexOf(created.patientCitizenId);
     await db
         .into(db.patientsTable)
         .insert(
           PatientsTableCompanion(
             patientId: Value(created.patientId),
-            patientCitizenId: Value(created.patientCitizenId),
+            patientCitizenId: Value(cid),
+            patientCitizenIdIndex: Value(cidIndex),
             patientTitle: Value(created.patientTitle),
             patientFname: Value(created.patientFname),
             patientLname: Value(created.patientLname),
@@ -169,12 +174,15 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   @override
   Future<Patient> updatePatient(Patient patient) async {
+    final cid = await db.citizenIds.encrypt(patient.patientCitizenId);
+    final cidIndex = await db.citizenIds.indexOf(patient.patientCitizenId);
     final rowsAffected =
         await (db.update(
           db.patientsTable,
         )..where((t) => t.patientId.equals(patient.patientId))).write(
           PatientsTableCompanion(
-            patientCitizenId: Value(patient.patientCitizenId),
+            patientCitizenId: Value(cid),
+            patientCitizenIdIndex: Value(cidIndex),
             patientTitle: Value(patient.patientTitle),
             patientFname: Value(patient.patientFname),
             patientLname: Value(patient.patientLname),
@@ -227,14 +235,14 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       query = query..where((t) => t.villageId.equals(villageId));
     }
     final rows = await query.get();
-    return rows.map(_mapVhv).toList();
+    return Future.wait(rows.map(_mapVhv));
   }
 
   @override
   Future<VHV?> getVhvById(String vhvId) async {
     final query = db.select(db.vhvsTable)..where((t) => t.vhvId.equals(vhvId));
     final row = await query.getSingleOrNull();
-    return row != null ? _mapVhv(row) : null;
+    return row != null ? await _mapVhv(row) : null;
   }
 
   @override
@@ -249,12 +257,15 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     }
     final created = vhv.copyWith(vhvId: newId);
     final passwordHash = await _hasher.hash(created.vhvPassword);
+    final cid = await db.citizenIds.encrypt(created.vhvCitizenId);
+    final cidIndex = await db.citizenIds.indexOf(created.vhvCitizenId);
     await db
         .into(db.vhvsTable)
         .insert(
           VhvsTableCompanion(
             vhvId: Value(created.vhvId),
-            vhvCitizenId: Value(created.vhvCitizenId),
+            vhvCitizenId: Value(cid),
+            vhvCitizenIdIndex: Value(cidIndex),
             vhvTitle: Value(created.vhvTitle),
             vhvFname: Value(created.vhvFname),
             vhvLname: Value(created.vhvLname),
@@ -273,6 +284,8 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   @override
   Future<VHV> updateVhv(VHV vhv) async {
+    final cid = await db.citizenIds.encrypt(vhv.vhvCitizenId);
+    final cidIndex = await db.citizenIds.indexOf(vhv.vhvCitizenId);
     // Empty password means "keep the current one".
     final passwordHash = vhv.vhvPassword.isNotEmpty
         ? Value(await _hasher.hash(vhv.vhvPassword))
@@ -282,7 +295,8 @@ class DriftNcdRepository implements NcdRepositoryInterface {
           db.vhvsTable,
         )..where((t) => t.vhvId.equals(vhv.vhvId))).write(
           VhvsTableCompanion(
-            vhvCitizenId: Value(vhv.vhvCitizenId),
+            vhvCitizenId: Value(cid),
+            vhvCitizenIdIndex: Value(cidIndex),
             vhvTitle: Value(vhv.vhvTitle),
             vhvFname: Value(vhv.vhvFname),
             vhvLname: Value(vhv.vhvLname),
@@ -537,10 +551,10 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     );
   }
 
-  Patient _mapPatient(PatientsTableData row) {
+  Future<Patient> _mapPatient(PatientsTableData row) async {
     return Patient(
       patientId: row.patientId,
-      patientCitizenId: row.patientCitizenId,
+      patientCitizenId: await db.citizenIds.decrypt(row.patientCitizenId),
       patientTitle: row.patientTitle,
       patientFname: row.patientFname,
       patientLname: row.patientLname,
@@ -553,10 +567,10 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     );
   }
 
-  VHV _mapVhv(VhvsTableData row) {
+  Future<VHV> _mapVhv(VhvsTableData row) async {
     return VHV(
       vhvId: row.vhvId,
-      vhvCitizenId: row.vhvCitizenId,
+      vhvCitizenId: await db.citizenIds.decrypt(row.vhvCitizenId),
       vhvTitle: row.vhvTitle,
       vhvFname: row.vhvFname,
       vhvLname: row.vhvLname,

@@ -4,13 +4,17 @@ import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import '../support/test_citizen_ids.dart';
 
 void main() {
   late AppDatabase db;
   late DriftNcdRepository repository;
 
   setUp(() async {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(
+      citizenIds: testCitizenIds(),
+      executor: NativeDatabase.memory(),
+    );
     repository = DriftNcdRepository(db);
   });
 

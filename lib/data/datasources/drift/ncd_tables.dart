@@ -43,7 +43,12 @@ class VhvsTable extends Table {
   String get tableName => 'vhvs';
 
   TextColumn get vhvId => text()();
+
+  /// AES-GCM ciphertext of the 13-digit citizen ID (see CitizenIdCipher).
   TextColumn get vhvCitizenId => text()();
+
+  /// HMAC index for exact lookups; never the plain ID.
+  TextColumn get vhvCitizenIdIndex => text().withDefault(const Constant(''))();
   TextColumn get vhvTitle => text()();
   TextColumn get vhvFname => text()();
   TextColumn get vhvLname => text()();
@@ -65,7 +70,13 @@ class PatientsTable extends Table {
   String get tableName => 'patients';
 
   TextColumn get patientId => text()();
+
+  /// AES-GCM ciphertext of the 13-digit citizen ID (see CitizenIdCipher).
   TextColumn get patientCitizenId => text()();
+
+  /// HMAC index for exact lookups; never the plain ID.
+  TextColumn get patientCitizenIdIndex =>
+      text().withDefault(const Constant(''))();
   TextColumn get patientTitle => text()();
   TextColumn get patientFname => text()();
   TextColumn get patientLname => text()();

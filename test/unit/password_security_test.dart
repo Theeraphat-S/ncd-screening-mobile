@@ -4,6 +4,7 @@ import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
+import '../support/test_citizen_ids.dart';
 
 VHV _newVhv({String password = 'secret123', String mobile = '0855555555'}) =>
     VHV(
@@ -69,7 +70,10 @@ void main() {
     late DriftNcdRepository repository;
 
     setUp(() {
-      db = AppDatabase(NativeDatabase.memory());
+      db = AppDatabase(
+        citizenIds: testCitizenIds(),
+        executor: NativeDatabase.memory(),
+      );
       repository = DriftNcdRepository(db);
     });
 
@@ -184,12 +188,13 @@ void main() {
     });
   });
 
-  group('AppDatabase - v3 to v4 migration', () {
+  group('AppDatabase - v3 to v5 migration', () {
     test(
       'legacy plaintext passwords are hashed and the plaintext columns are dropped',
       () async {
         final db = AppDatabase(
-          NativeDatabase.memory(
+          citizenIds: testCitizenIds(),
+          executor: NativeDatabase.memory(
             setup: (raw) {
               raw.execute('''
           CREATE TABLE villages (
@@ -246,6 +251,25 @@ void main() {
                 "VALUES ('VHV900', '9999999999999', 'นาย', 'ก', 'ข', '0900000000', 'v@x.th', "
                 "'legacypass', 0, 'ชาย', 'addr', 'V001')",
               );
+              raw.execute('''
+          CREATE TABLE patients (
+            patient_id TEXT NOT NULL PRIMARY KEY,
+            patient_citizen_id TEXT NOT NULL,
+            patient_title TEXT NOT NULL,
+            patient_fname TEXT NOT NULL,
+            patient_lname TEXT NOT NULL,
+            patient_gender TEXT NOT NULL,
+            patient_birth_date INTEGER NOT NULL,
+            patient_address TEXT NOT NULL,
+            patient_mobile TEXT NOT NULL DEFAULT '',
+            patient_img TEXT,
+            village_id TEXT NOT NULL
+          )''');
+              raw.execute(
+                'INSERT INTO patients (patient_id, patient_citizen_id, patient_title, '
+                'patient_fname, patient_lname, patient_gender, patient_birth_date, patient_address, village_id) '
+                "VALUES ('P900', '1500200000010', 'นาย', 'ก', 'ข', 'ชาย', 0, 'addr', 'V001')",
+              );
               raw.execute('PRAGMA user_version = 3');
             },
           ),
@@ -265,6 +289,23 @@ void main() {
           password: 'nursepass',
         );
         expect(nurseOk, isTrue);
+
+        final patient = await repository.login(
+          role: UserRole.patient,
+          identifier: '1500200000010',
+        );
+        expect((patient as Patient).patientId, equals('P900'));
+
+        final rawPatient = await db
+            .customSelect(
+              'SELECT patient_citizen_id AS cid, patient_citizen_id_index AS idx FROM patients',
+            )
+            .getSingle();
+        expect(
+          rawPatient.read<String>('cid'),
+          isNot(contains('1500200000010')),
+        );
+        expect(rawPatient.read<String>('idx'), isNotEmpty);
 
         final columns = await db
             .customSelect('PRAGMA table_info(vhvs)')

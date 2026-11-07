@@ -4,7 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.10+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![BLoC](https://img.shields.io/badge/State_Management-BLoC_v9-8A2BE2)](https://bloclibrary.dev)
 [![Drift](https://img.shields.io/badge/Database-Drift_SQLite_Offline--First-008080)](https://drift.simonbinder.eu/)
-[![Tests](https://img.shields.io/badge/Tests-212_Passing-success)](#-เริ่มต้นใช้งาน-getting-started)
+[![Tests](https://img.shields.io/badge/Tests-224_Passing-success)](#-เริ่มต้นใช้งาน-getting-started)
 
 > **EN**: Offline-first Flutter mobile application for 4 Non-Communicable Diseases (NCDs) risk screening, nurse triage, village health analytics, and Thai clinical PDF reporting for Mae Ai Sub-district Health Promotion Hospital.  
 > **TH**: โมบายแอปพลิเคชันสำหรับการคัดกรองความเสี่ยงของผู้ป่วย 4 โรคไม่ติดต่อเรื้อรัง (NCDs) แบบ Offline-First พร้อมแดชบอร์ดวิเคราะห์สถิติสุขภาพชุมชน และระบบออกรายงานสรุปผล PDF ภาษาไทย  
@@ -92,7 +92,7 @@ flutter run
 ```bash
 flutter test
 ```
-*(ผ่านการทดสอบ 212 Test Cases ครอบคลุม Unit Tests, BLoC Tests, Drift Repository Persistence, Thai PDF Services และ Widget Tests)*
+*(ผ่านการทดสอบ 224 Test Cases ครอบคลุม Unit Tests, BLoC Tests, Drift Repository Persistence, Thai PDF Services และ Widget Tests)*
 
 ---
 
@@ -111,6 +111,8 @@ flutter test
 ### 4. ลงนามแอปรุ่น Release (ไม่บังคับสำหรับการทดสอบ)
 สร้างไฟล์ `android/key.properties` (ไม่ถูก commit) ที่มีคีย์ `storeFile`, `storePassword`, `keyAlias`, `keyPassword`
 หากไม่มีไฟล์นี้ build release จะใช้คีย์ debug ซึ่ง **ห้ามนำไปแจกจ่าย**
+
+> **หมายเหตุความปลอดภัย:** เลขบัตรประชาชนถูกเข้ารหัสด้วยคีย์ที่เก็บใน keystore ของเครื่อง หากคีย์หาย ข้อมูลจะกู้คืนไม่ได้ ก่อนใช้งานจริงต้องมีขั้นตอนการกู้คืนที่บันทึกไว้ (ดู ADR 0011)
 
 ---
 
@@ -159,4 +161,5 @@ lib/
 - [ADR 0005: Nurse Village Health Analytics Engine](docs/adr/0005-village-health-analytics-engine.md)
 - [ADR 0006: Nordic Clinical Precision UI System Redesign](docs/adr/0006-nordic-clinical-ui-redesign.md)
 - [ADR 0010: Credential Hashing, Durable Sync Outbox & Bundled Thai Fonts](docs/adr/0010-credential-hashing-durable-sync-and-bundled-fonts.md)
+- [ADR 0011: Citizen ID Column Encryption & Backup Exclusion](docs/adr/0011-citizen-id-column-encryption.md)
 

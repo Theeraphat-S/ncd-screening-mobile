@@ -7,6 +7,7 @@ import 'package:ncd_screening_mobile/data/services/drift_sync_queue_service.dart
 import 'package:ncd_screening_mobile/domain/models/sync_queue_item.dart';
 import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
 import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
+import '../../support/test_citizen_ids.dart';
 
 class _AcceptingTransport implements SyncTransport {
   final List<String> sent = [];
@@ -82,7 +83,10 @@ void main() {
   late AppDatabase db;
 
   setUp(() {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(
+      citizenIds: testCitizenIds(),
+      executor: NativeDatabase.memory(),
+    );
   });
 
   tearDown(() async {

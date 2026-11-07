@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/ncd_tables.dart';
+import 'package:ncd_screening_mobile/data/security/citizen_id_cipher.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 
@@ -19,15 +20,28 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
+  /// Citizen-ID protection. Must be the same keys on every open of the file.
+  final CitizenIdCipher citizenIds;
+
+  /// Set during migration; the file is compacted after the transaction ends.
+  bool _vacuumAfterOpen = false;
+
+  AppDatabase({required this.citizenIds, QueryExecutor? executor})
+    : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     beforeOpen: (details) async {
       await _seedInitialDataIfEmpty();
+      if (_vacuumAfterOpen) {
+        // Rewrites the file so pages freed by migrations no longer hold
+        // plaintext. This is not a secure erase on flash storage.
+        _vacuumAfterOpen = false;
+        await customStatement('VACUUM');
+      }
     },
     onCreate: (Migrator m) async {
       await m.createAll();
@@ -51,8 +65,69 @@ class AppDatabase extends _$AppDatabase {
           await m.createTable(syncQueueTable);
         }
       }
+      if (from >= 3 && from < 5) {
+        await _migrateCitizenIds(m);
+      }
     },
   );
+
+  /// v4 -> v5: encrypt citizen IDs and add their lookup index.
+  Future<void> _migrateCitizenIds(Migrator m) async {
+    Future<bool> hasColumn(String table, String column) async {
+      final rows = await customSelect('PRAGMA table_info($table)').get();
+      return rows.any((r) => r.read<String>('name') == column);
+    }
+
+    if (!await hasColumn('patients', 'patient_citizen_id_index')) {
+      await m.addColumn(patientsTable, patientsTable.patientCitizenIdIndex);
+    }
+    if (!await hasColumn('vhvs', 'vhv_citizen_id_index')) {
+      await m.addColumn(vhvsTable, vhvsTable.vhvCitizenIdIndex);
+    }
+
+    final patientRows = await customSelect(
+      'SELECT patient_id AS id, patient_citizen_id AS cid FROM patients',
+    ).get();
+    for (final row in patientRows) {
+      final plain = row.read<String>('cid');
+      final encoded = await _encodeCitizenId(plain);
+      await customUpdate(
+        'UPDATE patients SET patient_citizen_id = ?, patient_citizen_id_index = ? WHERE patient_id = ?',
+        variables: [
+          Variable.withString(encoded.cipher),
+          Variable.withString(encoded.index),
+          Variable.withString(row.read<String>('id')),
+        ],
+        updates: {patientsTable},
+      );
+    }
+
+    final vhvRows = await customSelect(
+      'SELECT vhv_id AS id, vhv_citizen_id AS cid FROM vhvs',
+    ).get();
+    for (final row in vhvRows) {
+      final plain = row.read<String>('cid');
+      final encoded = await _encodeCitizenId(plain);
+      await customUpdate(
+        'UPDATE vhvs SET vhv_citizen_id = ?, vhv_citizen_id_index = ? WHERE vhv_id = ?',
+        variables: [
+          Variable.withString(encoded.cipher),
+          Variable.withString(encoded.index),
+          Variable.withString(row.read<String>('id')),
+        ],
+        updates: {vhvsTable},
+      );
+    }
+
+    _vacuumAfterOpen = true;
+  }
+
+  Future<({String cipher, String index})> _encodeCitizenId(String plain) async {
+    return (
+      cipher: await citizenIds.encrypt(plain),
+      index: await citizenIds.indexOf(plain),
+    );
+  }
 
   /// v3 -> v4: replace plaintext password columns with salted hashes and
   /// drop the plaintext columns. Existing values are hashed, never kept as-is.
@@ -105,6 +180,22 @@ class AppDatabase extends _$AppDatabase {
 
     // Demo accounts share one hash; computed once to keep first launch fast.
     final demoPasswordHash = await const PasswordHasher().hash('password123');
+
+    const demoCitizenIds = [
+      '1111111111111',
+      '0647700893123',
+      '0812345678123',
+      '1234567890123',
+      '2222222222222',
+      '3250184930571',
+      '1459900234889',
+      '2304055671004',
+      '3102299845662',
+    ];
+    final encodedIds = <String, ({String cipher, String index})>{};
+    for (final id in demoCitizenIds) {
+      encodedIds[id] = await _encodeCitizenId(id);
+    }
 
     await transaction(() async {
       // 1. Seed Villages
@@ -181,7 +272,8 @@ class AppDatabase extends _$AppDatabase {
         b.insertAll(vhvsTable, [
           VhvsTableCompanion(
             vhvId: const Value('VHV001'),
-            vhvCitizenId: const Value('1111111111111'),
+            vhvCitizenId: Value(encodedIds['1111111111111']!.cipher),
+            vhvCitizenIdIndex: Value(encodedIds['1111111111111']!.index),
             vhvTitle: const Value('นาย'),
             vhvFname: const Value('อสม'),
             vhvLname: const Value('ตัวอย่าง1'),
@@ -197,7 +289,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           VhvsTableCompanion(
             vhvId: const Value('VHV002'),
-            vhvCitizenId: const Value('0647700893123'),
+            vhvCitizenId: Value(encodedIds['0647700893123']!.cipher),
+            vhvCitizenIdIndex: Value(encodedIds['0647700893123']!.index),
             vhvTitle: const Value('นาง'),
             vhvFname: const Value('สมใจ'),
             vhvLname: const Value('จิตอาสา'),
@@ -211,7 +304,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           VhvsTableCompanion(
             vhvId: const Value('VHV003'),
-            vhvCitizenId: const Value('0812345678123'),
+            vhvCitizenId: Value(encodedIds['0812345678123']!.cipher),
+            vhvCitizenIdIndex: Value(encodedIds['0812345678123']!.index),
             vhvTitle: const Value('นาย'),
             vhvFname: const Value('มานะ'),
             vhvLname: const Value('ช่วยหมู่บ้าน'),
@@ -231,7 +325,8 @@ class AppDatabase extends _$AppDatabase {
         b.insertAll(patientsTable, [
           PatientsTableCompanion(
             patientId: const Value('P001'),
-            patientCitizenId: const Value('1234567890123'),
+            patientCitizenId: Value(encodedIds['1234567890123']!.cipher),
+            patientCitizenIdIndex: Value(encodedIds['1234567890123']!.index),
             patientTitle: const Value('นาย'),
             patientFname: const Value('สมชาย'),
             patientLname: const Value('ใจดี'),
@@ -245,7 +340,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P002'),
-            patientCitizenId: const Value('2222222222222'),
+            patientCitizenId: Value(encodedIds['2222222222222']!.cipher),
+            patientCitizenIdIndex: Value(encodedIds['2222222222222']!.index),
             patientTitle: const Value('นาย'),
             patientFname: const Value('ว่าน'),
             patientLname: const Value('ตัวอย่าง'),
@@ -259,7 +355,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P003'),
-            patientCitizenId: const Value('3250184930571'),
+            patientCitizenId: Value(encodedIds['3250184930571']!.cipher),
+            patientCitizenIdIndex: Value(encodedIds['3250184930571']!.index),
             patientTitle: const Value('นาง'),
             patientFname: const Value('สมศรี'),
             patientLname: const Value('มีสุข'),
@@ -273,7 +370,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P004'),
-            patientCitizenId: const Value('1459900234889'),
+            patientCitizenId: Value(encodedIds['1459900234889']!.cipher),
+            patientCitizenIdIndex: Value(encodedIds['1459900234889']!.index),
             patientTitle: const Value('นาย'),
             patientFname: const Value('มั่นคง'),
             patientLname: const Value('ทรหด'),
@@ -287,7 +385,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P005'),
-            patientCitizenId: const Value('2304055671004'),
+            patientCitizenId: Value(encodedIds['2304055671004']!.cipher),
+            patientCitizenIdIndex: Value(encodedIds['2304055671004']!.index),
             patientTitle: const Value('นาง'),
             patientFname: const Value('วิไล'),
             patientLname: const Value('งามตา'),
@@ -301,7 +400,8 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P006'),
-            patientCitizenId: const Value('3102299845662'),
+            patientCitizenId: Value(encodedIds['3102299845662']!.cipher),
+            patientCitizenIdIndex: Value(encodedIds['3102299845662']!.index),
             patientTitle: const Value('นาย'),
             patientFname: const Value('ศักดิ์ดา'),
             patientLname: const Value('กล้าหาญ'),

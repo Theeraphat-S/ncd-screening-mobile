@@ -5,6 +5,7 @@ import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:pdf/widgets.dart' as pw;
+import '../support/memory_key_store.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -112,7 +113,7 @@ void main() {
 
     test('PdfReportServiceInterface is registered in GetIt locator', () async {
       locator.reset();
-      await initLocator();
+      await initLocator(keyStore: MemoryKeyStore());
       expect(locator.isRegistered<PdfReportServiceInterface>(), isTrue);
       final resolved = locator<PdfReportServiceInterface>();
       expect(resolved, isNotNull);

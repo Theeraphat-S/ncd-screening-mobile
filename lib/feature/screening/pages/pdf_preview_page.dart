@@ -53,8 +53,7 @@ class PdfPreviewPage extends StatelessWidget {
             ? locator<PdfReportServiceInterface>()
             : PdfReportService());
 
-    final fileName =
-        'NCD_Report_${patient.patientCitizenId}_${screening.screenId}.pdf';
+    final fileName = 'NCD_Report_${screening.screenId}.pdf';
 
     return Scaffold(
       backgroundColor: PColor.backgroundColor,

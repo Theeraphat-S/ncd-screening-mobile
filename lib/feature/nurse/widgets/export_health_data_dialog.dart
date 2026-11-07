@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/health_data_export_service.dart';
@@ -33,6 +36,22 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
     super.dispose();
   }
 
+  /// Writes the CSV to the app cache and opens the system share sheet.
+  /// The file is left in the cache directory for the OS to purge.
+  Future<void> _shareClinicalCsv(String csv) async {
+    final dir = await getTemporaryDirectory();
+    final file = File(
+      '${dir.path}/ncd_export_${DateTime.now().millisecondsSinceEpoch}.csv',
+    );
+    await file.writeAsString(csv, flush: true);
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path, mimeType: 'text/csv')],
+        subject: 'NCD clinical export',
+      ),
+    );
+  }
+
   Future<void> _exportData() async {
     if (_selectedMode == ExportPrivacyMode.clinicalFull) {
       final verified = await locator<NcdRepositoryInterface>()
@@ -59,14 +78,22 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
       mode: _selectedMode,
     );
 
-    await Clipboard.setData(ClipboardData(text: csvData));
+    final isClinical = _selectedMode == ExportPrivacyMode.clinicalFull;
+    if (isClinical) {
+      // Identifiable data stays out of the clipboard, which any app can read.
+      await _shareClinicalCsv(csvData);
+    } else {
+      await Clipboard.setData(ClipboardData(text: csvData));
+    }
 
     if (!mounted) return;
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'ส่งออกข้อมูล ${screenings.length} รายการเรียบร้อยแล้ว (คัดลอกลง Clipboard แล้ว)',
+          isClinical
+              ? 'ส่งออกข้อมูล ${screenings.length} รายการเรียบร้อยแล้ว (เปิดหน้าต่างแชร์ไฟล์)'
+              : 'ส่งออกข้อมูล ${screenings.length} รายการเรียบร้อยแล้ว (คัดลอกลง Clipboard แล้ว)',
         ),
         backgroundColor: PColor.riskLow,
         behavior: SnackBarBehavior.floating,
@@ -186,14 +213,18 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          icon: const Icon(
-            Icons.copy_rounded,
+          icon: Icon(
+            _selectedMode == ExportPrivacyMode.clinicalFull
+                ? Icons.ios_share_rounded
+                : Icons.copy_rounded,
             color: PColor.neutralColor,
             size: 16,
           ),
-          label: const Text(
-            'ส่งออกและคัดลอก CSV',
-            style: TextStyle(
+          label: Text(
+            _selectedMode == ExportPrivacyMode.clinicalFull
+                ? 'ส่งออกไฟล์ CSV'
+                : 'ส่งออกและคัดลอก CSV',
+            style: const TextStyle(
               color: PColor.neutralColor,
               fontWeight: FontWeight.bold,
             ),

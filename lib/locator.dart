@@ -3,6 +3,7 @@ import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
+import 'package:ncd_screening_mobile/data/security/citizen_id_cipher.dart';
 import 'package:ncd_screening_mobile/data/services/drift_sync_queue_service.dart';
 import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
@@ -18,9 +19,17 @@ import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 
 final locator = GetIt.instance;
 
-Future<void> initLocator() async {
+Future<void> initLocator({SecretKeyStore? keyStore}) async {
+  // Keys are loaded before the database opens. If the keystore is unavailable,
+  // startup fails instead of silently storing citizen IDs unprotected.
+  final citizenIds = await CitizenIdCipher.loadOrCreate(
+    keyStore ?? const SecureKeyStore(),
+  );
+
   // Register AppDatabase
-  locator.registerLazySingleton<AppDatabase>(AppDatabase.new);
+  locator.registerLazySingleton<AppDatabase>(
+    () => AppDatabase(citizenIds: citizenIds),
+  );
 
   // Register NCD Repository (Offline-first Drift SQLite database persistence)
   locator.registerLazySingleton<NcdRepositoryInterface>(

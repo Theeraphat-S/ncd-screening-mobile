@@ -1214,6 +1214,19 @@ class $VhvsTableTable extends VhvsTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _vhvCitizenIdIndexMeta = const VerificationMeta(
+    'vhvCitizenIdIndex',
+  );
+  @override
+  late final GeneratedColumn<String> vhvCitizenIdIndex =
+      GeneratedColumn<String>(
+        'vhv_citizen_id_index',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   static const VerificationMeta _vhvTitleMeta = const VerificationMeta(
     'vhvTitle',
   );
@@ -1338,6 +1351,7 @@ class $VhvsTableTable extends VhvsTable
   List<GeneratedColumn> get $columns => [
     vhvId,
     vhvCitizenId,
+    vhvCitizenIdIndex,
     vhvTitle,
     vhvFname,
     vhvLname,
@@ -1380,6 +1394,15 @@ class $VhvsTableTable extends VhvsTable
       );
     } else if (isInserting) {
       context.missing(_vhvCitizenIdMeta);
+    }
+    if (data.containsKey('vhv_citizen_id_index')) {
+      context.handle(
+        _vhvCitizenIdIndexMeta,
+        vhvCitizenIdIndex.isAcceptableOrUnknown(
+          data['vhv_citizen_id_index']!,
+          _vhvCitizenIdIndexMeta,
+        ),
+      );
     }
     if (data.containsKey('vhv_title')) {
       context.handle(
@@ -1488,6 +1511,10 @@ class $VhvsTableTable extends VhvsTable
         DriftSqlType.string,
         data['${effectivePrefix}vhv_citizen_id'],
       )!,
+      vhvCitizenIdIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_citizen_id_index'],
+      )!,
       vhvTitle: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}vhv_title'],
@@ -1543,7 +1570,12 @@ class $VhvsTableTable extends VhvsTable
 
 class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   final String vhvId;
+
+  /// AES-GCM ciphertext of the 13-digit citizen ID (see CitizenIdCipher).
   final String vhvCitizenId;
+
+  /// HMAC index for exact lookups; never the plain ID.
+  final String vhvCitizenIdIndex;
   final String vhvTitle;
   final String vhvFname;
   final String vhvLname;
@@ -1558,6 +1590,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   const VhvsTableData({
     required this.vhvId,
     required this.vhvCitizenId,
+    required this.vhvCitizenIdIndex,
     required this.vhvTitle,
     required this.vhvFname,
     required this.vhvLname,
@@ -1575,6 +1608,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     final map = <String, Expression>{};
     map['vhv_id'] = Variable<String>(vhvId);
     map['vhv_citizen_id'] = Variable<String>(vhvCitizenId);
+    map['vhv_citizen_id_index'] = Variable<String>(vhvCitizenIdIndex);
     map['vhv_title'] = Variable<String>(vhvTitle);
     map['vhv_fname'] = Variable<String>(vhvFname);
     map['vhv_lname'] = Variable<String>(vhvLname);
@@ -1595,6 +1629,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     return VhvsTableCompanion(
       vhvId: Value(vhvId),
       vhvCitizenId: Value(vhvCitizenId),
+      vhvCitizenIdIndex: Value(vhvCitizenIdIndex),
       vhvTitle: Value(vhvTitle),
       vhvFname: Value(vhvFname),
       vhvLname: Value(vhvLname),
@@ -1619,6 +1654,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     return VhvsTableData(
       vhvId: serializer.fromJson<String>(json['vhvId']),
       vhvCitizenId: serializer.fromJson<String>(json['vhvCitizenId']),
+      vhvCitizenIdIndex: serializer.fromJson<String>(json['vhvCitizenIdIndex']),
       vhvTitle: serializer.fromJson<String>(json['vhvTitle']),
       vhvFname: serializer.fromJson<String>(json['vhvFname']),
       vhvLname: serializer.fromJson<String>(json['vhvLname']),
@@ -1638,6 +1674,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     return <String, dynamic>{
       'vhvId': serializer.toJson<String>(vhvId),
       'vhvCitizenId': serializer.toJson<String>(vhvCitizenId),
+      'vhvCitizenIdIndex': serializer.toJson<String>(vhvCitizenIdIndex),
       'vhvTitle': serializer.toJson<String>(vhvTitle),
       'vhvFname': serializer.toJson<String>(vhvFname),
       'vhvLname': serializer.toJson<String>(vhvLname),
@@ -1655,6 +1692,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   VhvsTableData copyWith({
     String? vhvId,
     String? vhvCitizenId,
+    String? vhvCitizenIdIndex,
     String? vhvTitle,
     String? vhvFname,
     String? vhvLname,
@@ -1669,6 +1707,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   }) => VhvsTableData(
     vhvId: vhvId ?? this.vhvId,
     vhvCitizenId: vhvCitizenId ?? this.vhvCitizenId,
+    vhvCitizenIdIndex: vhvCitizenIdIndex ?? this.vhvCitizenIdIndex,
     vhvTitle: vhvTitle ?? this.vhvTitle,
     vhvFname: vhvFname ?? this.vhvFname,
     vhvLname: vhvLname ?? this.vhvLname,
@@ -1687,6 +1726,9 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
       vhvCitizenId: data.vhvCitizenId.present
           ? data.vhvCitizenId.value
           : this.vhvCitizenId,
+      vhvCitizenIdIndex: data.vhvCitizenIdIndex.present
+          ? data.vhvCitizenIdIndex.value
+          : this.vhvCitizenIdIndex,
       vhvTitle: data.vhvTitle.present ? data.vhvTitle.value : this.vhvTitle,
       vhvFname: data.vhvFname.present ? data.vhvFname.value : this.vhvFname,
       vhvLname: data.vhvLname.present ? data.vhvLname.value : this.vhvLname,
@@ -1712,6 +1754,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     return (StringBuffer('VhvsTableData(')
           ..write('vhvId: $vhvId, ')
           ..write('vhvCitizenId: $vhvCitizenId, ')
+          ..write('vhvCitizenIdIndex: $vhvCitizenIdIndex, ')
           ..write('vhvTitle: $vhvTitle, ')
           ..write('vhvFname: $vhvFname, ')
           ..write('vhvLname: $vhvLname, ')
@@ -1731,6 +1774,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   int get hashCode => Object.hash(
     vhvId,
     vhvCitizenId,
+    vhvCitizenIdIndex,
     vhvTitle,
     vhvFname,
     vhvLname,
@@ -1749,6 +1793,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
       (other is VhvsTableData &&
           other.vhvId == this.vhvId &&
           other.vhvCitizenId == this.vhvCitizenId &&
+          other.vhvCitizenIdIndex == this.vhvCitizenIdIndex &&
           other.vhvTitle == this.vhvTitle &&
           other.vhvFname == this.vhvFname &&
           other.vhvLname == this.vhvLname &&
@@ -1765,6 +1810,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
 class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
   final Value<String> vhvId;
   final Value<String> vhvCitizenId;
+  final Value<String> vhvCitizenIdIndex;
   final Value<String> vhvTitle;
   final Value<String> vhvFname;
   final Value<String> vhvLname;
@@ -1780,6 +1826,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
   const VhvsTableCompanion({
     this.vhvId = const Value.absent(),
     this.vhvCitizenId = const Value.absent(),
+    this.vhvCitizenIdIndex = const Value.absent(),
     this.vhvTitle = const Value.absent(),
     this.vhvFname = const Value.absent(),
     this.vhvLname = const Value.absent(),
@@ -1796,6 +1843,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
   VhvsTableCompanion.insert({
     required String vhvId,
     required String vhvCitizenId,
+    this.vhvCitizenIdIndex = const Value.absent(),
     required String vhvTitle,
     required String vhvFname,
     required String vhvLname,
@@ -1822,6 +1870,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
   static Insertable<VhvsTableData> custom({
     Expression<String>? vhvId,
     Expression<String>? vhvCitizenId,
+    Expression<String>? vhvCitizenIdIndex,
     Expression<String>? vhvTitle,
     Expression<String>? vhvFname,
     Expression<String>? vhvLname,
@@ -1838,6 +1887,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     return RawValuesInsertable({
       if (vhvId != null) 'vhv_id': vhvId,
       if (vhvCitizenId != null) 'vhv_citizen_id': vhvCitizenId,
+      if (vhvCitizenIdIndex != null) 'vhv_citizen_id_index': vhvCitizenIdIndex,
       if (vhvTitle != null) 'vhv_title': vhvTitle,
       if (vhvFname != null) 'vhv_fname': vhvFname,
       if (vhvLname != null) 'vhv_lname': vhvLname,
@@ -1856,6 +1906,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
   VhvsTableCompanion copyWith({
     Value<String>? vhvId,
     Value<String>? vhvCitizenId,
+    Value<String>? vhvCitizenIdIndex,
     Value<String>? vhvTitle,
     Value<String>? vhvFname,
     Value<String>? vhvLname,
@@ -1872,6 +1923,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     return VhvsTableCompanion(
       vhvId: vhvId ?? this.vhvId,
       vhvCitizenId: vhvCitizenId ?? this.vhvCitizenId,
+      vhvCitizenIdIndex: vhvCitizenIdIndex ?? this.vhvCitizenIdIndex,
       vhvTitle: vhvTitle ?? this.vhvTitle,
       vhvFname: vhvFname ?? this.vhvFname,
       vhvLname: vhvLname ?? this.vhvLname,
@@ -1895,6 +1947,9 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     }
     if (vhvCitizenId.present) {
       map['vhv_citizen_id'] = Variable<String>(vhvCitizenId.value);
+    }
+    if (vhvCitizenIdIndex.present) {
+      map['vhv_citizen_id_index'] = Variable<String>(vhvCitizenIdIndex.value);
     }
     if (vhvTitle.present) {
       map['vhv_title'] = Variable<String>(vhvTitle.value);
@@ -1940,6 +1995,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     return (StringBuffer('VhvsTableCompanion(')
           ..write('vhvId: $vhvId, ')
           ..write('vhvCitizenId: $vhvCitizenId, ')
+          ..write('vhvCitizenIdIndex: $vhvCitizenIdIndex, ')
           ..write('vhvTitle: $vhvTitle, ')
           ..write('vhvFname: $vhvFname, ')
           ..write('vhvLname: $vhvLname, ')
@@ -1985,6 +2041,18 @@ class $PatientsTableTable extends PatientsTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _patientCitizenIdIndexMeta =
+      const VerificationMeta('patientCitizenIdIndex');
+  @override
+  late final GeneratedColumn<String> patientCitizenIdIndex =
+      GeneratedColumn<String>(
+        'patient_citizen_id_index',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   static const VerificationMeta _patientTitleMeta = const VerificationMeta(
     'patientTitle',
   );
@@ -2090,6 +2158,7 @@ class $PatientsTableTable extends PatientsTable
   List<GeneratedColumn> get $columns => [
     patientId,
     patientCitizenId,
+    patientCitizenIdIndex,
     patientTitle,
     patientFname,
     patientLname,
@@ -2130,6 +2199,15 @@ class $PatientsTableTable extends PatientsTable
       );
     } else if (isInserting) {
       context.missing(_patientCitizenIdMeta);
+    }
+    if (data.containsKey('patient_citizen_id_index')) {
+      context.handle(
+        _patientCitizenIdIndexMeta,
+        patientCitizenIdIndex.isAcceptableOrUnknown(
+          data['patient_citizen_id_index']!,
+          _patientCitizenIdIndexMeta,
+        ),
+      );
     }
     if (data.containsKey('patient_title')) {
       context.handle(
@@ -2237,6 +2315,10 @@ class $PatientsTableTable extends PatientsTable
         DriftSqlType.string,
         data['${effectivePrefix}patient_citizen_id'],
       )!,
+      patientCitizenIdIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_citizen_id_index'],
+      )!,
       patientTitle: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}patient_title'],
@@ -2285,7 +2367,12 @@ class $PatientsTableTable extends PatientsTable
 class PatientsTableData extends DataClass
     implements Insertable<PatientsTableData> {
   final String patientId;
+
+  /// AES-GCM ciphertext of the 13-digit citizen ID (see CitizenIdCipher).
   final String patientCitizenId;
+
+  /// HMAC index for exact lookups; never the plain ID.
+  final String patientCitizenIdIndex;
   final String patientTitle;
   final String patientFname;
   final String patientLname;
@@ -2298,6 +2385,7 @@ class PatientsTableData extends DataClass
   const PatientsTableData({
     required this.patientId,
     required this.patientCitizenId,
+    required this.patientCitizenIdIndex,
     required this.patientTitle,
     required this.patientFname,
     required this.patientLname,
@@ -2313,6 +2401,7 @@ class PatientsTableData extends DataClass
     final map = <String, Expression>{};
     map['patient_id'] = Variable<String>(patientId);
     map['patient_citizen_id'] = Variable<String>(patientCitizenId);
+    map['patient_citizen_id_index'] = Variable<String>(patientCitizenIdIndex);
     map['patient_title'] = Variable<String>(patientTitle);
     map['patient_fname'] = Variable<String>(patientFname);
     map['patient_lname'] = Variable<String>(patientLname);
@@ -2331,6 +2420,7 @@ class PatientsTableData extends DataClass
     return PatientsTableCompanion(
       patientId: Value(patientId),
       patientCitizenId: Value(patientCitizenId),
+      patientCitizenIdIndex: Value(patientCitizenIdIndex),
       patientTitle: Value(patientTitle),
       patientFname: Value(patientFname),
       patientLname: Value(patientLname),
@@ -2353,6 +2443,9 @@ class PatientsTableData extends DataClass
     return PatientsTableData(
       patientId: serializer.fromJson<String>(json['patientId']),
       patientCitizenId: serializer.fromJson<String>(json['patientCitizenId']),
+      patientCitizenIdIndex: serializer.fromJson<String>(
+        json['patientCitizenIdIndex'],
+      ),
       patientTitle: serializer.fromJson<String>(json['patientTitle']),
       patientFname: serializer.fromJson<String>(json['patientFname']),
       patientLname: serializer.fromJson<String>(json['patientLname']),
@@ -2370,6 +2463,7 @@ class PatientsTableData extends DataClass
     return <String, dynamic>{
       'patientId': serializer.toJson<String>(patientId),
       'patientCitizenId': serializer.toJson<String>(patientCitizenId),
+      'patientCitizenIdIndex': serializer.toJson<String>(patientCitizenIdIndex),
       'patientTitle': serializer.toJson<String>(patientTitle),
       'patientFname': serializer.toJson<String>(patientFname),
       'patientLname': serializer.toJson<String>(patientLname),
@@ -2385,6 +2479,7 @@ class PatientsTableData extends DataClass
   PatientsTableData copyWith({
     String? patientId,
     String? patientCitizenId,
+    String? patientCitizenIdIndex,
     String? patientTitle,
     String? patientFname,
     String? patientLname,
@@ -2397,6 +2492,7 @@ class PatientsTableData extends DataClass
   }) => PatientsTableData(
     patientId: patientId ?? this.patientId,
     patientCitizenId: patientCitizenId ?? this.patientCitizenId,
+    patientCitizenIdIndex: patientCitizenIdIndex ?? this.patientCitizenIdIndex,
     patientTitle: patientTitle ?? this.patientTitle,
     patientFname: patientFname ?? this.patientFname,
     patientLname: patientLname ?? this.patientLname,
@@ -2413,6 +2509,9 @@ class PatientsTableData extends DataClass
       patientCitizenId: data.patientCitizenId.present
           ? data.patientCitizenId.value
           : this.patientCitizenId,
+      patientCitizenIdIndex: data.patientCitizenIdIndex.present
+          ? data.patientCitizenIdIndex.value
+          : this.patientCitizenIdIndex,
       patientTitle: data.patientTitle.present
           ? data.patientTitle.value
           : this.patientTitle,
@@ -2446,6 +2545,7 @@ class PatientsTableData extends DataClass
     return (StringBuffer('PatientsTableData(')
           ..write('patientId: $patientId, ')
           ..write('patientCitizenId: $patientCitizenId, ')
+          ..write('patientCitizenIdIndex: $patientCitizenIdIndex, ')
           ..write('patientTitle: $patientTitle, ')
           ..write('patientFname: $patientFname, ')
           ..write('patientLname: $patientLname, ')
@@ -2463,6 +2563,7 @@ class PatientsTableData extends DataClass
   int get hashCode => Object.hash(
     patientId,
     patientCitizenId,
+    patientCitizenIdIndex,
     patientTitle,
     patientFname,
     patientLname,
@@ -2479,6 +2580,7 @@ class PatientsTableData extends DataClass
       (other is PatientsTableData &&
           other.patientId == this.patientId &&
           other.patientCitizenId == this.patientCitizenId &&
+          other.patientCitizenIdIndex == this.patientCitizenIdIndex &&
           other.patientTitle == this.patientTitle &&
           other.patientFname == this.patientFname &&
           other.patientLname == this.patientLname &&
@@ -2493,6 +2595,7 @@ class PatientsTableData extends DataClass
 class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
   final Value<String> patientId;
   final Value<String> patientCitizenId;
+  final Value<String> patientCitizenIdIndex;
   final Value<String> patientTitle;
   final Value<String> patientFname;
   final Value<String> patientLname;
@@ -2506,6 +2609,7 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
   const PatientsTableCompanion({
     this.patientId = const Value.absent(),
     this.patientCitizenId = const Value.absent(),
+    this.patientCitizenIdIndex = const Value.absent(),
     this.patientTitle = const Value.absent(),
     this.patientFname = const Value.absent(),
     this.patientLname = const Value.absent(),
@@ -2520,6 +2624,7 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
   PatientsTableCompanion.insert({
     required String patientId,
     required String patientCitizenId,
+    this.patientCitizenIdIndex = const Value.absent(),
     required String patientTitle,
     required String patientFname,
     required String patientLname,
@@ -2542,6 +2647,7 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
   static Insertable<PatientsTableData> custom({
     Expression<String>? patientId,
     Expression<String>? patientCitizenId,
+    Expression<String>? patientCitizenIdIndex,
     Expression<String>? patientTitle,
     Expression<String>? patientFname,
     Expression<String>? patientLname,
@@ -2556,6 +2662,8 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
     return RawValuesInsertable({
       if (patientId != null) 'patient_id': patientId,
       if (patientCitizenId != null) 'patient_citizen_id': patientCitizenId,
+      if (patientCitizenIdIndex != null)
+        'patient_citizen_id_index': patientCitizenIdIndex,
       if (patientTitle != null) 'patient_title': patientTitle,
       if (patientFname != null) 'patient_fname': patientFname,
       if (patientLname != null) 'patient_lname': patientLname,
@@ -2572,6 +2680,7 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
   PatientsTableCompanion copyWith({
     Value<String>? patientId,
     Value<String>? patientCitizenId,
+    Value<String>? patientCitizenIdIndex,
     Value<String>? patientTitle,
     Value<String>? patientFname,
     Value<String>? patientLname,
@@ -2586,6 +2695,8 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
     return PatientsTableCompanion(
       patientId: patientId ?? this.patientId,
       patientCitizenId: patientCitizenId ?? this.patientCitizenId,
+      patientCitizenIdIndex:
+          patientCitizenIdIndex ?? this.patientCitizenIdIndex,
       patientTitle: patientTitle ?? this.patientTitle,
       patientFname: patientFname ?? this.patientFname,
       patientLname: patientLname ?? this.patientLname,
@@ -2607,6 +2718,11 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
     }
     if (patientCitizenId.present) {
       map['patient_citizen_id'] = Variable<String>(patientCitizenId.value);
+    }
+    if (patientCitizenIdIndex.present) {
+      map['patient_citizen_id_index'] = Variable<String>(
+        patientCitizenIdIndex.value,
+      );
     }
     if (patientTitle.present) {
       map['patient_title'] = Variable<String>(patientTitle.value);
@@ -2646,6 +2762,7 @@ class PatientsTableCompanion extends UpdateCompanion<PatientsTableData> {
     return (StringBuffer('PatientsTableCompanion(')
           ..write('patientId: $patientId, ')
           ..write('patientCitizenId: $patientCitizenId, ')
+          ..write('patientCitizenIdIndex: $patientCitizenIdIndex, ')
           ..write('patientTitle: $patientTitle, ')
           ..write('patientFname: $patientFname, ')
           ..write('patientLname: $patientLname, ')
@@ -5801,6 +5918,7 @@ typedef $$VhvsTableTableCreateCompanionBuilder =
     VhvsTableCompanion Function({
       required String vhvId,
       required String vhvCitizenId,
+      Value<String> vhvCitizenIdIndex,
       required String vhvTitle,
       required String vhvFname,
       required String vhvLname,
@@ -5818,6 +5936,7 @@ typedef $$VhvsTableTableUpdateCompanionBuilder =
     VhvsTableCompanion Function({
       Value<String> vhvId,
       Value<String> vhvCitizenId,
+      Value<String> vhvCitizenIdIndex,
       Value<String> vhvTitle,
       Value<String> vhvFname,
       Value<String> vhvLname,
@@ -5848,6 +5967,11 @@ class $$VhvsTableTableFilterComposer
 
   ColumnFilters<String> get vhvCitizenId => $composableBuilder(
     column: $table.vhvCitizenId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get vhvCitizenIdIndex => $composableBuilder(
+    column: $table.vhvCitizenIdIndex,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5926,6 +6050,11 @@ class $$VhvsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get vhvCitizenIdIndex => $composableBuilder(
+    column: $table.vhvCitizenIdIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get vhvTitle => $composableBuilder(
     column: $table.vhvTitle,
     builder: (column) => ColumnOrderings(column),
@@ -5996,6 +6125,11 @@ class $$VhvsTableTableAnnotationComposer
 
   GeneratedColumn<String> get vhvCitizenId => $composableBuilder(
     column: $table.vhvCitizenId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get vhvCitizenIdIndex => $composableBuilder(
+    column: $table.vhvCitizenIdIndex,
     builder: (column) => column,
   );
 
@@ -6072,6 +6206,7 @@ class $$VhvsTableTableTableManager
               ({
                 Value<String> vhvId = const Value.absent(),
                 Value<String> vhvCitizenId = const Value.absent(),
+                Value<String> vhvCitizenIdIndex = const Value.absent(),
                 Value<String> vhvTitle = const Value.absent(),
                 Value<String> vhvFname = const Value.absent(),
                 Value<String> vhvLname = const Value.absent(),
@@ -6087,6 +6222,7 @@ class $$VhvsTableTableTableManager
               }) => VhvsTableCompanion(
                 vhvId: vhvId,
                 vhvCitizenId: vhvCitizenId,
+                vhvCitizenIdIndex: vhvCitizenIdIndex,
                 vhvTitle: vhvTitle,
                 vhvFname: vhvFname,
                 vhvLname: vhvLname,
@@ -6104,6 +6240,7 @@ class $$VhvsTableTableTableManager
               ({
                 required String vhvId,
                 required String vhvCitizenId,
+                Value<String> vhvCitizenIdIndex = const Value.absent(),
                 required String vhvTitle,
                 required String vhvFname,
                 required String vhvLname,
@@ -6119,6 +6256,7 @@ class $$VhvsTableTableTableManager
               }) => VhvsTableCompanion.insert(
                 vhvId: vhvId,
                 vhvCitizenId: vhvCitizenId,
+                vhvCitizenIdIndex: vhvCitizenIdIndex,
                 vhvTitle: vhvTitle,
                 vhvFname: vhvFname,
                 vhvLname: vhvLname,
@@ -6161,6 +6299,7 @@ typedef $$PatientsTableTableCreateCompanionBuilder =
     PatientsTableCompanion Function({
       required String patientId,
       required String patientCitizenId,
+      Value<String> patientCitizenIdIndex,
       required String patientTitle,
       required String patientFname,
       required String patientLname,
@@ -6176,6 +6315,7 @@ typedef $$PatientsTableTableUpdateCompanionBuilder =
     PatientsTableCompanion Function({
       Value<String> patientId,
       Value<String> patientCitizenId,
+      Value<String> patientCitizenIdIndex,
       Value<String> patientTitle,
       Value<String> patientFname,
       Value<String> patientLname,
@@ -6204,6 +6344,11 @@ class $$PatientsTableTableFilterComposer
 
   ColumnFilters<String> get patientCitizenId => $composableBuilder(
     column: $table.patientCitizenId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get patientCitizenIdIndex => $composableBuilder(
+    column: $table.patientCitizenIdIndex,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6272,6 +6417,11 @@ class $$PatientsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get patientCitizenIdIndex => $composableBuilder(
+    column: $table.patientCitizenIdIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get patientTitle => $composableBuilder(
     column: $table.patientTitle,
     builder: (column) => ColumnOrderings(column),
@@ -6332,6 +6482,11 @@ class $$PatientsTableTableAnnotationComposer
 
   GeneratedColumn<String> get patientCitizenId => $composableBuilder(
     column: $table.patientCitizenId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get patientCitizenIdIndex => $composableBuilder(
+    column: $table.patientCitizenIdIndex,
     builder: (column) => column,
   );
 
@@ -6416,6 +6571,7 @@ class $$PatientsTableTableTableManager
               ({
                 Value<String> patientId = const Value.absent(),
                 Value<String> patientCitizenId = const Value.absent(),
+                Value<String> patientCitizenIdIndex = const Value.absent(),
                 Value<String> patientTitle = const Value.absent(),
                 Value<String> patientFname = const Value.absent(),
                 Value<String> patientLname = const Value.absent(),
@@ -6429,6 +6585,7 @@ class $$PatientsTableTableTableManager
               }) => PatientsTableCompanion(
                 patientId: patientId,
                 patientCitizenId: patientCitizenId,
+                patientCitizenIdIndex: patientCitizenIdIndex,
                 patientTitle: patientTitle,
                 patientFname: patientFname,
                 patientLname: patientLname,
@@ -6444,6 +6601,7 @@ class $$PatientsTableTableTableManager
               ({
                 required String patientId,
                 required String patientCitizenId,
+                Value<String> patientCitizenIdIndex = const Value.absent(),
                 required String patientTitle,
                 required String patientFname,
                 required String patientLname,
@@ -6457,6 +6615,7 @@ class $$PatientsTableTableTableManager
               }) => PatientsTableCompanion.insert(
                 patientId: patientId,
                 patientCitizenId: patientCitizenId,
+                patientCitizenIdIndex: patientCitizenIdIndex,
                 patientTitle: patientTitle,
                 patientFname: patientFname,
                 patientLname: patientLname,

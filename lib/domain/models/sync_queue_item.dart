@@ -1,12 +1,7 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
-enum SyncStatus {
-  pending,
-  syncing,
-  synced,
-  failed,
-}
+enum SyncStatus { pending, syncing, synced, failed }
 
 class SyncQueueItem extends Equatable {
   final String id;
@@ -87,14 +82,14 @@ class SyncQueueItem extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        entityType,
-        entityId,
-        action,
-        payload,
-        createdAt,
-        retryCount,
-        status,
-        errorMessage,
-      ];
+    id,
+    entityType,
+    entityId,
+    action,
+    payload,
+    createdAt,
+    retryCount,
+    status,
+    errorMessage,
+  ];
 }

@@ -75,7 +75,13 @@ class SyncBadgeState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [pendingCount, isSyncing, isOnline, lastSyncedAt, message];
+  List<Object?> get props => [
+    pendingCount,
+    isSyncing,
+    isOnline,
+    lastSyncedAt,
+    message,
+  ];
 }
 
 // --- BLoC ---
@@ -84,8 +90,8 @@ class SyncBadgeBloc extends Bloc<SyncBadgeEvent, SyncBadgeState> {
   StreamSubscription<int>? _subscription;
 
   SyncBadgeBloc({required SyncQueueServiceInterface syncService})
-      : _syncService = syncService,
-        super(const SyncBadgeState()) {
+    : _syncService = syncService,
+      super(const SyncBadgeState()) {
     on<SyncBadgeStarted>(_onStarted);
     on<SyncBadgeRefreshRequested>(_onRefresh);
     on<SyncBadgeManualSyncRequested>(_onManualSync);
@@ -97,17 +103,26 @@ class SyncBadgeBloc extends Bloc<SyncBadgeEvent, SyncBadgeState> {
     });
   }
 
-  Future<void> _onStarted(SyncBadgeStarted event, Emitter<SyncBadgeState> emit) async {
+  Future<void> _onStarted(
+    SyncBadgeStarted event,
+    Emitter<SyncBadgeState> emit,
+  ) async {
     final count = await _syncService.getPendingCount();
     emit(state.copyWith(pendingCount: count));
   }
 
-  Future<void> _onRefresh(SyncBadgeRefreshRequested event, Emitter<SyncBadgeState> emit) async {
+  Future<void> _onRefresh(
+    SyncBadgeRefreshRequested event,
+    Emitter<SyncBadgeState> emit,
+  ) async {
     final count = await _syncService.getPendingCount();
     emit(state.copyWith(pendingCount: count));
   }
 
-  Future<void> _onItemEnqueued(SyncBadgeItemEnqueued event, Emitter<SyncBadgeState> emit) async {
+  Future<void> _onItemEnqueued(
+    SyncBadgeItemEnqueued event,
+    Emitter<SyncBadgeState> emit,
+  ) async {
     await _syncService.enqueue(event.item);
     final count = await _syncService.getPendingCount();
     emit(state.copyWith(pendingCount: count));
@@ -118,26 +133,41 @@ class SyncBadgeBloc extends Bloc<SyncBadgeEvent, SyncBadgeState> {
     }
   }
 
-  Future<void> _onManualSync(SyncBadgeManualSyncRequested event, Emitter<SyncBadgeState> emit) async {
+  Future<void> _onManualSync(
+    SyncBadgeManualSyncRequested event,
+    Emitter<SyncBadgeState> emit,
+  ) async {
     if (state.isSyncing) return;
     if (!state.isOnline) {
       emit(state.copyWith(message: 'ไม่มีสัญญาณอินเทอร์เน็ต'));
       return;
     }
 
-    emit(state.copyWith(isSyncing: true, message: 'กำลังซิงค์ข้อมูลกับเซิร์ฟเวอร์...'));
+    emit(
+      state.copyWith(
+        isSyncing: true,
+        message: 'กำลังซิงค์ข้อมูลกับเซิร์ฟเวอร์...',
+      ),
+    );
     final success = await _syncService.processQueue();
     final count = await _syncService.getPendingCount();
 
-    emit(state.copyWith(
-      isSyncing: false,
-      pendingCount: count,
-      lastSyncedAt: success ? DateTime.now() : state.lastSyncedAt,
-      message: success ? 'ซิงค์ข้อมูลเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาดในการซิงค์ข้อมูล',
-    ));
+    emit(
+      state.copyWith(
+        isSyncing: false,
+        pendingCount: count,
+        lastSyncedAt: success ? DateTime.now() : state.lastSyncedAt,
+        message: success
+            ? 'ซิงค์ข้อมูลเรียบร้อยแล้ว'
+            : 'ซิงค์ไม่สำเร็จ ข้อมูล $count รายการยังค้างอยู่ในเครื่อง',
+      ),
+    );
   }
 
-  void _onNetworkChanged(SyncBadgeNetworkChanged event, Emitter<SyncBadgeState> emit) {
+  void _onNetworkChanged(
+    SyncBadgeNetworkChanged event,
+    Emitter<SyncBadgeState> emit,
+  ) {
     emit(state.copyWith(isOnline: event.isOnline));
     if (event.isOnline && state.pendingCount > 0) {
       add(const SyncBadgeManualSyncRequested());

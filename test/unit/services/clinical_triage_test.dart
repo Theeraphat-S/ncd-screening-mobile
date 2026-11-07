@@ -17,56 +17,59 @@ void main() {
       villageId: 'V01',
     );
 
-    test('classifies hypertensive crisis (SBP >= 180) as Emergency with requiresImmediateVisit', () {
-      final crisisScreening = Screening(
-        screenId: 'SCR_CRISIS',
-        patientId: 'P001',
-        vhvId: 'VHV001',
-        screeningDate: DateTime.now(),
-        ageAtScreening: 66,
-        weight: 70,
-        height: 165,
-        bmi: 25.7,
-        waistCm: 88,
-        sbp: 185.0,
-        dbp: 115.0,
-        pulse: 90,
-        bloodSugar: 110,
-        reviewStatus: ReviewStatus.pending,
-        createdAt: DateTime.now(),
-        histories: const [],
-        results: const [
-          ScreeningResult(
-            resultId: 'R1',
-            screeningId: 'SCR_CRISIS',
-            diseaseName: 'โรคความดันโลหิตสูง',
-            diseaseCode: 'HT',
-            score: 10,
-            riskLevel: RiskLevel.high,
-            adviceText: 'วิกฤต',
-          ),
-        ],
-      );
+    test(
+      'classifies hypertensive crisis (SBP >= 180) as Emergency with requiresImmediateVisit',
+      () {
+        final crisisScreening = Screening(
+          screenId: 'SCR_CRISIS',
+          patientId: 'P001',
+          vhvId: 'VHV001',
+          screeningDate: DateTime.now(),
+          ageAtScreening: 66,
+          weight: 70,
+          height: 165,
+          bmi: 25.7,
+          waistCm: 88,
+          sbp: 185.0,
+          dbp: 115.0,
+          pulse: 90,
+          bloodSugar: 110,
+          reviewStatus: ReviewStatus.pending,
+          createdAt: DateTime.now(),
+          histories: const [],
+          results: const [
+            ScreeningResult(
+              resultId: 'R1',
+              screeningId: 'SCR_CRISIS',
+              diseaseName: 'โรคความดันโลหิตสูง',
+              diseaseCode: 'HT',
+              score: 10,
+              riskLevel: RiskLevel.high,
+              adviceText: 'วิกฤต',
+            ),
+          ],
+        );
 
-      final triage = ClinicalTriageService.assess(
-        screening: crisisScreening,
-        results: crisisScreening.results,
-      );
+        final triage = ClinicalTriageService.assess(
+          screening: crisisScreening,
+          results: crisisScreening.results,
+        );
 
-      expect(triage.urgencyLevel, TriageUrgencyLevel.emergency);
-      expect(triage.requiresImmediateVisit, isTrue);
-      expect(triage.urgencyLabel, contains('วิกฤตความดันโลหิตสูง'));
+        expect(triage.urgencyLevel, TriageUrgencyLevel.emergency);
+        expect(triage.requiresImmediateVisit, isTrue);
+        expect(triage.urgencyLabel, contains('วิกฤตความดันโลหิตสูง'));
 
-      final payload = ClinicalTriageService.generateLineWebhookPayload(
-        patient: basePatient,
-        screening: crisisScreening,
-        triage: triage,
-      );
+        final payload = ClinicalTriageService.generateLineWebhookPayload(
+          patient: basePatient,
+          screening: crisisScreening,
+          triage: triage,
+        );
 
-      expect(payload['event'], 'CLINICAL_TRIAGE_ALERT');
-      expect(payload['message'], contains('สมชาย ใจดี'));
-      expect(payload['message'], contains('185/115'));
-    });
+        expect(payload['event'], 'CLINICAL_TRIAGE_ALERT');
+        expect(payload['message'], contains('สมชาย ใจดี'));
+        expect(payload['message'], contains('185/115'));
+      },
+    );
 
     test('classifies multi-NCD high risk as Urgent triage', () {
       final multiHighScreening = Screening(

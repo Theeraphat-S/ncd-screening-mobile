@@ -34,9 +34,9 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     context.read<VillageBloc>().add(VillageListLoadRequested());
-    context
-        .read<VillageAnalyticsBloc>()
-        .add(const VillageAnalyticsLoadRequested());
+    context.read<VillageAnalyticsBloc>().add(
+      const VillageAnalyticsLoadRequested(),
+    );
   }
 
   @override
@@ -53,8 +53,11 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
@@ -68,21 +71,26 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
         actions: [
           const SyncBadgeWidget(),
           IconButton(
-            icon: const Icon(Icons.file_download_outlined, color: Colors.white),
+            icon: const Icon(
+              Icons.file_download_outlined,
+              color: PColor.neutralColor,
+            ),
             tooltip: 'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
             onPressed: () =>
                 ExportHealthDataDialog.show(context, nurse: widget.nurse),
           ),
           IconButton(
-            icon:
-                const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),
+            icon: const Icon(
+              Icons.person_add_alt_1_rounded,
+              color: PColor.neutralColor,
+            ),
             tooltip: 'เพิ่ม อสม.',
             onPressed: () {
               Navigator.push(
@@ -96,9 +104,9 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
+          indicatorColor: PColor.neutralColor,
           indicatorWeight: 3.5,
-          labelColor: Colors.white,
+          labelColor: PColor.neutralColor,
           unselectedLabelColor: Colors.white70,
           labelStyle: const TextStyle(
             fontSize: 14,
@@ -137,7 +145,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                       Text(
                         'พยาบาล: ${widget.nurse.fullName}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: PColor.neutralColor,
                           fontSize: 13.5,
                           fontWeight: FontWeight.bold,
                         ),
@@ -145,31 +153,33 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                       const SizedBox(height: 2),
                       const Text(
                         'พื้นที่รับผิดชอบ: ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 11.5,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 11.5),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
+                    color: PColor.neutralColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.shield_outlined,
-                          color: Colors.white, size: 14),
+                      Icon(
+                        Icons.shield_outlined,
+                        color: PColor.neutralColor,
+                        size: 14,
+                      ),
                       SizedBox(width: 4),
                       Text(
                         'รพ.สต.แม่อาย',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: PColor.neutralColor,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
                         ),
@@ -218,27 +228,32 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline_rounded,
-                      color: PColor.errorColor, size: 48),
+                  const Icon(
+                    Icons.error_outline_rounded,
+                    color: PColor.errorColor,
+                    size: 48,
+                  ),
                   const SizedBox(height: 12),
                   Text(
                     state.errorMessage ?? 'เกิดข้อผิดพลาดในการโหลดข้อมูล',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        fontSize: 14, color: PColor.contentColor),
+                      fontSize: 14,
+                      color: PColor.contentColor,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      context
-                          .read<VillageAnalyticsBloc>()
-                          .add(const VillageAnalyticsLoadRequested());
+                      context.read<VillageAnalyticsBloc>().add(
+                        const VillageAnalyticsLoadRequested(),
+                      );
                     },
                     icon: const Icon(Icons.refresh_rounded),
                     label: const Text('ลองใหม่'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: PColor.primaryColor,
-                      foregroundColor: Colors.white,
+                      foregroundColor: PColor.neutralColor,
                     ),
                   ),
                 ],
@@ -255,9 +270,9 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
         return RefreshIndicator(
           color: PColor.primaryColor,
           onRefresh: () async {
-            context
-                .read<VillageAnalyticsBloc>()
-                .add(const VillageAnalyticsRefreshRequested());
+            context.read<VillageAnalyticsBloc>().add(
+              const VillageAnalyticsRefreshRequested(),
+            );
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),

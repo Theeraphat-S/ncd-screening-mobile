@@ -36,7 +36,11 @@ class NurseVhvDetailPage extends StatelessWidget {
             backgroundColor: PColor.primaryColor,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+              tooltip: 'ย้อนกลับ',
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: PColor.neutralColor,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
             title: const Text(
@@ -44,7 +48,7 @@ class NurseVhvDetailPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: PColor.neutralColor,
               ),
             ),
             centerTitle: true,
@@ -58,7 +62,7 @@ class NurseVhvDetailPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -72,7 +76,9 @@ class NurseVhvDetailPage extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 40,
-                        backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
+                        backgroundColor: PColor.primaryLight.withValues(
+                          alpha: 0.15,
+                        ),
                         child: const Icon(
                           Icons.volunteer_activism_rounded,
                           size: 46,
@@ -105,7 +111,7 @@ class NurseVhvDetailPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -144,19 +150,24 @@ class NurseVhvDetailPage extends StatelessWidget {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.people_alt_outlined, color: Colors.white),
+                  icon: const Icon(
+                    Icons.people_alt_outlined,
+                    color: PColor.neutralColor,
+                  ),
                   label: const Text(
                     'ดูรายชื่อผู้ป่วยในหมู่บ้านนี้',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: PColor.neutralColor,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PColor.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     elevation: 2,
                   ),
                 ),
@@ -176,7 +187,10 @@ class NurseVhvDetailPage extends StatelessWidget {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.edit_outlined, color: PColor.primaryColor),
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: PColor.primaryColor,
+                  ),
                   label: const Text(
                     'แก้ไขข้อมูล อสม.',
                     style: TextStyle(
@@ -187,8 +201,13 @@ class NurseVhvDetailPage extends StatelessWidget {
                   ),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    side: const BorderSide(
+                      color: PColor.primaryColor,
+                      width: 1.5,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ],

@@ -43,6 +43,8 @@ dependencies:
   intl: ^0.20.2
   toastification: ^3.0.2
   dropdown_button2: ^2.3.9
+  cryptography: ^2.9.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
@@ -65,5 +67,13 @@ flutter:
   generate: true
   uses-material-design: true
 
+  fonts:
+    - family: Sarabun
+      fonts:
+        - asset: assets/fonts/Sarabun-Regular.ttf
+        - asset: assets/fonts/Sarabun-Bold.ttf
+          weight: 700
+
   assets:
     - assets/icons/
+    - assets/fonts/

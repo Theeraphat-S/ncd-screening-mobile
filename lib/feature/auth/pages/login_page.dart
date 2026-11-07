@@ -99,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
         _showWarning('รหัสบัตรประชาชนต้องเป็นตัวเลขความยาว 13 หลัก');
         return;
       }
-      if (password.isEmpty || password.length < 4 || password.length > 16) {
-        _showWarning('รหัสผ่านต้องมีความยาว 4-16 ตัวอักษร');
+      if (password.isEmpty) {
+        _showWarning('กรุณากรอกรหัสผ่าน');
         return;
       }
     } else if (widget.role == UserRole.nurse) {
@@ -108,19 +108,19 @@ class _LoginPageState extends State<LoginPage> {
         _showWarning('รหัสพยาบาลต้องมี 4 ตัวอักษรขึ้นไป');
         return;
       }
-      if (password.isEmpty || password.length < 4 || password.length > 16) {
-        _showWarning('รหัสผ่านต้องมีความยาว 4-16 ตัวอักษร');
+      if (password.isEmpty) {
+        _showWarning('กรุณากรอกรหัสผ่าน');
         return;
       }
     }
 
     context.read<AuthBloc>().add(
-          AuthLoginSubmitted(
-            role: widget.role,
-            identifier: id,
-            password: password.isNotEmpty ? password : null,
-          ),
-        );
+      AuthLoginSubmitted(
+        role: widget.role,
+        identifier: id,
+        password: password.isNotEmpty ? password : null,
+      ),
+    );
   }
 
   void _showWarning(String msg) {
@@ -144,24 +144,31 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => PatientHistoryListPage(patient: state.currentUser as Patient),
+                builder: (_) => PatientHistoryListPage(
+                  patient: state.currentUser as Patient,
+                ),
               ),
             );
           } else if (widget.role == UserRole.vhv && state.currentUser is VHV) {
             context.read<PatientBloc>().add(
-                  PatientLoadRequested(villageId: (state.currentUser as VHV).villageId),
-                );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => VhvPatientListPage(vhv: state.currentUser as VHV),
+              PatientLoadRequested(
+                villageId: (state.currentUser as VHV).villageId,
               ),
             );
-          } else if (widget.role == UserRole.nurse && state.currentUser is Nurse) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => NurseVillageListPage(nurse: state.currentUser as Nurse),
+                builder: (_) =>
+                    VhvPatientListPage(vhv: state.currentUser as VHV),
+              ),
+            );
+          } else if (widget.role == UserRole.nurse &&
+              state.currentUser is Nurse) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    NurseVillageListPage(nurse: state.currentUser as Nurse),
               ),
             );
           }
@@ -173,7 +180,11 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: PColor.primaryColor,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            tooltip: 'ย้อนกลับ',
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: PColor.neutralColor,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
@@ -181,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: PColor.neutralColor,
             ),
           ),
           centerTitle: true,
@@ -189,13 +200,16 @@ class _LoginPageState extends State<LoginPage> {
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 32.0,
+              ),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 440),
                 child: Container(
                   padding: const EdgeInsets.all(28.0),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: PColor.borderSubtle),
                     boxShadow: PShadow.card,
@@ -210,14 +224,16 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: BoxDecoration(
                             color: PColor.primaryLight,
                             shape: BoxShape.circle,
-                            border: Border.all(color: PColor.primaryColor.withValues(alpha: 0.2)),
+                            border: Border.all(
+                              color: PColor.primaryColor.withValues(alpha: 0.2),
+                            ),
                           ),
                           child: Icon(
                             widget.role == UserRole.patient
                                 ? Icons.person_rounded
                                 : widget.role == UserRole.vhv
-                                    ? Icons.volunteer_activism_rounded
-                                    : Icons.medical_services_rounded,
+                                ? Icons.volunteer_activism_rounded
+                                : Icons.medical_services_rounded,
                             size: 36,
                             color: PColor.primaryColor,
                           ),
@@ -266,22 +282,36 @@ class _LoginPageState extends State<LoginPage> {
                         maxLength: widget.role == UserRole.nurse ? null : 13,
                         decoration: InputDecoration(
                           hintText: _idHint,
-                          hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                          hintStyle: const TextStyle(
+                            color: PColor.textNeutralColor,
+                            fontSize: 14,
+                          ),
                           filled: true,
                           fillColor: PColor.backgroundColor,
                           counterText: '',
-                          prefixIcon: const Icon(Icons.badge_outlined, color: PColor.primaryColor, size: 22),
+                          prefixIcon: const Icon(
+                            Icons.badge_outlined,
+                            color: PColor.primaryColor,
+                            size: 22,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: PColor.borderSubtle),
+                            borderSide: const BorderSide(
+                              color: PColor.borderSubtle,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: PColor.borderSubtle),
+                            borderSide: const BorderSide(
+                              color: PColor.borderSubtle,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                            borderSide: const BorderSide(
+                              color: PColor.primaryColor,
+                              width: 1.5,
+                            ),
                           ),
                         ),
                       ),
@@ -303,29 +333,48 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: _obscurePassword,
                           decoration: InputDecoration(
                             hintText: 'กรอกรหัสผ่าน',
-                            hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                            hintStyle: const TextStyle(
+                              color: PColor.textNeutralColor,
+                              fontSize: 14,
+                            ),
                             filled: true,
                             fillColor: PColor.backgroundColor,
-                            prefixIcon: const Icon(Icons.lock_outline_rounded, color: PColor.primaryColor, size: 22),
+                            prefixIcon: const Icon(
+                              Icons.lock_outline_rounded,
+                              color: PColor.primaryColor,
+                              size: 22,
+                            ),
                             suffixIcon: IconButton(
+                              tooltip: 'แสดง/ซ่อนรหัสผ่าน',
                               icon: Icon(
-                                _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                                _obscurePassword
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
                                 color: PColor.textNeutralColor,
                                 size: 20,
                               ),
-                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                              onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword,
+                              ),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: PColor.borderSubtle),
+                              borderSide: const BorderSide(
+                                color: PColor.borderSubtle,
+                              ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: PColor.borderSubtle),
+                              borderSide: const BorderSide(
+                                color: PColor.borderSubtle,
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                              borderSide: const BorderSide(
+                                color: PColor.primaryColor,
+                                width: 1.5,
+                              ),
                             ),
                           ),
                         ),
@@ -343,7 +392,7 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: isLoading ? null : _handleLogin,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: PColor.primaryColor,
-                                foregroundColor: Colors.white,
+                                foregroundColor: PColor.neutralColor,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -355,7 +404,7 @@ class _LoginPageState extends State<LoginPage> {
                                       height: 22,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2.2,
-                                        color: Colors.white,
+                                        color: PColor.neutralColor,
                                       ),
                                     )
                                   : const Text(

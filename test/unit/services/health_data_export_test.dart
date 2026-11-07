@@ -5,14 +5,26 @@ import 'package:ncd_screening_mobile/domain/services/health_data_export_service.
 void main() {
   group('HealthDataExportService', () {
     test('maskCitizenId replaces middle digits with X according to PDPA', () {
-      expect(HealthDataExportService.maskCitizenId('1500200000010'), '1-5002-XXXXX-XX-0');
-      expect(HealthDataExportService.maskCitizenId('3-5002-99887-65-4'), '3-5002-XXXXX-XX-4');
+      expect(
+        HealthDataExportService.maskCitizenId('1500200000010'),
+        '1-5002-XXXXX-XX-0',
+      );
+      expect(
+        HealthDataExportService.maskCitizenId('3-5002-99887-65-4'),
+        '3-5002-XXXXX-XX-4',
+      );
       expect(HealthDataExportService.maskCitizenId('123'), 'X-XXXX-XXXXX-XX-X');
     });
 
     test('maskName masks first and last names with asterisks', () {
-      expect(HealthDataExportService.maskName('นาย', 'สมชาย', 'ใจดี'), 'นาย ส*** ใ***');
-      expect(HealthDataExportService.maskName('นาง', 'วันเพ็ญ', 'สดใส'), 'นาง ว*** ส***');
+      expect(
+        HealthDataExportService.maskName('นาย', 'สมชาย', 'ใจดี'),
+        'นาย ส*** ใ***',
+      );
+      expect(
+        HealthDataExportService.maskName('นาง', 'วันเพ็ญ', 'สดใส'),
+        'นาง ว*** ส***',
+      );
     });
 
     test('generates anonymized CSV with correct headers and masked data', () {

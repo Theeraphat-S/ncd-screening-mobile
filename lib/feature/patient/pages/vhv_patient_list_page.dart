@@ -24,8 +24,8 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
   void initState() {
     super.initState();
     context.read<PatientBloc>().add(
-          PatientLoadRequested(villageId: widget.vhv.villageId),
-        );
+      PatientLoadRequested(villageId: widget.vhv.villageId),
+    );
   }
 
   @override
@@ -36,7 +36,11 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
@@ -50,7 +54,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -58,7 +62,11 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
           const SyncBadgeWidget(),
           IconButton(
             tooltip: 'สแกนบัตร ปชช.',
-            icon: const Icon(Icons.document_scanner_rounded, color: Colors.white, size: 24),
+            icon: const Icon(
+              Icons.document_scanner_rounded,
+              color: PColor.neutralColor,
+              size: 24,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -69,7 +77,12 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.search_rounded, color: Colors.white, size: 26),
+            tooltip: 'ค้นหา',
+            icon: const Icon(
+              Icons.search_rounded,
+              color: PColor.neutralColor,
+              size: 26,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -87,18 +100,20 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            decoration: const BoxDecoration(
-              color: PColor.primaryDark,
-            ),
+            decoration: const BoxDecoration(color: PColor.primaryDark),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.12),
+                    color: PColor.neutralColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.volunteer_activism_rounded, color: Colors.white, size: 18),
+                  child: const Icon(
+                    Icons.volunteer_activism_rounded,
+                    color: PColor.neutralColor,
+                    size: 18,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -108,7 +123,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                       Text(
                         'อสม. ${widget.vhv.fullName}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: PColor.neutralColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
@@ -116,7 +131,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                       Text(
                         'พื้นที่รับผิดชอบ: หมู่ที่ ${widget.vhv.villageId.replaceAll('V', '')} รพ.สต.แม่อาย',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.8),
+                          color: PColor.neutralColor.withValues(alpha: 0.8),
                           fontSize: 12,
                         ),
                       ),
@@ -141,8 +156,13 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                 }
               },
               builder: (context, state) {
-                if (state.status == PatientStatus.loading && state.patients.isEmpty) {
-                  return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                if (state.status == PatientStatus.loading &&
+                    state.patients.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: PColor.primaryColor,
+                    ),
+                  );
                 }
 
                 if (state.patients.isEmpty) {
@@ -160,7 +180,11 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                               shape: BoxShape.circle,
                               border: Border.all(color: PColor.borderSubtle),
                             ),
-                            child: const Icon(Icons.person_search_rounded, size: 40, color: PColor.textNeutralColor),
+                            child: const Icon(
+                              Icons.person_search_rounded,
+                              size: 40,
+                              color: PColor.textNeutralColor,
+                            ),
                           ),
                           const SizedBox(height: 16),
                           const Text(
@@ -189,11 +213,14 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                   color: PColor.primaryColor,
                   onRefresh: () async {
                     context.read<PatientBloc>().add(
-                          PatientLoadRequested(villageId: widget.vhv.villageId),
-                        );
+                      PatientLoadRequested(villageId: widget.vhv.villageId),
+                    );
                   },
                   child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     itemCount: state.patients.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
@@ -210,11 +237,15 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: PColor.primaryColor,
         elevation: 2,
-        icon: const Icon(Icons.person_add_rounded, color: Colors.white, size: 20),
+        icon: const Icon(
+          Icons.person_add_rounded,
+          color: PColor.neutralColor,
+          size: 20,
+        ),
         label: const Text(
           'เพิ่มผู้ป่วยใหม่',
           style: TextStyle(
-            color: Colors.white,
+            color: PColor.neutralColor,
             fontWeight: FontWeight.w700,
             fontSize: 14.5,
             letterSpacing: -0.2,
@@ -236,10 +267,12 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
   }
 
   Widget _buildPatientCard(BuildContext context, Patient patient) {
-    final initials = patient.patientFname.isNotEmpty ? patient.patientFname.substring(0, 1) : 'P';
+    final initials = patient.patientFname.isNotEmpty
+        ? patient.patientFname.substring(0, 1)
+        : 'P';
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
@@ -254,10 +287,8 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PatientDetailPage(
-                  patient: patient,
-                  vhv: widget.vhv,
-                ),
+                builder: (_) =>
+                    PatientDetailPage(patient: patient, vhv: widget.vhv),
               ),
             );
           },
@@ -302,7 +333,11 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.credit_card_outlined, size: 14, color: PColor.textNeutralColor),
+                          const Icon(
+                            Icons.credit_card_outlined,
+                            size: 14,
+                            color: PColor.textNeutralColor,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             patient.patientCitizenId,

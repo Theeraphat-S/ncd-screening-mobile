@@ -5,7 +5,9 @@ import 'package:ncd_screening_mobile/shared/widgets/emergency_hospital_card.dart
 
 void main() {
   group('EmergencyHospitalCard', () {
-    testWidgets('renders alert details and contact buttons for crisis triage', (tester) async {
+    testWidgets('renders alert details and contact buttons for crisis triage', (
+      tester,
+    ) async {
       const crisisTriage = ClinicalTriageAssessment(
         urgencyLevel: TriageUrgencyLevel.emergency,
         requiresImmediateVisit: true,
@@ -16,14 +18,15 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: EmergencyHospitalCard(triage: crisisTriage),
-          ),
+          home: Scaffold(body: EmergencyHospitalCard(triage: crisisTriage)),
         ),
       );
 
       expect(find.text('การแจ้งเตือนเคสเร่งด่วน'), findsOneWidget);
-      expect(find.text('ภาวะวิกฤตความดันโลหิตสูง (Hypertensive Crisis)'), findsOneWidget);
+      expect(
+        find.text('ภาวะวิกฤตความดันโลหิตสูง (Hypertensive Crisis)'),
+        findsOneWidget,
+      );
       expect(find.textContaining('185/115'), findsOneWidget);
       expect(find.textContaining('1669'), findsOneWidget);
       expect(find.textContaining('รพ.สต.แม่อาย'), findsOneWidget);
@@ -35,7 +38,9 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
 
-    testWidgets('renders nothing when requiresImmediateVisit is false', (tester) async {
+    testWidgets('renders nothing when requiresImmediateVisit is false', (
+      tester,
+    ) async {
       const routineTriage = ClinicalTriageAssessment(
         urgencyLevel: TriageUrgencyLevel.routine,
         requiresImmediateVisit: false,
@@ -46,9 +51,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: EmergencyHospitalCard(triage: routineTriage),
-          ),
+          home: Scaffold(body: EmergencyHospitalCard(triage: routineTriage)),
         ),
       );
 

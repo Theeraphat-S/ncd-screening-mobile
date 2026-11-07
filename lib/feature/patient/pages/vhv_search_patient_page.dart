@@ -39,8 +39,8 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
     }
     setState(() => _hasSearched = true);
     context.read<PatientBloc>().add(
-          PatientSearchChanged(query, villageId: widget.vhv.villageId),
-        );
+      PatientSearchChanged(query, villageId: widget.vhv.villageId),
+    );
   }
 
   @override
@@ -51,12 +51,16 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () {
             // Restore village patients on exit
             context.read<PatientBloc>().add(
-                  PatientLoadRequested(villageId: widget.vhv.villageId),
-                );
+              PatientLoadRequested(villageId: widget.vhv.villageId),
+            );
             Navigator.pop(context);
           },
         ),
@@ -65,7 +69,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -80,7 +84,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
               // Search Input Box
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
@@ -95,22 +99,37 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'เลขบัตรประชาชนผู้ป่วย (13 หลัก)',
-                    hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
-                    prefixIcon: const Icon(Icons.badge_outlined, color: PColor.primaryColor),
+                    hintStyle: const TextStyle(
+                      color: PColor.textNeutralColor,
+                      fontSize: 14,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.badge_outlined,
+                      color: PColor.primaryColor,
+                    ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear_rounded, color: Colors.grey),
+                            tooltip: 'ล้างข้อความ',
+                            icon: const Icon(
+                              Icons.clear_rounded,
+                              color: Colors.grey,
+                            ),
                             onPressed: () {
                               _searchController.clear();
                               setState(() => _hasSearched = false);
                               context.read<PatientBloc>().add(
-                                    PatientLoadRequested(villageId: widget.vhv.villageId),
-                                  );
+                                PatientLoadRequested(
+                                  villageId: widget.vhv.villageId,
+                                ),
+                              );
                             },
                           )
                         : null,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                   ),
                   onSubmitted: (_) => _onSearch(),
                 ),
@@ -123,13 +142,17 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                     flex: 3,
                     child: ElevatedButton.icon(
                       onPressed: _onSearch,
-                      icon: const Icon(Icons.search_rounded, color: Colors.white, size: 20),
+                      icon: const Icon(
+                        Icons.search_rounded,
+                        color: PColor.neutralColor,
+                        size: 20,
+                      ),
                       label: const Text(
                         'ค้นหา',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: PColor.neutralColor,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -154,7 +177,11 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.document_scanner_rounded, color: PColor.primaryColor, size: 19),
+                      icon: const Icon(
+                        Icons.document_scanner_rounded,
+                        color: PColor.primaryColor,
+                        size: 19,
+                      ),
                       label: const Text(
                         'สแกน OCR',
                         style: TextStyle(
@@ -164,7 +191,10 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                         ),
                       ),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: PColor.primaryColor, width: 1.5),
+                        side: const BorderSide(
+                          color: PColor.primaryColor,
+                          width: 1.5,
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -181,7 +211,11 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                 child: BlocBuilder<PatientBloc, PatientState>(
                   builder: (context, state) {
                     if (state.status == PatientStatus.loading) {
-                      return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: PColor.primaryColor,
+                        ),
+                      );
                     }
 
                     if (_hasSearched && state.patients.isEmpty) {
@@ -189,7 +223,11 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.search_off_rounded, size: 64, color: Colors.grey.shade400),
+                            Icon(
+                              Icons.search_off_rounded,
+                              size: 64,
+                              color: Colors.grey.shade400,
+                            ),
                             const SizedBox(height: 12),
                             const Text(
                               'ไม่พบข้อมูล',
@@ -236,7 +274,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
 
   Widget _buildPatientResultCard(BuildContext context, Patient patient) {
     return Material(
-      color: Colors.white,
+      color: PColor.neutralColor,
       borderRadius: BorderRadius.circular(14),
       elevation: 2,
       child: InkWell(
@@ -246,10 +284,8 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => PatientDetailPage(
-                patient: patient,
-                vhv: widget.vhv,
-              ),
+              builder: (_) =>
+                  PatientDetailPage(patient: patient, vhv: widget.vhv),
             ),
           );
         },
@@ -260,7 +296,11 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
               CircleAvatar(
                 radius: 26,
                 backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                child: const Icon(Icons.person, color: PColor.primaryColor, size: 30),
+                child: const Icon(
+                  Icons.person,
+                  color: PColor.primaryColor,
+                  size: 30,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(

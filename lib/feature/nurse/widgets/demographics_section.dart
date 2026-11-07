@@ -12,7 +12,7 @@ class DemographicsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -27,8 +27,11 @@ class DemographicsSection extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.pie_chart_outline_rounded,
-                  color: PColor.primaryColor, size: 22),
+              Icon(
+                Icons.pie_chart_outline_rounded,
+                color: PColor.primaryColor,
+                size: 22,
+              ),
               SizedBox(width: 8),
               Text(
                 'การกระจายตัวของประชากร',

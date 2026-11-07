@@ -65,16 +65,16 @@ class NcdDiseaseBreakdown extends Equatable {
 
   @override
   List<Object?> get props => [
-        diseaseCode,
-        diseaseName,
-        lowCount,
-        moderateCount,
-        highCount,
-        totalScreened,
-        lowPercentage,
-        moderatePercentage,
-        highPercentage,
-      ];
+    diseaseCode,
+    diseaseName,
+    lowCount,
+    moderateCount,
+    highCount,
+    totalScreened,
+    lowPercentage,
+    moderatePercentage,
+    highPercentage,
+  ];
 }
 
 /// Demographic distribution across gender and age brackets
@@ -107,9 +107,7 @@ class DemographicDistribution extends Equatable {
     required this.age60AndAboveRatio,
   });
 
-  factory DemographicDistribution.calculate({
-    required List<Patient> patients,
-  }) {
+  factory DemographicDistribution.calculate({required List<Patient> patients}) {
     final total = patients.length;
     int male = 0;
     int female = 0;
@@ -157,18 +155,18 @@ class DemographicDistribution extends Equatable {
 
   @override
   List<Object?> get props => [
-        maleCount,
-        femaleCount,
-        totalPatients,
-        maleRatio,
-        femaleRatio,
-        ageUnder35Count,
-        age35To59Count,
-        age60AndAboveCount,
-        ageUnder35Ratio,
-        age35To59Ratio,
-        age60AndAboveRatio,
-      ];
+    maleCount,
+    femaleCount,
+    totalPatients,
+    maleRatio,
+    femaleRatio,
+    ageUnder35Count,
+    age35To59Count,
+    age60AndAboveCount,
+    ageUnder35Ratio,
+    age35To59Ratio,
+    age60AndAboveRatio,
+  ];
 }
 
 /// High-risk patient priority item for community health follow-up
@@ -191,13 +189,13 @@ class HighRiskPriorityPatient extends Equatable {
 
   @override
   List<Object?> get props => [
-        patient,
-        village,
-        latestScreening,
-        highRiskDiseases,
-        highRiskCount,
-        latestScreeningDate,
-      ];
+    patient,
+    village,
+    latestScreening,
+    highRiskDiseases,
+    highRiskCount,
+    latestScreeningDate,
+  ];
 }
 
 /// Comparative health metrics summary for an individual village
@@ -222,14 +220,14 @@ class VillageComparisonSummary extends Equatable {
 
   @override
   List<Object?> get props => [
-        village,
-        totalPatients,
-        screenedPatientsCount,
-        screeningCoveragePercentage,
-        highRiskPatientsCount,
-        pendingReviewCount,
-        approvedReviewCount,
-      ];
+    village,
+    totalPatients,
+    screenedPatientsCount,
+    screeningCoveragePercentage,
+    highRiskPatientsCount,
+    pendingReviewCount,
+    approvedReviewCount,
+  ];
 }
 
 /// Root aggregate village analytics model
@@ -281,20 +279,20 @@ class VillageAnalytics extends Equatable {
 
   @override
   List<Object?> get props => [
-        selectedVillageId,
-        selectedVillageName,
-        totalVillagesCount,
-        totalPatients,
-        screenedPatientsCount,
-        totalScreeningsCount,
-        screeningCoveragePercentage,
-        highRiskPatientsCount,
-        pendingReviewsCount,
-        approvedReviewsCount,
-        diseaseBreakdowns,
-        demographics,
-        villageComparisons,
-        highRiskPriorityQueue,
-        sortOrder,
-      ];
+    selectedVillageId,
+    selectedVillageName,
+    totalVillagesCount,
+    totalPatients,
+    screenedPatientsCount,
+    totalScreeningsCount,
+    screeningCoveragePercentage,
+    highRiskPatientsCount,
+    pendingReviewsCount,
+    approvedReviewsCount,
+    diseaseBreakdowns,
+    demographics,
+    villageComparisons,
+    highRiskPriorityQueue,
+    sortOrder,
+  ];
 }

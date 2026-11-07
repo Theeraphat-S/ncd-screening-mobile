@@ -63,9 +63,7 @@ void main() {
   });
 
   Widget buildTestWidget() {
-    return MaterialApp(
-      home: IdCardScannerPage(vhv: testVhv),
-    );
+    return MaterialApp(home: IdCardScannerPage(vhv: testVhv));
   }
 
   group('IdCardScannerPage', () {
@@ -78,7 +76,9 @@ void main() {
       expect(find.text('ทดสอบคนใหม่'), findsOneWidget);
     });
 
-    testWidgets('matches existing patient and navigates to ScreeningFormPage', (tester) async {
+    testWidgets('matches existing patient and navigates to ScreeningFormPage', (
+      tester,
+    ) async {
       mockRepo.patientsByCitizenId['1500200000010'] = testPatient;
 
       await tester.pumpWidget(buildTestWidget());
@@ -89,16 +89,19 @@ void main() {
       expect(find.byType(ScreeningFormPage), findsOneWidget);
     });
 
-    testWidgets('routes to AddEditPatientPage with pre-filled info for new patient', (tester) async {
-      await tester.pumpWidget(buildTestWidget());
+    testWidgets(
+      'routes to AddEditPatientPage with pre-filled info for new patient',
+      (tester) async {
+        await tester.pumpWidget(buildTestWidget());
 
-      await tester.tap(find.text('ทดสอบคนใหม่'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('ทดสอบคนใหม่'));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(AddEditPatientPage), findsOneWidget);
-      expect(find.text('1500299988877'), findsOneWidget);
-      expect(find.text('วันเพ็ญ'), findsOneWidget);
-      expect(find.text('สดใส'), findsOneWidget);
-    });
+        expect(find.byType(AddEditPatientPage), findsOneWidget);
+        expect(find.text('1500299988877'), findsOneWidget);
+        expect(find.text('วันเพ็ญ'), findsOneWidget);
+        expect(find.text('สดใส'), findsOneWidget);
+      },
+    );
   });
 }

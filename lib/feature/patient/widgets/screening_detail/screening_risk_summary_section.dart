@@ -43,65 +43,73 @@ class ScreeningRiskSummarySection extends StatelessWidget {
         ),
         PSpacing.gapVerticalSm,
         ...results.map(
-          (res) => Container(
-            margin: const EdgeInsets.only(bottom: PSpacing.sm),
-            padding: PSpacing.edgeInsetsAllLg,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: PRadius.borderCard,
-              border: Border.all(color: PColor.borderSubtle),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: res.riskLevel.backgroundColor,
-                    shape: BoxShape.circle,
+          (res) => Semantics(
+            container: true,
+            label:
+                '${res.diseaseName}, ความเสี่ยง${res.riskLevel.labelTh}, คะแนน ${res.score}',
+            child: Container(
+              margin: const EdgeInsets.only(bottom: PSpacing.sm),
+              padding: PSpacing.edgeInsetsAllLg,
+              decoration: BoxDecoration(
+                color: PColor.neutralColor,
+                borderRadius: PRadius.borderCard,
+                border: Border.all(color: PColor.borderSubtle),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: res.riskLevel.backgroundColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.favorite_rounded,
+                      color: res.riskLevel.color,
+                      size: 22,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.favorite_rounded,
-                    color: res.riskLevel.color,
-                    size: 22,
-                  ),
-                ),
-                PSpacing.gapHorizontalLg,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        res.diseaseName,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.contentColor,
+                  PSpacing.gapHorizontalLg,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          res.diseaseName,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: PColor.contentColor,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'คะแนน: ${res.score} คะแนน',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: PColor.textNeutralColor,
+                        const SizedBox(height: 2),
+                        Text(
+                          'คะแนน: ${res.score} คะแนน',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: PColor.textNeutralColor,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: res.riskLevel.color,
+                      borderRadius: PRadius.borderXl,
+                    ),
+                    child: Text(
+                      res.riskLevel.labelTh,
+                      style: PTypography.badge,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: res.riskLevel.color,
-                    borderRadius: PRadius.borderXl,
-                  ),
-                  child: Text(res.riskLevel.labelTh, style: PTypography.badge),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

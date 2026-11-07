@@ -187,41 +187,34 @@ class $VillagesTableTable extends VillagesTable
   VillagesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return VillagesTableData(
-      villageId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_id'],
-          )!,
-      villageName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_name'],
-          )!,
-      villageNumber:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_number'],
-          )!,
-      subdistrictId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}subdistrict_id'],
-          )!,
-      subdistrictName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}subdistrict_name'],
-          )!,
-      districtName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}district_name'],
-          )!,
-      provinceName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}province_name'],
-          )!,
+      villageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_id'],
+      )!,
+      villageName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_name'],
+      )!,
+      villageNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_number'],
+      )!,
+      subdistrictId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subdistrict_id'],
+      )!,
+      subdistrictName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subdistrict_name'],
+      )!,
+      districtName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}district_name'],
+      )!,
+      provinceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}province_name'],
+      )!,
     );
   }
 
@@ -323,28 +316,24 @@ class VillagesTableData extends DataClass
   VillagesTableData copyWithCompanion(VillagesTableCompanion data) {
     return VillagesTableData(
       villageId: data.villageId.present ? data.villageId.value : this.villageId,
-      villageName:
-          data.villageName.present ? data.villageName.value : this.villageName,
-      villageNumber:
-          data.villageNumber.present
-              ? data.villageNumber.value
-              : this.villageNumber,
-      subdistrictId:
-          data.subdistrictId.present
-              ? data.subdistrictId.value
-              : this.subdistrictId,
-      subdistrictName:
-          data.subdistrictName.present
-              ? data.subdistrictName.value
-              : this.subdistrictName,
-      districtName:
-          data.districtName.present
-              ? data.districtName.value
-              : this.districtName,
-      provinceName:
-          data.provinceName.present
-              ? data.provinceName.value
-              : this.provinceName,
+      villageName: data.villageName.present
+          ? data.villageName.value
+          : this.villageName,
+      villageNumber: data.villageNumber.present
+          ? data.villageNumber.value
+          : this.villageNumber,
+      subdistrictId: data.subdistrictId.present
+          ? data.subdistrictId.value
+          : this.subdistrictId,
+      subdistrictName: data.subdistrictName.present
+          ? data.subdistrictName.value
+          : this.subdistrictName,
+      districtName: data.districtName.present
+          ? data.districtName.value
+          : this.districtName,
+      provinceName: data.provinceName.present
+          ? data.provinceName.value
+          : this.provinceName,
     );
   }
 
@@ -578,17 +567,19 @@ class $NursesTableTable extends NursesTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _nursePasswordMeta = const VerificationMeta(
-    'nursePassword',
+  static const VerificationMeta _nursePasswordHashMeta = const VerificationMeta(
+    'nursePasswordHash',
   );
   @override
-  late final GeneratedColumn<String> nursePassword = GeneratedColumn<String>(
-    'nurse_password',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+  late final GeneratedColumn<String> nursePasswordHash =
+      GeneratedColumn<String>(
+        'nurse_password_hash',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   static const VerificationMeta _nurseGenderMeta = const VerificationMeta(
     'nurseGender',
   );
@@ -643,7 +634,7 @@ class $NursesTableTable extends NursesTable
     nurseLname,
     nurseMobile,
     nurseEmail,
-    nursePassword,
+    nursePasswordHash,
     nurseGender,
     nurseBirthDate,
     nurseImg,
@@ -712,16 +703,14 @@ class $NursesTableTable extends NursesTable
     } else if (isInserting) {
       context.missing(_nurseEmailMeta);
     }
-    if (data.containsKey('nurse_password')) {
+    if (data.containsKey('nurse_password_hash')) {
       context.handle(
-        _nursePasswordMeta,
-        nursePassword.isAcceptableOrUnknown(
-          data['nurse_password']!,
-          _nursePasswordMeta,
+        _nursePasswordHashMeta,
+        nursePasswordHash.isAcceptableOrUnknown(
+          data['nurse_password_hash']!,
+          _nursePasswordHashMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_nursePasswordMeta);
     }
     if (data.containsKey('nurse_gender')) {
       context.handle(
@@ -769,60 +758,50 @@ class $NursesTableTable extends NursesTable
   NursesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NursesTableData(
-      nurseId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_id'],
-          )!,
-      nurseTitle:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_title'],
-          )!,
-      nurseFname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_fname'],
-          )!,
-      nurseLname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_lname'],
-          )!,
-      nurseMobile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_mobile'],
-          )!,
-      nurseEmail:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_email'],
-          )!,
-      nursePassword:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_password'],
-          )!,
-      nurseGender:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_gender'],
-          )!,
-      nurseBirthDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}nurse_birth_date'],
-          )!,
+      nurseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_id'],
+      )!,
+      nurseTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_title'],
+      )!,
+      nurseFname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_fname'],
+      )!,
+      nurseLname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_lname'],
+      )!,
+      nurseMobile: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_mobile'],
+      )!,
+      nurseEmail: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_email'],
+      )!,
+      nursePasswordHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_password_hash'],
+      )!,
+      nurseGender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_gender'],
+      )!,
+      nurseBirthDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}nurse_birth_date'],
+      )!,
       nurseImg: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}nurse_img'],
       ),
-      subdistrictId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}subdistrict_id'],
-          )!,
+      subdistrictId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subdistrict_id'],
+      )!,
     );
   }
 
@@ -839,7 +818,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
   final String nurseLname;
   final String nurseMobile;
   final String nurseEmail;
-  final String nursePassword;
+  final String nursePasswordHash;
   final String nurseGender;
   final DateTime nurseBirthDate;
   final String? nurseImg;
@@ -851,7 +830,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
     required this.nurseLname,
     required this.nurseMobile,
     required this.nurseEmail,
-    required this.nursePassword,
+    required this.nursePasswordHash,
     required this.nurseGender,
     required this.nurseBirthDate,
     this.nurseImg,
@@ -866,7 +845,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
     map['nurse_lname'] = Variable<String>(nurseLname);
     map['nurse_mobile'] = Variable<String>(nurseMobile);
     map['nurse_email'] = Variable<String>(nurseEmail);
-    map['nurse_password'] = Variable<String>(nursePassword);
+    map['nurse_password_hash'] = Variable<String>(nursePasswordHash);
     map['nurse_gender'] = Variable<String>(nurseGender);
     map['nurse_birth_date'] = Variable<DateTime>(nurseBirthDate);
     if (!nullToAbsent || nurseImg != null) {
@@ -884,13 +863,12 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
       nurseLname: Value(nurseLname),
       nurseMobile: Value(nurseMobile),
       nurseEmail: Value(nurseEmail),
-      nursePassword: Value(nursePassword),
+      nursePasswordHash: Value(nursePasswordHash),
       nurseGender: Value(nurseGender),
       nurseBirthDate: Value(nurseBirthDate),
-      nurseImg:
-          nurseImg == null && nullToAbsent
-              ? const Value.absent()
-              : Value(nurseImg),
+      nurseImg: nurseImg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nurseImg),
       subdistrictId: Value(subdistrictId),
     );
   }
@@ -907,7 +885,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
       nurseLname: serializer.fromJson<String>(json['nurseLname']),
       nurseMobile: serializer.fromJson<String>(json['nurseMobile']),
       nurseEmail: serializer.fromJson<String>(json['nurseEmail']),
-      nursePassword: serializer.fromJson<String>(json['nursePassword']),
+      nursePasswordHash: serializer.fromJson<String>(json['nursePasswordHash']),
       nurseGender: serializer.fromJson<String>(json['nurseGender']),
       nurseBirthDate: serializer.fromJson<DateTime>(json['nurseBirthDate']),
       nurseImg: serializer.fromJson<String?>(json['nurseImg']),
@@ -924,7 +902,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
       'nurseLname': serializer.toJson<String>(nurseLname),
       'nurseMobile': serializer.toJson<String>(nurseMobile),
       'nurseEmail': serializer.toJson<String>(nurseEmail),
-      'nursePassword': serializer.toJson<String>(nursePassword),
+      'nursePasswordHash': serializer.toJson<String>(nursePasswordHash),
       'nurseGender': serializer.toJson<String>(nurseGender),
       'nurseBirthDate': serializer.toJson<DateTime>(nurseBirthDate),
       'nurseImg': serializer.toJson<String?>(nurseImg),
@@ -939,7 +917,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
     String? nurseLname,
     String? nurseMobile,
     String? nurseEmail,
-    String? nursePassword,
+    String? nursePasswordHash,
     String? nurseGender,
     DateTime? nurseBirthDate,
     Value<String?> nurseImg = const Value.absent(),
@@ -951,7 +929,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
     nurseLname: nurseLname ?? this.nurseLname,
     nurseMobile: nurseMobile ?? this.nurseMobile,
     nurseEmail: nurseEmail ?? this.nurseEmail,
-    nursePassword: nursePassword ?? this.nursePassword,
+    nursePasswordHash: nursePasswordHash ?? this.nursePasswordHash,
     nurseGender: nurseGender ?? this.nurseGender,
     nurseBirthDate: nurseBirthDate ?? this.nurseBirthDate,
     nurseImg: nurseImg.present ? nurseImg.value : this.nurseImg,
@@ -960,31 +938,34 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
   NursesTableData copyWithCompanion(NursesTableCompanion data) {
     return NursesTableData(
       nurseId: data.nurseId.present ? data.nurseId.value : this.nurseId,
-      nurseTitle:
-          data.nurseTitle.present ? data.nurseTitle.value : this.nurseTitle,
-      nurseFname:
-          data.nurseFname.present ? data.nurseFname.value : this.nurseFname,
-      nurseLname:
-          data.nurseLname.present ? data.nurseLname.value : this.nurseLname,
-      nurseMobile:
-          data.nurseMobile.present ? data.nurseMobile.value : this.nurseMobile,
-      nurseEmail:
-          data.nurseEmail.present ? data.nurseEmail.value : this.nurseEmail,
-      nursePassword:
-          data.nursePassword.present
-              ? data.nursePassword.value
-              : this.nursePassword,
-      nurseGender:
-          data.nurseGender.present ? data.nurseGender.value : this.nurseGender,
-      nurseBirthDate:
-          data.nurseBirthDate.present
-              ? data.nurseBirthDate.value
-              : this.nurseBirthDate,
+      nurseTitle: data.nurseTitle.present
+          ? data.nurseTitle.value
+          : this.nurseTitle,
+      nurseFname: data.nurseFname.present
+          ? data.nurseFname.value
+          : this.nurseFname,
+      nurseLname: data.nurseLname.present
+          ? data.nurseLname.value
+          : this.nurseLname,
+      nurseMobile: data.nurseMobile.present
+          ? data.nurseMobile.value
+          : this.nurseMobile,
+      nurseEmail: data.nurseEmail.present
+          ? data.nurseEmail.value
+          : this.nurseEmail,
+      nursePasswordHash: data.nursePasswordHash.present
+          ? data.nursePasswordHash.value
+          : this.nursePasswordHash,
+      nurseGender: data.nurseGender.present
+          ? data.nurseGender.value
+          : this.nurseGender,
+      nurseBirthDate: data.nurseBirthDate.present
+          ? data.nurseBirthDate.value
+          : this.nurseBirthDate,
       nurseImg: data.nurseImg.present ? data.nurseImg.value : this.nurseImg,
-      subdistrictId:
-          data.subdistrictId.present
-              ? data.subdistrictId.value
-              : this.subdistrictId,
+      subdistrictId: data.subdistrictId.present
+          ? data.subdistrictId.value
+          : this.subdistrictId,
     );
   }
 
@@ -997,7 +978,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
           ..write('nurseLname: $nurseLname, ')
           ..write('nurseMobile: $nurseMobile, ')
           ..write('nurseEmail: $nurseEmail, ')
-          ..write('nursePassword: $nursePassword, ')
+          ..write('nursePasswordHash: $nursePasswordHash, ')
           ..write('nurseGender: $nurseGender, ')
           ..write('nurseBirthDate: $nurseBirthDate, ')
           ..write('nurseImg: $nurseImg, ')
@@ -1014,7 +995,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
     nurseLname,
     nurseMobile,
     nurseEmail,
-    nursePassword,
+    nursePasswordHash,
     nurseGender,
     nurseBirthDate,
     nurseImg,
@@ -1030,7 +1011,7 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
           other.nurseLname == this.nurseLname &&
           other.nurseMobile == this.nurseMobile &&
           other.nurseEmail == this.nurseEmail &&
-          other.nursePassword == this.nursePassword &&
+          other.nursePasswordHash == this.nursePasswordHash &&
           other.nurseGender == this.nurseGender &&
           other.nurseBirthDate == this.nurseBirthDate &&
           other.nurseImg == this.nurseImg &&
@@ -1044,7 +1025,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
   final Value<String> nurseLname;
   final Value<String> nurseMobile;
   final Value<String> nurseEmail;
-  final Value<String> nursePassword;
+  final Value<String> nursePasswordHash;
   final Value<String> nurseGender;
   final Value<DateTime> nurseBirthDate;
   final Value<String?> nurseImg;
@@ -1057,7 +1038,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
     this.nurseLname = const Value.absent(),
     this.nurseMobile = const Value.absent(),
     this.nurseEmail = const Value.absent(),
-    this.nursePassword = const Value.absent(),
+    this.nursePasswordHash = const Value.absent(),
     this.nurseGender = const Value.absent(),
     this.nurseBirthDate = const Value.absent(),
     this.nurseImg = const Value.absent(),
@@ -1071,7 +1052,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
     required String nurseLname,
     required String nurseMobile,
     required String nurseEmail,
-    required String nursePassword,
+    this.nursePasswordHash = const Value.absent(),
     required String nurseGender,
     required DateTime nurseBirthDate,
     this.nurseImg = const Value.absent(),
@@ -1083,7 +1064,6 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
        nurseLname = Value(nurseLname),
        nurseMobile = Value(nurseMobile),
        nurseEmail = Value(nurseEmail),
-       nursePassword = Value(nursePassword),
        nurseGender = Value(nurseGender),
        nurseBirthDate = Value(nurseBirthDate);
   static Insertable<NursesTableData> custom({
@@ -1093,7 +1073,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
     Expression<String>? nurseLname,
     Expression<String>? nurseMobile,
     Expression<String>? nurseEmail,
-    Expression<String>? nursePassword,
+    Expression<String>? nursePasswordHash,
     Expression<String>? nurseGender,
     Expression<DateTime>? nurseBirthDate,
     Expression<String>? nurseImg,
@@ -1107,7 +1087,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
       if (nurseLname != null) 'nurse_lname': nurseLname,
       if (nurseMobile != null) 'nurse_mobile': nurseMobile,
       if (nurseEmail != null) 'nurse_email': nurseEmail,
-      if (nursePassword != null) 'nurse_password': nursePassword,
+      if (nursePasswordHash != null) 'nurse_password_hash': nursePasswordHash,
       if (nurseGender != null) 'nurse_gender': nurseGender,
       if (nurseBirthDate != null) 'nurse_birth_date': nurseBirthDate,
       if (nurseImg != null) 'nurse_img': nurseImg,
@@ -1123,7 +1103,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
     Value<String>? nurseLname,
     Value<String>? nurseMobile,
     Value<String>? nurseEmail,
-    Value<String>? nursePassword,
+    Value<String>? nursePasswordHash,
     Value<String>? nurseGender,
     Value<DateTime>? nurseBirthDate,
     Value<String?>? nurseImg,
@@ -1137,7 +1117,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
       nurseLname: nurseLname ?? this.nurseLname,
       nurseMobile: nurseMobile ?? this.nurseMobile,
       nurseEmail: nurseEmail ?? this.nurseEmail,
-      nursePassword: nursePassword ?? this.nursePassword,
+      nursePasswordHash: nursePasswordHash ?? this.nursePasswordHash,
       nurseGender: nurseGender ?? this.nurseGender,
       nurseBirthDate: nurseBirthDate ?? this.nurseBirthDate,
       nurseImg: nurseImg ?? this.nurseImg,
@@ -1167,8 +1147,8 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
     if (nurseEmail.present) {
       map['nurse_email'] = Variable<String>(nurseEmail.value);
     }
-    if (nursePassword.present) {
-      map['nurse_password'] = Variable<String>(nursePassword.value);
+    if (nursePasswordHash.present) {
+      map['nurse_password_hash'] = Variable<String>(nursePasswordHash.value);
     }
     if (nurseGender.present) {
       map['nurse_gender'] = Variable<String>(nurseGender.value);
@@ -1197,7 +1177,7 @@ class NursesTableCompanion extends UpdateCompanion<NursesTableData> {
           ..write('nurseLname: $nurseLname, ')
           ..write('nurseMobile: $nurseMobile, ')
           ..write('nurseEmail: $nurseEmail, ')
-          ..write('nursePassword: $nursePassword, ')
+          ..write('nursePasswordHash: $nursePasswordHash, ')
           ..write('nurseGender: $nurseGender, ')
           ..write('nurseBirthDate: $nurseBirthDate, ')
           ..write('nurseImg: $nurseImg, ')
@@ -1289,16 +1269,17 @@ class $VhvsTableTable extends VhvsTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _vhvPasswordMeta = const VerificationMeta(
-    'vhvPassword',
+  static const VerificationMeta _vhvPasswordHashMeta = const VerificationMeta(
+    'vhvPasswordHash',
   );
   @override
-  late final GeneratedColumn<String> vhvPassword = GeneratedColumn<String>(
-    'vhv_password',
+  late final GeneratedColumn<String> vhvPasswordHash = GeneratedColumn<String>(
+    'vhv_password_hash',
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
   );
   static const VerificationMeta _vhvBirthDateMeta = const VerificationMeta(
     'vhvBirthDate',
@@ -1362,7 +1343,7 @@ class $VhvsTableTable extends VhvsTable
     vhvLname,
     vhvMobile,
     vhvEmail,
-    vhvPassword,
+    vhvPasswordHash,
     vhvBirthDate,
     vhvGender,
     vhvAddress,
@@ -1440,16 +1421,14 @@ class $VhvsTableTable extends VhvsTable
     } else if (isInserting) {
       context.missing(_vhvEmailMeta);
     }
-    if (data.containsKey('vhv_password')) {
+    if (data.containsKey('vhv_password_hash')) {
       context.handle(
-        _vhvPasswordMeta,
-        vhvPassword.isAcceptableOrUnknown(
-          data['vhv_password']!,
-          _vhvPasswordMeta,
+        _vhvPasswordHashMeta,
+        vhvPasswordHash.isAcceptableOrUnknown(
+          data['vhv_password_hash']!,
+          _vhvPasswordHashMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_vhvPasswordMeta);
     }
     if (data.containsKey('vhv_birth_date')) {
       context.handle(
@@ -1501,70 +1480,58 @@ class $VhvsTableTable extends VhvsTable
   VhvsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return VhvsTableData(
-      vhvId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_id'],
-          )!,
-      vhvCitizenId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_citizen_id'],
-          )!,
-      vhvTitle:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_title'],
-          )!,
-      vhvFname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_fname'],
-          )!,
-      vhvLname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_lname'],
-          )!,
-      vhvMobile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_mobile'],
-          )!,
-      vhvEmail:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_email'],
-          )!,
-      vhvPassword:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_password'],
-          )!,
-      vhvBirthDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}vhv_birth_date'],
-          )!,
-      vhvGender:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_gender'],
-          )!,
-      vhvAddress:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_address'],
-          )!,
+      vhvId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_id'],
+      )!,
+      vhvCitizenId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_citizen_id'],
+      )!,
+      vhvTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_title'],
+      )!,
+      vhvFname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_fname'],
+      )!,
+      vhvLname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_lname'],
+      )!,
+      vhvMobile: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_mobile'],
+      )!,
+      vhvEmail: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_email'],
+      )!,
+      vhvPasswordHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_password_hash'],
+      )!,
+      vhvBirthDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}vhv_birth_date'],
+      )!,
+      vhvGender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_gender'],
+      )!,
+      vhvAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_address'],
+      )!,
       vhvImg: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}vhv_img'],
       ),
-      villageId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_id'],
-          )!,
+      villageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_id'],
+      )!,
     );
   }
 
@@ -1582,7 +1549,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   final String vhvLname;
   final String vhvMobile;
   final String vhvEmail;
-  final String vhvPassword;
+  final String vhvPasswordHash;
   final DateTime vhvBirthDate;
   final String vhvGender;
   final String vhvAddress;
@@ -1596,7 +1563,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     required this.vhvLname,
     required this.vhvMobile,
     required this.vhvEmail,
-    required this.vhvPassword,
+    required this.vhvPasswordHash,
     required this.vhvBirthDate,
     required this.vhvGender,
     required this.vhvAddress,
@@ -1613,7 +1580,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     map['vhv_lname'] = Variable<String>(vhvLname);
     map['vhv_mobile'] = Variable<String>(vhvMobile);
     map['vhv_email'] = Variable<String>(vhvEmail);
-    map['vhv_password'] = Variable<String>(vhvPassword);
+    map['vhv_password_hash'] = Variable<String>(vhvPasswordHash);
     map['vhv_birth_date'] = Variable<DateTime>(vhvBirthDate);
     map['vhv_gender'] = Variable<String>(vhvGender);
     map['vhv_address'] = Variable<String>(vhvAddress);
@@ -1633,12 +1600,13 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
       vhvLname: Value(vhvLname),
       vhvMobile: Value(vhvMobile),
       vhvEmail: Value(vhvEmail),
-      vhvPassword: Value(vhvPassword),
+      vhvPasswordHash: Value(vhvPasswordHash),
       vhvBirthDate: Value(vhvBirthDate),
       vhvGender: Value(vhvGender),
       vhvAddress: Value(vhvAddress),
-      vhvImg:
-          vhvImg == null && nullToAbsent ? const Value.absent() : Value(vhvImg),
+      vhvImg: vhvImg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(vhvImg),
       villageId: Value(villageId),
     );
   }
@@ -1656,7 +1624,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
       vhvLname: serializer.fromJson<String>(json['vhvLname']),
       vhvMobile: serializer.fromJson<String>(json['vhvMobile']),
       vhvEmail: serializer.fromJson<String>(json['vhvEmail']),
-      vhvPassword: serializer.fromJson<String>(json['vhvPassword']),
+      vhvPasswordHash: serializer.fromJson<String>(json['vhvPasswordHash']),
       vhvBirthDate: serializer.fromJson<DateTime>(json['vhvBirthDate']),
       vhvGender: serializer.fromJson<String>(json['vhvGender']),
       vhvAddress: serializer.fromJson<String>(json['vhvAddress']),
@@ -1675,7 +1643,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
       'vhvLname': serializer.toJson<String>(vhvLname),
       'vhvMobile': serializer.toJson<String>(vhvMobile),
       'vhvEmail': serializer.toJson<String>(vhvEmail),
-      'vhvPassword': serializer.toJson<String>(vhvPassword),
+      'vhvPasswordHash': serializer.toJson<String>(vhvPasswordHash),
       'vhvBirthDate': serializer.toJson<DateTime>(vhvBirthDate),
       'vhvGender': serializer.toJson<String>(vhvGender),
       'vhvAddress': serializer.toJson<String>(vhvAddress),
@@ -1692,7 +1660,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     String? vhvLname,
     String? vhvMobile,
     String? vhvEmail,
-    String? vhvPassword,
+    String? vhvPasswordHash,
     DateTime? vhvBirthDate,
     String? vhvGender,
     String? vhvAddress,
@@ -1706,7 +1674,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     vhvLname: vhvLname ?? this.vhvLname,
     vhvMobile: vhvMobile ?? this.vhvMobile,
     vhvEmail: vhvEmail ?? this.vhvEmail,
-    vhvPassword: vhvPassword ?? this.vhvPassword,
+    vhvPasswordHash: vhvPasswordHash ?? this.vhvPasswordHash,
     vhvBirthDate: vhvBirthDate ?? this.vhvBirthDate,
     vhvGender: vhvGender ?? this.vhvGender,
     vhvAddress: vhvAddress ?? this.vhvAddress,
@@ -1716,24 +1684,24 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   VhvsTableData copyWithCompanion(VhvsTableCompanion data) {
     return VhvsTableData(
       vhvId: data.vhvId.present ? data.vhvId.value : this.vhvId,
-      vhvCitizenId:
-          data.vhvCitizenId.present
-              ? data.vhvCitizenId.value
-              : this.vhvCitizenId,
+      vhvCitizenId: data.vhvCitizenId.present
+          ? data.vhvCitizenId.value
+          : this.vhvCitizenId,
       vhvTitle: data.vhvTitle.present ? data.vhvTitle.value : this.vhvTitle,
       vhvFname: data.vhvFname.present ? data.vhvFname.value : this.vhvFname,
       vhvLname: data.vhvLname.present ? data.vhvLname.value : this.vhvLname,
       vhvMobile: data.vhvMobile.present ? data.vhvMobile.value : this.vhvMobile,
       vhvEmail: data.vhvEmail.present ? data.vhvEmail.value : this.vhvEmail,
-      vhvPassword:
-          data.vhvPassword.present ? data.vhvPassword.value : this.vhvPassword,
-      vhvBirthDate:
-          data.vhvBirthDate.present
-              ? data.vhvBirthDate.value
-              : this.vhvBirthDate,
+      vhvPasswordHash: data.vhvPasswordHash.present
+          ? data.vhvPasswordHash.value
+          : this.vhvPasswordHash,
+      vhvBirthDate: data.vhvBirthDate.present
+          ? data.vhvBirthDate.value
+          : this.vhvBirthDate,
       vhvGender: data.vhvGender.present ? data.vhvGender.value : this.vhvGender,
-      vhvAddress:
-          data.vhvAddress.present ? data.vhvAddress.value : this.vhvAddress,
+      vhvAddress: data.vhvAddress.present
+          ? data.vhvAddress.value
+          : this.vhvAddress,
       vhvImg: data.vhvImg.present ? data.vhvImg.value : this.vhvImg,
       villageId: data.villageId.present ? data.villageId.value : this.villageId,
     );
@@ -1749,7 +1717,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
           ..write('vhvLname: $vhvLname, ')
           ..write('vhvMobile: $vhvMobile, ')
           ..write('vhvEmail: $vhvEmail, ')
-          ..write('vhvPassword: $vhvPassword, ')
+          ..write('vhvPasswordHash: $vhvPasswordHash, ')
           ..write('vhvBirthDate: $vhvBirthDate, ')
           ..write('vhvGender: $vhvGender, ')
           ..write('vhvAddress: $vhvAddress, ')
@@ -1768,7 +1736,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
     vhvLname,
     vhvMobile,
     vhvEmail,
-    vhvPassword,
+    vhvPasswordHash,
     vhvBirthDate,
     vhvGender,
     vhvAddress,
@@ -1786,7 +1754,7 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
           other.vhvLname == this.vhvLname &&
           other.vhvMobile == this.vhvMobile &&
           other.vhvEmail == this.vhvEmail &&
-          other.vhvPassword == this.vhvPassword &&
+          other.vhvPasswordHash == this.vhvPasswordHash &&
           other.vhvBirthDate == this.vhvBirthDate &&
           other.vhvGender == this.vhvGender &&
           other.vhvAddress == this.vhvAddress &&
@@ -1802,7 +1770,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
   final Value<String> vhvLname;
   final Value<String> vhvMobile;
   final Value<String> vhvEmail;
-  final Value<String> vhvPassword;
+  final Value<String> vhvPasswordHash;
   final Value<DateTime> vhvBirthDate;
   final Value<String> vhvGender;
   final Value<String> vhvAddress;
@@ -1817,7 +1785,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     this.vhvLname = const Value.absent(),
     this.vhvMobile = const Value.absent(),
     this.vhvEmail = const Value.absent(),
-    this.vhvPassword = const Value.absent(),
+    this.vhvPasswordHash = const Value.absent(),
     this.vhvBirthDate = const Value.absent(),
     this.vhvGender = const Value.absent(),
     this.vhvAddress = const Value.absent(),
@@ -1833,7 +1801,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     required String vhvLname,
     required String vhvMobile,
     required String vhvEmail,
-    required String vhvPassword,
+    this.vhvPasswordHash = const Value.absent(),
     required DateTime vhvBirthDate,
     required String vhvGender,
     required String vhvAddress,
@@ -1847,7 +1815,6 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
        vhvLname = Value(vhvLname),
        vhvMobile = Value(vhvMobile),
        vhvEmail = Value(vhvEmail),
-       vhvPassword = Value(vhvPassword),
        vhvBirthDate = Value(vhvBirthDate),
        vhvGender = Value(vhvGender),
        vhvAddress = Value(vhvAddress),
@@ -1860,7 +1827,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     Expression<String>? vhvLname,
     Expression<String>? vhvMobile,
     Expression<String>? vhvEmail,
-    Expression<String>? vhvPassword,
+    Expression<String>? vhvPasswordHash,
     Expression<DateTime>? vhvBirthDate,
     Expression<String>? vhvGender,
     Expression<String>? vhvAddress,
@@ -1876,7 +1843,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
       if (vhvLname != null) 'vhv_lname': vhvLname,
       if (vhvMobile != null) 'vhv_mobile': vhvMobile,
       if (vhvEmail != null) 'vhv_email': vhvEmail,
-      if (vhvPassword != null) 'vhv_password': vhvPassword,
+      if (vhvPasswordHash != null) 'vhv_password_hash': vhvPasswordHash,
       if (vhvBirthDate != null) 'vhv_birth_date': vhvBirthDate,
       if (vhvGender != null) 'vhv_gender': vhvGender,
       if (vhvAddress != null) 'vhv_address': vhvAddress,
@@ -1894,7 +1861,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     Value<String>? vhvLname,
     Value<String>? vhvMobile,
     Value<String>? vhvEmail,
-    Value<String>? vhvPassword,
+    Value<String>? vhvPasswordHash,
     Value<DateTime>? vhvBirthDate,
     Value<String>? vhvGender,
     Value<String>? vhvAddress,
@@ -1910,7 +1877,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
       vhvLname: vhvLname ?? this.vhvLname,
       vhvMobile: vhvMobile ?? this.vhvMobile,
       vhvEmail: vhvEmail ?? this.vhvEmail,
-      vhvPassword: vhvPassword ?? this.vhvPassword,
+      vhvPasswordHash: vhvPasswordHash ?? this.vhvPasswordHash,
       vhvBirthDate: vhvBirthDate ?? this.vhvBirthDate,
       vhvGender: vhvGender ?? this.vhvGender,
       vhvAddress: vhvAddress ?? this.vhvAddress,
@@ -1944,8 +1911,8 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
     if (vhvEmail.present) {
       map['vhv_email'] = Variable<String>(vhvEmail.value);
     }
-    if (vhvPassword.present) {
-      map['vhv_password'] = Variable<String>(vhvPassword.value);
+    if (vhvPasswordHash.present) {
+      map['vhv_password_hash'] = Variable<String>(vhvPasswordHash.value);
     }
     if (vhvBirthDate.present) {
       map['vhv_birth_date'] = Variable<DateTime>(vhvBirthDate.value);
@@ -1978,7 +1945,7 @@ class VhvsTableCompanion extends UpdateCompanion<VhvsTableData> {
           ..write('vhvLname: $vhvLname, ')
           ..write('vhvMobile: $vhvMobile, ')
           ..write('vhvEmail: $vhvEmail, ')
-          ..write('vhvPassword: $vhvPassword, ')
+          ..write('vhvPasswordHash: $vhvPasswordHash, ')
           ..write('vhvBirthDate: $vhvBirthDate, ')
           ..write('vhvGender: $vhvGender, ')
           ..write('vhvAddress: $vhvAddress, ')
@@ -2262,60 +2229,50 @@ class $PatientsTableTable extends PatientsTable
   PatientsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PatientsTableData(
-      patientId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_id'],
-          )!,
-      patientCitizenId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_citizen_id'],
-          )!,
-      patientTitle:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_title'],
-          )!,
-      patientFname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_fname'],
-          )!,
-      patientLname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_lname'],
-          )!,
-      patientGender:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_gender'],
-          )!,
-      patientBirthDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}patient_birth_date'],
-          )!,
-      patientAddress:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_address'],
-          )!,
-      patientMobile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_mobile'],
-          )!,
+      patientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_id'],
+      )!,
+      patientCitizenId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_citizen_id'],
+      )!,
+      patientTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_title'],
+      )!,
+      patientFname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_fname'],
+      )!,
+      patientLname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_lname'],
+      )!,
+      patientGender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_gender'],
+      )!,
+      patientBirthDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}patient_birth_date'],
+      )!,
+      patientAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_address'],
+      )!,
+      patientMobile: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_mobile'],
+      )!,
       patientImg: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}patient_img'],
       ),
-      villageId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_id'],
-          )!,
+      villageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_id'],
+      )!,
     );
   }
 
@@ -2381,10 +2338,9 @@ class PatientsTableData extends DataClass
       patientBirthDate: Value(patientBirthDate),
       patientAddress: Value(patientAddress),
       patientMobile: Value(patientMobile),
-      patientImg:
-          patientImg == null && nullToAbsent
-              ? const Value.absent()
-              : Value(patientImg),
+      patientImg: patientImg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(patientImg),
       villageId: Value(villageId),
     );
   }
@@ -2454,40 +2410,33 @@ class PatientsTableData extends DataClass
   PatientsTableData copyWithCompanion(PatientsTableCompanion data) {
     return PatientsTableData(
       patientId: data.patientId.present ? data.patientId.value : this.patientId,
-      patientCitizenId:
-          data.patientCitizenId.present
-              ? data.patientCitizenId.value
-              : this.patientCitizenId,
-      patientTitle:
-          data.patientTitle.present
-              ? data.patientTitle.value
-              : this.patientTitle,
-      patientFname:
-          data.patientFname.present
-              ? data.patientFname.value
-              : this.patientFname,
-      patientLname:
-          data.patientLname.present
-              ? data.patientLname.value
-              : this.patientLname,
-      patientGender:
-          data.patientGender.present
-              ? data.patientGender.value
-              : this.patientGender,
-      patientBirthDate:
-          data.patientBirthDate.present
-              ? data.patientBirthDate.value
-              : this.patientBirthDate,
-      patientAddress:
-          data.patientAddress.present
-              ? data.patientAddress.value
-              : this.patientAddress,
-      patientMobile:
-          data.patientMobile.present
-              ? data.patientMobile.value
-              : this.patientMobile,
-      patientImg:
-          data.patientImg.present ? data.patientImg.value : this.patientImg,
+      patientCitizenId: data.patientCitizenId.present
+          ? data.patientCitizenId.value
+          : this.patientCitizenId,
+      patientTitle: data.patientTitle.present
+          ? data.patientTitle.value
+          : this.patientTitle,
+      patientFname: data.patientFname.present
+          ? data.patientFname.value
+          : this.patientFname,
+      patientLname: data.patientLname.present
+          ? data.patientLname.value
+          : this.patientLname,
+      patientGender: data.patientGender.present
+          ? data.patientGender.value
+          : this.patientGender,
+      patientBirthDate: data.patientBirthDate.present
+          ? data.patientBirthDate.value
+          : this.patientBirthDate,
+      patientAddress: data.patientAddress.present
+          ? data.patientAddress.value
+          : this.patientAddress,
+      patientMobile: data.patientMobile.present
+          ? data.patientMobile.value
+          : this.patientMobile,
+      patientImg: data.patientImg.present
+          ? data.patientImg.value
+          : this.patientImg,
       villageId: data.villageId.present ? data.villageId.value : this.villageId,
     );
   }
@@ -3077,41 +3026,34 @@ class $ScreeningsTableTable extends ScreeningsTable
   ScreeningsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningsTableData(
-      screenId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}screen_id'],
-          )!,
-      patientId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_id'],
-          )!,
-      vhvId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_id'],
-          )!,
-      screeningDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}screening_date'],
-          )!,
-      ageAtScreening:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}age_at_screening'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
-      reviewStatus:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}review_status'],
-          )!,
+      screenId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}screen_id'],
+      )!,
+      patientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_id'],
+      )!,
+      vhvId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_id'],
+      )!,
+      screeningDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}screening_date'],
+      )!,
+      ageAtScreening: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}age_at_screening'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      reviewStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}review_status'],
+      )!,
       reviewedByNurseId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}reviewed_by_nurse_id'],
@@ -3120,46 +3062,38 @@ class $ScreeningsTableTable extends ScreeningsTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}reviewed_at'],
       ),
-      weight:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}weight'],
-          )!,
-      height:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}height'],
-          )!,
-      bmi:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}bmi'],
-          )!,
-      waistCm:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}waist_cm'],
-          )!,
-      sbp:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}sbp'],
-          )!,
-      dbp:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}dbp'],
-          )!,
-      pulse:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}pulse'],
-          )!,
-      bloodSugar:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}blood_sugar'],
-          )!,
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight'],
+      )!,
+      height: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}height'],
+      )!,
+      bmi: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}bmi'],
+      )!,
+      waistCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}waist_cm'],
+      )!,
+      sbp: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}sbp'],
+      )!,
+      dbp: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}dbp'],
+      )!,
+      pulse: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}pulse'],
+      )!,
+      bloodSugar: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}blood_sugar'],
+      )!,
     );
   }
 
@@ -3243,14 +3177,12 @@ class ScreeningsTableData extends DataClass
       ageAtScreening: Value(ageAtScreening),
       createdAt: Value(createdAt),
       reviewStatus: Value(reviewStatus),
-      reviewedByNurseId:
-          reviewedByNurseId == null && nullToAbsent
-              ? const Value.absent()
-              : Value(reviewedByNurseId),
-      reviewedAt:
-          reviewedAt == null && nullToAbsent
-              ? const Value.absent()
-              : Value(reviewedAt),
+      reviewedByNurseId: reviewedByNurseId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reviewedByNurseId),
+      reviewedAt: reviewedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reviewedAt),
       weight: Value(weight),
       height: Value(height),
       bmi: Value(bmi),
@@ -3339,10 +3271,9 @@ class ScreeningsTableData extends DataClass
     ageAtScreening: ageAtScreening ?? this.ageAtScreening,
     createdAt: createdAt ?? this.createdAt,
     reviewStatus: reviewStatus ?? this.reviewStatus,
-    reviewedByNurseId:
-        reviewedByNurseId.present
-            ? reviewedByNurseId.value
-            : this.reviewedByNurseId,
+    reviewedByNurseId: reviewedByNurseId.present
+        ? reviewedByNurseId.value
+        : this.reviewedByNurseId,
     reviewedAt: reviewedAt.present ? reviewedAt.value : this.reviewedAt,
     weight: weight ?? this.weight,
     height: height ?? this.height,
@@ -3358,25 +3289,22 @@ class ScreeningsTableData extends DataClass
       screenId: data.screenId.present ? data.screenId.value : this.screenId,
       patientId: data.patientId.present ? data.patientId.value : this.patientId,
       vhvId: data.vhvId.present ? data.vhvId.value : this.vhvId,
-      screeningDate:
-          data.screeningDate.present
-              ? data.screeningDate.value
-              : this.screeningDate,
-      ageAtScreening:
-          data.ageAtScreening.present
-              ? data.ageAtScreening.value
-              : this.ageAtScreening,
+      screeningDate: data.screeningDate.present
+          ? data.screeningDate.value
+          : this.screeningDate,
+      ageAtScreening: data.ageAtScreening.present
+          ? data.ageAtScreening.value
+          : this.ageAtScreening,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      reviewStatus:
-          data.reviewStatus.present
-              ? data.reviewStatus.value
-              : this.reviewStatus,
-      reviewedByNurseId:
-          data.reviewedByNurseId.present
-              ? data.reviewedByNurseId.value
-              : this.reviewedByNurseId,
-      reviewedAt:
-          data.reviewedAt.present ? data.reviewedAt.value : this.reviewedAt,
+      reviewStatus: data.reviewStatus.present
+          ? data.reviewStatus.value
+          : this.reviewStatus,
+      reviewedByNurseId: data.reviewedByNurseId.present
+          ? data.reviewedByNurseId.value
+          : this.reviewedByNurseId,
+      reviewedAt: data.reviewedAt.present
+          ? data.reviewedAt.value
+          : this.reviewedAt,
       weight: data.weight.present ? data.weight.value : this.weight,
       height: data.height.present ? data.height.value : this.height,
       bmi: data.bmi.present ? data.bmi.value : this.bmi,
@@ -3384,8 +3312,9 @@ class ScreeningsTableData extends DataClass
       sbp: data.sbp.present ? data.sbp.value : this.sbp,
       dbp: data.dbp.present ? data.dbp.value : this.dbp,
       pulse: data.pulse.present ? data.pulse.value : this.pulse,
-      bloodSugar:
-          data.bloodSugar.present ? data.bloodSugar.value : this.bloodSugar,
+      bloodSugar: data.bloodSugar.present
+          ? data.bloodSugar.value
+          : this.bloodSugar,
     );
   }
 
@@ -3858,35 +3787,30 @@ class $ScreeningHistoriesTableTable extends ScreeningHistoriesTable
   }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningHistoriesTableData(
-      historyId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}history_id'],
-          )!,
-      screeningId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}screening_id'],
-          )!,
-      questionId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}question_id'],
-          )!,
-      questionText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}question_text'],
-          )!,
+      historyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}history_id'],
+      )!,
+      screeningId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}screening_id'],
+      )!,
+      questionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}question_id'],
+      )!,
+      questionText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}question_text'],
+      )!,
       answerValue: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}answer_value'],
       ),
-      answerText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}answer_text'],
-          )!,
+      answerText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}answer_text'],
+      )!,
     );
   }
 
@@ -3932,10 +3856,9 @@ class ScreeningHistoriesTableData extends DataClass
       screeningId: Value(screeningId),
       questionId: Value(questionId),
       questionText: Value(questionText),
-      answerValue:
-          answerValue == null && nullToAbsent
-              ? const Value.absent()
-              : Value(answerValue),
+      answerValue: answerValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answerValue),
       answerText: Value(answerText),
     );
   }
@@ -3987,18 +3910,21 @@ class ScreeningHistoriesTableData extends DataClass
   ) {
     return ScreeningHistoriesTableData(
       historyId: data.historyId.present ? data.historyId.value : this.historyId,
-      screeningId:
-          data.screeningId.present ? data.screeningId.value : this.screeningId,
-      questionId:
-          data.questionId.present ? data.questionId.value : this.questionId,
-      questionText:
-          data.questionText.present
-              ? data.questionText.value
-              : this.questionText,
-      answerValue:
-          data.answerValue.present ? data.answerValue.value : this.answerValue,
-      answerText:
-          data.answerText.present ? data.answerText.value : this.answerText,
+      screeningId: data.screeningId.present
+          ? data.screeningId.value
+          : this.screeningId,
+      questionId: data.questionId.present
+          ? data.questionId.value
+          : this.questionId,
+      questionText: data.questionText.present
+          ? data.questionText.value
+          : this.questionText,
+      answerValue: data.answerValue.present
+          ? data.answerValue.value
+          : this.answerValue,
+      answerText: data.answerText.present
+          ? data.answerText.value
+          : this.answerText,
     );
   }
 
@@ -4351,46 +4277,38 @@ class $ScreeningResultsTableTable extends ScreeningResultsTable
   }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningResultsTableData(
-      resultId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}result_id'],
-          )!,
-      screeningId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}screening_id'],
-          )!,
-      diseaseName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}disease_name'],
-          )!,
-      diseaseCode:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}disease_code'],
-          )!,
-      score:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}score'],
-          )!,
-      riskLevel:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}risk_level'],
-          )!,
-      adviceText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}advice_text'],
-          )!,
-      criteriaText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}criteria_text'],
-          )!,
+      resultId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}result_id'],
+      )!,
+      screeningId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}screening_id'],
+      )!,
+      diseaseName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}disease_name'],
+      )!,
+      diseaseCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}disease_code'],
+      )!,
+      score: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}score'],
+      )!,
+      riskLevel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}risk_level'],
+      )!,
+      adviceText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}advice_text'],
+      )!,
+      criteriaText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}criteria_text'],
+      )!,
     );
   }
 
@@ -4502,20 +4420,23 @@ class ScreeningResultsTableData extends DataClass
   ) {
     return ScreeningResultsTableData(
       resultId: data.resultId.present ? data.resultId.value : this.resultId,
-      screeningId:
-          data.screeningId.present ? data.screeningId.value : this.screeningId,
-      diseaseName:
-          data.diseaseName.present ? data.diseaseName.value : this.diseaseName,
-      diseaseCode:
-          data.diseaseCode.present ? data.diseaseCode.value : this.diseaseCode,
+      screeningId: data.screeningId.present
+          ? data.screeningId.value
+          : this.screeningId,
+      diseaseName: data.diseaseName.present
+          ? data.diseaseName.value
+          : this.diseaseName,
+      diseaseCode: data.diseaseCode.present
+          ? data.diseaseCode.value
+          : this.diseaseCode,
       score: data.score.present ? data.score.value : this.score,
       riskLevel: data.riskLevel.present ? data.riskLevel.value : this.riskLevel,
-      adviceText:
-          data.adviceText.present ? data.adviceText.value : this.adviceText,
-      criteriaText:
-          data.criteriaText.present
-              ? data.criteriaText.value
-              : this.criteriaText,
+      adviceText: data.adviceText.present
+          ? data.adviceText.value
+          : this.adviceText,
+      criteriaText: data.criteriaText.present
+          ? data.criteriaText.value
+          : this.criteriaText,
     );
   }
 
@@ -4696,6 +4617,569 @@ class ScreeningResultsTableCompanion
   }
 }
 
+class $SyncQueueTableTable extends SyncQueueTable
+    with TableInfo<$SyncQueueTableTable, SyncQueueTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncQueueTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entityTypeMeta = const VerificationMeta(
+    'entityType',
+  );
+  @override
+  late final GeneratedColumn<String> entityType = GeneratedColumn<String>(
+    'entity_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entityIdMeta = const VerificationMeta(
+    'entityId',
+  );
+  @override
+  late final GeneratedColumn<String> entityId = GeneratedColumn<String>(
+    'entity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _actionMeta = const VerificationMeta('action');
+  @override
+  late final GeneratedColumn<String> action = GeneratedColumn<String>(
+    'action',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _payloadMeta = const VerificationMeta(
+    'payload',
+  );
+  @override
+  late final GeneratedColumn<String> payload = GeneratedColumn<String>(
+    'payload',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _retryCountMeta = const VerificationMeta(
+    'retryCount',
+  );
+  @override
+  late final GeneratedColumn<int> retryCount = GeneratedColumn<int>(
+    'retry_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('pending'),
+  );
+  static const VerificationMeta _errorMessageMeta = const VerificationMeta(
+    'errorMessage',
+  );
+  @override
+  late final GeneratedColumn<String> errorMessage = GeneratedColumn<String>(
+    'error_message',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    entityType,
+    entityId,
+    action,
+    payload,
+    createdAt,
+    retryCount,
+    status,
+    errorMessage,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_queue';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SyncQueueTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('entity_type')) {
+      context.handle(
+        _entityTypeMeta,
+        entityType.isAcceptableOrUnknown(data['entity_type']!, _entityTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entityTypeMeta);
+    }
+    if (data.containsKey('entity_id')) {
+      context.handle(
+        _entityIdMeta,
+        entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entityIdMeta);
+    }
+    if (data.containsKey('action')) {
+      context.handle(
+        _actionMeta,
+        action.isAcceptableOrUnknown(data['action']!, _actionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_actionMeta);
+    }
+    if (data.containsKey('payload')) {
+      context.handle(
+        _payloadMeta,
+        payload.isAcceptableOrUnknown(data['payload']!, _payloadMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_payloadMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('retry_count')) {
+      context.handle(
+        _retryCountMeta,
+        retryCount.isAcceptableOrUnknown(data['retry_count']!, _retryCountMeta),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('error_message')) {
+      context.handle(
+        _errorMessageMeta,
+        errorMessage.isAcceptableOrUnknown(
+          data['error_message']!,
+          _errorMessageMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SyncQueueTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncQueueTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      entityType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_type'],
+      )!,
+      entityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_id'],
+      )!,
+      action: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}action'],
+      )!,
+      payload: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      retryCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}retry_count'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      errorMessage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}error_message'],
+      ),
+    );
+  }
+
+  @override
+  $SyncQueueTableTable createAlias(String alias) {
+    return $SyncQueueTableTable(attachedDatabase, alias);
+  }
+}
+
+class SyncQueueTableData extends DataClass
+    implements Insertable<SyncQueueTableData> {
+  final String id;
+  final String entityType;
+  final String entityId;
+  final String action;
+  final String payload;
+  final DateTime createdAt;
+  final int retryCount;
+  final String status;
+  final String? errorMessage;
+  const SyncQueueTableData({
+    required this.id,
+    required this.entityType,
+    required this.entityId,
+    required this.action,
+    required this.payload,
+    required this.createdAt,
+    required this.retryCount,
+    required this.status,
+    this.errorMessage,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['entity_type'] = Variable<String>(entityType);
+    map['entity_id'] = Variable<String>(entityId);
+    map['action'] = Variable<String>(action);
+    map['payload'] = Variable<String>(payload);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['retry_count'] = Variable<int>(retryCount);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || errorMessage != null) {
+      map['error_message'] = Variable<String>(errorMessage);
+    }
+    return map;
+  }
+
+  SyncQueueTableCompanion toCompanion(bool nullToAbsent) {
+    return SyncQueueTableCompanion(
+      id: Value(id),
+      entityType: Value(entityType),
+      entityId: Value(entityId),
+      action: Value(action),
+      payload: Value(payload),
+      createdAt: Value(createdAt),
+      retryCount: Value(retryCount),
+      status: Value(status),
+      errorMessage: errorMessage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorMessage),
+    );
+  }
+
+  factory SyncQueueTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncQueueTableData(
+      id: serializer.fromJson<String>(json['id']),
+      entityType: serializer.fromJson<String>(json['entityType']),
+      entityId: serializer.fromJson<String>(json['entityId']),
+      action: serializer.fromJson<String>(json['action']),
+      payload: serializer.fromJson<String>(json['payload']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      retryCount: serializer.fromJson<int>(json['retryCount']),
+      status: serializer.fromJson<String>(json['status']),
+      errorMessage: serializer.fromJson<String?>(json['errorMessage']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'entityType': serializer.toJson<String>(entityType),
+      'entityId': serializer.toJson<String>(entityId),
+      'action': serializer.toJson<String>(action),
+      'payload': serializer.toJson<String>(payload),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'retryCount': serializer.toJson<int>(retryCount),
+      'status': serializer.toJson<String>(status),
+      'errorMessage': serializer.toJson<String?>(errorMessage),
+    };
+  }
+
+  SyncQueueTableData copyWith({
+    String? id,
+    String? entityType,
+    String? entityId,
+    String? action,
+    String? payload,
+    DateTime? createdAt,
+    int? retryCount,
+    String? status,
+    Value<String?> errorMessage = const Value.absent(),
+  }) => SyncQueueTableData(
+    id: id ?? this.id,
+    entityType: entityType ?? this.entityType,
+    entityId: entityId ?? this.entityId,
+    action: action ?? this.action,
+    payload: payload ?? this.payload,
+    createdAt: createdAt ?? this.createdAt,
+    retryCount: retryCount ?? this.retryCount,
+    status: status ?? this.status,
+    errorMessage: errorMessage.present ? errorMessage.value : this.errorMessage,
+  );
+  SyncQueueTableData copyWithCompanion(SyncQueueTableCompanion data) {
+    return SyncQueueTableData(
+      id: data.id.present ? data.id.value : this.id,
+      entityType: data.entityType.present
+          ? data.entityType.value
+          : this.entityType,
+      entityId: data.entityId.present ? data.entityId.value : this.entityId,
+      action: data.action.present ? data.action.value : this.action,
+      payload: data.payload.present ? data.payload.value : this.payload,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      retryCount: data.retryCount.present
+          ? data.retryCount.value
+          : this.retryCount,
+      status: data.status.present ? data.status.value : this.status,
+      errorMessage: data.errorMessage.present
+          ? data.errorMessage.value
+          : this.errorMessage,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncQueueTableData(')
+          ..write('id: $id, ')
+          ..write('entityType: $entityType, ')
+          ..write('entityId: $entityId, ')
+          ..write('action: $action, ')
+          ..write('payload: $payload, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('retryCount: $retryCount, ')
+          ..write('status: $status, ')
+          ..write('errorMessage: $errorMessage')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    entityType,
+    entityId,
+    action,
+    payload,
+    createdAt,
+    retryCount,
+    status,
+    errorMessage,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncQueueTableData &&
+          other.id == this.id &&
+          other.entityType == this.entityType &&
+          other.entityId == this.entityId &&
+          other.action == this.action &&
+          other.payload == this.payload &&
+          other.createdAt == this.createdAt &&
+          other.retryCount == this.retryCount &&
+          other.status == this.status &&
+          other.errorMessage == this.errorMessage);
+}
+
+class SyncQueueTableCompanion extends UpdateCompanion<SyncQueueTableData> {
+  final Value<String> id;
+  final Value<String> entityType;
+  final Value<String> entityId;
+  final Value<String> action;
+  final Value<String> payload;
+  final Value<DateTime> createdAt;
+  final Value<int> retryCount;
+  final Value<String> status;
+  final Value<String?> errorMessage;
+  final Value<int> rowid;
+  const SyncQueueTableCompanion({
+    this.id = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.entityId = const Value.absent(),
+    this.action = const Value.absent(),
+    this.payload = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.retryCount = const Value.absent(),
+    this.status = const Value.absent(),
+    this.errorMessage = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SyncQueueTableCompanion.insert({
+    required String id,
+    required String entityType,
+    required String entityId,
+    required String action,
+    required String payload,
+    required DateTime createdAt,
+    this.retryCount = const Value.absent(),
+    this.status = const Value.absent(),
+    this.errorMessage = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       entityType = Value(entityType),
+       entityId = Value(entityId),
+       action = Value(action),
+       payload = Value(payload),
+       createdAt = Value(createdAt);
+  static Insertable<SyncQueueTableData> custom({
+    Expression<String>? id,
+    Expression<String>? entityType,
+    Expression<String>? entityId,
+    Expression<String>? action,
+    Expression<String>? payload,
+    Expression<DateTime>? createdAt,
+    Expression<int>? retryCount,
+    Expression<String>? status,
+    Expression<String>? errorMessage,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (entityType != null) 'entity_type': entityType,
+      if (entityId != null) 'entity_id': entityId,
+      if (action != null) 'action': action,
+      if (payload != null) 'payload': payload,
+      if (createdAt != null) 'created_at': createdAt,
+      if (retryCount != null) 'retry_count': retryCount,
+      if (status != null) 'status': status,
+      if (errorMessage != null) 'error_message': errorMessage,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SyncQueueTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? entityType,
+    Value<String>? entityId,
+    Value<String>? action,
+    Value<String>? payload,
+    Value<DateTime>? createdAt,
+    Value<int>? retryCount,
+    Value<String>? status,
+    Value<String?>? errorMessage,
+    Value<int>? rowid,
+  }) {
+    return SyncQueueTableCompanion(
+      id: id ?? this.id,
+      entityType: entityType ?? this.entityType,
+      entityId: entityId ?? this.entityId,
+      action: action ?? this.action,
+      payload: payload ?? this.payload,
+      createdAt: createdAt ?? this.createdAt,
+      retryCount: retryCount ?? this.retryCount,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (entityType.present) {
+      map['entity_type'] = Variable<String>(entityType.value);
+    }
+    if (entityId.present) {
+      map['entity_id'] = Variable<String>(entityId.value);
+    }
+    if (action.present) {
+      map['action'] = Variable<String>(action.value);
+    }
+    if (payload.present) {
+      map['payload'] = Variable<String>(payload.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (retryCount.present) {
+      map['retry_count'] = Variable<int>(retryCount.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (errorMessage.present) {
+      map['error_message'] = Variable<String>(errorMessage.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncQueueTableCompanion(')
+          ..write('id: $id, ')
+          ..write('entityType: $entityType, ')
+          ..write('entityId: $entityId, ')
+          ..write('action: $action, ')
+          ..write('payload: $payload, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('retryCount: $retryCount, ')
+          ..write('status: $status, ')
+          ..write('errorMessage: $errorMessage, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4710,6 +5194,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ScreeningHistoriesTableTable(this);
   late final $ScreeningResultsTableTable screeningResultsTable =
       $ScreeningResultsTableTable(this);
+  late final $SyncQueueTableTable syncQueueTable = $SyncQueueTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4722,6 +5207,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     screeningsTable,
     screeningHistoriesTable,
     screeningResultsTable,
+    syncQueueTable,
   ];
 }
 
@@ -4908,16 +5394,12 @@ class $$VillagesTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$VillagesTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$VillagesTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$VillagesTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$VillagesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VillagesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VillagesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> villageId = const Value.absent(),
@@ -4958,16 +5440,9 @@ class $$VillagesTableTableTableManager
                 provinceName: provinceName,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -4998,7 +5473,7 @@ typedef $$NursesTableTableCreateCompanionBuilder =
       required String nurseLname,
       required String nurseMobile,
       required String nurseEmail,
-      required String nursePassword,
+      Value<String> nursePasswordHash,
       required String nurseGender,
       required DateTime nurseBirthDate,
       Value<String?> nurseImg,
@@ -5013,7 +5488,7 @@ typedef $$NursesTableTableUpdateCompanionBuilder =
       Value<String> nurseLname,
       Value<String> nurseMobile,
       Value<String> nurseEmail,
-      Value<String> nursePassword,
+      Value<String> nursePasswordHash,
       Value<String> nurseGender,
       Value<DateTime> nurseBirthDate,
       Value<String?> nurseImg,
@@ -5060,8 +5535,8 @@ class $$NursesTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get nursePassword => $composableBuilder(
-    column: $table.nursePassword,
+  ColumnFilters<String> get nursePasswordHash => $composableBuilder(
+    column: $table.nursePasswordHash,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5125,8 +5600,8 @@ class $$NursesTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get nursePassword => $composableBuilder(
-    column: $table.nursePassword,
+  ColumnOrderings<String> get nursePasswordHash => $composableBuilder(
+    column: $table.nursePasswordHash,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -5188,8 +5663,8 @@ class $$NursesTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get nursePassword => $composableBuilder(
-    column: $table.nursePassword,
+  GeneratedColumn<String> get nursePasswordHash => $composableBuilder(
+    column: $table.nursePasswordHash,
     builder: (column) => column,
   );
 
@@ -5235,13 +5710,12 @@ class $$NursesTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$NursesTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$NursesTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$NursesTableTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$NursesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NursesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NursesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> nurseId = const Value.absent(),
@@ -5250,7 +5724,7 @@ class $$NursesTableTableTableManager
                 Value<String> nurseLname = const Value.absent(),
                 Value<String> nurseMobile = const Value.absent(),
                 Value<String> nurseEmail = const Value.absent(),
-                Value<String> nursePassword = const Value.absent(),
+                Value<String> nursePasswordHash = const Value.absent(),
                 Value<String> nurseGender = const Value.absent(),
                 Value<DateTime> nurseBirthDate = const Value.absent(),
                 Value<String?> nurseImg = const Value.absent(),
@@ -5263,7 +5737,7 @@ class $$NursesTableTableTableManager
                 nurseLname: nurseLname,
                 nurseMobile: nurseMobile,
                 nurseEmail: nurseEmail,
-                nursePassword: nursePassword,
+                nursePasswordHash: nursePasswordHash,
                 nurseGender: nurseGender,
                 nurseBirthDate: nurseBirthDate,
                 nurseImg: nurseImg,
@@ -5278,7 +5752,7 @@ class $$NursesTableTableTableManager
                 required String nurseLname,
                 required String nurseMobile,
                 required String nurseEmail,
-                required String nursePassword,
+                Value<String> nursePasswordHash = const Value.absent(),
                 required String nurseGender,
                 required DateTime nurseBirthDate,
                 Value<String?> nurseImg = const Value.absent(),
@@ -5291,23 +5765,16 @@ class $$NursesTableTableTableManager
                 nurseLname: nurseLname,
                 nurseMobile: nurseMobile,
                 nurseEmail: nurseEmail,
-                nursePassword: nursePassword,
+                nursePasswordHash: nursePasswordHash,
                 nurseGender: nurseGender,
                 nurseBirthDate: nurseBirthDate,
                 nurseImg: nurseImg,
                 subdistrictId: subdistrictId,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -5339,7 +5806,7 @@ typedef $$VhvsTableTableCreateCompanionBuilder =
       required String vhvLname,
       required String vhvMobile,
       required String vhvEmail,
-      required String vhvPassword,
+      Value<String> vhvPasswordHash,
       required DateTime vhvBirthDate,
       required String vhvGender,
       required String vhvAddress,
@@ -5356,7 +5823,7 @@ typedef $$VhvsTableTableUpdateCompanionBuilder =
       Value<String> vhvLname,
       Value<String> vhvMobile,
       Value<String> vhvEmail,
-      Value<String> vhvPassword,
+      Value<String> vhvPasswordHash,
       Value<DateTime> vhvBirthDate,
       Value<String> vhvGender,
       Value<String> vhvAddress,
@@ -5409,8 +5876,8 @@ class $$VhvsTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get vhvPassword => $composableBuilder(
-    column: $table.vhvPassword,
+  ColumnFilters<String> get vhvPasswordHash => $composableBuilder(
+    column: $table.vhvPasswordHash,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5484,8 +5951,8 @@ class $$VhvsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get vhvPassword => $composableBuilder(
-    column: $table.vhvPassword,
+  ColumnOrderings<String> get vhvPasswordHash => $composableBuilder(
+    column: $table.vhvPasswordHash,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -5547,8 +6014,8 @@ class $$VhvsTableTableAnnotationComposer
   GeneratedColumn<String> get vhvEmail =>
       $composableBuilder(column: $table.vhvEmail, builder: (column) => column);
 
-  GeneratedColumn<String> get vhvPassword => $composableBuilder(
-    column: $table.vhvPassword,
+  GeneratedColumn<String> get vhvPasswordHash => $composableBuilder(
+    column: $table.vhvPasswordHash,
     builder: (column) => column,
   );
 
@@ -5595,12 +6062,12 @@ class $$VhvsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$VhvsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$VhvsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$VhvsTableTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$VhvsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VhvsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VhvsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> vhvId = const Value.absent(),
@@ -5610,7 +6077,7 @@ class $$VhvsTableTableTableManager
                 Value<String> vhvLname = const Value.absent(),
                 Value<String> vhvMobile = const Value.absent(),
                 Value<String> vhvEmail = const Value.absent(),
-                Value<String> vhvPassword = const Value.absent(),
+                Value<String> vhvPasswordHash = const Value.absent(),
                 Value<DateTime> vhvBirthDate = const Value.absent(),
                 Value<String> vhvGender = const Value.absent(),
                 Value<String> vhvAddress = const Value.absent(),
@@ -5625,7 +6092,7 @@ class $$VhvsTableTableTableManager
                 vhvLname: vhvLname,
                 vhvMobile: vhvMobile,
                 vhvEmail: vhvEmail,
-                vhvPassword: vhvPassword,
+                vhvPasswordHash: vhvPasswordHash,
                 vhvBirthDate: vhvBirthDate,
                 vhvGender: vhvGender,
                 vhvAddress: vhvAddress,
@@ -5642,7 +6109,7 @@ class $$VhvsTableTableTableManager
                 required String vhvLname,
                 required String vhvMobile,
                 required String vhvEmail,
-                required String vhvPassword,
+                Value<String> vhvPasswordHash = const Value.absent(),
                 required DateTime vhvBirthDate,
                 required String vhvGender,
                 required String vhvAddress,
@@ -5657,7 +6124,7 @@ class $$VhvsTableTableTableManager
                 vhvLname: vhvLname,
                 vhvMobile: vhvMobile,
                 vhvEmail: vhvEmail,
-                vhvPassword: vhvPassword,
+                vhvPasswordHash: vhvPasswordHash,
                 vhvBirthDate: vhvBirthDate,
                 vhvGender: vhvGender,
                 vhvAddress: vhvAddress,
@@ -5665,16 +6132,9 @@ class $$VhvsTableTableTableManager
                 villageId: villageId,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -5946,16 +6406,12 @@ class $$PatientsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$PatientsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$PatientsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$PatientsTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$PatientsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PatientsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PatientsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> patientId = const Value.absent(),
@@ -6012,16 +6468,9 @@ class $$PatientsTableTableTableManager
                 villageId: villageId,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -6379,19 +6828,12 @@ class $$ScreeningsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () =>
-                  $$ScreeningsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$ScreeningsTableTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$ScreeningsTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$ScreeningsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ScreeningsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ScreeningsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> screenId = const Value.absent(),
@@ -6472,16 +6914,9 @@ class $$ScreeningsTableTableTableManager
                 bloodSugar: bloodSugar,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -6676,18 +7111,18 @@ class $$ScreeningHistoriesTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ScreeningHistoriesTableTableFilterComposer(
+          createFilteringComposer: () =>
+              $$ScreeningHistoriesTableTableFilterComposer(
                 $db: db,
                 $table: table,
               ),
-          createOrderingComposer:
-              () => $$ScreeningHistoriesTableTableOrderingComposer(
+          createOrderingComposer: () =>
+              $$ScreeningHistoriesTableTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
-          createComputedFieldComposer:
-              () => $$ScreeningHistoriesTableTableAnnotationComposer(
+          createComputedFieldComposer: () =>
+              $$ScreeningHistoriesTableTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -6727,16 +7162,9 @@ class $$ScreeningHistoriesTableTableTableManager
                 answerText: answerText,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -6961,18 +7389,18 @@ class $$ScreeningResultsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ScreeningResultsTableTableFilterComposer(
+          createFilteringComposer: () =>
+              $$ScreeningResultsTableTableFilterComposer(
                 $db: db,
                 $table: table,
               ),
-          createOrderingComposer:
-              () => $$ScreeningResultsTableTableOrderingComposer(
+          createOrderingComposer: () =>
+              $$ScreeningResultsTableTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
-          createComputedFieldComposer:
-              () => $$ScreeningResultsTableTableAnnotationComposer(
+          createComputedFieldComposer: () =>
+              $$ScreeningResultsTableTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -7020,16 +7448,9 @@ class $$ScreeningResultsTableTableTableManager
                 criteriaText: criteriaText,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -7056,6 +7477,294 @@ typedef $$ScreeningResultsTableTableProcessedTableManager =
       ScreeningResultsTableData,
       PrefetchHooks Function()
     >;
+typedef $$SyncQueueTableTableCreateCompanionBuilder =
+    SyncQueueTableCompanion Function({
+      required String id,
+      required String entityType,
+      required String entityId,
+      required String action,
+      required String payload,
+      required DateTime createdAt,
+      Value<int> retryCount,
+      Value<String> status,
+      Value<String?> errorMessage,
+      Value<int> rowid,
+    });
+typedef $$SyncQueueTableTableUpdateCompanionBuilder =
+    SyncQueueTableCompanion Function({
+      Value<String> id,
+      Value<String> entityType,
+      Value<String> entityId,
+      Value<String> action,
+      Value<String> payload,
+      Value<DateTime> createdAt,
+      Value<int> retryCount,
+      Value<String> status,
+      Value<String?> errorMessage,
+      Value<int> rowid,
+    });
+
+class $$SyncQueueTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SyncQueueTableTable> {
+  $$SyncQueueTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityId => $composableBuilder(
+    column: $table.entityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get action => $composableBuilder(
+    column: $table.action,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get payload => $composableBuilder(
+    column: $table.payload,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get retryCount => $composableBuilder(
+    column: $table.retryCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get errorMessage => $composableBuilder(
+    column: $table.errorMessage,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SyncQueueTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SyncQueueTableTable> {
+  $$SyncQueueTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityId => $composableBuilder(
+    column: $table.entityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get action => $composableBuilder(
+    column: $table.action,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get payload => $composableBuilder(
+    column: $table.payload,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get retryCount => $composableBuilder(
+    column: $table.retryCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get errorMessage => $composableBuilder(
+    column: $table.errorMessage,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SyncQueueTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SyncQueueTableTable> {
+  $$SyncQueueTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityType => $composableBuilder(
+    column: $table.entityType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get entityId =>
+      $composableBuilder(column: $table.entityId, builder: (column) => column);
+
+  GeneratedColumn<String> get action =>
+      $composableBuilder(column: $table.action, builder: (column) => column);
+
+  GeneratedColumn<String> get payload =>
+      $composableBuilder(column: $table.payload, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get retryCount => $composableBuilder(
+    column: $table.retryCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get errorMessage => $composableBuilder(
+    column: $table.errorMessage,
+    builder: (column) => column,
+  );
+}
+
+class $$SyncQueueTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SyncQueueTableTable,
+          SyncQueueTableData,
+          $$SyncQueueTableTableFilterComposer,
+          $$SyncQueueTableTableOrderingComposer,
+          $$SyncQueueTableTableAnnotationComposer,
+          $$SyncQueueTableTableCreateCompanionBuilder,
+          $$SyncQueueTableTableUpdateCompanionBuilder,
+          (
+            SyncQueueTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $SyncQueueTableTable,
+              SyncQueueTableData
+            >,
+          ),
+          SyncQueueTableData,
+          PrefetchHooks Function()
+        > {
+  $$SyncQueueTableTableTableManager(
+    _$AppDatabase db,
+    $SyncQueueTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncQueueTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncQueueTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncQueueTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> entityType = const Value.absent(),
+                Value<String> entityId = const Value.absent(),
+                Value<String> action = const Value.absent(),
+                Value<String> payload = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> retryCount = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> errorMessage = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SyncQueueTableCompanion(
+                id: id,
+                entityType: entityType,
+                entityId: entityId,
+                action: action,
+                payload: payload,
+                createdAt: createdAt,
+                retryCount: retryCount,
+                status: status,
+                errorMessage: errorMessage,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String entityType,
+                required String entityId,
+                required String action,
+                required String payload,
+                required DateTime createdAt,
+                Value<int> retryCount = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> errorMessage = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SyncQueueTableCompanion.insert(
+                id: id,
+                entityType: entityType,
+                entityId: entityId,
+                action: action,
+                payload: payload,
+                createdAt: createdAt,
+                retryCount: retryCount,
+                status: status,
+                errorMessage: errorMessage,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SyncQueueTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SyncQueueTableTable,
+      SyncQueueTableData,
+      $$SyncQueueTableTableFilterComposer,
+      $$SyncQueueTableTableOrderingComposer,
+      $$SyncQueueTableTableAnnotationComposer,
+      $$SyncQueueTableTableCreateCompanionBuilder,
+      $$SyncQueueTableTableUpdateCompanionBuilder,
+      (
+        SyncQueueTableData,
+        BaseReferences<_$AppDatabase, $SyncQueueTableTable, SyncQueueTableData>,
+      ),
+      SyncQueueTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7077,4 +7786,6 @@ class $AppDatabaseManager {
       );
   $$ScreeningResultsTableTableTableManager get screeningResultsTable =>
       $$ScreeningResultsTableTableTableManager(_db, _db.screeningResultsTable);
+  $$SyncQueueTableTableTableManager get syncQueueTable =>
+      $$SyncQueueTableTableTableManager(_db, _db.syncQueueTable);
 }

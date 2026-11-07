@@ -24,15 +24,24 @@ Future<void> main() async {
       providers: [
         BlocProvider<AuthBloc>(create: (context) => locator<AuthBloc>()),
         BlocProvider<PatientBloc>(create: (context) => locator<PatientBloc>()),
-        BlocProvider<ScreeningBloc>(create: (context) => locator<ScreeningBloc>()),
+        BlocProvider<ScreeningBloc>(
+          create: (context) => locator<ScreeningBloc>(),
+        ),
         BlocProvider<VhvBloc>(create: (context) => locator<VhvBloc>()),
         BlocProvider<VillageBloc>(create: (context) => locator<VillageBloc>()),
-        BlocProvider<VillageAnalyticsBloc>(create: (context) => locator<VillageAnalyticsBloc>()),
-        BlocProvider<SyncBadgeBloc>(
-          create: (context) => locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
+        BlocProvider<VillageAnalyticsBloc>(
+          create: (context) => locator<VillageAnalyticsBloc>(),
         ),
-        BlocProvider<AccessibilityCubit>(create: (context) => locator<AccessibilityCubit>()),
-        BlocProvider<LanguageBloc>(create: (context) => locator<LanguageBloc>()),
+        BlocProvider<SyncBadgeBloc>(
+          create: (context) =>
+              locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
+        ),
+        BlocProvider<AccessibilityCubit>(
+          create: (context) => locator<AccessibilityCubit>(),
+        ),
+        BlocProvider<LanguageBloc>(
+          create: (context) => locator<LanguageBloc>(),
+        ),
       ],
       child: const NcdScreeningApp(),
     ),
@@ -62,7 +71,9 @@ class NcdScreeningApp extends StatelessWidget {
                 final systemScale = mediaQuery.textScaler.scale(1.0);
                 return MediaQuery(
                   data: mediaQuery.copyWith(
-                    textScaler: TextScaler.linear(systemScale * accessState.textScaleFactor),
+                    textScaler: TextScaler.linear(
+                      systemScale * accessState.textScaleFactor,
+                    ),
                   ),
                   child: child ?? const SizedBox.shrink(),
                 );

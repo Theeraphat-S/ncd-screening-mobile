@@ -29,10 +29,14 @@ class AccessibilityScaleToggle extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: state.isElderlyMode ? PColor.riskModerate : Colors.white.withValues(alpha: 0.2),
+              color: state.isElderlyMode
+                  ? PColor.riskModerate
+                  : PColor.neutralColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: state.isElderlyMode ? PColor.riskModerate : Colors.white54,
+                color: state.isElderlyMode
+                    ? PColor.riskModerate
+                    : Colors.white54,
                 width: 1.2,
               ),
             ),
@@ -42,7 +46,9 @@ class AccessibilityScaleToggle extends StatelessWidget {
                 Icon(
                   Icons.text_fields_rounded,
                   size: 16,
-                  color: state.isElderlyMode ? Colors.white : Colors.white,
+                  color: state.isElderlyMode
+                      ? PColor.neutralColor
+                      : PColor.neutralColor,
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -50,7 +56,7 @@ class AccessibilityScaleToggle extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                   ),
                 ),
               ],
@@ -111,7 +117,8 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
 
     if (cubit != null) {
       return BlocBuilder<AccessibilityCubit, AccessibilityState>(
-        builder: (context, accState) => _buildCard(context, accState.textScaleFactor),
+        builder: (context, accState) =>
+            _buildCard(context, accState.textScaleFactor),
       );
     }
 
@@ -122,140 +129,153 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
     final riskColor = _getRiskColor(advice.riskLevel);
     final riskBg = _getRiskBgColor(advice.riskLevel);
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: PColor.neutralColor,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Pill
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: riskBg,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Pill
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: riskBg,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  _getRiskIcon(advice.riskLevel),
+                  color: riskColor,
+                  size: 22 * scale,
                 ),
-                child: Row(
-                  children: [
-                    Icon(_getRiskIcon(advice.riskLevel), color: riskColor, size: 22 * scale),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            advice.diseaseName,
-                            style: TextStyle(
-                              fontSize: 15 * scale,
-                              fontWeight: FontWeight.bold,
-                              color: PColor.contentColor,
-                            ),
-                          ),
-                          Text(
-                            advice.conditionSummary,
-                            style: TextStyle(
-                              fontSize: 12.5 * scale,
-                              color: PColor.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: riskColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        advice.riskLabelThai,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        advice.diseaseName,
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11 * scale,
+                          fontSize: 15 * scale,
                           fontWeight: FontWeight.bold,
+                          color: PColor.contentColor,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Content Body Bento Sections
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildAdviceRow(
-                      icon: Icons.restaurant_rounded,
-                      iconColor: PColor.riskLow,
-                      label: 'อาหารที่ควรกิน: ',
-                      labelColor: PColor.riskLow,
-                      content: advice.goodFoods.join(', '),
-                      scale: scale,
-                    ),
-                    const SizedBox(height: 10),
-                    _buildAdviceRow(
-                      icon: Icons.do_not_disturb_alt_rounded,
-                      iconColor: PColor.riskHigh,
-                      label: 'สิ่งที่ควรเลี่ยง: ',
-                      labelColor: PColor.riskHigh,
-                      content: advice.avoidFoods.join(', '),
-                      scale: scale,
-                    ),
-                    const SizedBox(height: 10),
-                    _buildAdviceRow(
-                      icon: Icons.directions_walk_rounded,
-                      iconColor: PColor.primaryDark,
-                      label: 'การออกกำลังกาย: ',
-                      labelColor: PColor.primaryDark,
-                      content: advice.exerciseTip,
-                      scale: scale,
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Followup Schedule
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: PColor.surfaceSubtle,
-                        borderRadius: BorderRadius.circular(10),
+                      Text(
+                        advice.conditionSummary,
+                        style: TextStyle(
+                          fontSize: 12.5 * scale,
+                          color: PColor.textSecondary,
+                        ),
                       ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.calendar_month_rounded, size: 16, color: PColor.textNeutralColor),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'นัดติดตาม: ${advice.followUpSchedule}',
-                              style: TextStyle(
-                                fontSize: 12.5 * scale,
-                                fontWeight: FontWeight.w600,
-                                color: PColor.primaryDark,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: riskColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    advice.riskLabelThai,
+                    style: TextStyle(
+                      color: PColor.neutralColor,
+                      fontSize: 11 * scale,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        );
+
+          // Content Body Bento Sections
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildAdviceRow(
+                  icon: Icons.restaurant_rounded,
+                  iconColor: PColor.riskLow,
+                  label: 'อาหารที่ควรกิน: ',
+                  labelColor: PColor.riskLow,
+                  content: advice.goodFoods.join(', '),
+                  scale: scale,
+                ),
+                const SizedBox(height: 10),
+                _buildAdviceRow(
+                  icon: Icons.do_not_disturb_alt_rounded,
+                  iconColor: PColor.riskHigh,
+                  label: 'สิ่งที่ควรเลี่ยง: ',
+                  labelColor: PColor.riskHigh,
+                  content: advice.avoidFoods.join(', '),
+                  scale: scale,
+                ),
+                const SizedBox(height: 10),
+                _buildAdviceRow(
+                  icon: Icons.directions_walk_rounded,
+                  iconColor: PColor.primaryDark,
+                  label: 'การออกกำลังกาย: ',
+                  labelColor: PColor.primaryDark,
+                  content: advice.exerciseTip,
+                  scale: scale,
+                ),
+                const SizedBox(height: 10),
+
+                // Followup Schedule
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: PColor.surfaceSubtle,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_month_rounded,
+                        size: 16,
+                        color: PColor.textNeutralColor,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'นัดติดตาม: ${advice.followUpSchedule}',
+                          style: TextStyle(
+                            fontSize: 12.5 * scale,
+                            fontWeight: FontWeight.w600,
+                            color: PColor.primaryDark,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildAdviceRow({
@@ -282,7 +302,10 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
               children: [
                 TextSpan(
                   text: label,
-                  style: TextStyle(fontWeight: FontWeight.bold, color: labelColor),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: labelColor,
+                  ),
                 ),
                 TextSpan(text: content),
               ],

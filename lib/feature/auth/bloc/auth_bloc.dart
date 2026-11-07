@@ -74,11 +74,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this.repository) : super(const AuthState()) {
     on<AuthSelectRole>((event, emit) {
-      emit(state.copyWith(
-        selectedRole: event.role,
-        status: AuthStatus.unauthenticated,
-        errorMessage: null,
-      ));
+      emit(
+        state.copyWith(
+          selectedRole: event.role,
+          status: AuthStatus.unauthenticated,
+          errorMessage: null,
+        ),
+      );
     });
 
     on<AuthLoginSubmitted>((event, emit) async {
@@ -89,17 +91,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           identifier: event.identifier,
           password: event.password,
         );
-        emit(state.copyWith(
-          status: AuthStatus.authenticated,
-          selectedRole: event.role,
-          currentUser: user,
-          errorMessage: null,
-        ));
+        emit(
+          state.copyWith(
+            status: AuthStatus.authenticated,
+            selectedRole: event.role,
+            currentUser: user,
+            errorMessage: null,
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: AuthStatus.error,
-          errorMessage: e.toString().replaceAll('Exception: ', ''),
-        ));
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: e.toString().replaceAll('Exception: ', ''),
+          ),
+        );
       }
     });
 

@@ -25,8 +25,8 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
   void initState() {
     super.initState();
     context.read<VhvBloc>().add(
-          VhvListLoadRequested(villageId: widget.village.villageId),
-        );
+      VhvListLoadRequested(villageId: widget.village.villageId),
+    );
   }
 
   @override
@@ -37,7 +37,11 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -45,13 +49,16 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),
+            icon: const Icon(
+              Icons.person_add_alt_1_rounded,
+              color: PColor.neutralColor,
+            ),
             tooltip: 'เพิ่ม อสม.',
             onPressed: () {
               Navigator.push(
@@ -76,7 +83,7 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
             child: Text(
               '${widget.village.villageName} • หมู่ ${widget.village.villageNumber}',
               style: const TextStyle(
-                color: Colors.white,
+                color: PColor.neutralColor,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -97,7 +104,11 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
               },
               builder: (context, state) {
                 if (state.status == VhvStatus.loading && state.vhvs.isEmpty) {
-                  return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: PColor.primaryColor,
+                    ),
+                  );
                 }
 
                 if (state.vhvs.isEmpty) {
@@ -105,7 +116,11 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person_off_outlined, size: 64, color: Colors.grey.shade400),
+                        Icon(
+                          Icons.person_off_outlined,
+                          size: 64,
+                          color: Colors.grey.shade400,
+                        ),
                         const SizedBox(height: 12),
                         const Text(
                           'ยังไม่มีรายชื่อ อสม. ในหมู่บ้านนี้',
@@ -124,8 +139,8 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
                   color: PColor.primaryColor,
                   onRefresh: () async {
                     context.read<VhvBloc>().add(
-                          VhvListLoadRequested(villageId: widget.village.villageId),
-                        );
+                      VhvListLoadRequested(villageId: widget.village.villageId),
+                    );
                   },
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
@@ -147,7 +162,7 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
 
   Widget _buildVhvCard(BuildContext context, VHV vhv) {
     return Material(
-      color: Colors.white,
+      color: PColor.neutralColor,
       borderRadius: BorderRadius.circular(14),
       elevation: 1.5,
       child: InkWell(
@@ -172,7 +187,11 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
               CircleAvatar(
                 radius: 24,
                 backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                child: const Icon(Icons.volunteer_activism_rounded, color: PColor.primaryColor, size: 26),
+                child: const Icon(
+                  Icons.volunteer_activism_rounded,
+                  color: PColor.primaryColor,
+                  size: 26,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(

@@ -98,14 +98,14 @@ class PatientState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        patients,
-        selectedPatient,
-        currentVillageId,
-        searchQuery,
-        message,
-        errorMessage,
-      ];
+    status,
+    patients,
+    selectedPatient,
+    currentVillageId,
+    searchQuery,
+    message,
+    errorMessage,
+  ];
 }
 
 // BLOC
@@ -114,50 +114,59 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
 
   PatientBloc(this.repository) : super(const PatientState()) {
     on<PatientLoadRequested>((event, emit) async {
-      emit(state.copyWith(
-        status: PatientStatus.loading,
-        currentVillageId: event.villageId,
-        searchQuery: event.searchQuery,
-        errorMessage: null,
-      ));
+      emit(
+        state.copyWith(
+          status: PatientStatus.loading,
+          currentVillageId: event.villageId,
+          searchQuery: event.searchQuery,
+          errorMessage: null,
+        ),
+      );
       try {
         final patients = await repository.getPatients(
           villageId: event.villageId,
           searchQuery: event.searchQuery,
         );
-        emit(state.copyWith(
-          status: PatientStatus.success,
-          patients: patients,
-          errorMessage: null,
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.success,
+            patients: patients,
+            errorMessage: null,
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: PatientStatus.failure,
-          errorMessage: e.toString().replaceAll('Exception: ', ''),
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.failure,
+            errorMessage: e.toString().replaceAll('Exception: ', ''),
+          ),
+        );
       }
     });
 
     on<PatientSearchChanged>((event, emit) async {
-      emit(state.copyWith(
-        status: PatientStatus.loading,
-        searchQuery: event.query,
-      ));
+      emit(
+        state.copyWith(status: PatientStatus.loading, searchQuery: event.query),
+      );
       try {
         final patients = await repository.getPatients(
           villageId: event.villageId ?? state.currentVillageId,
           searchQuery: event.query,
         );
-        emit(state.copyWith(
-          status: PatientStatus.success,
-          patients: patients,
-          searchQuery: event.query,
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.success,
+            patients: patients,
+            searchQuery: event.query,
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: PatientStatus.failure,
-          errorMessage: e.toString().replaceAll('Exception: ', ''),
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.failure,
+            errorMessage: e.toString().replaceAll('Exception: ', ''),
+          ),
+        );
       }
     });
 
@@ -170,17 +179,21 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
       try {
         final newPatient = await repository.addPatient(event.patient);
         final updatedList = [newPatient, ...state.patients];
-        emit(state.copyWith(
-          status: PatientStatus.success,
-          patients: updatedList,
-          selectedPatient: newPatient,
-          message: 'บันทึกข้อมูลผู้ป่วยสำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.success,
+            patients: updatedList,
+            selectedPatient: newPatient,
+            message: 'บันทึกข้อมูลผู้ป่วยสำเร็จ',
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: PatientStatus.failure,
-          errorMessage: 'บันทึกข้อมูล ผู้ป่วย ไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.failure,
+            errorMessage: 'บันทึกข้อมูล ผู้ป่วย ไม่สำเร็จ',
+          ),
+        );
       }
     });
 
@@ -191,17 +204,21 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
         final updatedList = state.patients
             .map((p) => p.patientId == updated.patientId ? updated : p)
             .toList();
-        emit(state.copyWith(
-          status: PatientStatus.success,
-          patients: updatedList,
-          selectedPatient: updated,
-          message: 'แก้ไขข้อมูลผู้ป่วยสำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.success,
+            patients: updatedList,
+            selectedPatient: updated,
+            message: 'แก้ไขข้อมูลผู้ป่วยสำเร็จ',
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: PatientStatus.failure,
-          errorMessage: 'แก้ไขผู้ป่วย ไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.failure,
+            errorMessage: 'แก้ไขผู้ป่วย ไม่สำเร็จ',
+          ),
+        );
       }
     });
 
@@ -213,23 +230,29 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
           final updatedList = state.patients
               .where((p) => p.patientId != event.patientId)
               .toList();
-          emit(state.copyWith(
-            status: PatientStatus.success,
-            patients: updatedList,
-            selectedPatient: null,
-            message: 'ลบข้อมูลผู้ป่วยสำเร็จ',
-          ));
+          emit(
+            state.copyWith(
+              status: PatientStatus.success,
+              patients: updatedList,
+              selectedPatient: null,
+              message: 'ลบข้อมูลผู้ป่วยสำเร็จ',
+            ),
+          );
         } else {
-          emit(state.copyWith(
-            status: PatientStatus.failure,
-            errorMessage: 'ลบผู้ป่วย ไม่สำเร็จ',
-          ));
+          emit(
+            state.copyWith(
+              status: PatientStatus.failure,
+              errorMessage: 'ลบผู้ป่วย ไม่สำเร็จ',
+            ),
+          );
         }
       } catch (e) {
-        emit(state.copyWith(
-          status: PatientStatus.failure,
-          errorMessage: 'ลบผู้ป่วย ไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: PatientStatus.failure,
+            errorMessage: 'ลบผู้ป่วย ไม่สำเร็จ',
+          ),
+        );
       }
     });
   }

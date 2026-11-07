@@ -30,7 +30,14 @@ class IdCardOcrResult extends Equatable {
   }
 
   @override
-  List<Object?> get props => [citizenId, prefix, firstName, lastName, dateOfBirth, rawText];
+  List<Object?> get props => [
+    citizenId,
+    prefix,
+    firstName,
+    lastName,
+    dateOfBirth,
+    rawText,
+  ];
 }
 
 /// On-device regex-based parser for Thai National ID card text.
@@ -75,7 +82,9 @@ class IdCardOcrParser {
     }
 
     if (citizenId == null) {
-      final standaloneMatch = _digitsOnly13.firstMatch(rawText.replaceAll('-', ' '));
+      final standaloneMatch = _digitsOnly13.firstMatch(
+        rawText.replaceAll('-', ' '),
+      );
       if (standaloneMatch != null) {
         citizenId = standaloneMatch.group(0);
       }
@@ -97,8 +106,9 @@ class IdCardOcrParser {
     }
 
     // 3. Extract DOB if present (e.g. เกิดวันที่ 15 ม.ค. 2505 or 15 Jan 1962)
-    final dobMatch = RegExp(r'(?:เกิดวันที่|Date of Birth)\s*([0-9]{1,2}\s+[^\n0-9]+\s+[0-9]{4})')
-        .firstMatch(rawText);
+    final dobMatch = RegExp(
+      r'(?:เกิดวันที่|Date of Birth)\s*([0-9]{1,2}\s+[^\n0-9]+\s+[0-9]{4})',
+    ).firstMatch(rawText);
     if (dobMatch != null && dobMatch.groupCount >= 1) {
       dateOfBirth = dobMatch.group(1)!.trim();
     }

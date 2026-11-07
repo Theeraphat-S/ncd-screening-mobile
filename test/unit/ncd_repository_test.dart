@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
-import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import '../support/mock_ncd_repository.dart';
 
 void main() {
   late MockNcdRepository repository;
@@ -22,28 +22,34 @@ void main() {
       expect(patient.patientFname, equals('สมชาย'));
     });
 
-    test('Patient login throws Exception for unregistered citizen ID', () async {
-      expect(
-        () => repository.login(
-          role: UserRole.patient,
-          identifier: '9999999999999',
-        ),
-        throwsA(isA<Exception>()),
-      );
-    });
+    test(
+      'Patient login throws Exception for unregistered citizen ID',
+      () async {
+        expect(
+          () => repository.login(
+            role: UserRole.patient,
+            identifier: '9999999999999',
+          ),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
-    test('VHV login succeeds with valid credentials (mobile/ID and correct password)', () async {
-      final user = await repository.login(
-        role: UserRole.vhv,
-        identifier: '0800000001',
-        password: 'password123',
-      );
+    test(
+      'VHV login succeeds with valid credentials (mobile/ID and correct password)',
+      () async {
+        final user = await repository.login(
+          role: UserRole.vhv,
+          identifier: '0800000001',
+          password: 'password123',
+        );
 
-      expect(user, isA<VHV>());
-      final vhv = user as VHV;
-      expect(vhv.vhvId, equals('VHV001'));
-      expect(vhv.vhvFname, equals('อสม'));
-    });
+        expect(user, isA<VHV>());
+        final vhv = user as VHV;
+        expect(vhv.vhvId, equals('VHV001'));
+        expect(vhv.vhvFname, equals('อสม'));
+      },
+    );
 
     test('VHV login throws Exception with wrong password', () async {
       expect(
@@ -91,32 +97,46 @@ void main() {
       final patientsV001 = await repository.getPatients(villageId: 'V001');
       expect(patientsV001.every((p) => p.villageId == 'V001'), isTrue);
 
-      final patientsNonExistent = await repository.getPatients(villageId: 'V999');
+      final patientsNonExistent = await repository.getPatients(
+        villageId: 'V999',
+      );
       expect(patientsNonExistent, isEmpty);
     });
 
-    test('getPatients filters correctly by searchQuery (name and citizen ID)', () async {
-      final resultsByName = await repository.getPatients(searchQuery: 'สมชาย');
-      expect(resultsByName.length, equals(1));
-      expect(resultsByName.first.patientFname, equals('สมชาย'));
+    test(
+      'getPatients filters correctly by searchQuery (name and citizen ID)',
+      () async {
+        final resultsByName = await repository.getPatients(
+          searchQuery: 'สมชาย',
+        );
+        expect(resultsByName.length, equals(1));
+        expect(resultsByName.first.patientFname, equals('สมชาย'));
 
-      final resultsById = await repository.getPatients(searchQuery: '1234567890123');
-      expect(resultsById.length, equals(1));
-      expect(resultsById.first.patientId, equals('P001'));
-    });
+        final resultsById = await repository.getPatients(
+          searchQuery: '1234567890123',
+        );
+        expect(resultsById.length, equals(1));
+        expect(resultsById.first.patientId, equals('P001'));
+      },
+    );
 
-    test('getPatientById and getPatientByCitizenId return correct patient', () async {
-      final patientById = await repository.getPatientById('P001');
-      expect(patientById, isNotNull);
-      expect(patientById!.patientFname, equals('สมชาย'));
+    test(
+      'getPatientById and getPatientByCitizenId return correct patient',
+      () async {
+        final patientById = await repository.getPatientById('P001');
+        expect(patientById, isNotNull);
+        expect(patientById!.patientFname, equals('สมชาย'));
 
-      final patientByCitizenId = await repository.getPatientByCitizenId('1234567890123');
-      expect(patientByCitizenId, isNotNull);
-      expect(patientByCitizenId!.patientId, equals('P001'));
+        final patientByCitizenId = await repository.getPatientByCitizenId(
+          '1234567890123',
+        );
+        expect(patientByCitizenId, isNotNull);
+        expect(patientByCitizenId!.patientId, equals('P001'));
 
-      final notFound = await repository.getPatientById('INVALID_ID');
-      expect(notFound, isNull);
-    });
+        final notFound = await repository.getPatientById('INVALID_ID');
+        expect(notFound, isNull);
+      },
+    );
 
     test('addPatient inserts a new patient and assigns an ID', () async {
       final newPatient = Patient(
@@ -217,23 +237,36 @@ void main() {
   });
 
   group('MockNcdRepository - Screenings and Nurse Approval', () {
-    test('getScreeningsByPatient returns screenings ordered descending by date', () async {
-      final screenings = await repository.getScreeningsByPatient('P001');
-      expect(screenings.isNotEmpty, isTrue);
-      expect(screenings.length, greaterThanOrEqualTo(2));
-      expect(screenings.first.screeningDate.isAfter(screenings.last.screeningDate), isTrue);
-    });
+    test(
+      'getScreeningsByPatient returns screenings ordered descending by date',
+      () async {
+        final screenings = await repository.getScreeningsByPatient('P001');
+        expect(screenings.isNotEmpty, isTrue);
+        expect(screenings.length, greaterThanOrEqualTo(2));
+        expect(
+          screenings.first.screeningDate.isAfter(screenings.last.screeningDate),
+          isTrue,
+        );
+      },
+    );
 
-    test('getAllScreenings returns all screenings or filtered by villageId', () async {
-      final all = await repository.getAllScreenings();
-      expect(all.length, greaterThanOrEqualTo(2));
+    test(
+      'getAllScreenings returns all screenings or filtered by villageId',
+      () async {
+        final all = await repository.getAllScreenings();
+        expect(all.length, greaterThanOrEqualTo(2));
 
-      final v001Screenings = await repository.getAllScreenings(villageId: 'V001');
-      expect(v001Screenings.length, equals(2));
+        final v001Screenings = await repository.getAllScreenings(
+          villageId: 'V001',
+        );
+        expect(v001Screenings.length, equals(2));
 
-      final v002Screenings = await repository.getAllScreenings(villageId: 'V002');
-      expect(v002Screenings, isEmpty);
-    });
+        final v002Screenings = await repository.getAllScreenings(
+          villageId: 'V002',
+        );
+        expect(v002Screenings, isEmpty);
+      },
+    );
 
     test('saveScreening adds a new screening record', () async {
       final newScreening = Screening(
@@ -265,20 +298,23 @@ void main() {
       expect(fetched.reviewStatus, equals(ReviewStatus.pending));
     });
 
-    test('updateScreeningReview approves/rejects screening with nurseId and timestamp', () async {
-      final updated = await repository.updateScreeningReview(
-        screeningId: 'S001',
-        status: ReviewStatus.approved,
-        nurseId: 'NUR001',
-      );
+    test(
+      'updateScreeningReview approves/rejects screening with nurseId and timestamp',
+      () async {
+        final updated = await repository.updateScreeningReview(
+          screeningId: 'S001',
+          status: ReviewStatus.approved,
+          nurseId: 'NUR001',
+        );
 
-      expect(updated.reviewStatus, equals(ReviewStatus.approved));
-      expect(updated.reviewedByNurseId, equals('NUR001'));
-      expect(updated.reviewedAt, isNotNull);
+        expect(updated.reviewStatus, equals(ReviewStatus.approved));
+        expect(updated.reviewedByNurseId, equals('NUR001'));
+        expect(updated.reviewedAt, isNotNull);
 
-      final fetched = await repository.getScreeningById('S001');
-      expect(fetched!.reviewStatus, equals(ReviewStatus.approved));
-    });
+        final fetched = await repository.getScreeningById('S001');
+        expect(fetched!.reviewStatus, equals(ReviewStatus.approved));
+      },
+    );
   });
 
   group('MockNcdRepository - Villages & Nurse', () {

@@ -50,7 +50,11 @@ class EmergencyHospitalCard extends StatelessWidget {
                   color: cardColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.emergency_rounded, color: Colors.white, size: 24),
+                child: const Icon(
+                  Icons.emergency_rounded,
+                  color: PColor.neutralColor,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -97,14 +101,18 @@ class EmergencyHospitalCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: PColor.neutralColor,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: cardColor.withValues(alpha: 0.3)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.health_and_safety_rounded, color: cardColor, size: 18),
+                const Icon(
+                  Icons.health_and_safety_rounded,
+                  color: cardColor,
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -129,19 +137,31 @@ class EmergencyHospitalCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: cardColor,
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     elevation: 0,
                   ),
-                  icon: const Icon(Icons.phone_in_talk_rounded, color: Colors.white, size: 18),
+                  icon: const Icon(
+                    Icons.phone_in_talk_rounded,
+                    color: PColor.neutralColor,
+                    size: 18,
+                  ),
                   label: Text(
                     'โทร $hospitalName\n($hospitalPhone)',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.bold,
+                      color: PColor.neutralColor,
+                    ),
                   ),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('กำลังต่อสายโทรออก: $hospitalPhone ($hospitalName)'),
+                        content: Text(
+                          'กำลังต่อสายโทรออก: $hospitalPhone ($hospitalName)',
+                        ),
                         backgroundColor: cardColor,
                         behavior: SnackBarBehavior.floating,
                       ),
@@ -156,19 +176,26 @@ class EmergencyHospitalCard extends StatelessWidget {
                     foregroundColor: cardColor,
                     side: const BorderSide(color: cardColor, width: 1.5),
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    backgroundColor: PColor.neutralColor,
                   ),
                   icon: const Icon(Icons.support_agent_rounded, size: 18),
                   label: const Text(
                     'สายด่วนกู้ชีพ\n(1669)',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('กำลังต่อสายโทรออก: 1669 (ศูนย์รับแจ้งเหตุฉุกเฉิน)'),
+                        content: Text(
+                          'กำลังต่อสายโทรออก: 1669 (ศูนย์รับแจ้งเหตุฉุกเฉิน)',
+                        ),
                         backgroundColor: PColor.riskHigh,
                         behavior: SnackBarBehavior.floating,
                       ),

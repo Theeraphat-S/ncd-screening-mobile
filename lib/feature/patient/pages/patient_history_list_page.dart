@@ -29,8 +29,8 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
   void initState() {
     super.initState();
     context.read<ScreeningBloc>().add(
-          ScreeningHistoryLoadRequested(widget.patient.patientId),
-        );
+      ScreeningHistoryLoadRequested(widget.patient.patientId),
+    );
   }
 
   @override
@@ -43,12 +43,18 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () {
             if (isPatientSelf) {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const UserTypeSelectionPage()),
+                MaterialPageRoute(
+                  builder: (_) => const UserTypeSelectionPage(),
+                ),
                 (route) => false,
               );
             } else {
@@ -61,7 +67,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -70,97 +76,115 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
         children: [
           Column(
             children: [
-          // Header Patient Info Card
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            color: PColor.primaryDark,
-            child: Row(
-              children: [
-                const Icon(Icons.account_circle, color: Colors.white, size: 28),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ผู้ป่วย: ${widget.patient.fullName}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '(${widget.patient.patientCitizenId})',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12.5,
-                        ),
-                      ),
-                    ],
-                  ),
+              // Header Patient Info Card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
                 ),
-              ],
-            ),
-          ),
-
-          // Screenings History List
-          Expanded(
-            child: BlocBuilder<ScreeningBloc, ScreeningState>(
-              builder: (context, state) {
-                if (state.status == ScreeningStatus.loading && state.historyList.isEmpty) {
-                  return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
-                }
-
-                if (state.historyList.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.history_toggle_off_rounded, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'ไม่พบข้อมูลประวัติการคัดกรอง',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: PColor.textNeutralColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                color: PColor.primaryDark,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.account_circle,
+                      color: PColor.neutralColor,
+                      size: 28,
                     ),
-                  );
-                }
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ผู้ป่วย: ${widget.patient.fullName}',
+                            style: const TextStyle(
+                              color: PColor.neutralColor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '(${widget.patient.patientCitizenId})',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-                return RefreshIndicator(
-                  color: PColor.primaryColor,
-                  onRefresh: () async {
-                    context.read<ScreeningBloc>().add(
-                          ScreeningHistoryLoadRequested(widget.patient.patientId),
+              // Screenings History List
+              Expanded(
+                child: BlocBuilder<ScreeningBloc, ScreeningState>(
+                  builder: (context, state) {
+                    if (state.status == ScreeningStatus.loading &&
+                        state.historyList.isEmpty) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: PColor.primaryColor,
+                        ),
+                      );
+                    }
+
+                    if (state.historyList.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.history_toggle_off_rounded,
+                              size: 64,
+                              color: Colors.grey.shade400,
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'ไม่พบข้อมูลประวัติการคัดกรอง',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: PColor.textNeutralColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      color: PColor.primaryColor,
+                      onRefresh: () async {
+                        context.read<ScreeningBloc>().add(
+                          ScreeningHistoryLoadRequested(
+                            widget.patient.patientId,
+                          ),
                         );
+                      },
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: state.historyList.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        itemBuilder: (context, index) {
+                          final item = state.historyList[index];
+                          return _buildHistoryCard(context, item);
+                        },
+                      ),
+                    );
                   },
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: state.historyList.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      final item = state.historyList[index];
-                      return _buildHistoryCard(context, item);
-                    },
-                  ),
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
+          if (isPatientSelf) const PatientAccessibilityFloatingBubble(),
         ],
       ),
-      if (isPatientSelf) const PatientAccessibilityFloatingBubble(),
-    ],
-  ),
-);
-}
+    );
+  }
 
   Widget _buildHistoryCard(BuildContext context, Screening item) {
     final dateStr =
@@ -169,7 +193,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
         '${item.screeningDate.hour.toString().padLeft(2, '0')}:${item.screeningDate.minute.toString().padLeft(2, '0')}';
 
     return Material(
-      color: Colors.white,
+      color: PColor.neutralColor,
       borderRadius: BorderRadius.circular(14),
       elevation: 1.5,
       child: InkWell(
@@ -198,7 +222,11 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                   color: PColor.primaryLight.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.assignment_outlined, color: PColor.primaryColor, size: 24),
+                child: const Icon(
+                  Icons.assignment_outlined,
+                  color: PColor.primaryColor,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(

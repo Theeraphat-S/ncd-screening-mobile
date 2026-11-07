@@ -49,7 +49,7 @@ class ScreeningDetailActionButtons extends StatelessWidget {
             side: const BorderSide(color: PColor.primaryColor, width: 1.5),
             padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(borderRadius: PRadius.borderCard),
-            backgroundColor: Colors.white,
+            backgroundColor: PColor.neutralColor,
           ),
         ),
         PSpacing.gapVerticalMd,
@@ -80,7 +80,7 @@ class ScreeningDetailActionButtons extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: PColor.neutralColor,
               ),
             ),
           ),

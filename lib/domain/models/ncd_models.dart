@@ -1,8 +1,4 @@
-enum UserRole {
-  patient,
-  vhv,
-  nurse,
-}
+enum UserRole { patient, vhv, nurse }
 
 enum RiskLevel {
   low('ต่ำ', 'Low'),
@@ -66,24 +62,24 @@ class Village {
       'หมู่ $villageNumber $villageName ต.$subdistrictName อ.$districtName จ.$provinceName';
 
   Map<String, dynamic> toMap() => {
-        'villageId': villageId,
-        'villageName': villageName,
-        'villageNumber': villageNumber,
-        'subdistrictId': subdistrictId,
-        'subdistrictName': subdistrictName,
-        'districtName': districtName,
-        'provinceName': provinceName,
-      };
+    'villageId': villageId,
+    'villageName': villageName,
+    'villageNumber': villageNumber,
+    'subdistrictId': subdistrictId,
+    'subdistrictName': subdistrictName,
+    'districtName': districtName,
+    'provinceName': provinceName,
+  };
 
   factory Village.fromMap(Map<String, dynamic> map) => Village(
-        villageId: map['villageId'] ?? '',
-        villageName: map['villageName'] ?? '',
-        villageNumber: map['villageNumber'] ?? '',
-        subdistrictId: map['subdistrictId'] ?? 'SD001',
-        subdistrictName: map['subdistrictName'] ?? 'ท่าตอน',
-        districtName: map['districtName'] ?? 'แม่อาย',
-        provinceName: map['provinceName'] ?? 'เชียงใหม่',
-      );
+    villageId: map['villageId'] ?? '',
+    villageName: map['villageName'] ?? '',
+    villageNumber: map['villageNumber'] ?? '',
+    subdistrictId: map['subdistrictId'] ?? 'SD001',
+    subdistrictName: map['subdistrictName'] ?? 'ท่าตอน',
+    districtName: map['districtName'] ?? 'แม่อาย',
+    provinceName: map['provinceName'] ?? 'เชียงใหม่',
+  );
 }
 
 class Patient {
@@ -119,7 +115,8 @@ class Patient {
     final now = DateTime.now();
     int age = now.year - patientBirthDate.year;
     if (now.month < patientBirthDate.month ||
-        (now.month == patientBirthDate.month && now.day < patientBirthDate.day)) {
+        (now.month == patientBirthDate.month &&
+            now.day < patientBirthDate.day)) {
       age--;
     }
     return age;
@@ -154,33 +151,34 @@ class Patient {
   }
 
   Map<String, dynamic> toMap() => {
-        'patientId': patientId,
-        'patientCitizenId': patientCitizenId,
-        'patientTitle': patientTitle,
-        'patientFname': patientFname,
-        'patientLname': patientLname,
-        'patientGender': patientGender,
-        'patientBirthDate': patientBirthDate.toIso8601String(),
-        'patientAddress': patientAddress,
-        'patientMobile': patientMobile,
-        'patientImg': patientImg,
-        'villageId': villageId,
-      };
+    'patientId': patientId,
+    'patientCitizenId': patientCitizenId,
+    'patientTitle': patientTitle,
+    'patientFname': patientFname,
+    'patientLname': patientLname,
+    'patientGender': patientGender,
+    'patientBirthDate': patientBirthDate.toIso8601String(),
+    'patientAddress': patientAddress,
+    'patientMobile': patientMobile,
+    'patientImg': patientImg,
+    'villageId': villageId,
+  };
 
   factory Patient.fromMap(Map<String, dynamic> map) => Patient(
-        patientId: map['patientId'] ?? '',
-        patientCitizenId: map['patientCitizenId'] ?? '',
-        patientTitle: map['patientTitle'] ?? '',
-        patientFname: map['patientFname'] ?? '',
-        patientLname: map['patientLname'] ?? '',
-        patientGender: map['patientGender'] ?? 'ชาย',
-        patientBirthDate: DateTime.tryParse(map['patientBirthDate'] ?? '') ??
-            DateTime(1980, 1, 1),
-        patientAddress: map['patientAddress'] ?? '',
-        patientMobile: map['patientMobile'] ?? '',
-        patientImg: map['patientImg'],
-        villageId: map['villageId'] ?? '',
-      );
+    patientId: map['patientId'] ?? '',
+    patientCitizenId: map['patientCitizenId'] ?? '',
+    patientTitle: map['patientTitle'] ?? '',
+    patientFname: map['patientFname'] ?? '',
+    patientLname: map['patientLname'] ?? '',
+    patientGender: map['patientGender'] ?? 'ชาย',
+    patientBirthDate:
+        DateTime.tryParse(map['patientBirthDate'] ?? '') ??
+        DateTime(1980, 1, 1),
+    patientAddress: map['patientAddress'] ?? '',
+    patientMobile: map['patientMobile'] ?? '',
+    patientImg: map['patientImg'],
+    villageId: map['villageId'] ?? '',
+  );
 }
 
 class VHV {
@@ -249,37 +247,37 @@ class VHV {
   }
 
   Map<String, dynamic> toMap() => {
-        'vhvId': vhvId,
-        'vhvCitizenId': vhvCitizenId,
-        'vhvTitle': vhvTitle,
-        'vhvFname': vhvFname,
-        'vhvLname': vhvLname,
-        'vhvMobile': vhvMobile,
-        'vhvEmail': vhvEmail,
-        'vhvPassword': vhvPassword,
-        'vhvBirthDate': vhvBirthDate.toIso8601String(),
-        'vhvGender': vhvGender,
-        'vhvAddress': vhvAddress,
-        'vhvImg': vhvImg,
-        'villageId': villageId,
-      };
+    'vhvId': vhvId,
+    'vhvCitizenId': vhvCitizenId,
+    'vhvTitle': vhvTitle,
+    'vhvFname': vhvFname,
+    'vhvLname': vhvLname,
+    'vhvMobile': vhvMobile,
+    'vhvEmail': vhvEmail,
+    'vhvPassword': vhvPassword,
+    'vhvBirthDate': vhvBirthDate.toIso8601String(),
+    'vhvGender': vhvGender,
+    'vhvAddress': vhvAddress,
+    'vhvImg': vhvImg,
+    'villageId': villageId,
+  };
 
   factory VHV.fromMap(Map<String, dynamic> map) => VHV(
-        vhvId: map['vhvId'] ?? '',
-        vhvCitizenId: map['vhvCitizenId'] ?? '',
-        vhvTitle: map['vhvTitle'] ?? '',
-        vhvFname: map['vhvFname'] ?? '',
-        vhvLname: map['vhvLname'] ?? '',
-        vhvMobile: map['vhvMobile'] ?? '',
-        vhvEmail: map['vhvEmail'] ?? '',
-        vhvPassword: map['vhvPassword'] ?? '',
-        vhvBirthDate: DateTime.tryParse(map['vhvBirthDate'] ?? '') ??
-            DateTime(1985, 1, 1),
-        vhvGender: map['vhvGender'] ?? 'หญิง',
-        vhvAddress: map['vhvAddress'] ?? '',
-        vhvImg: map['vhvImg'],
-        villageId: map['villageId'] ?? '',
-      );
+    vhvId: map['vhvId'] ?? '',
+    vhvCitizenId: map['vhvCitizenId'] ?? '',
+    vhvTitle: map['vhvTitle'] ?? '',
+    vhvFname: map['vhvFname'] ?? '',
+    vhvLname: map['vhvLname'] ?? '',
+    vhvMobile: map['vhvMobile'] ?? '',
+    vhvEmail: map['vhvEmail'] ?? '',
+    vhvPassword: map['vhvPassword'] ?? '',
+    vhvBirthDate:
+        DateTime.tryParse(map['vhvBirthDate'] ?? '') ?? DateTime(1985, 1, 1),
+    vhvGender: map['vhvGender'] ?? 'หญิง',
+    vhvAddress: map['vhvAddress'] ?? '',
+    vhvImg: map['vhvImg'],
+    villageId: map['villageId'] ?? '',
+  );
 }
 
 class Nurse {
@@ -312,33 +310,33 @@ class Nurse {
   String get fullName => '$nurseTitle$nurseFname $nurseLname';
 
   Map<String, dynamic> toMap() => {
-        'nurseId': nurseId,
-        'nurseTitle': nurseTitle,
-        'nurseFname': nurseFname,
-        'nurseLname': nurseLname,
-        'nurseMobile': nurseMobile,
-        'nurseEmail': nurseEmail,
-        'nursePassword': nursePassword,
-        'nurseGender': nurseGender,
-        'nurseBirthDate': nurseBirthDate.toIso8601String(),
-        'nurseImg': nurseImg,
-        'subdistrictId': subdistrictId,
-      };
+    'nurseId': nurseId,
+    'nurseTitle': nurseTitle,
+    'nurseFname': nurseFname,
+    'nurseLname': nurseLname,
+    'nurseMobile': nurseMobile,
+    'nurseEmail': nurseEmail,
+    'nursePassword': nursePassword,
+    'nurseGender': nurseGender,
+    'nurseBirthDate': nurseBirthDate.toIso8601String(),
+    'nurseImg': nurseImg,
+    'subdistrictId': subdistrictId,
+  };
 
   factory Nurse.fromMap(Map<String, dynamic> map) => Nurse(
-        nurseId: map['nurseId'] ?? '',
-        nurseTitle: map['nurseTitle'] ?? '',
-        nurseFname: map['nurseFname'] ?? '',
-        nurseLname: map['nurseLname'] ?? '',
-        nurseMobile: map['nurseMobile'] ?? '',
-        nurseEmail: map['nurseEmail'] ?? '',
-        nursePassword: map['nursePassword'] ?? '',
-        nurseGender: map['nurseGender'] ?? 'หญิง',
-        nurseBirthDate: DateTime.tryParse(map['nurseBirthDate'] ?? '') ??
-            DateTime(1990, 1, 1),
-        nurseImg: map['nurseImg'],
-        subdistrictId: map['subdistrictId'] ?? 'SD001',
-      );
+    nurseId: map['nurseId'] ?? '',
+    nurseTitle: map['nurseTitle'] ?? '',
+    nurseFname: map['nurseFname'] ?? '',
+    nurseLname: map['nurseLname'] ?? '',
+    nurseMobile: map['nurseMobile'] ?? '',
+    nurseEmail: map['nurseEmail'] ?? '',
+    nursePassword: map['nursePassword'] ?? '',
+    nurseGender: map['nurseGender'] ?? 'หญิง',
+    nurseBirthDate:
+        DateTime.tryParse(map['nurseBirthDate'] ?? '') ?? DateTime(1990, 1, 1),
+    nurseImg: map['nurseImg'],
+    subdistrictId: map['subdistrictId'] ?? 'SD001',
+  );
 }
 
 class Question {
@@ -355,18 +353,18 @@ class Question {
   });
 
   Map<String, dynamic> toMap() => {
-        'questionId': questionId,
-        'questionCode': questionCode,
-        'questionText': questionText,
-        'unit': unit,
-      };
+    'questionId': questionId,
+    'questionCode': questionCode,
+    'questionText': questionText,
+    'unit': unit,
+  };
 
   factory Question.fromMap(Map<String, dynamic> map) => Question(
-        questionId: map['questionId'] ?? '',
-        questionCode: map['questionCode'] ?? '',
-        questionText: map['questionText'] ?? '',
-        unit: map['unit'] ?? '',
-      );
+    questionId: map['questionId'] ?? '',
+    questionCode: map['questionCode'] ?? '',
+    questionText: map['questionText'] ?? '',
+    unit: map['unit'] ?? '',
+  );
 }
 
 class ScreeningHistory {
@@ -387,13 +385,13 @@ class ScreeningHistory {
   });
 
   Map<String, dynamic> toMap() => {
-        'historyId': historyId,
-        'screeningId': screeningId,
-        'questionId': questionId,
-        'questionText': questionText,
-        'answerValue': answerValue,
-        'answerText': answerText,
-      };
+    'historyId': historyId,
+    'screeningId': screeningId,
+    'questionId': questionId,
+    'questionText': questionText,
+    'answerValue': answerValue,
+    'answerText': answerText,
+  };
 
   factory ScreeningHistory.fromMap(Map<String, dynamic> map) =>
       ScreeningHistory(
@@ -452,27 +450,26 @@ class ScreeningResult {
   }
 
   Map<String, dynamic> toMap() => {
-        'resultId': resultId,
-        'screeningId': screeningId,
-        'diseaseName': diseaseName,
-        'diseaseCode': diseaseCode,
-        'score': score,
-        'riskLevel': riskLevel.name,
-        'adviceText': adviceText,
-        'criteriaText': criteriaText,
-      };
+    'resultId': resultId,
+    'screeningId': screeningId,
+    'diseaseName': diseaseName,
+    'diseaseCode': diseaseCode,
+    'score': score,
+    'riskLevel': riskLevel.name,
+    'adviceText': adviceText,
+    'criteriaText': criteriaText,
+  };
 
-  factory ScreeningResult.fromMap(Map<String, dynamic> map) =>
-      ScreeningResult(
-        resultId: map['resultId'] ?? '',
-        screeningId: map['screeningId'] ?? '',
-        diseaseName: map['diseaseName'] ?? '',
-        diseaseCode: map['diseaseCode'] ?? '',
-        score: map['score'] ?? 0,
-        riskLevel: RiskLevel.fromString(map['riskLevel']),
-        adviceText: map['adviceText'] ?? '',
-        criteriaText: map['criteriaText'] ?? '',
-      );
+  factory ScreeningResult.fromMap(Map<String, dynamic> map) => ScreeningResult(
+    resultId: map['resultId'] ?? '',
+    screeningId: map['screeningId'] ?? '',
+    diseaseName: map['diseaseName'] ?? '',
+    diseaseCode: map['diseaseCode'] ?? '',
+    score: map['score'] ?? 0,
+    riskLevel: RiskLevel.fromString(map['riskLevel']),
+    adviceText: map['adviceText'] ?? '',
+    criteriaText: map['criteriaText'] ?? '',
+  );
 }
 
 class Screening {
@@ -566,56 +563,57 @@ class Screening {
   }
 
   Map<String, dynamic> toMap() => {
-        'screenId': screenId,
-        'patientId': patientId,
-        'vhvId': vhvId,
-        'screeningDate': screeningDate.toIso8601String(),
-        'ageAtScreening': ageAtScreening,
-        'createdAt': createdAt.toIso8601String(),
-        'reviewStatus': reviewStatus.code,
-        'reviewedByNurseId': reviewedByNurseId,
-        'reviewedAt': reviewedAt?.toIso8601String(),
-        'weight': weight,
-        'height': height,
-        'bmi': bmi,
-        'waistCm': waistCm,
-        'sbp': sbp,
-        'dbp': dbp,
-        'pulse': pulse,
-        'bloodSugar': bloodSugar,
-        'histories': histories.map((x) => x.toMap()).toList(),
-        'results': results.map((x) => x.toMap()).toList(),
-      };
+    'screenId': screenId,
+    'patientId': patientId,
+    'vhvId': vhvId,
+    'screeningDate': screeningDate.toIso8601String(),
+    'ageAtScreening': ageAtScreening,
+    'createdAt': createdAt.toIso8601String(),
+    'reviewStatus': reviewStatus.code,
+    'reviewedByNurseId': reviewedByNurseId,
+    'reviewedAt': reviewedAt?.toIso8601String(),
+    'weight': weight,
+    'height': height,
+    'bmi': bmi,
+    'waistCm': waistCm,
+    'sbp': sbp,
+    'dbp': dbp,
+    'pulse': pulse,
+    'bloodSugar': bloodSugar,
+    'histories': histories.map((x) => x.toMap()).toList(),
+    'results': results.map((x) => x.toMap()).toList(),
+  };
 
   factory Screening.fromMap(Map<String, dynamic> map) => Screening(
-        screenId: map['screenId'] ?? '',
-        patientId: map['patientId'] ?? '',
-        vhvId: map['vhvId'] ?? '',
-        screeningDate: DateTime.tryParse(map['screeningDate'] ?? '') ??
-            DateTime.now(),
-        ageAtScreening: map['ageAtScreening'] ?? 0,
-        createdAt:
-            DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
-        reviewStatus: ReviewStatus.fromString(map['reviewStatus']),
-        reviewedByNurseId: map['reviewedByNurseId'],
-        reviewedAt: map['reviewedAt'] != null
-            ? DateTime.tryParse(map['reviewedAt'])
-            : null,
-        weight: (map['weight'] as num?)?.toDouble() ?? 0.0,
-        height: (map['height'] as num?)?.toDouble() ?? 0.0,
-        bmi: (map['bmi'] as num?)?.toDouble() ?? 0.0,
-        waistCm: (map['waistCm'] as num?)?.toDouble() ?? 0.0,
-        sbp: (map['sbp'] as num?)?.toDouble() ?? 0.0,
-        dbp: (map['dbp'] as num?)?.toDouble() ?? 0.0,
-        pulse: (map['pulse'] as num?)?.toDouble() ?? 0.0,
-        bloodSugar: (map['bloodSugar'] as num?)?.toDouble() ?? 0.0,
-        histories: (map['histories'] as List<dynamic>?)
-                ?.map((x) => ScreeningHistory.fromMap(x))
-                .toList() ??
-            [],
-        results: (map['results'] as List<dynamic>?)
-                ?.map((x) => ScreeningResult.fromMap(x))
-                .toList() ??
-            [],
-      );
+    screenId: map['screenId'] ?? '',
+    patientId: map['patientId'] ?? '',
+    vhvId: map['vhvId'] ?? '',
+    screeningDate:
+        DateTime.tryParse(map['screeningDate'] ?? '') ?? DateTime.now(),
+    ageAtScreening: map['ageAtScreening'] ?? 0,
+    createdAt: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
+    reviewStatus: ReviewStatus.fromString(map['reviewStatus']),
+    reviewedByNurseId: map['reviewedByNurseId'],
+    reviewedAt: map['reviewedAt'] != null
+        ? DateTime.tryParse(map['reviewedAt'])
+        : null,
+    weight: (map['weight'] as num?)?.toDouble() ?? 0.0,
+    height: (map['height'] as num?)?.toDouble() ?? 0.0,
+    bmi: (map['bmi'] as num?)?.toDouble() ?? 0.0,
+    waistCm: (map['waistCm'] as num?)?.toDouble() ?? 0.0,
+    sbp: (map['sbp'] as num?)?.toDouble() ?? 0.0,
+    dbp: (map['dbp'] as num?)?.toDouble() ?? 0.0,
+    pulse: (map['pulse'] as num?)?.toDouble() ?? 0.0,
+    bloodSugar: (map['bloodSugar'] as num?)?.toDouble() ?? 0.0,
+    histories:
+        (map['histories'] as List<dynamic>?)
+            ?.map((x) => ScreeningHistory.fromMap(x))
+            .toList() ??
+        [],
+    results:
+        (map['results'] as List<dynamic>?)
+            ?.map((x) => ScreeningResult.fromMap(x))
+            .toList() ??
+        [],
+  );
 }

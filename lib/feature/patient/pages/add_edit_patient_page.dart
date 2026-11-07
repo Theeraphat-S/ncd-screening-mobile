@@ -97,7 +97,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(
               primary: PColor.primaryColor,
-              onPrimary: Colors.white,
+              onPrimary: PColor.neutralColor,
             ),
           ),
           child: child!,
@@ -137,7 +137,9 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
     final newPatient = Patient(
       patientId: widget.patient?.patientId ?? '',
       patientCitizenId: citizenId,
-      patientTitle: title.isNotEmpty ? title : (_gender == 'ชาย' ? 'นาย' : 'นาง'),
+      patientTitle: title.isNotEmpty
+          ? title
+          : (_gender == 'ชาย' ? 'นาย' : 'นาง'),
       patientFname: fname,
       patientLname: lname,
       patientGender: _gender,
@@ -174,7 +176,11 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -182,7 +188,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -197,17 +203,26 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
               children: [
                 // Image Upload Card
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 16,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
                     children: [
                       CircleAvatar(
                         radius: 36,
-                        backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                        child: const Icon(Icons.person, size: 40, color: PColor.primaryColor),
+                        backgroundColor: PColor.primaryLight.withValues(
+                          alpha: 0.15,
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          size: 40,
+                          color: PColor.primaryColor,
+                        ),
                       ),
                       const SizedBox(width: 20),
                       Expanded(
@@ -232,14 +247,25 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                   ),
                                 );
                               },
-                              icon: const Icon(Icons.image_outlined, size: 18, color: PColor.primaryColor),
+                              icon: const Icon(
+                                Icons.image_outlined,
+                                size: 18,
+                                color: PColor.primaryColor,
+                              ),
                               label: Text(
                                 _isEdit ? 'เปลี่ยนรูป' : 'แนบรูป',
-                                style: const TextStyle(color: PColor.primaryColor, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                  color: PColor.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: PColor.primaryColor),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                side: const BorderSide(
+                                  color: PColor.primaryColor,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
                           ],
@@ -254,7 +280,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -266,7 +292,9 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                         controller: _citizenIdController,
                         keyboardType: TextInputType.number,
                         maxLength: 13,
-                        decoration: _inputDecoration('กรอกเลขบัตรประชาชน 13 หลัก'),
+                        decoration: _inputDecoration(
+                          'กรอกเลขบัตรประชาชน 13 หลัก',
+                        ),
                       ),
                       const SizedBox(height: 16),
 
@@ -321,9 +349,13 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                               children: [
                                 _buildLabel('เพศ'),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: DropdownButtonHideUnderline(
@@ -331,11 +363,19 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                       value: _gender,
                                       isExpanded: true,
                                       items: const [
-                                        DropdownMenuItem(value: 'ชาย', child: Text('ชาย')),
-                                        DropdownMenuItem(value: 'หญิง', child: Text('หญิง')),
+                                        DropdownMenuItem(
+                                          value: 'ชาย',
+                                          child: Text('ชาย'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 'หญิง',
+                                          child: Text('หญิง'),
+                                        ),
                                       ],
                                       onChanged: (v) {
-                                        if (v != null) setState(() => _gender = v);
+                                        if (v != null) {
+                                          setState(() => _gender = v);
+                                        }
                                       },
                                     ),
                                   ),
@@ -352,19 +392,31 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                 InkWell(
                                   onTap: _selectBirthDate,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 14,
+                                    ),
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade300),
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           '${_birthDate.day.toString().padLeft(2, '0')}/${_birthDate.month.toString().padLeft(2, '0')}/${_birthDate.year + 543}',
-                                          style: const TextStyle(fontSize: 13.5),
+                                          style: const TextStyle(
+                                            fontSize: 13.5,
+                                          ),
                                         ),
-                                        const Icon(Icons.calendar_today_outlined, size: 18, color: PColor.primaryColor),
+                                        const Icon(
+                                          Icons.calendar_today_outlined,
+                                          size: 18,
+                                          color: PColor.primaryColor,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -378,7 +430,10 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
 
                       // Auto-calculated age
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(8),
@@ -399,7 +454,9 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                       TextFormField(
                         controller: _addressController,
                         maxLines: 2,
-                        decoration: _inputDecoration('เช่น 60 หมู่ 1 บ้านท่าตอน อ.แม่อาย'),
+                        decoration: _inputDecoration(
+                          'เช่น 60 หมู่ 1 บ้านท่าตอน อ.แม่อาย',
+                        ),
                       ),
                     ],
                   ),
@@ -409,19 +466,24 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                 // Save Button
                 ElevatedButton.icon(
                   onPressed: _onSave,
-                  icon: const Icon(Icons.save_outlined, color: Colors.white),
+                  icon: const Icon(
+                    Icons.save_outlined,
+                    color: PColor.neutralColor,
+                  ),
                   label: const Text(
                     'บันทึก',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: PColor.neutralColor,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PColor.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     elevation: 2,
                   ),
                 ),
@@ -451,9 +513,12 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 13.5),
+      hintStyle: const TextStyle(
+        color: PColor.textNeutralColor,
+        fontSize: 13.5,
+      ),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: PColor.neutralColor,
       counterText: '',
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       border: OutlineInputBorder(

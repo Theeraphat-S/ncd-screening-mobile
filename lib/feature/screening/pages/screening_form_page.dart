@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
@@ -21,6 +22,7 @@ class ScreeningFormPage extends StatefulWidget {
 }
 
 class _ScreeningFormPageState extends State<ScreeningFormPage> {
+  final _random = Random.secure();
   // Biometrics Controllers
   final _weightController = TextEditingController(text: '60');
   final _heightController = TextEditingController(text: '175');
@@ -55,19 +57,32 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     super.dispose();
   }
 
-  void _onSubmit() {
-    final weight = double.tryParse(_weightController.text) ?? 0.0;
-    final height = double.tryParse(_heightController.text) ?? 0.0;
-    final waist = double.tryParse(_waistController.text) ?? 0.0;
-    final sbp = double.tryParse(_sbpController.text) ?? 0.0;
-    final dbp = double.tryParse(_dbpController.text) ?? 0.0;
-    final pulse = double.tryParse(_pulseController.text) ?? 0.0;
-    final bloodSugar = double.tryParse(_bloodSugarController.text) ?? 0.0;
+  /// Returns a Thai error message when [value] is missing or outside the
+  /// clinically plausible range, otherwise null.
+  String? _rangeError(String label, String raw, double min, double max) {
+    final value = double.tryParse(raw.trim());
+    if (value == null) return 'กรุณากรอก$label';
+    if (value < min || value > max) {
+      return '$labelต้องอยู่ระหว่าง ${min.toStringAsFixed(0)}-${max.toStringAsFixed(0)}';
+    }
+    return null;
+  }
 
-    if (weight <= 0 || height <= 0 || waist <= 0 || sbp <= 0 || dbp <= 0 || pulse <= 0 || bloodSugar <= 0) {
+  void _onSubmit() {
+    final errors = [
+      _rangeError('น้ำหนัก (กก.)', _weightController.text, 1, 300),
+      _rangeError('ส่วนสูง (ซม.)', _heightController.text, 50, 250),
+      _rangeError('รอบเอว (ซม.)', _waistController.text, 20, 200),
+      _rangeError('ความดันตัวบน (SBP)', _sbpController.text, 60, 260),
+      _rangeError('ความดันตัวล่าง (DBP)', _dbpController.text, 30, 160),
+      _rangeError('ชีพจร', _pulseController.text, 30, 220),
+      _rangeError('น้ำตาลในเลือด (FBS)', _bloodSugarController.text, 20, 600),
+    ].whereType<String>().toList();
+
+    if (errors.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('ข้อมูลไม่ถูกต้อง กรุณากรอกตัวเลขค่าตรวจวัดให้ครบถ้วน'),
+        SnackBar(
+          content: Text(errors.first),
           backgroundColor: PColor.errorColor,
           behavior: SnackBarBehavior.floating,
         ),
@@ -75,7 +90,17 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
       return;
     }
 
-    final screeningId = 'S${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    final weight = double.parse(_weightController.text.trim());
+    final height = double.parse(_heightController.text.trim());
+    final waist = double.parse(_waistController.text.trim());
+    final sbp = double.parse(_sbpController.text.trim());
+    final dbp = double.parse(_dbpController.text.trim());
+    final pulse = double.parse(_pulseController.text.trim());
+    final bloodSugar = double.parse(_bloodSugarController.text.trim());
+
+    // Unique per device and per save, not just per millisecond.
+    final screeningId =
+        'S${DateTime.now().millisecondsSinceEpoch}${_random.nextInt(9000) + 1000}';
     final bmi = NcdRiskCalculator.calculateBmi(weight, height);
 
     final histories = [
@@ -169,7 +194,11 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -177,7 +206,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -224,7 +253,10 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                     // Auto BMI Banner
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: PColor.primaryColor.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(10),
@@ -234,11 +266,19 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                         children: [
                           const Text(
                             'ดัชนีมวลกาย (BMI คำนวณอัตโนมัติ):',
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: PColor.primaryDark),
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: PColor.primaryDark,
+                            ),
                           ),
                           Text(
                             '$_calculatedBmi kg/m²',
-                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: PColor.primaryColor),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: PColor.primaryColor,
+                            ),
                           ),
                         ],
                       ),
@@ -305,7 +345,9 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Question 1
-                    _buildQuestionTitle('1) ท่านมีประวัติการเจ็บป่วย/พบแพทย์ด้วยโรค NCDs หรือไม่:'),
+                    _buildQuestionTitle(
+                      '1) ท่านมีประวัติการเจ็บป่วย/พบแพทย์ด้วยโรค NCDs หรือไม่:',
+                    ),
                     _buildRadioGroup(
                       value: _q1PersonalNcd,
                       options: const ['มี', 'ไม่มี', 'ไม่ทราบ'],
@@ -313,16 +355,32 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                     ),
                     if (_q1PersonalNcd == 'มี') ...[
                       const Padding(
-                        padding: EdgeInsets.only(left: 8.0, top: 4.0, bottom: 6.0),
+                        padding: EdgeInsets.only(
+                          left: 8.0,
+                          top: 4.0,
+                          bottom: 6.0,
+                        ),
                         child: Text(
                           'เลือกโรคที่ป่วย (เลือกได้มากกว่า 1 ข้อ):',
-                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: PColor.primaryDark),
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w600,
+                            color: PColor.primaryDark,
+                          ),
                         ),
                       ),
-                      ...['โรคเบาหวาน', 'โรคความดันโลหิตสูง', 'โรคหลอดเลือดหัวใจ', 'โรคอ้วนลงพุง'].map(
+                      ...[
+                        'โรคเบาหวาน',
+                        'โรคความดันโลหิตสูง',
+                        'โรคหลอดเลือดหัวใจ',
+                        'โรคอ้วนลงพุง',
+                      ].map(
                         (disease) => CheckboxListTile(
                           dense: true,
-                          title: Text(disease, style: const TextStyle(fontSize: 13.5)),
+                          title: Text(
+                            disease,
+                            style: const TextStyle(fontSize: 13.5),
+                          ),
                           value: _selectedPersonalNcds.contains(disease),
                           activeColor: PColor.primaryColor,
                           controlAffinity: ListTileControlAffinity.leading,
@@ -360,7 +418,9 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                     const Divider(height: 24),
 
                     // Question 4
-                    _buildQuestionTitle('4) ญาติตรงสาย (พ่อ/แม่/พี่/น้อง) ป่วยเป็นโรค NCDs หรือไม่:'),
+                    _buildQuestionTitle(
+                      '4) ญาติตรงสาย (พ่อ/แม่/พี่/น้อง) ป่วยเป็นโรค NCDs หรือไม่:',
+                    ),
                     _buildRadioGroup(
                       value: _q4FamilyNcd,
                       options: const ['มี', 'ไม่มี', 'ไม่ทราบ'],
@@ -374,19 +434,24 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
               // Submit Button
               ElevatedButton.icon(
                 onPressed: _onSubmit,
-                icon: const Icon(Icons.analytics_outlined, color: Colors.white),
+                icon: const Icon(
+                  Icons.analytics_outlined,
+                  color: PColor.neutralColor,
+                ),
                 label: const Text(
                   'บันทึกและประเมินความเสี่ยง',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PColor.primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   elevation: 3,
                 ),
               ),
@@ -402,7 +467,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
@@ -436,22 +501,26 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
             color: isDone
                 ? PColor.primaryColor
                 : isActive
-                    ? PColor.primaryLight
-                    : PColor.surfaceSubtle,
+                ? PColor.primaryLight
+                : PColor.surfaceSubtle,
             border: Border.all(
-              color: (isActive || isDone) ? PColor.primaryColor : PColor.borderSubtle,
+              color: (isActive || isDone)
+                  ? PColor.primaryColor
+                  : PColor.borderSubtle,
               width: 1.5,
             ),
           ),
           child: Center(
             child: isDone
-                ? const Icon(Icons.check, size: 16, color: Colors.white)
+                ? const Icon(Icons.check, size: 16, color: PColor.neutralColor)
                 : Text(
                     number,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
+                      color: isActive
+                          ? PColor.primaryDark
+                          : PColor.textNeutralColor,
                     ),
                   ),
           ),
@@ -461,8 +530,12 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
           label,
           style: TextStyle(
             fontSize: 11.5,
-            fontWeight: (isActive || isDone) ? FontWeight.w700 : FontWeight.w500,
-            color: (isActive || isDone) ? PColor.contentColor : PColor.textNeutralColor,
+            fontWeight: (isActive || isDone)
+                ? FontWeight.w700
+                : FontWeight.w500,
+            color: (isActive || isDone)
+                ? PColor.contentColor
+                : PColor.textNeutralColor,
           ),
         ),
       ],
@@ -487,7 +560,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
@@ -535,7 +608,11 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: PColor.contentColor),
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: PColor.contentColor,
+          ),
         ),
         const SizedBox(height: 6),
         TextFormField(
@@ -544,10 +621,16 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
           onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 13.5),
+            hintStyle: const TextStyle(
+              color: PColor.textNeutralColor,
+              fontSize: 13.5,
+            ),
             filled: true,
             fillColor: PColor.backgroundColor,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: PColor.borderSubtle),
@@ -558,7 +641,10 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+              borderSide: const BorderSide(
+                color: PColor.primaryColor,
+                width: 1.5,
+              ),
             ),
           ),
         ),
@@ -597,10 +683,14 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    color: isSelected ? PColor.primaryLight : PColor.surfaceSubtle,
+                    color: isSelected
+                        ? PColor.primaryLight
+                        : PColor.surfaceSubtle,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: isSelected ? PColor.primaryColor : PColor.borderSubtle,
+                      color: isSelected
+                          ? PColor.primaryColor
+                          : PColor.borderSubtle,
                       width: isSelected ? 1.5 : 1,
                     ),
                   ),
@@ -609,8 +699,12 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                       opt,
                       style: TextStyle(
                         fontSize: 13,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                        color: isSelected ? PColor.primaryDark : PColor.textSecondary,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? PColor.primaryDark
+                            : PColor.textSecondary,
                       ),
                     ),
                   ),

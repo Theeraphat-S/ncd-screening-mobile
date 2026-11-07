@@ -101,7 +101,11 @@ class PatientScreeningDetailPage extends StatelessWidget {
       backgroundColor: PColor.primaryColor,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+        tooltip: 'ย้อนกลับ',
+        icon: const Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: PColor.neutralColor,
+        ),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
@@ -115,7 +119,10 @@ class PatientScreeningDetailPage extends StatelessWidget {
           child: AccessibilityScaleToggle(),
         ),
         IconButton(
-          icon: const Icon(Icons.picture_as_pdf_outlined, color: Colors.white),
+          icon: const Icon(
+            Icons.picture_as_pdf_outlined,
+            color: PColor.neutralColor,
+          ),
           tooltip: 'ส่งออก/พิมพ์รายงาน PDF',
           onPressed: () => PdfPreviewPage.open(
             context,

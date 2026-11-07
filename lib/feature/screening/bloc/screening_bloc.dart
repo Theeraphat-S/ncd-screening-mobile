@@ -61,20 +61,20 @@ class ScreeningCalculateRiskRequested extends ScreeningEvent {
 
   @override
   List<Object?> get props => [
-        screeningId,
-        weight,
-        height,
-        bmi,
-        waistCm,
-        sbp,
-        dbp,
-        pulse,
-        bloodSugar,
-        gender,
-        hasDirectFamilyNcd,
-        hasPersonalNcd,
-        personalNcdDetail,
-      ];
+    screeningId,
+    weight,
+    height,
+    bmi,
+    waistCm,
+    sbp,
+    dbp,
+    pulse,
+    bloodSugar,
+    gender,
+    hasDirectFamilyNcd,
+    hasPersonalNcd,
+    personalNcdDetail,
+  ];
 }
 
 class ScreeningSaveRequested extends ScreeningEvent {
@@ -141,13 +141,13 @@ class ScreeningState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        historyList,
-        currentScreening,
-        evaluatedResults,
-        message,
-        errorMessage,
-      ];
+    status,
+    historyList,
+    currentScreening,
+    evaluatedResults,
+    message,
+    errorMessage,
+  ];
 }
 
 // BLOC
@@ -159,23 +159,26 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
       emit(state.copyWith(status: ScreeningStatus.loading, errorMessage: null));
       try {
         final list = await repository.getScreeningsByPatient(event.patientId);
-        emit(state.copyWith(
-          status: ScreeningStatus.success,
-          historyList: list,
-        ));
+        emit(
+          state.copyWith(status: ScreeningStatus.success, historyList: list),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: ScreeningStatus.failure,
-          errorMessage: 'ไม่พบข้อมูล',
-        ));
+        emit(
+          state.copyWith(
+            status: ScreeningStatus.failure,
+            errorMessage: 'ไม่พบข้อมูล',
+          ),
+        );
       }
     });
 
     on<ScreeningDetailSelected>((event, emit) {
-      emit(state.copyWith(
-        currentScreening: event.screening,
-        evaluatedResults: event.screening.results,
-      ));
+      emit(
+        state.copyWith(
+          currentScreening: event.screening,
+          evaluatedResults: event.screening.results,
+        ),
+      );
     });
 
     on<ScreeningCalculateRiskRequested>((event, emit) {
@@ -201,10 +204,10 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
       emit(state.copyWith(status: ScreeningStatus.loading));
       try {
         final saved = await repository.saveScreening(event.screening);
-        
+
         // Enqueue to offline sync queue if service is available
         if (locator.isRegistered<SyncQueueServiceInterface>()) {
-          locator<SyncQueueServiceInterface>().enqueue(
+          await locator<SyncQueueServiceInterface>().enqueue(
             SyncQueueItem(
               id: 'SYNC_${saved.screenId}_${DateTime.now().millisecondsSinceEpoch}',
               entityType: 'screening',
@@ -229,17 +232,21 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
           );
         }
 
-        emit(state.copyWith(
-          status: ScreeningStatus.success,
-          currentScreening: saved,
-          historyList: [saved, ...state.historyList],
-          message: 'บันทึกการคัดกรองสำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: ScreeningStatus.success,
+            currentScreening: saved,
+            historyList: [saved, ...state.historyList],
+            message: 'บันทึกการคัดกรองสำเร็จ',
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: ScreeningStatus.failure,
-          errorMessage: 'บันทึกการแบบฟอร์มคัดกรองโรคไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: ScreeningStatus.failure,
+            errorMessage: 'บันทึกการแบบฟอร์มคัดกรองโรคไม่สำเร็จ',
+          ),
+        );
       }
     });
 
@@ -255,18 +262,22 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
         final updatedHistory = state.historyList
             .map((s) => s.screenId == updated.screenId ? updated : s)
             .toList();
-        emit(state.copyWith(
-          status: ScreeningStatus.success,
-          currentScreening: updated,
-          historyList: updatedHistory,
-          evaluatedResults: updated.results,
-          message: 'อนุมัติผลการประเมินความเสี่ยงสำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: ScreeningStatus.success,
+            currentScreening: updated,
+            historyList: updatedHistory,
+            evaluatedResults: updated.results,
+            message: 'อนุมัติผลการประเมินความเสี่ยงสำเร็จ',
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: ScreeningStatus.failure,
-          errorMessage: 'บันทึกผลประเมิน ไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: ScreeningStatus.failure,
+            errorMessage: 'บันทึกผลประเมิน ไม่สำเร็จ',
+          ),
+        );
       }
     });
   }

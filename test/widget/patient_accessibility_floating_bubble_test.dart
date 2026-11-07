@@ -35,7 +35,9 @@ void main() {
       );
     }
 
-    testWidgets('renders collapsed floating bubble trigger by default', (tester) async {
+    testWidgets('renders collapsed floating bubble trigger by default', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -44,7 +46,9 @@ void main() {
       expect(find.text('ปรับการแสดงผล'), findsNothing);
     });
 
-    testWidgets('expands and displays accessibility controls when tapped', (tester) async {
+    testWidgets('expands and displays accessibility controls when tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -60,30 +64,33 @@ void main() {
       expect(find.text('รีเซ็ตค่ามาตรฐาน'), findsOneWidget);
     });
 
-    testWidgets('toggles elderly mode and fine-tunes font scaling with A+ and A-', (tester) async {
-      await tester.pumpWidget(createTestWidget());
-      await tester.pumpAndSettle();
+    testWidgets(
+      'toggles elderly mode and fine-tunes font scaling with A+ and A-',
+      (tester) async {
+        await tester.pumpWidget(createTestWidget());
+        await tester.pumpAndSettle();
 
-      // Expand bubble
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
+        // Expand bubble
+        await tester.tap(find.byType(FloatingActionButton));
+        await tester.pumpAndSettle();
 
-      // Tap A+ button
-      await tester.tap(find.text('A+'));
-      await tester.pumpAndSettle();
-      expect(accessibilityCubit.state.textScaleFactor, 1.1);
+        // Tap A+ button
+        await tester.tap(find.text('A+'));
+        await tester.pumpAndSettle();
+        expect(accessibilityCubit.state.textScaleFactor, 1.1);
 
-      // Tap A- button
-      await tester.tap(find.text('A-'));
-      await tester.pumpAndSettle();
-      expect(accessibilityCubit.state.textScaleFactor, 1.0);
+        // Tap A- button
+        await tester.tap(find.text('A-'));
+        await tester.pumpAndSettle();
+        expect(accessibilityCubit.state.textScaleFactor, 1.0);
 
-      // Tap Reset
-      await tester.tap(find.text('รีเซ็ตค่ามาตรฐาน'));
-      await tester.pumpAndSettle();
-      expect(accessibilityCubit.state.textScaleFactor, 1.0);
-      expect(accessibilityCubit.state.isElderlyMode, isFalse);
-    });
+        // Tap Reset
+        await tester.tap(find.text('รีเซ็ตค่ามาตรฐาน'));
+        await tester.pumpAndSettle();
+        expect(accessibilityCubit.state.textScaleFactor, 1.0);
+        expect(accessibilityCubit.state.isElderlyMode, isFalse);
+      },
+    );
 
     testWidgets('collapses when close icon is tapped', (tester) async {
       await tester.pumpWidget(createTestWidget());
@@ -108,12 +115,15 @@ void main() {
       expect(theme.textTheme.bodyMedium?.fontFamily, 'Sarabun');
     });
 
-    test('highContrastTheme uses dark charcoal background and yellow primary', () {
-      final theme = AppTheme.highContrastTheme;
-      expect(theme.brightness, Brightness.dark);
-      expect(theme.scaffoldBackgroundColor, PColor.hcBackground);
-      expect(theme.colorScheme.primary, PColor.hcAccent);
-      expect(theme.appBarTheme.backgroundColor, PColor.hcBackground);
-    });
+    test(
+      'highContrastTheme uses dark charcoal background and yellow primary',
+      () {
+        final theme = AppTheme.highContrastTheme;
+        expect(theme.brightness, Brightness.dark);
+        expect(theme.scaffoldBackgroundColor, PColor.hcBackground);
+        expect(theme.colorScheme.primary, PColor.hcAccent);
+        expect(theme.appBarTheme.backgroundColor, PColor.hcBackground);
+      },
+    );
   });
 }

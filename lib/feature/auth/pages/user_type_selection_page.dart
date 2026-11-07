@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
+import 'package:ncd_screening_mobile/shared/components/appbar/language_dropdown.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
@@ -12,10 +13,20 @@ class UserTypeSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          SizedBox(width: 56, child: LanguageDropdown(context: context)),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 32.0,
+            ),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
@@ -28,8 +39,11 @@ class UserTypeSelectionPage extends StatelessWidget {
                     height: 104,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(color: PColor.borderSubtle, width: 1.5),
+                      color: PColor.neutralColor,
+                      border: Border.all(
+                        color: PColor.borderSubtle,
+                        width: 1.5,
+                      ),
                       boxShadow: PShadow.card,
                     ),
                     child: Center(
@@ -66,7 +80,11 @@ class UserTypeSelectionPage extends StatelessWidget {
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.location_on_outlined, size: 16, color: PColor.textNeutralColor),
+                      Icon(
+                        Icons.location_on_outlined,
+                        size: 16,
+                        color: PColor.textNeutralColor,
+                      ),
                       SizedBox(width: 4),
                       Text(
                         'รพ.สต.แม่อาย จ.เชียงใหม่',
@@ -80,7 +98,10 @@ class UserTypeSelectionPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: PColor.surfaceSubtle,
                       borderRadius: BorderRadius.circular(20),
@@ -104,7 +125,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                     title: 'บุคคลทั่วไป',
                     subtitle: 'เข้าดูประวัติและผลการคัดกรองสุขภาพของตนเอง',
                     icon: Icons.person_outline_rounded,
-                    accentColor: const Color(0xFF0284C7),
+                    accentColor: PColor.secondaryColor,
                     accentBg: const Color(0xFFE0F2FE),
                   ),
                   const SizedBox(height: 14),
@@ -126,7 +147,8 @@ class UserTypeSelectionPage extends StatelessWidget {
                     context: context,
                     role: UserRole.nurse,
                     title: 'สำหรับพยาบาล',
-                    subtitle: 'ดูแลข้อมูล อสม. และอนุมัติผลการประเมินความเสี่ยง',
+                    subtitle:
+                        'ดูแลข้อมูล อสม. และอนุมัติผลการประเมินความเสี่ยง',
                     icon: Icons.medical_services_outlined,
                     accentColor: const Color(0xFF4F46E5),
                     accentBg: const Color(0xFFEEF2FF),
@@ -152,7 +174,7 @@ class UserTypeSelectionPage extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: PColor.borderSubtle, width: 1),
         boxShadow: PShadow.card,
@@ -166,9 +188,7 @@ class UserTypeSelectionPage extends StatelessWidget {
             context.read<AuthBloc>().add(AuthSelectRole(role));
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => LoginPage(role: role),
-              ),
+              MaterialPageRoute(builder: (_) => LoginPage(role: role)),
             );
           },
           child: Padding(

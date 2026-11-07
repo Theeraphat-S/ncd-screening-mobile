@@ -62,15 +62,20 @@ import 'home_page_localizations_th.dart';
 /// be consistent with the languages listed in the HomePageLocalizations.supportedLocales
 /// property.
 abstract class HomePageLocalizations {
-  HomePageLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  HomePageLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
   static HomePageLocalizations? of(BuildContext context) {
-    return Localizations.of<HomePageLocalizations>(context, HomePageLocalizations);
+    return Localizations.of<HomePageLocalizations>(
+      context,
+      HomePageLocalizations,
+    );
   }
 
-  static const LocalizationsDelegate<HomePageLocalizations> delegate = _HomePageLocalizationsDelegate();
+  static const LocalizationsDelegate<HomePageLocalizations> delegate =
+      _HomePageLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,17 +87,18 @@ abstract class HomePageLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('th')
+    Locale('th'),
   ];
 
   /// Welcome to {appName}
@@ -114,34 +120,38 @@ abstract class HomePageLocalizations {
   String text_ip(Object ip);
 }
 
-class _HomePageLocalizationsDelegate extends LocalizationsDelegate<HomePageLocalizations> {
+class _HomePageLocalizationsDelegate
+    extends LocalizationsDelegate<HomePageLocalizations> {
   const _HomePageLocalizationsDelegate();
 
   @override
   Future<HomePageLocalizations> load(Locale locale) {
-    return SynchronousFuture<HomePageLocalizations>(lookupHomePageLocalizations(locale));
+    return SynchronousFuture<HomePageLocalizations>(
+      lookupHomePageLocalizations(locale),
+    );
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'th'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'th'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_HomePageLocalizationsDelegate old) => false;
 }
 
 HomePageLocalizations lookupHomePageLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return HomePageLocalizationsEn();
-    case 'th': return HomePageLocalizationsTh();
+    case 'en':
+      return HomePageLocalizationsEn();
+    case 'th':
+      return HomePageLocalizationsTh();
   }
 
   throw FlutterError(
     'HomePageLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

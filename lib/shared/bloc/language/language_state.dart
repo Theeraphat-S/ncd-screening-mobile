@@ -7,10 +7,7 @@ class LanguageState extends Equatable {
 
   const LanguageState(this.locale, {this.isDropdownOpen = false});
 
-  LanguageState copyWith({
-    Locale? locale,
-    bool? isDropdownOpen,
-  }) {
+  LanguageState copyWith({Locale? locale, bool? isDropdownOpen}) {
     return LanguageState(
       locale ?? this.locale,
       isDropdownOpen: isDropdownOpen ?? this.isDropdownOpen,

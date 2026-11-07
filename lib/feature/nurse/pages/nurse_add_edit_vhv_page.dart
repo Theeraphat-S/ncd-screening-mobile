@@ -76,7 +76,7 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(
               primary: PColor.primaryColor,
-              onPrimary: Colors.white,
+              onPrimary: PColor.neutralColor,
             ),
           ),
           child: child!,
@@ -110,7 +110,10 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
       _showError('นามสกุลต้องมีความยาว 3 ถึง 100 ตัวอักษร');
       return;
     }
-    if (mobile.length != 10 || (!mobile.startsWith('06') && !mobile.startsWith('08') && !mobile.startsWith('09'))) {
+    if (mobile.length != 10 ||
+        (!mobile.startsWith('06') &&
+            !mobile.startsWith('08') &&
+            !mobile.startsWith('09'))) {
       _showError('เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก ขึ้นต้นด้วย 06, 08, 09');
       return;
     }
@@ -118,8 +121,12 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
       _showError('รูปแบบอีเมลไม่ถูกต้อง');
       return;
     }
-    if (!_isEdit && (password.length < 4 || password.length > 16)) {
-      _showError('รหัสผ่านต้องมีความยาว 4-16 ตัวอักษร');
+    if (!_isEdit && password.isEmpty) {
+      _showError('กรุณากำหนดรหัสผ่าน');
+      return;
+    }
+    if (password.isNotEmpty && (password.length < 8 || password.length > 64)) {
+      _showError('รหัสผ่านต้องมีความยาว 8-64 ตัวอักษร');
       return;
     }
 
@@ -131,10 +138,12 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
       vhvLname: lname,
       vhvMobile: mobile,
       vhvEmail: email,
-      vhvPassword: password.isNotEmpty ? password : (widget.vhv?.vhvPassword ?? 'password123'),
+      // Empty on edit means "keep current password"; the repository hashes it.
+      vhvPassword: password,
       vhvBirthDate: _birthDate,
       vhvGender: _gender,
-      vhvAddress: widget.vhv?.vhvAddress ?? 'หมู่บ้าน $_selectedVillageId อ.แม่อาย',
+      vhvAddress:
+          widget.vhv?.vhvAddress ?? 'หมู่บ้าน $_selectedVillageId อ.แม่อาย',
       villageId: _selectedVillageId,
     );
 
@@ -165,7 +174,11 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -173,7 +186,7 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -188,15 +201,21 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
                   children: [
                     CircleAvatar(
                       radius: 36,
-                      backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                      child: const Icon(Icons.volunteer_activism_rounded, size: 40, color: PColor.primaryColor),
+                      backgroundColor: PColor.primaryLight.withValues(
+                        alpha: 0.15,
+                      ),
+                      child: const Icon(
+                        Icons.volunteer_activism_rounded,
+                        size: 40,
+                        color: PColor.primaryColor,
+                      ),
                     ),
                     const SizedBox(width: 20),
                     Expanded(
@@ -215,17 +234,31 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                           OutlinedButton.icon(
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('เลือกรูปภาพเรียบร้อยแล้ว'), duration: Duration(seconds: 1)),
+                                const SnackBar(
+                                  content: Text('เลือกรูปภาพเรียบร้อยแล้ว'),
+                                  duration: Duration(seconds: 1),
+                                ),
                               );
                             },
-                            icon: const Icon(Icons.image_outlined, size: 18, color: PColor.primaryColor),
+                            icon: const Icon(
+                              Icons.image_outlined,
+                              size: 18,
+                              color: PColor.primaryColor,
+                            ),
                             label: Text(
                               _isEdit ? 'เปลี่ยนรูป' : 'แนบรูป',
-                              style: const TextStyle(color: PColor.primaryColor, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                color: PColor.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: PColor.primaryColor),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              side: const BorderSide(
+                                color: PColor.primaryColor,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ],
@@ -240,7 +273,7 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -253,11 +286,31 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                         final villages = vState.villages.isNotEmpty
                             ? vState.villages
                             : [
-                                const Village(villageId: 'V001', villageName: 'บ้านท่าตอน', villageNumber: '1'),
-                                const Village(villageId: 'V002', villageName: 'บ้านใหม่หมอกจ๋าม', villageNumber: '2'),
-                                const Village(villageId: 'V003', villageName: 'บ้านห้วยปู', villageNumber: '3'),
-                                const Village(villageId: 'V004', villageName: 'บ้านแม่ฮ่าง', villageNumber: '4'),
-                                const Village(villageId: 'V005', villageName: 'บ้านร่มไทย', villageNumber: '5'),
+                                const Village(
+                                  villageId: 'V001',
+                                  villageName: 'บ้านท่าตอน',
+                                  villageNumber: '1',
+                                ),
+                                const Village(
+                                  villageId: 'V002',
+                                  villageName: 'บ้านใหม่หมอกจ๋าม',
+                                  villageNumber: '2',
+                                ),
+                                const Village(
+                                  villageId: 'V003',
+                                  villageName: 'บ้านห้วยปู',
+                                  villageNumber: '3',
+                                ),
+                                const Village(
+                                  villageId: 'V004',
+                                  villageName: 'บ้านแม่ฮ่าง',
+                                  villageNumber: '4',
+                                ),
+                                const Village(
+                                  villageId: 'V005',
+                                  villageName: 'บ้านร่มไทย',
+                                  villageNumber: '5',
+                                ),
                               ];
                         return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -270,13 +323,19 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                               value: _selectedVillageId,
                               isExpanded: true,
                               items: villages
-                                  .map((v) => DropdownMenuItem(
-                                        value: v.villageId,
-                                        child: Text('หมู่ ${v.villageNumber} ${v.villageName}'),
-                                      ))
+                                  .map(
+                                    (v) => DropdownMenuItem(
+                                      value: v.villageId,
+                                      child: Text(
+                                        'หมู่ ${v.villageNumber} ${v.villageName}',
+                                      ),
+                                    ),
+                                  )
                                   .toList(),
                               onChanged: (val) {
-                                if (val != null) setState(() => _selectedVillageId = val);
+                                if (val != null) {
+                                  setState(() => _selectedVillageId = val);
+                                }
                               },
                             ),
                           ),
@@ -291,7 +350,9 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                       controller: _citizenIdController,
                       keyboardType: TextInputType.number,
                       maxLength: 13,
-                      decoration: _inputDecoration('กรอกเลขบัตรประชาชน 13 หลัก'),
+                      decoration: _inputDecoration(
+                        'กรอกเลขบัตรประชาชน 13 หลัก',
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -346,9 +407,13 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                             children: [
                               _buildLabel('เพศ'),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.shade300),
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: DropdownButtonHideUnderline(
@@ -356,11 +421,19 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                                     value: _gender,
                                     isExpanded: true,
                                     items: const [
-                                      DropdownMenuItem(value: 'หญิง', child: Text('หญิง')),
-                                      DropdownMenuItem(value: 'ชาย', child: Text('ชาย')),
+                                      DropdownMenuItem(
+                                        value: 'หญิง',
+                                        child: Text('หญิง'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'ชาย',
+                                        child: Text('ชาย'),
+                                      ),
                                     ],
                                     onChanged: (v) {
-                                      if (v != null) setState(() => _gender = v);
+                                      if (v != null) {
+                                        setState(() => _gender = v);
+                                      }
                                     },
                                   ),
                                 ),
@@ -377,19 +450,29 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                               InkWell(
                                 onTap: _selectBirthDate,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 14,
+                                  ),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '${_birthDate.day.toString().padLeft(2, '0')}/${_birthDate.month.toString().padLeft(2, '0')}/${_birthDate.year + 543}',
                                         style: const TextStyle(fontSize: 13),
                                       ),
-                                      const Icon(Icons.calendar_today_outlined, size: 16, color: PColor.primaryColor),
+                                      const Icon(
+                                        Icons.calendar_today_outlined,
+                                        size: 16,
+                                        color: PColor.primaryColor,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -421,11 +504,17 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
                     const SizedBox(height: 16),
 
                     // Password
-                    _buildLabel(_isEdit ? 'รหัสผ่านใหม่ (ปล่อยว่าง = ไม่เปลี่ยน)' : 'รหัสผ่าน'),
+                    _buildLabel(
+                      _isEdit
+                          ? 'รหัสผ่านใหม่ (ปล่อยว่าง = ไม่เปลี่ยน)'
+                          : 'รหัสผ่าน',
+                    ),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: _inputDecoration('กำหนดรหัสผ่าน 4-16 ตัวอักษร'),
+                      decoration: _inputDecoration(
+                        'กำหนดรหัสผ่าน 8-64 ตัวอักษร',
+                      ),
                     ),
                   ],
                 ),
@@ -435,19 +524,24 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
               // Submit Button
               ElevatedButton.icon(
                 onPressed: _onSave,
-                icon: const Icon(Icons.save_outlined, color: Colors.white),
+                icon: const Icon(
+                  Icons.save_outlined,
+                  color: PColor.neutralColor,
+                ),
                 label: const Text(
                   'บันทึก',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: PColor.neutralColor,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PColor.primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   elevation: 2,
                 ),
               ),
@@ -476,9 +570,12 @@ class _NurseAddEditVhvPageState extends State<NurseAddEditVhvPage> {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 13.5),
+      hintStyle: const TextStyle(
+        color: PColor.textNeutralColor,
+        fontSize: 13.5,
+      ),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: PColor.neutralColor,
       counterText: '',
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       border: OutlineInputBorder(

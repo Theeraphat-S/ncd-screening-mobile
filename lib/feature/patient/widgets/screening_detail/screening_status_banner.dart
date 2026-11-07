@@ -17,7 +17,7 @@ class ScreeningStatusBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPending = reviewStatus == ReviewStatus.pending;
     final dateStr =
-        '${screeningDate.day.toString().padLeft(2, '0')}/${screeningDate.month.toString().padLeft(2, '0')}/${screeningDate.year + 543}';
+        '${screeningDate.day.toString().padLeft(2, '0')}/${screeningDate.month.toString().padLeft(2, '0')}/${screeningDate.year + 543} พ.ศ.';
 
     return Container(
       padding: const EdgeInsets.symmetric(

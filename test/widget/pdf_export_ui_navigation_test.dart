@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
-import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import '../support/mock_ncd_repository.dart';
 
 class FakePdfReportService implements PdfReportServiceInterface {
   bool generateCalled = false;
@@ -146,7 +146,9 @@ void main() {
     fakePdfService = FakePdfReportService();
 
     locator.reset();
-    locator.registerLazySingleton<PdfReportServiceInterface>(() => fakePdfService);
+    locator.registerLazySingleton<PdfReportServiceInterface>(
+      () => fakePdfService,
+    );
   });
 
   tearDown(() {
@@ -178,10 +180,7 @@ void main() {
     );
   }
 
-  Widget buildRiskResultApp({
-    required Screening screening,
-    VHV? vhv,
-  }) {
+  Widget buildRiskResultApp({required Screening screening, VHV? vhv}) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ScreeningBloc>.value(value: screeningBloc),
@@ -199,12 +198,16 @@ void main() {
   }
 
   group('PatientScreeningDetailPage - UI Navigation & State Stress Tests', () {
-    testWidgets('renders pending review screening state correctly', (WidgetTester tester) async {
+    testWidgets('renders pending review screening state correctly', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(buildDetailApp(screening: samplePendingScreening, vhv: sampleVhv));
+      await tester.pumpWidget(
+        buildDetailApp(screening: samplePendingScreening, vhv: sampleVhv),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('ผลคัดกรอง: สมชาย ใจดี'), findsOneWidget);
@@ -212,34 +215,47 @@ void main() {
       expect(find.text('ผลการประเมินความเสี่ยง 4 โรค'), findsOneWidget);
       expect(find.text('ข้อมูลสัญญาณชีพและร่างกาย'), findsOneWidget);
       expect(find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)'), findsOneWidget);
-      expect(find.byIcon(Icons.picture_as_pdf_outlined), findsNWidgets(2)); // AppBar icon + Button icon
+      expect(
+        find.byIcon(Icons.picture_as_pdf_outlined),
+        findsNWidgets(2),
+      ); // AppBar icon + Button icon
     });
 
-    testWidgets('renders approved review screening state correctly with nurse data', (WidgetTester tester) async {
+    testWidgets(
+      'renders approved review screening state correctly with nurse data',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(800, 1400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(
+          buildDetailApp(
+            screening: sampleApprovedScreening,
+            nurse: sampleNurse,
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
+        expect(find.text('ประเมินและยืนยันผล (Submit)'), findsOneWidget);
+      },
+    );
+
+    testWidgets('tapping AppBar PDF export icon navigates to PdfPreviewPage', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(buildDetailApp(
-        screening: sampleApprovedScreening,
-        nurse: sampleNurse,
-      ));
-      await tester.pumpAndSettle();
-
-      expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
-      expect(find.text('ประเมินและยืนยันผล (Submit)'), findsOneWidget);
-    });
-
-    testWidgets('tapping AppBar PDF export icon navigates to PdfPreviewPage', (WidgetTester tester) async {
-      tester.view.physicalSize = const Size(800, 1400);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-
-      await tester.pumpWidget(buildDetailApp(screening: samplePendingScreening, vhv: sampleVhv));
+      await tester.pumpWidget(
+        buildDetailApp(screening: samplePendingScreening, vhv: sampleVhv),
+      );
       await tester.pumpAndSettle();
 
       final appBarPdfIcon = find.byWidgetPredicate(
-        (widget) => widget is IconButton && widget.tooltip == 'ส่งออก/พิมพ์รายงาน PDF',
+        (widget) =>
+            widget is IconButton && widget.tooltip == 'ส่งออก/พิมพ์รายงาน PDF',
       );
       expect(appBarPdfIcon, findsOneWidget);
 
@@ -252,78 +268,107 @@ void main() {
       expect(find.text('นายสมชาย ใจดี • SCR20260822001'), findsOneWidget);
     });
 
-    testWidgets('tapping in-body PDF export button navigates to PdfPreviewPage', (WidgetTester tester) async {
-      tester.view.physicalSize = const Size(800, 1400);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
+    testWidgets(
+      'tapping in-body PDF export button navigates to PdfPreviewPage',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(800, 1400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(buildDetailApp(screening: sampleApprovedScreening, nurse: sampleNurse));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildDetailApp(
+            screening: sampleApprovedScreening,
+            nurse: sampleNurse,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      final exportButton = find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)');
-      await tester.ensureVisible(exportButton);
-      await tester.tap(exportButton);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 200));
+        final exportButton = find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)');
+        await tester.ensureVisible(exportButton);
+        await tester.tap(exportButton);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 200));
 
-      expect(find.byType(PdfPreviewPage), findsOneWidget);
-      expect(find.text('ตัวอย่างรายงาน PDF'), findsOneWidget);
-    });
+        expect(find.byType(PdfPreviewPage), findsOneWidget);
+        expect(find.text('ตัวอย่างรายงาน PDF'), findsOneWidget);
+      },
+    );
 
-    testWidgets('reflects dynamic review state updates from ScreeningBloc historyList', (WidgetTester tester) async {
-      tester.view.physicalSize = const Size(800, 1400);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
+    testWidgets(
+      'reflects dynamic review state updates from ScreeningBloc historyList',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(800, 1400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
 
-      // Initially loaded with pending screening in bloc history
-      screeningBloc.emit(ScreeningState(
-        historyList: [samplePendingScreening],
-        currentScreening: samplePendingScreening,
-      ));
+        // Initially loaded with pending screening in bloc history
+        screeningBloc.emit(
+          ScreeningState(
+            historyList: [samplePendingScreening],
+            currentScreening: samplePendingScreening,
+          ),
+        );
 
-      await tester.pumpWidget(buildDetailApp(screening: samplePendingScreening));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildDetailApp(screening: samplePendingScreening),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('รอพยาบาลตรวจสอบและรับรองผล'), findsOneWidget);
+        expect(find.text('รอพยาบาลตรวจสอบและรับรองผล'), findsOneWidget);
 
-      // Nurse approves screening -> bloc emits updated historyList
-      screeningBloc.emit(ScreeningState(
-        historyList: [sampleApprovedScreening],
-        currentScreening: sampleApprovedScreening,
-      ));
-      await tester.pumpAndSettle();
+        // Nurse approves screening -> bloc emits updated historyList
+        screeningBloc.emit(
+          ScreeningState(
+            historyList: [sampleApprovedScreening],
+            currentScreening: sampleApprovedScreening,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
-    });
+        expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
+      },
+    );
   });
 
   group('RiskAssessmentResultPage - UI Navigation & State Stress Tests', () {
-    testWidgets('renders all 4 disease risk cards and navigation buttons', (WidgetTester tester) async {
+    testWidgets('renders all 4 disease risk cards and navigation buttons', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(buildRiskResultApp(screening: samplePendingScreening, vhv: sampleVhv));
+      await tester.pumpWidget(
+        buildRiskResultApp(screening: samplePendingScreening, vhv: sampleVhv),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('แนวโน้มความเสี่ยง'), findsWidgets);
       expect(find.text('มีแนวโน้มความเสี่ยงที่จะเป็น'), findsOneWidget);
       expect(find.text('ผู้ป่วย: นายสมชาย ใจดี'), findsOneWidget);
       expect(find.text('กลับไปหน้ารายชื่อผู้ป่วย'), findsOneWidget);
-      expect(find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'), findsOneWidget);
+      expect(
+        find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)'),
+        findsOneWidget,
+      );
       expect(find.byIcon(Icons.picture_as_pdf_outlined), findsNWidgets(2));
     });
 
-    testWidgets('tapping AppBar PDF export icon navigates to PdfPreviewPage', (WidgetTester tester) async {
+    testWidgets('tapping AppBar PDF export icon navigates to PdfPreviewPage', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(buildRiskResultApp(screening: samplePendingScreening, vhv: sampleVhv));
+      await tester.pumpWidget(
+        buildRiskResultApp(screening: samplePendingScreening, vhv: sampleVhv),
+      );
       await tester.pumpAndSettle();
 
       final appBarPdfIcon = find.byWidgetPredicate(
-        (widget) => widget is IconButton && widget.tooltip == 'ส่งออก/พิมพ์รายงาน PDF',
+        (widget) =>
+            widget is IconButton && widget.tooltip == 'ส่งออก/พิมพ์รายงาน PDF',
       );
       expect(appBarPdfIcon, findsOneWidget);
 
@@ -335,15 +380,21 @@ void main() {
       expect(find.text('ตัวอย่างรายงาน PDF'), findsOneWidget);
     });
 
-    testWidgets('tapping body PDF export button navigates to PdfPreviewPage', (WidgetTester tester) async {
+    testWidgets('tapping body PDF export button navigates to PdfPreviewPage', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(buildRiskResultApp(screening: samplePendingScreening, vhv: sampleVhv));
+      await tester.pumpWidget(
+        buildRiskResultApp(screening: samplePendingScreening, vhv: sampleVhv),
+      );
       await tester.pumpAndSettle();
 
-      final exportButton = find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)');
+      final exportButton = find.text(
+        'ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)',
+      );
       await tester.ensureVisible(exportButton);
       await tester.tap(exportButton);
       await tester.pump();
@@ -355,7 +406,9 @@ void main() {
   });
 
   group('PdfPreviewPage - Widget Error Boundary and Fallback Tests', () {
-    testWidgets('renders PDF preview layout and initiates report generation', (WidgetTester tester) async {
+    testWidgets('renders PDF preview layout and initiates report generation', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -378,7 +431,9 @@ void main() {
       expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsOneWidget);
     });
 
-    testWidgets('pops back when back icon is tapped on PdfPreviewPage', (WidgetTester tester) async {
+    testWidgets('pops back when back icon is tapped on PdfPreviewPage', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);

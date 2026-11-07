@@ -12,7 +12,7 @@ class AnalyticsChartsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -27,8 +27,11 @@ class AnalyticsChartsSection extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.monitor_heart_rounded,
-                  color: PColor.primaryColor, size: 22),
+              Icon(
+                Icons.monitor_heart_rounded,
+                color: PColor.primaryColor,
+                size: 22,
+              ),
               SizedBox(width: 8),
               Text(
                 'สถิติความเสี่ยงรายโรค NCDs (4 โรค)',
@@ -131,23 +134,17 @@ class AnalyticsChartsSection extends StatelessWidget {
                       if (breakdown.lowCount > 0)
                         Expanded(
                           flex: breakdown.lowCount,
-                          child: Container(
-                            color: PColor.riskLow,
-                          ),
+                          child: Container(color: PColor.riskLow),
                         ),
                       if (breakdown.moderateCount > 0)
                         Expanded(
                           flex: breakdown.moderateCount,
-                          child: Container(
-                            color: PColor.riskModerate,
-                          ),
+                          child: Container(color: PColor.riskModerate),
                         ),
                       if (breakdown.highCount > 0)
                         Expanded(
                           flex: breakdown.highCount,
-                          child: Container(
-                            color: PColor.riskHigh,
-                          ),
+                          child: Container(color: PColor.riskHigh),
                         ),
                     ],
                   ),
@@ -195,10 +192,7 @@ class AnalyticsChartsSection extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 4),
         Text(

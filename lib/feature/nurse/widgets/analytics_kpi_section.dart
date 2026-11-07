@@ -62,7 +62,7 @@ class AnalyticsKpiSection extends StatelessWidget {
                 unit: 'รายการ',
                 subtitle: 'อนุมัติแล้ว ${analytics.approvedReviewsCount}',
                 icon: Icons.pending_actions_rounded,
-                iconColor: const Color(0xFFD97706),
+                iconColor: PColor.riskModerate,
                 bgColor: const Color(0xFFFEF3C7),
               ),
             ),
@@ -85,10 +85,13 @@ class AnalyticsKpiSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(14),
         border: isAlert
-            ? Border.all(color: PColor.errorColor.withValues(alpha: 0.4), width: 1.5)
+            ? Border.all(
+                color: PColor.errorColor.withValues(alpha: 0.4),
+                width: 1.5,
+              )
             : Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(

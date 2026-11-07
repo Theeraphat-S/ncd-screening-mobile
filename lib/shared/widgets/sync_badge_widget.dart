@@ -9,7 +9,7 @@ class SyncBadgeWidget extends StatelessWidget {
   void _showSyncDetailModal(BuildContext context, SyncBadgeState state) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: PColor.neutralColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -29,7 +29,11 @@ class SyncBadgeWidget extends StatelessWidget {
                       color: PColor.primaryLight,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.cloud_sync_rounded, color: PColor.primaryDark, size: 24),
+                    child: const Icon(
+                      Icons.cloud_sync_rounded,
+                      color: PColor.primaryDark,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   const Expanded(
@@ -46,13 +50,20 @@ class SyncBadgeWidget extends StatelessWidget {
                         ),
                         Text(
                           'ระบบจัดเก็บออฟไลน์ปลอดภัย 100%',
-                          style: TextStyle(fontSize: 13, color: PColor.textSecondary),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: PColor.textSecondary,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded, color: PColor.textNeutralColor),
+                    tooltip: 'ปิด',
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: PColor.textNeutralColor,
+                    ),
                     onPressed: () => Navigator.pop(ctx),
                   ),
                 ],
@@ -69,17 +80,23 @@ class SyncBadgeWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      state.isOnline ? Icons.wifi_rounded : Icons.wifi_off_rounded,
+                      state.isOnline
+                          ? Icons.wifi_rounded
+                          : Icons.wifi_off_rounded,
                       color: state.isOnline ? PColor.riskLow : PColor.riskHigh,
                       size: 22,
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      state.isOnline ? 'สถานะเครือข่าย: ออนไลน์ (พร้อมซิงค์)' : 'สถานะเครือข่าย: ออฟไลน์',
+                      state.isOnline
+                          ? 'สถานะเครือข่าย: ออนไลน์ (พร้อมซิงค์)'
+                          : 'สถานะเครือข่าย: ออฟไลน์',
                       style: TextStyle(
                         fontSize: 14.5,
                         fontWeight: FontWeight.w600,
-                        color: state.isOnline ? PColor.riskLow : PColor.riskHigh,
+                        color: state.isOnline
+                            ? PColor.riskLow
+                            : PColor.riskHigh,
                       ),
                     ),
                   ],
@@ -91,17 +108,25 @@ class SyncBadgeWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: state.pendingCount == 0 ? PColor.riskLowBg : PColor.riskModerateBg,
+                  color: state.pendingCount == 0
+                      ? PColor.riskLowBg
+                      : PColor.riskModerateBg,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: state.pendingCount == 0 ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
+                    color: state.pendingCount == 0
+                        ? PColor.riskLow.withValues(alpha: 0.3)
+                        : PColor.riskModerate.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      state.pendingCount == 0 ? Icons.check_circle_outline_rounded : Icons.hourglass_top_rounded,
-                      color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate,
+                      state.pendingCount == 0
+                          ? Icons.check_circle_outline_rounded
+                          : Icons.hourglass_top_rounded,
+                      color: state.pendingCount == 0
+                          ? PColor.riskLow
+                          : PColor.riskModerate,
                       size: 22,
                     ),
                     const SizedBox(width: 12),
@@ -113,7 +138,9 @@ class SyncBadgeWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate,
+                          color: state.pendingCount == 0
+                              ? PColor.riskLow
+                              : PColor.riskModerate,
                         ),
                       ),
                     ),
@@ -129,23 +156,40 @@ class SyncBadgeWidget extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PColor.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
                   icon: state.isSyncing
                       ? const SizedBox(
                           width: 18,
                           height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: PColor.neutralColor,
+                          ),
                         )
-                      : const Icon(Icons.sync_rounded, color: Colors.white, size: 20),
+                      : const Icon(
+                          Icons.sync_rounded,
+                          color: PColor.neutralColor,
+                          size: 20,
+                        ),
                   label: Text(
-                    state.isSyncing ? 'กำลังส่งข้อมูล...' : 'สั่งซิงค์ข้อมูลทันที',
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                    state.isSyncing
+                        ? 'กำลังส่งข้อมูล...'
+                        : 'สั่งซิงค์ข้อมูลทันที',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: PColor.neutralColor,
+                    ),
                   ),
                   onPressed: state.isSyncing
                       ? null
                       : () {
-                          context.read<SyncBadgeBloc>().add(const SyncBadgeManualSyncRequested());
+                          context.read<SyncBadgeBloc>().add(
+                            const SyncBadgeManualSyncRequested(),
+                          );
                           Navigator.pop(ctx);
                         },
                 ),
@@ -180,7 +224,7 @@ class SyncBadgeWidget extends StatelessWidget {
               height: 18,
               child: CircularProgressIndicator(
                 strokeWidth: 2.2,
-                color: Colors.white,
+                color: PColor.neutralColor,
               ),
             ),
             onPressed: () => _showSyncDetailModal(context, state),
@@ -208,12 +252,16 @@ class SyncBadgeWidget extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.cloud_upload_outlined, color: Colors.white, size: 14),
+                  const Icon(
+                    Icons.cloud_upload_outlined,
+                    color: PColor.neutralColor,
+                    size: 14,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '${state.pendingCount} รอส่ง',
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: PColor.neutralColor,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -230,7 +278,11 @@ class SyncBadgeWidget extends StatelessWidget {
           icon: Stack(
             clipBehavior: Clip.none,
             children: [
-              const Icon(Icons.cloud_done_rounded, color: Colors.white, size: 22),
+              const Icon(
+                Icons.cloud_done_rounded,
+                color: PColor.neutralColor,
+                size: 22,
+              ),
               Positioned(
                 right: -2,
                 top: -2,

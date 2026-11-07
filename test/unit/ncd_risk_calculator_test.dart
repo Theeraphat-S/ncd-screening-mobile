@@ -43,39 +43,46 @@ void main() {
       expect(dmResult.criteriaText, contains('< 100 mg/dL'));
     });
 
-    test('blood sugar 100–125 mg/dL should evaluate to Moderate risk (Score 2)', () {
-      final resultsBoundary100 = NcdRiskCalculator.evaluateRisk(
-        screeningId: 'test_dm_mod_100',
-        weight: 60,
-        height: 170,
-        bmi: 20.8,
-        waistCm: 75,
-        sbp: 115,
-        dbp: 75,
-        pulse: 72,
-        bloodSugar: 100,
-        gender: 'หญิง',
-      );
-      final dmMod100 = resultsBoundary100.firstWhere((r) => r.diseaseCode == 'DIABETES');
-      expect(dmMod100.riskLevel, equals(RiskLevel.moderate));
-      expect(dmMod100.score, equals(2));
+    test(
+      'blood sugar 100–125 mg/dL should evaluate to Moderate risk (Score 2)',
+      () {
+        final resultsBoundary100 = NcdRiskCalculator.evaluateRisk(
+          screeningId: 'test_dm_mod_100',
+          weight: 60,
+          height: 170,
+          bmi: 20.8,
+          waistCm: 75,
+          sbp: 115,
+          dbp: 75,
+          pulse: 72,
+          bloodSugar: 100,
+          gender: 'หญิง',
+        );
+        final dmMod100 = resultsBoundary100.firstWhere(
+          (r) => r.diseaseCode == 'DIABETES',
+        );
+        expect(dmMod100.riskLevel, equals(RiskLevel.moderate));
+        expect(dmMod100.score, equals(2));
 
-      final resultsBoundary125 = NcdRiskCalculator.evaluateRisk(
-        screeningId: 'test_dm_mod_125',
-        weight: 60,
-        height: 170,
-        bmi: 20.8,
-        waistCm: 75,
-        sbp: 115,
-        dbp: 75,
-        pulse: 72,
-        bloodSugar: 125,
-        gender: 'หญิง',
-      );
-      final dmMod125 = resultsBoundary125.firstWhere((r) => r.diseaseCode == 'DIABETES');
-      expect(dmMod125.riskLevel, equals(RiskLevel.moderate));
-      expect(dmMod125.score, equals(2));
-    });
+        final resultsBoundary125 = NcdRiskCalculator.evaluateRisk(
+          screeningId: 'test_dm_mod_125',
+          weight: 60,
+          height: 170,
+          bmi: 20.8,
+          waistCm: 75,
+          sbp: 115,
+          dbp: 75,
+          pulse: 72,
+          bloodSugar: 125,
+          gender: 'หญิง',
+        );
+        final dmMod125 = resultsBoundary125.firstWhere(
+          (r) => r.diseaseCode == 'DIABETES',
+        );
+        expect(dmMod125.riskLevel, equals(RiskLevel.moderate));
+        expect(dmMod125.score, equals(2));
+      },
+    );
 
     test('blood sugar >= 126 mg/dL should evaluate to High risk (Score 3)', () {
       final results = NcdRiskCalculator.evaluateRisk(
@@ -96,26 +103,29 @@ void main() {
       expect(dmResult.score, equals(3));
     });
 
-    test('patient with known personal history of Diabetes is evaluated as High risk even if blood sugar is normal', () {
-      final results = NcdRiskCalculator.evaluateRisk(
-        screeningId: 'test_dm_history',
-        weight: 60,
-        height: 170,
-        bmi: 20.8,
-        waistCm: 75,
-        sbp: 115,
-        dbp: 75,
-        pulse: 72,
-        bloodSugar: 90,
-        gender: 'ชาย',
-        hasPersonalNcd: true,
-        personalNcdDetail: 'เบาหวาน',
-      );
+    test(
+      'patient with known personal history of Diabetes is evaluated as High risk even if blood sugar is normal',
+      () {
+        final results = NcdRiskCalculator.evaluateRisk(
+          screeningId: 'test_dm_history',
+          weight: 60,
+          height: 170,
+          bmi: 20.8,
+          waistCm: 75,
+          sbp: 115,
+          dbp: 75,
+          pulse: 72,
+          bloodSugar: 90,
+          gender: 'ชาย',
+          hasPersonalNcd: true,
+          personalNcdDetail: 'เบาหวาน',
+        );
 
-      final dmResult = results.firstWhere((r) => r.diseaseCode == 'DIABETES');
-      expect(dmResult.riskLevel, equals(RiskLevel.high));
-      expect(dmResult.score, equals(3));
-    });
+        final dmResult = results.firstWhere((r) => r.diseaseCode == 'DIABETES');
+        expect(dmResult.riskLevel, equals(RiskLevel.high));
+        expect(dmResult.score, equals(3));
+      },
+    );
   });
 
   group('NcdRiskCalculator - Hypertension (HT) Risk Assessment', () {
@@ -133,46 +143,51 @@ void main() {
         gender: 'ชาย',
       );
 
-      final htResult = results.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
+      final htResult = results.firstWhere(
+        (r) => r.diseaseCode == 'HYPERTENSION',
+      );
       expect(htResult.riskLevel, equals(RiskLevel.low));
       expect(htResult.score, equals(1));
     });
 
-    test('SBP 120-139 or DBP 80-89 should evaluate to Moderate risk (Pre-HT, Score 2)', () {
-      // SBP in range, DBP normal
-      final results1 = NcdRiskCalculator.evaluateRisk(
-        screeningId: 'test_ht_mod_1',
-        weight: 60,
-        height: 170,
-        bmi: 20.8,
-        waistCm: 75,
-        sbp: 125,
-        dbp: 75,
-        pulse: 72,
-        bloodSugar: 90,
-        gender: 'ชาย',
-      );
-      final ht1 = results1.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
-      expect(ht1.riskLevel, equals(RiskLevel.moderate));
-      expect(ht1.score, equals(2));
+    test(
+      'SBP 120-139 or DBP 80-89 should evaluate to Moderate risk (Pre-HT, Score 2)',
+      () {
+        // SBP in range, DBP normal
+        final results1 = NcdRiskCalculator.evaluateRisk(
+          screeningId: 'test_ht_mod_1',
+          weight: 60,
+          height: 170,
+          bmi: 20.8,
+          waistCm: 75,
+          sbp: 125,
+          dbp: 75,
+          pulse: 72,
+          bloodSugar: 90,
+          gender: 'ชาย',
+        );
+        final ht1 = results1.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
+        expect(ht1.riskLevel, equals(RiskLevel.moderate));
+        expect(ht1.score, equals(2));
 
-      // SBP normal, DBP in range
-      final results2 = NcdRiskCalculator.evaluateRisk(
-        screeningId: 'test_ht_mod_2',
-        weight: 60,
-        height: 170,
-        bmi: 20.8,
-        waistCm: 75,
-        sbp: 115,
-        dbp: 85,
-        pulse: 72,
-        bloodSugar: 90,
-        gender: 'ชาย',
-      );
-      final ht2 = results2.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
-      expect(ht2.riskLevel, equals(RiskLevel.moderate));
-      expect(ht2.score, equals(2));
-    });
+        // SBP normal, DBP in range
+        final results2 = NcdRiskCalculator.evaluateRisk(
+          screeningId: 'test_ht_mod_2',
+          weight: 60,
+          height: 170,
+          bmi: 20.8,
+          waistCm: 75,
+          sbp: 115,
+          dbp: 85,
+          pulse: 72,
+          bloodSugar: 90,
+          gender: 'ชาย',
+        );
+        final ht2 = results2.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
+        expect(ht2.riskLevel, equals(RiskLevel.moderate));
+        expect(ht2.score, equals(2));
+      },
+    );
 
     test('SBP >= 140 or DBP >= 90 should evaluate to High risk (Score 3)', () {
       final resultsSbpHigh = NcdRiskCalculator.evaluateRisk(
@@ -187,7 +202,9 @@ void main() {
         bloodSugar: 90,
         gender: 'หญิง',
       );
-      final htSbp = resultsSbpHigh.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
+      final htSbp = resultsSbpHigh.firstWhere(
+        (r) => r.diseaseCode == 'HYPERTENSION',
+      );
       expect(htSbp.riskLevel, equals(RiskLevel.high));
       expect(htSbp.score, equals(3));
 
@@ -203,7 +220,9 @@ void main() {
         bloodSugar: 90,
         gender: 'หญิง',
       );
-      final htDbp = resultsDbpHigh.firstWhere((r) => r.diseaseCode == 'HYPERTENSION');
+      final htDbp = resultsDbpHigh.firstWhere(
+        (r) => r.diseaseCode == 'HYPERTENSION',
+      );
       expect(htDbp.riskLevel, equals(RiskLevel.high));
       expect(htDbp.score, equals(3));
     });
@@ -224,7 +243,9 @@ void main() {
         bloodSugar: 90,
         gender: 'ชาย',
       );
-      final obWaist = resWaist.firstWhere((r) => r.diseaseCode == 'METABOLIC_OBESITY');
+      final obWaist = resWaist.firstWhere(
+        (r) => r.diseaseCode == 'METABOLIC_OBESITY',
+      );
       expect(obWaist.riskLevel, equals(RiskLevel.high));
       expect(obWaist.score, equals(3));
 
@@ -241,7 +262,9 @@ void main() {
         bloodSugar: 90,
         gender: 'ชาย',
       );
-      final obBmi = resBmi.firstWhere((r) => r.diseaseCode == 'METABOLIC_OBESITY');
+      final obBmi = resBmi.firstWhere(
+        (r) => r.diseaseCode == 'METABOLIC_OBESITY',
+      );
       expect(obBmi.riskLevel, equals(RiskLevel.high));
       expect(obBmi.score, equals(3));
     });
@@ -259,7 +282,9 @@ void main() {
         bloodSugar: 90,
         gender: 'หญิง',
       );
-      final obWaist = resWaist.firstWhere((r) => r.diseaseCode == 'METABOLIC_OBESITY');
+      final obWaist = resWaist.firstWhere(
+        (r) => r.diseaseCode == 'METABOLIC_OBESITY',
+      );
       expect(obWaist.riskLevel, equals(RiskLevel.high));
       expect(obWaist.score, equals(3));
     });

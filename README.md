@@ -4,7 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.10+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![BLoC](https://img.shields.io/badge/State_Management-BLoC_v9-8A2BE2)](https://bloclibrary.dev)
 [![Drift](https://img.shields.io/badge/Database-Drift_SQLite_Offline--First-008080)](https://drift.simonbinder.eu/)
-[![Tests](https://img.shields.io/badge/Tests-198_Passing-success)](#-เริ่มต้นใช้งาน-getting-started)
+[![Tests](https://img.shields.io/badge/Tests-212_Passing-success)](#-เริ่มต้นใช้งาน-getting-started)
 
 > **EN**: Offline-first Flutter mobile application for 4 Non-Communicable Diseases (NCDs) risk screening, nurse triage, village health analytics, and Thai clinical PDF reporting for Mae Ai Sub-district Health Promotion Hospital.  
 > **TH**: โมบายแอปพลิเคชันสำหรับการคัดกรองความเสี่ยงของผู้ป่วย 4 โรคไม่ติดต่อเรื้อรัง (NCDs) แบบ Offline-First พร้อมแดชบอร์ดวิเคราะห์สถิติสุขภาพชุมชน และระบบออกรายงานสรุปผล PDF ภาษาไทย  
@@ -92,7 +92,7 @@ flutter run
 ```bash
 flutter test
 ```
-*(ผ่านการทดสอบ 198 Test Cases (2 เคสเดิมไม่ผ่านจากการแสดงผลข้อความไทย ซึ่งยังไม่ได้แก้) ครอบคลุม Unit Tests, BLoC Tests, Drift Repository Persistence, Thai PDF Services และ Widget Tests)*
+*(ผ่านการทดสอบ 212 Test Cases ครอบคลุม Unit Tests, BLoC Tests, Drift Repository Persistence, Thai PDF Services และ Widget Tests)*
 
 ---
 
@@ -105,6 +105,12 @@ flutter test
   - เสี่ยงต่ำ (Low): Emerald-600 (`#059669`) / Emerald-50 Bg (`#ECFDF5`)
   - เสี่ยงปานกลาง (Moderate): Amber-600 (`#D97706`) / Amber-50 Bg (`#FFFBEB`)
   - เสี่ยงสูง (High): Red-600 (`#DC2626`) / Red-50 Bg (`#FEF2F2`)
+
+---
+
+### 4. ลงนามแอปรุ่น Release (ไม่บังคับสำหรับการทดสอบ)
+สร้างไฟล์ `android/key.properties` (ไม่ถูก commit) ที่มีคีย์ `storeFile`, `storePassword`, `keyAlias`, `keyPassword`
+หากไม่มีไฟล์นี้ build release จะใช้คีย์ debug ซึ่ง **ห้ามนำไปแจกจ่าย**
 
 ---
 
@@ -152,4 +158,5 @@ lib/
 - [ADR 0004: Thai PDF Clinical Report Generation](docs/adr/0004-thai-pdf-clinical-report-generation.md)
 - [ADR 0005: Nurse Village Health Analytics Engine](docs/adr/0005-village-health-analytics-engine.md)
 - [ADR 0006: Nordic Clinical Precision UI System Redesign](docs/adr/0006-nordic-clinical-ui-redesign.md)
+- [ADR 0010: Credential Hashing, Durable Sync Outbox & Bundled Thai Fonts](docs/adr/0010-credential-hashing-durable-sync-and-bundled-fonts.md)
 

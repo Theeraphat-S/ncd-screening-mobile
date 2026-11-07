@@ -33,33 +33,41 @@ class NcdRiskCalculator {
     String dmAdvice;
     int dmScore = 0;
 
-    if (bloodSugar >= 126 || (hasPersonalNcd && (personalNcdDetail?.contains('เบาหวาน') ?? false))) {
+    if (bloodSugar >= 126 ||
+        (hasPersonalNcd && (personalNcdDetail?.contains('เบาหวาน') ?? false))) {
       dmRisk = RiskLevel.high;
-      dmCriteria = 'ค่าน้ำตาลในเลือด ≥ 126 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
+      dmCriteria =
+          'ค่าน้ำตาลในเลือด ≥ 126 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
       dmAdvice = 'สงสัยโรคเบาหวาน ควรพบแพทย์เพื่อตรวจยืนยันและรับการรักษา';
       dmScore = 3;
     } else if (bloodSugar >= 100) {
       dmRisk = RiskLevel.moderate;
-      dmCriteria = 'ค่าน้ำตาลในเลือด 100–125 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
-      dmAdvice = 'กลุ่มเสี่ยงเบาหวาน แนะนำลดอาหารหวานมันเค็ม ติดตามระดับน้ำตาลสม่ำเสมอ';
+      dmCriteria =
+          'ค่าน้ำตาลในเลือด 100–125 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
+      dmAdvice =
+          'กลุ่มเสี่ยงเบาหวาน แนะนำลดอาหารหวานมันเค็ม ติดตามระดับน้ำตาลสม่ำเสมอ';
       dmScore = 2;
     } else {
       dmRisk = RiskLevel.low;
-      dmCriteria = 'ค่าน้ำตาลในเลือด < 100 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
-      dmAdvice = 'ค่าน้ำตาลในเลือดอยู่ในเกณฑ์ปกติ รักษาสุขภาพและรับประทานอาหารที่มีประโยชน์';
+      dmCriteria =
+          'ค่าน้ำตาลในเลือด < 100 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
+      dmAdvice =
+          'ค่าน้ำตาลในเลือดอยู่ในเกณฑ์ปกติ รักษาสุขภาพและรับประทานอาหารที่มีประโยชน์';
       dmScore = 1;
     }
 
-    results.add(ScreeningResult(
-      resultId: '${screeningId}_DM',
-      screeningId: screeningId,
-      diseaseName: 'โรคเบาหวาน',
-      diseaseCode: 'DIABETES',
-      score: dmScore,
-      riskLevel: dmRisk,
-      adviceText: dmAdvice,
-      criteriaText: dmCriteria,
-    ));
+    results.add(
+      ScreeningResult(
+        resultId: '${screeningId}_DM',
+        screeningId: screeningId,
+        diseaseName: 'โรคเบาหวาน',
+        diseaseCode: 'DIABETES',
+        score: dmScore,
+        riskLevel: dmRisk,
+        adviceText: dmAdvice,
+        criteriaText: dmCriteria,
+      ),
+    );
 
     // 2. โรคความดันโลหิตสูง (Hypertension)
     RiskLevel htRisk;
@@ -69,31 +77,38 @@ class NcdRiskCalculator {
 
     if (sbp >= 140 || dbp >= 90) {
       htRisk = RiskLevel.high;
-      htCriteria = 'เกณฑ์: SBP ≥ 140 หรือ DBP ≥ 90 (ค่าที่วัดได้: $sbp/$dbp mmHg)';
-      htAdvice = 'ความดันโลหิตสูง ควรพบแพทย์หรือเจ้าหน้าที่สาธารณสุขเพื่อประเมินซ้ำ';
+      htCriteria =
+          'เกณฑ์: SBP ≥ 140 หรือ DBP ≥ 90 (ค่าที่วัดได้: $sbp/$dbp mmHg)';
+      htAdvice =
+          'ความดันโลหิตสูง ควรพบแพทย์หรือเจ้าหน้าที่สาธารณสุขเพื่อประเมินซ้ำ';
       htScore = 3;
     } else if (sbp >= 120 || dbp >= 80) {
       htRisk = RiskLevel.moderate;
-      htCriteria = 'เกณฑ์: SBP 120–139 หรือ DBP 80–89 mmHg (ค่าที่วัดได้: $sbp/$dbp mmHg)';
-      htAdvice = 'กลุ่มเสี่ยงความดันโลหิตสูง (Pre-hypertension) ควรปรับพฤติกรรม ลดการบริโภคโซเดียม';
+      htCriteria =
+          'เกณฑ์: SBP 120–139 หรือ DBP 80–89 mmHg (ค่าที่วัดได้: $sbp/$dbp mmHg)';
+      htAdvice =
+          'กลุ่มเสี่ยงความดันโลหิตสูง (Pre-hypertension) ควรปรับพฤติกรรม ลดการบริโภคโซเดียม';
       htScore = 2;
     } else {
       htRisk = RiskLevel.low;
-      htCriteria = 'เกณฑ์: SBP < 120 และ DBP < 80 mmHg (ค่าที่วัดได้: $sbp/$dbp mmHg)';
+      htCriteria =
+          'เกณฑ์: SBP < 120 และ DBP < 80 mmHg (ค่าที่วัดได้: $sbp/$dbp mmHg)';
       htAdvice = 'ความดันโลหิตอยู่ในเกณฑ์ปกติ รักษาวิถีชีวิตสุขภาพดีต่อเนื่อง';
       htScore = 1;
     }
 
-    results.add(ScreeningResult(
-      resultId: '${screeningId}_HT',
-      screeningId: screeningId,
-      diseaseName: 'โรคความดันโลหิตสูง',
-      diseaseCode: 'HYPERTENSION',
-      score: htScore,
-      riskLevel: htRisk,
-      adviceText: htAdvice,
-      criteriaText: htCriteria,
-    ));
+    results.add(
+      ScreeningResult(
+        resultId: '${screeningId}_HT',
+        screeningId: screeningId,
+        diseaseName: 'โรคความดันโลหิตสูง',
+        diseaseCode: 'HYPERTENSION',
+        score: htScore,
+        riskLevel: htRisk,
+        adviceText: htAdvice,
+        criteriaText: htCriteria,
+      ),
+    );
 
     // 3. โรคอ้วนลงพุง (Metabolic Syndrome / Obesity)
     RiskLevel obesityRisk;
@@ -108,31 +123,39 @@ class NcdRiskCalculator {
 
     if (isWaistOver || isBmiOver) {
       obesityRisk = RiskLevel.high;
-      obesityCriteria = 'เข้าเกณฑ์ (BMI ≥ 25 หรือ รอบเอว ≥ $waistThreshold ซม.) (ปัจจุบัน BMI $bmi, รอบเอว $waistCm ซม.)';
-      obesityAdvice = 'เข้าเกณฑ์อ้วนลงพุง แนะนำควบคุมอาหาร ลดของทอด ของหวาน และออกกำลังกายสม่ำเสมอ';
+      obesityCriteria =
+          'เข้าเกณฑ์ (BMI ≥ 25 หรือ รอบเอว ≥ $waistThreshold ซม.) (ปัจจุบัน BMI $bmi, รอบเอว $waistCm ซม.)';
+      obesityAdvice =
+          'เข้าเกณฑ์อ้วนลงพุง แนะนำควบคุมอาหาร ลดของทอด ของหวาน และออกกำลังกายสม่ำเสมอ';
       obesityScore = 3;
     } else if (bmi >= 23.0) {
       obesityRisk = RiskLevel.moderate;
-      obesityCriteria = 'น้ำหนักเกินเกณฑ์มาตรฐานเอเชีย (BMI 23.0–24.9) (ปัจจุบัน BMI $bmi)';
-      obesityAdvice = 'เริ่มมีน้ำหนักเกินเกณฑ์ ควรเพิ่มกิจกรรมทางกายและควบคุมปริมาณแคลอรี';
+      obesityCriteria =
+          'น้ำหนักเกินเกณฑ์มาตรฐานเอเชีย (BMI 23.0–24.9) (ปัจจุบัน BMI $bmi)';
+      obesityAdvice =
+          'เริ่มมีน้ำหนักเกินเกณฑ์ ควรเพิ่มกิจกรรมทางกายและควบคุมปริมาณแคลอรี';
       obesityScore = 2;
     } else {
       obesityRisk = RiskLevel.low;
-      obesityCriteria = 'รอบเอวไม่เกินเกณฑ์ ($waistCm ซม.) และ BMI < 23 ($bmi kg/m²)';
-      obesityAdvice = 'ยังไม่เข้าเกณฑ์อ้วนลงพุง รักษาระดับน้ำหนักและดัชนีมวลกายให้สมดุล';
+      obesityCriteria =
+          'รอบเอวไม่เกินเกณฑ์ ($waistCm ซม.) และ BMI < 23 ($bmi kg/m²)';
+      obesityAdvice =
+          'ยังไม่เข้าเกณฑ์อ้วนลงพุง รักษาระดับน้ำหนักและดัชนีมวลกายให้สมดุล';
       obesityScore = 1;
     }
 
-    results.add(ScreeningResult(
-      resultId: '${screeningId}_OBESITY',
-      screeningId: screeningId,
-      diseaseName: 'โรคอ้วนลงพุง',
-      diseaseCode: 'METABOLIC_OBESITY',
-      score: obesityScore,
-      riskLevel: obesityRisk,
-      adviceText: obesityAdvice,
-      criteriaText: obesityCriteria,
-    ));
+    results.add(
+      ScreeningResult(
+        resultId: '${screeningId}_OBESITY',
+        screeningId: screeningId,
+        diseaseName: 'โรคอ้วนลงพุง',
+        diseaseCode: 'METABOLIC_OBESITY',
+        score: obesityScore,
+        riskLevel: obesityRisk,
+        adviceText: obesityAdvice,
+        criteriaText: obesityCriteria,
+      ),
+    );
 
     // 4. โรคหลอดเลือดหัวใจ (Cardiovascular Disease - CVD)
     int cvdRiskCount = 0;
@@ -149,28 +172,36 @@ class NcdRiskCalculator {
 
     if (cvdRiskCount >= 3) {
       cvdRisk = RiskLevel.high;
-      cvdCriteria = 'มีปัจจัยเสี่ยง $cvdRiskCount ข้อ (BP $sbp/$dbp, น้ำตาล $bloodSugar mg/dL, ชีพจร $pulse bpm)';
-      cvdAdvice = 'มีความเสี่ยงสูงต่อโรคหลอดเลือดหัวใจ แนะนำให้พบแพทย์ตรวจระบบหัวใจและหลอดเลือดอย่างละเอียด';
+      cvdCriteria =
+          'มีปัจจัยเสี่ยง $cvdRiskCount ข้อ (BP $sbp/$dbp, น้ำตาล $bloodSugar mg/dL, ชีพจร $pulse bpm)';
+      cvdAdvice =
+          'มีความเสี่ยงสูงต่อโรคหลอดเลือดหัวใจ แนะนำให้พบแพทย์ตรวจระบบหัวใจและหลอดเลือดอย่างละเอียด';
     } else if (cvdRiskCount >= 2) {
       cvdRisk = RiskLevel.moderate;
-      cvdCriteria = 'มีปัจจัยเสี่ยง $cvdRiskCount ข้อ (BP $sbp/$dbp, รอบเอว $waistCm ซม.)';
-      cvdAdvice = 'มีความเสี่ยงปานกลาง ควรควบคุมปัจจัยเสี่ยงหลัก เช่น ความดันและระดับน้ำตาล';
+      cvdCriteria =
+          'มีปัจจัยเสี่ยง $cvdRiskCount ข้อ (BP $sbp/$dbp, รอบเอว $waistCm ซม.)';
+      cvdAdvice =
+          'มีความเสี่ยงปานกลาง ควรควบคุมปัจจัยเสี่ยงหลัก เช่น ความดันและระดับน้ำตาล';
     } else {
       cvdRisk = RiskLevel.low;
-      cvdCriteria = 'มีปัจจัยเสี่ยงน้อยกว่า 2 ข้อ (BP $sbp/$dbp, ชีพจร $pulse bpm)';
-      cvdAdvice = 'ยังไม่พบความเสี่ยงสูงต่อโรคหลอดเลือดหัวใจ ออกกำลังกายและตรวจสุขภาพประจำปี';
+      cvdCriteria =
+          'มีปัจจัยเสี่ยงน้อยกว่า 2 ข้อ (BP $sbp/$dbp, ชีพจร $pulse bpm)';
+      cvdAdvice =
+          'ยังไม่พบความเสี่ยงสูงต่อโรคหลอดเลือดหัวใจ ออกกำลังกายและตรวจสุขภาพประจำปี';
     }
 
-    results.add(ScreeningResult(
-      resultId: '${screeningId}_CVD',
-      screeningId: screeningId,
-      diseaseName: 'โรคหลอดเลือดหัวใจ',
-      diseaseCode: 'CVD',
-      score: cvdRiskCount,
-      riskLevel: cvdRisk,
-      adviceText: cvdAdvice,
-      criteriaText: cvdCriteria,
-    ));
+    results.add(
+      ScreeningResult(
+        resultId: '${screeningId}_CVD',
+        screeningId: screeningId,
+        diseaseName: 'โรคหลอดเลือดหัวใจ',
+        diseaseCode: 'CVD',
+        score: cvdRiskCount,
+        riskLevel: cvdRisk,
+        adviceText: cvdAdvice,
+        criteriaText: cvdCriteria,
+      ),
+    );
 
     return results;
   }

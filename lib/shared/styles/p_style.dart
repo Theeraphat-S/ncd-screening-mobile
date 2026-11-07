@@ -7,7 +7,7 @@ class PStyle {
   static ButtonStyle get btnPrimary {
     return ElevatedButton.styleFrom(
       backgroundColor: PColor.primaryColor,
-      foregroundColor: Colors.white,
+      foregroundColor: PColor.neutralColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(PRadius.sm),
       ),
@@ -17,7 +17,7 @@ class PStyle {
 
   static ButtonStyle get btnSecondary {
     return ElevatedButton.styleFrom(
-      backgroundColor: Colors.white,
+      backgroundColor: PColor.neutralColor,
       foregroundColor: PColor.contentColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(PRadius.sm),

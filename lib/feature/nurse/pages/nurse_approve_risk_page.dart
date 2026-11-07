@@ -41,7 +41,9 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
 
   RiskLevel _findRisk(String code) {
     try {
-      final match = widget.screening.results.firstWhere((r) => r.diseaseCode == code);
+      final match = widget.screening.results.firstWhere(
+        (r) => r.diseaseCode == code,
+      );
       return match.riskLevel;
     } catch (_) {
       return RiskLevel.low;
@@ -72,13 +74,13 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
 
   void _onApproveDirect() {
     context.read<ScreeningBloc>().add(
-          ScreeningApproveRequested(
-            screeningId: widget.screening.screenId,
-            status: ReviewStatus.approved,
-            nurseId: widget.nurse.nurseId,
-            updatedResults: _buildUpdatedResults(),
-          ),
-        );
+      ScreeningApproveRequested(
+        screeningId: widget.screening.screenId,
+        status: ReviewStatus.approved,
+        nurseId: widget.nurse.nurseId,
+        updatedResults: _buildUpdatedResults(),
+      ),
+    );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('อนุมัติผลการประเมินความเสี่ยงสำเร็จ'),
@@ -94,8 +96,13 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 26,
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -105,7 +112,11 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   color: Colors.amber.shade50,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.help_outline_rounded, size: 44, color: Colors.orange),
+                child: const Icon(
+                  Icons.help_outline_rounded,
+                  size: 44,
+                  color: Colors.orange,
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -134,12 +145,17 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       onPressed: () => Navigator.pop(dialogContext),
                       child: const Text(
                         'ยกเลิก',
-                        style: TextStyle(color: PColor.textNeutralColor, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: PColor.textNeutralColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -149,7 +165,9 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.primaryColor,
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       onPressed: () {
                         Navigator.pop(dialogContext);
@@ -157,7 +175,10 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       },
                       child: const Text(
                         'ยืนยัน',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: PColor.neutralColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -181,7 +202,11 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -189,7 +214,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -204,7 +229,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -218,8 +243,14 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   children: [
                     CircleAvatar(
                       radius: 34,
-                      backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                      child: const Icon(Icons.person, size: 38, color: PColor.primaryColor),
+                      backgroundColor: PColor.primaryLight.withValues(
+                        alpha: 0.15,
+                      ),
+                      child: const Icon(
+                        Icons.person,
+                        size: 38,
+                        color: PColor.primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -233,7 +264,10 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                     const SizedBox(height: 4),
                     Text(
                       'วันที่รับการคัดกรอง : $dateStr',
-                      style: const TextStyle(fontSize: 13, color: PColor.textNeutralColor),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: PColor.textNeutralColor,
+                      ),
                     ),
                   ],
                 ),
@@ -244,7 +278,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -267,14 +301,19 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                           children: [
                             Text(
                               res.diseaseName,
-                              style: const TextStyle(fontSize: 13.5, color: PColor.contentColor),
+                              style: const TextStyle(
+                                fontSize: 13.5,
+                                color: PColor.contentColor,
+                              ),
                             ),
                             Text(
                               res.riskLevel.labelTh,
                               style: TextStyle(
                                 fontSize: 13.5,
                                 fontWeight: FontWeight.bold,
-                                color: PColor.getRiskColor(res.riskLevel.labelTh),
+                                color: PColor.getRiskColor(
+                                  res.riskLevel.labelTh,
+                                ),
                               ),
                             ),
                           ],
@@ -290,7 +329,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -349,7 +388,9 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green.shade600,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () {
                         if (_hasChanges) {
@@ -363,7 +404,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: PColor.neutralColor,
                         ),
                       ),
                     ),
@@ -374,7 +415,9 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: Colors.red.shade400),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () {
                         if (_hasChanges) {
@@ -413,7 +456,11 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: PColor.contentColor),
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: PColor.contentColor,
+          ),
         ),
         const SizedBox(height: 6),
         Container(
@@ -427,23 +474,28 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
               value: currentValue,
               isExpanded: true,
               items: RiskLevel.values
-                  .map((r) => DropdownMenuItem(
-                        value: r,
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: PColor.getRiskColor(r.labelTh),
-                              ),
+                  .map(
+                    (r) => DropdownMenuItem(
+                      value: r,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: PColor.getRiskColor(r.labelTh),
                             ),
-                            const SizedBox(width: 8),
-                            Text(r.labelTh, style: const TextStyle(fontSize: 13.5)),
-                          ],
-                        ),
-                      ))
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            r.labelTh,
+                            style: const TextStyle(fontSize: 13.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                   .toList(),
               onChanged: onChanged,
             ),

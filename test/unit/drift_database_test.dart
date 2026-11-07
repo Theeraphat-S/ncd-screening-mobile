@@ -19,37 +19,45 @@ void main() {
   });
 
   group('Drift Database - Initialization & Seeding', () {
-    test('Schema version is 3', () {
-      expect(db.schemaVersion, equals(3));
+    test('Schema version is 4', () {
+      expect(db.schemaVersion, equals(4));
     });
 
-    test('Initial automatic demo seeding populates all 7 tables correctly',
-        () async {
-      final villages = await repository.getVillages();
-      expect(villages.length, equals(5));
-      expect(villages.map((v) => v.villageId),
-          containsAll(['V001', 'V002', 'V003', 'V004', 'V005']));
+    test(
+      'Initial automatic demo seeding populates all 7 tables correctly',
+      () async {
+        final villages = await repository.getVillages();
+        expect(villages.length, equals(5));
+        expect(
+          villages.map((v) => v.villageId),
+          containsAll(['V001', 'V002', 'V003', 'V004', 'V005']),
+        );
 
-      final nurses = await (db.select(db.nursesTable)).get();
-      expect(nurses.length, equals(1));
-      expect(nurses.first.nurseId, equals('NUR001'));
-      expect(nurses.first.nurseFname, equals('กานดา'));
+        final nurses = await (db.select(db.nursesTable)).get();
+        expect(nurses.length, equals(1));
+        expect(nurses.first.nurseId, equals('NUR001'));
+        expect(nurses.first.nurseFname, equals('กานดา'));
 
-      final vhvs = await repository.getVhvs();
-      expect(vhvs.length, equals(3));
-      expect(vhvs.map((v) => v.vhvId),
-          containsAll(['VHV001', 'VHV002', 'VHV003']));
+        final vhvs = await repository.getVhvs();
+        expect(vhvs.length, equals(3));
+        expect(
+          vhvs.map((v) => v.vhvId),
+          containsAll(['VHV001', 'VHV002', 'VHV003']),
+        );
 
-      final patients = await repository.getPatients();
-      expect(patients.length, equals(6));
-      expect(patients.map((p) => p.patientId),
-          containsAll(['P001', 'P002', 'P003', 'P004', 'P005', 'P006']));
+        final patients = await repository.getPatients();
+        expect(patients.length, equals(6));
+        expect(
+          patients.map((p) => p.patientId),
+          containsAll(['P001', 'P002', 'P003', 'P004', 'P005', 'P006']),
+        );
 
-      final screenings = await repository.getAllScreenings();
-      expect(screenings.length, equals(2));
-      expect(screenings.first.histories.length, greaterThanOrEqualTo(4));
-      expect(screenings.first.results.length, equals(4));
-    });
+        final screenings = await repository.getAllScreenings();
+        expect(screenings.length, equals(2));
+        expect(screenings.first.histories.length, greaterThanOrEqualTo(4));
+        expect(screenings.first.results.length, equals(4));
+      },
+    );
   });
 
   group('DriftNcdRepository - Authentication', () {
@@ -65,31 +73,34 @@ void main() {
       expect(patient.patientFname, equals('สมชาย'));
     });
 
-    test('Patient login throws Exception for unregistered citizen ID',
-        () async {
-      expect(
-        () => repository.login(
-          role: UserRole.patient,
-          identifier: '9999999999999',
-        ),
-        throwsA(isA<Exception>()),
-      );
-    });
+    test(
+      'Patient login throws Exception for unregistered citizen ID',
+      () async {
+        expect(
+          () => repository.login(
+            role: UserRole.patient,
+            identifier: '9999999999999',
+          ),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
     test(
-        'VHV login succeeds with valid credentials (mobile/ID and correct password)',
-        () async {
-      final user = await repository.login(
-        role: UserRole.vhv,
-        identifier: '0800000001',
-        password: 'password123',
-      );
+      'VHV login succeeds with valid credentials (mobile/ID and correct password)',
+      () async {
+        final user = await repository.login(
+          role: UserRole.vhv,
+          identifier: '0800000001',
+          password: 'password123',
+        );
 
-      expect(user, isA<VHV>());
-      final vhv = user as VHV;
-      expect(vhv.vhvId, equals('VHV001'));
-      expect(vhv.vhvFname, equals('อสม'));
-    });
+        expect(user, isA<VHV>());
+        final vhv = user as VHV;
+        expect(vhv.vhvId, equals('VHV001'));
+        expect(vhv.vhvFname, equals('อสม'));
+      },
+    );
 
     test('VHV login throws Exception with wrong password', () async {
       expect(
@@ -137,38 +148,46 @@ void main() {
       final patientsV001 = await repository.getPatients(villageId: 'V001');
       expect(patientsV001.every((p) => p.villageId == 'V001'), isTrue);
 
-      final patientsNonExistent =
-          await repository.getPatients(villageId: 'V999');
+      final patientsNonExistent = await repository.getPatients(
+        villageId: 'V999',
+      );
       expect(patientsNonExistent, isEmpty);
     });
 
-    test('getPatients filters correctly by searchQuery (name and citizen ID)',
-        () async {
-      final resultsByName =
-          await repository.getPatients(searchQuery: 'สมชาย');
-      expect(resultsByName.length, equals(1));
-      expect(resultsByName.first.patientFname, equals('สมชาย'));
+    test(
+      'getPatients filters correctly by searchQuery (name and citizen ID)',
+      () async {
+        final resultsByName = await repository.getPatients(
+          searchQuery: 'สมชาย',
+        );
+        expect(resultsByName.length, equals(1));
+        expect(resultsByName.first.patientFname, equals('สมชาย'));
 
-      final resultsById =
-          await repository.getPatients(searchQuery: '1234567890123');
-      expect(resultsById.length, equals(1));
-      expect(resultsById.first.patientId, equals('P001'));
-    });
+        final resultsById = await repository.getPatients(
+          searchQuery: '1234567890123',
+        );
+        expect(resultsById.length, equals(1));
+        expect(resultsById.first.patientId, equals('P001'));
+      },
+    );
 
-    test('getPatientById and getPatientByCitizenId return correct patient',
-        () async {
-      final patientById = await repository.getPatientById('P001');
-      expect(patientById, isNotNull);
-      expect(patientById!.patientFname, equals('สมชาย'));
+    test(
+      'getPatientById and getPatientByCitizenId return correct patient',
+      () async {
+        final patientById = await repository.getPatientById('P001');
+        expect(patientById, isNotNull);
+        expect(patientById!.patientFname, equals('สมชาย'));
 
-      final patientByCitizenId =
-          await repository.getPatientByCitizenId('1234567890123');
-      expect(patientByCitizenId, isNotNull);
-      expect(patientByCitizenId!.patientId, equals('P001'));
+        final patientByCitizenId = await repository.getPatientByCitizenId(
+          '1234567890123',
+        );
+        expect(patientByCitizenId, isNotNull);
+        expect(patientByCitizenId!.patientId, equals('P001'));
 
-      final notFound = await repository.getPatientById('INVALID_ID');
-      expect(notFound, isNull);
-    });
+        final notFound = await repository.getPatientById('INVALID_ID');
+        expect(notFound, isNull);
+      },
+    );
 
     test('addPatient inserts a new patient and assigns an ID', () async {
       final newPatient = Patient(
@@ -270,31 +289,34 @@ void main() {
 
   group('DriftNcdRepository - Screenings and Nurse Approval', () {
     test(
-        'getScreeningsByPatient returns screenings ordered descending by date',
-        () async {
-      final screenings = await repository.getScreeningsByPatient('P001');
-      expect(screenings.isNotEmpty, isTrue);
-      expect(screenings.length, greaterThanOrEqualTo(2));
-      expect(
+      'getScreeningsByPatient returns screenings ordered descending by date',
+      () async {
+        final screenings = await repository.getScreeningsByPatient('P001');
+        expect(screenings.isNotEmpty, isTrue);
+        expect(screenings.length, greaterThanOrEqualTo(2));
+        expect(
           screenings.first.screeningDate.isAfter(screenings.last.screeningDate),
-          isTrue);
-    });
+          isTrue,
+        );
+      },
+    );
 
     test('getAllScreenings retrieves all or filtered by villageId', () async {
       final all = await repository.getAllScreenings();
       expect(all.length, greaterThanOrEqualTo(2));
 
-      final v001Screenings =
-          await repository.getAllScreenings(villageId: 'V001');
+      final v001Screenings = await repository.getAllScreenings(
+        villageId: 'V001',
+      );
       expect(v001Screenings.length, equals(2));
 
-      final v002Screenings =
-          await repository.getAllScreenings(villageId: 'V002');
+      final v002Screenings = await repository.getAllScreenings(
+        villageId: 'V002',
+      );
       expect(v002Screenings, isEmpty);
     });
 
-    test('saveScreening adds a new screening record with relations',
-        () async {
+    test('saveScreening adds a new screening record with relations', () async {
       final newResults = NcdRiskCalculator.evaluateRisk(
         screeningId: '',
         weight: 65,
@@ -350,34 +372,39 @@ void main() {
     });
 
     test(
-        'updateScreeningReview approves screening with nurseId and updatedResults',
-        () async {
-      final existing = await repository.getScreeningById('S001');
-      expect(existing, isNotNull);
-      expect(existing!.reviewStatus, equals(ReviewStatus.pending));
+      'updateScreeningReview approves screening with nurseId and updatedResults',
+      () async {
+        final existing = await repository.getScreeningById('S001');
+        expect(existing, isNotNull);
+        expect(existing!.reviewStatus, equals(ReviewStatus.pending));
 
-      final updatedResults = existing.results
-          .map((r) => r.copyWith(adviceText: 'พยาบาลให้คำแนะนำเพิ่มเติม'))
-          .toList();
+        final updatedResults = existing.results
+            .map((r) => r.copyWith(adviceText: 'พยาบาลให้คำแนะนำเพิ่มเติม'))
+            .toList();
 
-      final updated = await repository.updateScreeningReview(
-        screeningId: 'S001',
-        status: ReviewStatus.approved,
-        nurseId: 'NUR001',
-        updatedResults: updatedResults,
-      );
+        final updated = await repository.updateScreeningReview(
+          screeningId: 'S001',
+          status: ReviewStatus.approved,
+          nurseId: 'NUR001',
+          updatedResults: updatedResults,
+        );
 
-      expect(updated.reviewStatus, equals(ReviewStatus.approved));
-      expect(updated.reviewedByNurseId, equals('NUR001'));
-      expect(updated.reviewedAt, isNotNull);
-      expect(updated.results.first.adviceText,
-          equals('พยาบาลให้คำแนะนำเพิ่มเติม'));
+        expect(updated.reviewStatus, equals(ReviewStatus.approved));
+        expect(updated.reviewedByNurseId, equals('NUR001'));
+        expect(updated.reviewedAt, isNotNull);
+        expect(
+          updated.results.first.adviceText,
+          equals('พยาบาลให้คำแนะนำเพิ่มเติม'),
+        );
 
-      final fetched = await repository.getScreeningById('S001');
-      expect(fetched!.reviewStatus, equals(ReviewStatus.approved));
-      expect(fetched.results.first.adviceText,
-          equals('พยาบาลให้คำแนะนำเพิ่มเติม'));
-    });
+        final fetched = await repository.getScreeningById('S001');
+        expect(fetched!.reviewStatus, equals(ReviewStatus.approved));
+        expect(
+          fetched.results.first.adviceText,
+          equals('พยาบาลให้คำแนะนำเพิ่มเติม'),
+        );
+      },
+    );
   });
 
   group('DriftNcdRepository - Villages & Nurse', () {

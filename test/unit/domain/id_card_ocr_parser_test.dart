@@ -56,7 +56,9 @@ THAILAND
       expect(emptyResult.hasValidCitizenId, isFalse);
       expect(emptyResult.citizenId, isNull);
 
-      final noisyResult = IdCardOcrParser.parse('Random text without any ID or numbers');
+      final noisyResult = IdCardOcrParser.parse(
+        'Random text without any ID or numbers',
+      );
       expect(noisyResult.hasValidCitizenId, isFalse);
       expect(noisyResult.citizenId, isNull);
     });

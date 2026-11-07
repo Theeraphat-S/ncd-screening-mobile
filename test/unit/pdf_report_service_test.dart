@@ -138,53 +138,65 @@ void main() {
       expect(header, equals('%PDF-'));
     });
 
-    test('generates valid PDF bytes for approved screening with nurse sign-off', () async {
-      final pdfBytes = await pdfService.generateScreeningReport(
-        patient: samplePatient,
-        screening: sampleApprovedScreening,
-        vhv: sampleVhv,
-        nurse: sampleNurse,
-        village: sampleVillage,
-      );
+    test(
+      'generates valid PDF bytes for approved screening with nurse sign-off',
+      () async {
+        final pdfBytes = await pdfService.generateScreeningReport(
+          patient: samplePatient,
+          screening: sampleApprovedScreening,
+          vhv: sampleVhv,
+          nurse: sampleNurse,
+          village: sampleVillage,
+        );
 
-      expect(pdfBytes, isNotNull);
-      expect(pdfBytes.isNotEmpty, isTrue);
-      expect(pdfBytes.length, greaterThan(1000));
+        expect(pdfBytes, isNotNull);
+        expect(pdfBytes.isNotEmpty, isTrue);
+        expect(pdfBytes.length, greaterThan(1000));
 
-      final header = utf8.decode(pdfBytes.sublist(0, 5), allowMalformed: true);
-      expect(header, equals('%PDF-'));
-    });
+        final header = utf8.decode(
+          pdfBytes.sublist(0, 5),
+          allowMalformed: true,
+        );
+        expect(header, equals('%PDF-'));
+      },
+    );
 
-    test('generates valid PDF when optional parameters (vhv, nurse, village) are null', () async {
-      final pdfBytes = await pdfService.generateScreeningReport(
-        patient: samplePatient,
-        screening: samplePendingScreening,
-        vhv: null,
-        nurse: null,
-        village: null,
-      );
+    test(
+      'generates valid PDF when optional parameters (vhv, nurse, village) are null',
+      () async {
+        final pdfBytes = await pdfService.generateScreeningReport(
+          patient: samplePatient,
+          screening: samplePendingScreening,
+          vhv: null,
+          nurse: null,
+          village: null,
+        );
 
-      expect(pdfBytes, isNotNull);
-      expect(pdfBytes.isNotEmpty, isTrue);
-      expect(pdfBytes.length, greaterThan(1000));
-    });
+        expect(pdfBytes, isNotNull);
+        expect(pdfBytes.isNotEmpty, isTrue);
+        expect(pdfBytes.length, greaterThan(1000));
+      },
+    );
 
-    test('generates valid PDF when screening.results is empty (fallback calculation)', () async {
-      final screeningWithoutResults = samplePendingScreening.copyWith(
-        results: [],
-      );
+    test(
+      'generates valid PDF when screening.results is empty (fallback calculation)',
+      () async {
+        final screeningWithoutResults = samplePendingScreening.copyWith(
+          results: [],
+        );
 
-      final pdfBytes = await pdfService.generateScreeningReport(
-        patient: samplePatient,
-        screening: screeningWithoutResults,
-        vhv: sampleVhv,
-        village: sampleVillage,
-      );
+        final pdfBytes = await pdfService.generateScreeningReport(
+          patient: samplePatient,
+          screening: screeningWithoutResults,
+          vhv: sampleVhv,
+          village: sampleVillage,
+        );
 
-      expect(pdfBytes, isNotNull);
-      expect(pdfBytes.isNotEmpty, isTrue);
-      expect(pdfBytes.length, greaterThan(1000));
-    });
+        expect(pdfBytes, isNotNull);
+        expect(pdfBytes.isNotEmpty, isTrue);
+        expect(pdfBytes.length, greaterThan(1000));
+      },
+    );
 
     test('generates valid PDF for high-risk screening in all 4 NCDs', () async {
       final highRiskScreening = samplePendingScreening.copyWith(

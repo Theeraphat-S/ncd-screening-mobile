@@ -35,7 +35,13 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
 
   Future<void> _exportData() async {
     if (_selectedMode == ExportPrivacyMode.clinicalFull) {
-      if (_passwordController.text.trim() != widget.nurse.nursePassword) {
+      final verified = await locator<NcdRepositoryInterface>()
+          .verifyNursePassword(
+            nurseId: widget.nurse.nurseId,
+            password: _passwordController.text,
+          );
+      if (!mounted) return;
+      if (!verified) {
         setState(() => _errorMessage = 'รหัสผ่านพยาบาลไม่ถูกต้อง');
         return;
       }
@@ -108,7 +114,10 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       'โหมดนิรนาม สถิติวิจัย (PDPA)',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     subtitle: Text(
                       'ซ่อนเลขบัตร ปชช. (1-5002-XXXXX-XX-0) และย่อชื่อผู้ป่วย',
@@ -121,7 +130,10 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       'โหมดเวชระเบียนเต็ม (Full HIS)',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     subtitle: Text(
                       'แสดงเลขและชื่อเต็มเพื่อนำเข้า JHCIS/HOSxP (ต้องใส่รหัสพยาบาล)',
@@ -174,10 +186,17 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          icon: const Icon(Icons.copy_rounded, color: Colors.white, size: 16),
+          icon: const Icon(
+            Icons.copy_rounded,
+            color: PColor.neutralColor,
+            size: 16,
+          ),
           label: const Text(
             'ส่งออกและคัดลอก CSV',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: PColor.neutralColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           onPressed: _exportData,
         ),

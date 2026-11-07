@@ -42,12 +42,12 @@ class ScreeningLifestyleGuidanceSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(PSpacing.sm),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: PColor.neutralColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.health_and_safety_rounded,
-                  color: Colors.white,
+                  color: PColor.neutralColor,
                   size: 24,
                 ),
               ),
@@ -59,7 +59,7 @@ class ScreeningLifestyleGuidanceSection extends StatelessWidget {
                     Text(
                       'คู่มือการปฏิบัติตัวและอาหารสุขภาพ',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: PColor.neutralColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),

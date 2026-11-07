@@ -7,12 +7,10 @@ class VillagesTable extends Table {
   TextColumn get villageId => text()();
   TextColumn get villageName => text()();
   TextColumn get villageNumber => text()();
-  TextColumn get subdistrictId =>
-      text().withDefault(const Constant('SD001'))();
+  TextColumn get subdistrictId => text().withDefault(const Constant('SD001'))();
   TextColumn get subdistrictName =>
       text().withDefault(const Constant('ท่าตอน'))();
-  TextColumn get districtName =>
-      text().withDefault(const Constant('แม่อาย'))();
+  TextColumn get districtName => text().withDefault(const Constant('แม่อาย'))();
   TextColumn get provinceName =>
       text().withDefault(const Constant('เชียงใหม่'))();
 
@@ -30,12 +28,11 @@ class NursesTable extends Table {
   TextColumn get nurseLname => text()();
   TextColumn get nurseMobile => text()();
   TextColumn get nurseEmail => text()();
-  TextColumn get nursePassword => text()();
+  TextColumn get nursePasswordHash => text().withDefault(const Constant(''))();
   TextColumn get nurseGender => text()();
   DateTimeColumn get nurseBirthDate => dateTime()();
   TextColumn get nurseImg => text().nullable()();
-  TextColumn get subdistrictId =>
-      text().withDefault(const Constant('SD001'))();
+  TextColumn get subdistrictId => text().withDefault(const Constant('SD001'))();
 
   @override
   Set<Column> get primaryKey => {nurseId};
@@ -52,7 +49,7 @@ class VhvsTable extends Table {
   TextColumn get vhvLname => text()();
   TextColumn get vhvMobile => text()();
   TextColumn get vhvEmail => text()();
-  TextColumn get vhvPassword => text()();
+  TextColumn get vhvPasswordHash => text().withDefault(const Constant(''))();
   DateTimeColumn get vhvBirthDate => dateTime()();
   TextColumn get vhvGender => text()();
   TextColumn get vhvAddress => text()();
@@ -75,8 +72,7 @@ class PatientsTable extends Table {
   TextColumn get patientGender => text()();
   DateTimeColumn get patientBirthDate => dateTime()();
   TextColumn get patientAddress => text()();
-  TextColumn get patientMobile =>
-      text().withDefault(const Constant(''))();
+  TextColumn get patientMobile => text().withDefault(const Constant(''))();
   TextColumn get patientImg => text().nullable()();
   TextColumn get villageId => text()();
 
@@ -139,9 +135,27 @@ class ScreeningResultsTable extends Table {
   IntColumn get score => integer()();
   TextColumn get riskLevel => text()();
   TextColumn get adviceText => text()();
-  TextColumn get criteriaText =>
-      text().withDefault(const Constant(''))();
+  TextColumn get criteriaText => text().withDefault(const Constant(''))();
 
   @override
   Set<Column> get primaryKey => {resultId};
+}
+
+/// Durable outbox for screenings waiting to be sent to a server.
+class SyncQueueTable extends Table {
+  @override
+  String get tableName => 'sync_queue';
+
+  TextColumn get id => text()();
+  TextColumn get entityType => text()();
+  TextColumn get entityId => text()();
+  TextColumn get action => text()();
+  TextColumn get payload => text()();
+  DateTimeColumn get createdAt => dateTime()();
+  IntColumn get retryCount => integer().withDefault(const Constant(0))();
+  TextColumn get status => text().withDefault(const Constant('pending'))();
+  TextColumn get errorMessage => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }

@@ -78,13 +78,13 @@ class VhvState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        vhvs,
-        selectedVhv,
-        currentVillageId,
-        message,
-        errorMessage,
-      ];
+    status,
+    vhvs,
+    selectedVhv,
+    currentVillageId,
+    message,
+    errorMessage,
+  ];
 }
 
 // BLOC
@@ -93,22 +93,23 @@ class VhvBloc extends Bloc<VhvEvent, VhvState> {
 
   VhvBloc(this.repository) : super(const VhvState()) {
     on<VhvListLoadRequested>((event, emit) async {
-      emit(state.copyWith(
-        status: VhvStatus.loading,
-        currentVillageId: event.villageId,
-        errorMessage: null,
-      ));
+      emit(
+        state.copyWith(
+          status: VhvStatus.loading,
+          currentVillageId: event.villageId,
+          errorMessage: null,
+        ),
+      );
       try {
         final list = await repository.getVhvs(villageId: event.villageId);
-        emit(state.copyWith(
-          status: VhvStatus.success,
-          vhvs: list,
-        ));
+        emit(state.copyWith(status: VhvStatus.success, vhvs: list));
       } catch (e) {
-        emit(state.copyWith(
-          status: VhvStatus.failure,
-          errorMessage: 'ไม่พบข้อมูล',
-        ));
+        emit(
+          state.copyWith(
+            status: VhvStatus.failure,
+            errorMessage: 'ไม่พบข้อมูล',
+          ),
+        );
       }
     });
 
@@ -120,17 +121,21 @@ class VhvBloc extends Bloc<VhvEvent, VhvState> {
       emit(state.copyWith(status: VhvStatus.loading));
       try {
         final newVhv = await repository.addVhv(event.vhv);
-        emit(state.copyWith(
-          status: VhvStatus.success,
-          vhvs: [newVhv, ...state.vhvs],
-          selectedVhv: newVhv,
-          message: 'บันทึกข้อมูล อสม. สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: VhvStatus.success,
+            vhvs: [newVhv, ...state.vhvs],
+            selectedVhv: newVhv,
+            message: 'บันทึกข้อมูล อสม. สำเร็จ',
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: VhvStatus.failure,
-          errorMessage: 'บันทึกการข้อมูล อสม ไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: VhvStatus.failure,
+            errorMessage: 'บันทึกการข้อมูล อสม ไม่สำเร็จ',
+          ),
+        );
       }
     });
 
@@ -141,17 +146,21 @@ class VhvBloc extends Bloc<VhvEvent, VhvState> {
         final list = state.vhvs
             .map((v) => v.vhvId == updated.vhvId ? updated : v)
             .toList();
-        emit(state.copyWith(
-          status: VhvStatus.success,
-          vhvs: list,
-          selectedVhv: updated,
-          message: 'แก้ไขข้อมูล อสม. สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: VhvStatus.success,
+            vhvs: list,
+            selectedVhv: updated,
+            message: 'แก้ไขข้อมูล อสม. สำเร็จ',
+          ),
+        );
       } catch (e) {
-        emit(state.copyWith(
-          status: VhvStatus.failure,
-          errorMessage: 'แก้ไขอสม ไม่สำเร็จ',
-        ));
+        emit(
+          state.copyWith(
+            status: VhvStatus.failure,
+            errorMessage: 'แก้ไขอสม ไม่สำเร็จ',
+          ),
+        );
       }
     });
   }

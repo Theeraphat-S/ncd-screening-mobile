@@ -21,7 +21,7 @@ class _PatientAccessibilityFloatingBubbleState
       builder: (context, state) {
         final isHC = state.isHighContrast;
         final bubbleBg = isHC ? PColor.hcAccent : PColor.primaryColor;
-        final iconColor = isHC ? Colors.black : Colors.white;
+        final iconColor = isHC ? Colors.black : PColor.neutralColor;
 
         return Positioned(
           right: 16,
@@ -36,7 +36,7 @@ class _PatientAccessibilityFloatingBubbleState
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isHC ? PColor.hcSurface : Colors.white,
+                    color: isHC ? PColor.hcSurface : PColor.neutralColor,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: isHC ? PColor.hcAccent : PColor.borderSubtle,
@@ -44,7 +44,9 @@ class _PatientAccessibilityFloatingBubbleState
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: isHC ? 0.6 : 0.15),
+                        color: Colors.black.withValues(
+                          alpha: isHC ? 0.6 : 0.15,
+                        ),
                         blurRadius: 16,
                         offset: const Offset(0, 6),
                       ),
@@ -74,7 +76,9 @@ class _PatientAccessibilityFloatingBubbleState
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: isHC ? PColor.hcText : PColor.contentColor,
+                                      color: isHC
+                                          ? PColor.hcText
+                                          : PColor.contentColor,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -83,6 +87,7 @@ class _PatientAccessibilityFloatingBubbleState
                             ),
                           ),
                           IconButton(
+                            tooltip: 'ปิด',
                             key: const Key('bubble_close_button'),
                             icon: Icon(
                               Icons.close_rounded,
@@ -113,10 +118,13 @@ class _PatientAccessibilityFloatingBubbleState
                           ),
                         ),
                         value: state.isElderlyMode,
-                        activeTrackColor:
-                            isHC ? PColor.hcAccent : PColor.primaryColor,
+                        activeTrackColor: isHC
+                            ? PColor.hcAccent
+                            : PColor.primaryColor,
                         onChanged: (val) {
-                          context.read<AccessibilityCubit>().setElderlyMode(val);
+                          context.read<AccessibilityCubit>().setElderlyMode(
+                            val,
+                          );
                         },
                       ),
                       // High Contrast Mode Toggle
@@ -132,10 +140,13 @@ class _PatientAccessibilityFloatingBubbleState
                           ),
                         ),
                         value: state.isHighContrast,
-                        activeTrackColor:
-                            isHC ? PColor.hcAccent : PColor.primaryColor,
+                        activeTrackColor: isHC
+                            ? PColor.hcAccent
+                            : PColor.primaryColor,
                         onChanged: (_) {
-                          context.read<AccessibilityCubit>().toggleHighContrast();
+                          context
+                              .read<AccessibilityCubit>()
+                              .toggleHighContrast();
                         },
                       ),
                       const SizedBox(height: 8),
@@ -156,8 +167,15 @@ class _PatientAccessibilityFloatingBubbleState
                               onPressed: () => context
                                   .read<AccessibilityCubit>()
                                   .decreaseTextScale(),
-                              icon: const Icon(Icons.text_decrease_rounded, size: 16),
-                              label: const Text('A-'),
+                              icon: const Icon(
+                                Icons.text_decrease_rounded,
+                                size: 16,
+                              ),
+                              label: Semantics(
+                                excludeSemantics: true,
+                                label: 'ลดขนาดตัวอักษร',
+                                child: const Text('A-'),
+                              ),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: isHC
                                     ? PColor.hcAccent
@@ -167,7 +185,9 @@ class _PatientAccessibilityFloatingBubbleState
                                       ? PColor.hcAccent
                                       : PColor.borderStrong,
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                               ),
                             ),
                           ),
@@ -177,8 +197,15 @@ class _PatientAccessibilityFloatingBubbleState
                               onPressed: () => context
                                   .read<AccessibilityCubit>()
                                   .increaseTextScale(),
-                              icon: const Icon(Icons.text_increase_rounded, size: 16),
-                              label: const Text('A+'),
+                              icon: const Icon(
+                                Icons.text_increase_rounded,
+                                size: 16,
+                              ),
+                              label: Semantics(
+                                excludeSemantics: true,
+                                label: 'เพิ่มขนาดตัวอักษร',
+                                child: const Text('A+'),
+                              ),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: isHC
                                     ? PColor.hcAccent
@@ -188,7 +215,9 @@ class _PatientAccessibilityFloatingBubbleState
                                       ? PColor.hcAccent
                                       : PColor.borderStrong,
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                               ),
                             ),
                           ),
@@ -198,8 +227,9 @@ class _PatientAccessibilityFloatingBubbleState
                       // Reset Button
                       Center(
                         child: TextButton.icon(
-                          onPressed: () =>
-                              context.read<AccessibilityCubit>().resetAccessibility(),
+                          onPressed: () => context
+                              .read<AccessibilityCubit>()
+                              .resetAccessibility(),
                           icon: Icon(
                             Icons.refresh_rounded,
                             size: 14,
@@ -228,7 +258,7 @@ class _PatientAccessibilityFloatingBubbleState
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                   side: isHC
-                      ? const BorderSide(color: Colors.white, width: 2)
+                      ? const BorderSide(color: PColor.neutralColor, width: 2)
                       : BorderSide.none,
                 ),
                 tooltip: 'ปรับขนาดอักษรและความคมชัด (Accessibility)',

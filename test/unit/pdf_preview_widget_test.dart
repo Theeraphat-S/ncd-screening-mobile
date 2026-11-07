@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
-import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_screening_detail_page.dart';
@@ -13,6 +12,7 @@ import 'package:ncd_screening_mobile/feature/screening/pages/risk_assessment_res
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import '../support/mock_ncd_repository.dart';
 
 class MockPdfReportService implements PdfReportServiceInterface {
   final bool shouldThrow;
@@ -89,7 +89,9 @@ void main() {
   );
 
   group('PdfPreviewPage Widget Tests', () {
-    testWidgets('renders PdfPreviewPage header and PdfPreview widget', (WidgetTester tester) async {
+    testWidgets('renders PdfPreviewPage header and PdfPreview widget', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -107,118 +109,132 @@ void main() {
       );
 
       expect(find.text('ตัวอย่างรายงาน PDF'), findsOneWidget);
-      expect(find.text('${samplePatient.fullName} • ${sampleScreening.screenId}'), findsOneWidget);
+      expect(
+        find.text('${samplePatient.fullName} • ${sampleScreening.screenId}'),
+        findsOneWidget,
+      );
       expect(find.byType(PdfPreview), findsOneWidget);
     });
 
-    testWidgets('displays error boundary when PDF generation throws an exception', (WidgetTester tester) async {
-      tester.view.physicalSize = const Size(800, 1200);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
+    testWidgets(
+      'displays error boundary when PDF generation throws an exception',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(800, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
 
-      final mockFailingService = MockPdfReportService(shouldThrow: true);
+        final mockFailingService = MockPdfReportService(shouldThrow: true);
 
-      // Suppress framework exception during expected failure test
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {};
-      addTearDown(() {
-        FlutterError.onError = originalOnError;
-      });
+        // Suppress framework exception during expected failure test
+        final originalOnError = FlutterError.onError;
+        FlutterError.onError = (details) {};
+        addTearDown(() {
+          FlutterError.onError = originalOnError;
+        });
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PdfPreviewPage(
-            patient: samplePatient,
-            screening: sampleScreening,
-            pdfReportService: mockFailingService,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PdfPreviewPage(
+              patient: samplePatient,
+              screening: sampleScreening,
+              pdfReportService: mockFailingService,
+            ),
           ),
-        ),
-      );
+        );
 
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
 
-      expect(find.text('เกิดข้อผิดพลาดในการสร้างเอกสาร PDF'), findsOneWidget);
-      expect(find.byIcon(Icons.error_outline_rounded), findsOneWidget);
-    });
+        expect(find.text('เกิดข้อผิดพลาดในการสร้างเอกสาร PDF'), findsOneWidget);
+        expect(find.byIcon(Icons.error_outline_rounded), findsOneWidget);
+      },
+    );
   });
 
   group('Screening Details & Result Page PDF Navigation Tests', () {
-    testWidgets('PatientScreeningDetailPage has PDF export action in AppBar and body', (WidgetTester tester) async {
-      tester.view.physicalSize = const Size(800, 1400);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
+    testWidgets(
+      'PatientScreeningDetailPage has PDF export action in AppBar and body',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(800, 1400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
 
-      final mockRepo = MockNcdRepository();
-      final screeningBloc = ScreeningBloc(mockRepo);
-      final accessibilityCubit = AccessibilityCubit();
+        final mockRepo = MockNcdRepository();
+        final screeningBloc = ScreeningBloc(mockRepo);
+        final accessibilityCubit = AccessibilityCubit();
 
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<ScreeningBloc>.value(value: screeningBloc),
-            BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
-          ],
-          child: MaterialApp(
-            home: PatientScreeningDetailPage(
-              patient: samplePatient,
-              screening: sampleScreening,
+        await tester.pumpWidget(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<ScreeningBloc>.value(value: screeningBloc),
+              BlocProvider<AccessibilityCubit>.value(value: accessibilityCubit),
+            ],
+            child: MaterialApp(
+              home: PatientScreeningDetailPage(
+                patient: samplePatient,
+                screening: sampleScreening,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      // Verify AppBar action
-      final appBarPdfIcon = find.byIcon(Icons.picture_as_pdf_outlined);
-      expect(appBarPdfIcon, findsWidgets);
+        // Verify AppBar action
+        final appBarPdfIcon = find.byIcon(Icons.picture_as_pdf_outlined);
+        expect(appBarPdfIcon, findsWidgets);
 
-      // Verify Body Button
-      final exportBtn = find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)');
-      expect(exportBtn, findsOneWidget);
-      await tester.ensureVisible(exportBtn);
-      await tester.pump(const Duration(milliseconds: 100));
+        // Verify Body Button
+        final exportBtn = find.text('ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)');
+        expect(exportBtn, findsOneWidget);
+        await tester.ensureVisible(exportBtn);
+        await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.tap(exportBtn);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+        await tester.tap(exportBtn);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.byType(PdfPreviewPage), findsOneWidget);
+        expect(find.byType(PdfPreviewPage), findsOneWidget);
 
-      screeningBloc.close();
-      accessibilityCubit.close();
-    });
+        screeningBloc.close();
+        accessibilityCubit.close();
+      },
+    );
 
-    testWidgets('RiskAssessmentResultPage has PDF export button navigating to PdfPreviewPage', (WidgetTester tester) async {
-      tester.view.physicalSize = const Size(800, 1400);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
+    testWidgets(
+      'RiskAssessmentResultPage has PDF export button navigating to PdfPreviewPage',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(800, 1400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
 
-      final accessibilityCubit = AccessibilityCubit();
+        final accessibilityCubit = AccessibilityCubit();
 
-      await tester.pumpWidget(
-        BlocProvider<AccessibilityCubit>.value(
-          value: accessibilityCubit,
-          child: MaterialApp(
-            home: RiskAssessmentResultPage(
-              patient: samplePatient,
-              screening: sampleScreening,
+        await tester.pumpWidget(
+          BlocProvider<AccessibilityCubit>.value(
+            value: accessibilityCubit,
+            child: MaterialApp(
+              home: RiskAssessmentResultPage(
+                patient: samplePatient,
+                screening: sampleScreening,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final exportBtn = find.text('ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)');
-      expect(exportBtn, findsOneWidget);
-      await tester.ensureVisible(exportBtn);
-      await tester.pump(const Duration(milliseconds: 100));
+        final exportBtn = find.text(
+          'ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)',
+        );
+        expect(exportBtn, findsOneWidget);
+        await tester.ensureVisible(exportBtn);
+        await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.tap(exportBtn);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+        await tester.tap(exportBtn);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.byType(PdfPreviewPage), findsOneWidget);
+        expect(find.byType(PdfPreviewPage), findsOneWidget);
 
-      accessibilityCubit.close();
-    });
+        accessibilityCubit.close();
+      },
+    );
   });
 }

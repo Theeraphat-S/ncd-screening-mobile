@@ -14,7 +14,7 @@ class AnalyticsFilterBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
@@ -30,8 +30,11 @@ class AnalyticsFilterBar extends StatelessWidget {
           // Village Dropdown
           Row(
             children: [
-              const Icon(Icons.filter_alt_rounded,
-                  color: PColor.primaryColor, size: 20),
+              const Icon(
+                Icons.filter_alt_rounded,
+                color: PColor.primaryColor,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               const Text(
                 'เลือกพื้นที่:',
@@ -44,8 +47,10 @@ class AnalyticsFilterBar extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
                     borderRadius: BorderRadius.circular(10),
@@ -55,8 +60,10 @@ class AnalyticsFilterBar extends StatelessWidget {
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: state.selectedVillageId ?? 'ALL',
-                      icon: const Icon(Icons.arrow_drop_down_rounded,
-                          color: PColor.primaryColor),
+                      icon: const Icon(
+                        Icons.arrow_drop_down_rounded,
+                        color: PColor.primaryColor,
+                      ),
                       style: const TextStyle(
                         fontSize: 13.5,
                         color: PColor.contentColor,
@@ -64,10 +71,10 @@ class AnalyticsFilterBar extends StatelessWidget {
                       ),
                       onChanged: (val) {
                         context.read<VillageAnalyticsBloc>().add(
-                              VillageAnalyticsFilterChanged(
-                                val == 'ALL' ? null : val,
-                              ),
-                            );
+                          VillageAnalyticsFilterChanged(
+                            val == 'ALL' ? null : val,
+                          ),
+                        );
                       },
                       items: [
                         DropdownMenuItem<String>(
@@ -98,8 +105,11 @@ class AnalyticsFilterBar extends StatelessWidget {
           // Sort Order Selector
           Row(
             children: [
-              const Icon(Icons.sort_rounded,
-                  color: PColor.textNeutralColor, size: 20),
+              const Icon(
+                Icons.sort_rounded,
+                color: PColor.textNeutralColor,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               const Text(
                 'เรียงลำดับ:',
@@ -112,8 +122,10 @@ class AnalyticsFilterBar extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
                     borderRadius: BorderRadius.circular(10),
@@ -123,8 +135,10 @@ class AnalyticsFilterBar extends StatelessWidget {
                     child: DropdownButton<AnalyticsSortOrder>(
                       isExpanded: true,
                       value: state.sortOrder,
-                      icon: const Icon(Icons.arrow_drop_down_rounded,
-                          color: PColor.textNeutralColor),
+                      icon: const Icon(
+                        Icons.arrow_drop_down_rounded,
+                        color: PColor.textNeutralColor,
+                      ),
                       style: const TextStyle(
                         fontSize: 13,
                         color: PColor.contentColor,
@@ -132,15 +146,17 @@ class AnalyticsFilterBar extends StatelessWidget {
                       onChanged: (order) {
                         if (order != null) {
                           context.read<VillageAnalyticsBloc>().add(
-                                VillageAnalyticsSortOrderChanged(order),
-                              );
+                            VillageAnalyticsSortOrderChanged(order),
+                          );
                         }
                       },
                       items: AnalyticsSortOrder.values.map((order) {
                         return DropdownMenuItem<AnalyticsSortOrder>(
                           value: order,
-                          child: Text(order.labelTh,
-                              overflow: TextOverflow.ellipsis),
+                          child: Text(
+                            order.labelTh,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         );
                       }).toList(),
                     ),

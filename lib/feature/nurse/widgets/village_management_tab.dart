@@ -41,7 +41,7 @@ class VillageManagementTab extends StatelessWidget {
   Widget _buildVillageCard(BuildContext context, Village village) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
@@ -140,24 +140,29 @@ class VillageManagementTab extends StatelessWidget {
                       color: PColor.primaryLight.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.volunteer_activism_rounded,
-                        color: PColor.primaryColor),
+                    child: const Icon(
+                      Icons.volunteer_activism_rounded,
+                      color: PColor.primaryColor,
+                    ),
                   ),
-                  title: const Text('รายชื่อ อสม. ในหมู่บ้าน',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle:
-                      const Text('ดูข้อมูลและจัดการ อสม. ประจำหมู่บ้านนี้'),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  title: const Text(
+                    'รายชื่อ อสม. ในหมู่บ้าน',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: const Text(
+                    'ดูข้อมูลและจัดการ อสม. ประจำหมู่บ้านนี้',
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 16,
+                  ),
                   onTap: () {
                     Navigator.pop(bottomSheetContext);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => NurseVhvListPage(
-                          nurse: nurse,
-                          village: village,
-                        ),
+                        builder: (_) =>
+                            NurseVhvListPage(nurse: nurse, village: village),
                       ),
                     );
                   },
@@ -170,15 +175,22 @@ class VillageManagementTab extends StatelessWidget {
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.people_outline_rounded,
-                        color: Colors.blue),
+                    child: const Icon(
+                      Icons.people_outline_rounded,
+                      color: Colors.blue,
+                    ),
                   ),
-                  title: const Text('รายชื่อผู้ป่วยในหมู่บ้าน',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle:
-                      const Text('ดูรายชื่อผู้ป่วยและผลการคัดกรองความเสี่ยง'),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  title: const Text(
+                    'รายชื่อผู้ป่วยในหมู่บ้าน',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: const Text(
+                    'ดูรายชื่อผู้ป่วยและผลการคัดกรองความเสี่ยง',
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 16,
+                  ),
                   onTap: () {
                     Navigator.pop(bottomSheetContext);
                     Navigator.push(

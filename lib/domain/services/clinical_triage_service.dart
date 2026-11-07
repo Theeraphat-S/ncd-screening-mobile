@@ -1,12 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 
-enum TriageUrgencyLevel {
-  routine,
-  moderate,
-  urgent,
-  emergency,
-}
+enum TriageUrgencyLevel { routine, moderate, urgent, emergency }
 
 class ClinicalTriageAssessment extends Equatable {
   final TriageUrgencyLevel urgencyLevel;
@@ -25,12 +20,12 @@ class ClinicalTriageAssessment extends Equatable {
 
   @override
   List<Object?> get props => [
-        urgencyLevel,
-        requiresImmediateVisit,
-        urgencyLabel,
-        clinicalRationale,
-        recommendedAction,
-      ];
+    urgencyLevel,
+    requiresImmediateVisit,
+    urgencyLabel,
+    clinicalRationale,
+    recommendedAction,
+  ];
 }
 
 class ClinicalTriageService {
@@ -45,7 +40,9 @@ class ClinicalTriageService {
     final sbp = screening.sbp;
     final dbp = screening.dbp;
     final bs = screening.bloodSugar;
-    final highRiskCount = results.where((r) => r.riskLevel == RiskLevel.high).length;
+    final highRiskCount = results
+        .where((r) => r.riskLevel == RiskLevel.high)
+        .length;
 
     // 1. Emergency: Hypertensive Crisis or Severe Hyperglycemia with symptoms
     if (sbp >= 180 || dbp >= 110) {
@@ -53,8 +50,10 @@ class ClinicalTriageService {
         urgencyLevel: TriageUrgencyLevel.emergency,
         requiresImmediateVisit: true,
         urgencyLabel: 'ภาวะวิกฤตความดันโลหิตสูง (Hypertensive Crisis)',
-        clinicalRationale: 'ความดันโลหิต ${sbp.toInt()}/${dbp.toInt()} มม.ปรอท สูงเกินเกณฑ์อันตราย เสี่ยงหลอดเลือดสมองแตก',
-        recommendedAction: 'ส่งตัวพบแพทย์ รพ.สต. หรือ รพ.แม่อาย ทันที และพยาบาลลงเยี่ยมบ้านด่วน',
+        clinicalRationale:
+            'ความดันโลหิต ${sbp.toInt()}/${dbp.toInt()} มม.ปรอท สูงเกินเกณฑ์อันตราย เสี่ยงหลอดเลือดสมองแตก',
+        recommendedAction:
+            'ส่งตัวพบแพทย์ รพ.สต. หรือ รพ.แม่อาย ทันที และพยาบาลลงเยี่ยมบ้านด่วน',
       );
     }
 
@@ -63,7 +62,8 @@ class ClinicalTriageService {
         urgencyLevel: TriageUrgencyLevel.emergency,
         requiresImmediateVisit: true,
         urgencyLabel: 'ภาวะน้ำตาลในเลือดสูงวิกฤต (Severe Hyperglycemia)',
-        clinicalRationale: 'ค่าน้ำตาลในเลือด $bs มก./ดล. สูงผิดปกติ เสี่ยงต่อภาวะเลือดเป็นกรด',
+        clinicalRationale:
+            'ค่าน้ำตาลในเลือด $bs มก./ดล. สูงผิดปกติ เสี่ยงต่อภาวะเลือดเป็นกรด',
         recommendedAction: 'นำส่ง รพ.สต. เพื่อตรวจยืนยันและรับการรักษาทันที',
       );
     }
@@ -85,7 +85,8 @@ class ClinicalTriageService {
         urgencyLevel: TriageUrgencyLevel.moderate,
         requiresImmediateVisit: false,
         urgencyLabel: 'กลุ่มเสี่ยงระดับสูงรายโรค (High Risk)',
-        clinicalRationale: 'พบความเสี่ยงโรคเรื้อรังสูง 1 โรค ควรได้รับการตรวจยืนยัน',
+        clinicalRationale:
+            'พบความเสี่ยงโรคเรื้อรังสูง 1 โรค ควรได้รับการตรวจยืนยัน',
         recommendedAction: 'นัดหมายตรวจซ้ำที่ รพ.สต. ภายใน 2 สัปดาห์',
       );
     }
@@ -130,7 +131,8 @@ class ClinicalTriageService {
         'action': triage.recommendedAction,
         'requiresImmediateVisit': triage.requiresImmediateVisit,
       },
-      'message': '🚨 [แจ้งเตือนเคสด่วน] ${triage.urgencyLabel}\nผู้ป่วย: ${patient.fullName} (หมู่ ${patient.villageId})\nBP: ${screening.sbp.toInt()}/${screening.dbp.toInt()} mmHg, Sugar: ${screening.bloodSugar} mg/dL\nการดำเนินการ: ${triage.recommendedAction}',
+      'message':
+          '🚨 [แจ้งเตือนเคสด่วน] ${triage.urgencyLabel}\nผู้ป่วย: ${patient.fullName} (หมู่ ${patient.villageId})\nBP: ${screening.sbp.toInt()}/${screening.dbp.toInt()} mmHg, Sugar: ${screening.bloodSugar} mg/dL\nการดำเนินการ: ${triage.recommendedAction}',
     };
   }
 }

@@ -63,8 +63,9 @@ class VillageAnalyticsCalculator {
     final double coveragePct = totalPatients == 0
         ? 0.0
         : double.parse(
-            ((screenedPatientsCount / totalPatients) * 100.0)
-                .toStringAsFixed(1),
+            ((screenedPatientsCount / totalPatients) * 100.0).toStringAsFixed(
+              1,
+            ),
           );
 
     int pendingReviews = 0;
@@ -78,8 +79,9 @@ class VillageAnalyticsCalculator {
     }
 
     // 4. Demographic Distribution
-    final demographics =
-        DemographicDistribution.calculate(patients: activePatients);
+    final demographics = DemographicDistribution.calculate(
+      patients: activePatients,
+    );
 
     // 5. 4 NCD Disease Breakdowns
     int dmLow = 0, dmMod = 0, dmHigh = 0;
@@ -139,14 +141,16 @@ class VillageAnalyticsCalculator {
       }
 
       if (highRiskDiseases.isNotEmpty) {
-        highRiskPatients.add(HighRiskPriorityPatient(
-          patient: patient,
-          village: villageMap[patient.villageId],
-          latestScreening: latest,
-          highRiskDiseases: highRiskDiseases,
-          highRiskCount: highRiskDiseases.length,
-          latestScreeningDate: latest.screeningDate,
-        ));
+        highRiskPatients.add(
+          HighRiskPriorityPatient(
+            patient: patient,
+            village: villageMap[patient.villageId],
+            latestScreening: latest,
+            highRiskDiseases: highRiskDiseases,
+            highRiskCount: highRiskDiseases.length,
+            latestScreeningDate: latest.screeningDate,
+          ),
+        );
       }
     }
 
@@ -204,11 +208,13 @@ class VillageAnalyticsCalculator {
     final comparisons = <VillageComparisonSummary>[];
 
     for (final village in villages) {
-      final vPatients =
-          patients.where((p) => p.villageId == village.villageId).toList();
+      final vPatients = patients
+          .where((p) => p.villageId == village.villageId)
+          .toList();
       final vPatientIds = vPatients.map((p) => p.patientId).toSet();
-      final vScreenings =
-          screenings.where((s) => vPatientIds.contains(s.patientId)).toList();
+      final vScreenings = screenings
+          .where((s) => vPatientIds.contains(s.patientId))
+          .toList();
 
       int vScreenedCount = 0;
       int vHighRiskCount = 0;
@@ -216,8 +222,9 @@ class VillageAnalyticsCalculator {
         final latest = allLatestScreeningMap[p.patientId];
         if (latest != null) {
           vScreenedCount++;
-          final hasHighRisk =
-              latest.results.any((r) => r.riskLevel == RiskLevel.high);
+          final hasHighRisk = latest.results.any(
+            (r) => r.riskLevel == RiskLevel.high,
+          );
           if (hasHighRisk) {
             vHighRiskCount++;
           }
@@ -241,15 +248,17 @@ class VillageAnalyticsCalculator {
         }
       }
 
-      comparisons.add(VillageComparisonSummary(
-        village: village,
-        totalPatients: vTotal,
-        screenedPatientsCount: vScreenedCount,
-        screeningCoveragePercentage: vCoveragePct,
-        highRiskPatientsCount: vHighRiskCount,
-        pendingReviewCount: vPending,
-        approvedReviewCount: vApproved,
-      ));
+      comparisons.add(
+        VillageComparisonSummary(
+          village: village,
+          totalPatients: vTotal,
+          screenedPatientsCount: vScreenedCount,
+          screeningCoveragePercentage: vCoveragePct,
+          highRiskPatientsCount: vHighRiskCount,
+          pendingReviewCount: vPending,
+          approvedReviewCount: vApproved,
+        ),
+      );
     }
 
     // Sort comparisons according to sortOrder
@@ -283,19 +292,25 @@ class VillageAnalyticsCalculator {
     switch (sortOrder) {
       case AnalyticsSortOrder.highRiskDesc:
         comparisons.sort((a, b) {
-          final cmp =
-              b.highRiskPatientsCount.compareTo(a.highRiskPatientsCount);
+          final cmp = b.highRiskPatientsCount.compareTo(
+            a.highRiskPatientsCount,
+          );
           if (cmp != 0) return cmp;
-          return parseVillageNum(a.village).compareTo(parseVillageNum(b.village));
+          return parseVillageNum(
+            a.village,
+          ).compareTo(parseVillageNum(b.village));
         });
         break;
 
       case AnalyticsSortOrder.screeningCoverageDesc:
         comparisons.sort((a, b) {
-          final cmp = b.screeningCoveragePercentage
-              .compareTo(a.screeningCoveragePercentage);
+          final cmp = b.screeningCoveragePercentage.compareTo(
+            a.screeningCoveragePercentage,
+          );
           if (cmp != 0) return cmp;
-          return parseVillageNum(a.village).compareTo(parseVillageNum(b.village));
+          return parseVillageNum(
+            a.village,
+          ).compareTo(parseVillageNum(b.village));
         });
         break;
 
@@ -303,13 +318,17 @@ class VillageAnalyticsCalculator {
         comparisons.sort((a, b) {
           final cmp = b.totalPatients.compareTo(a.totalPatients);
           if (cmp != 0) return cmp;
-          return parseVillageNum(a.village).compareTo(parseVillageNum(b.village));
+          return parseVillageNum(
+            a.village,
+          ).compareTo(parseVillageNum(b.village));
         });
         break;
 
       case AnalyticsSortOrder.villageNumberAsc:
-        comparisons.sort((a, b) =>
-            parseVillageNum(a.village).compareTo(parseVillageNum(b.village)));
+        comparisons.sort(
+          (a, b) =>
+              parseVillageNum(a.village).compareTo(parseVillageNum(b.village)),
+        );
         break;
     }
   }

@@ -62,15 +62,14 @@ class VillageBloc extends Bloc<VillageEvent, VillageState> {
       emit(state.copyWith(status: VillageStatus.loading, errorMessage: null));
       try {
         final list = await repository.getVillages();
-        emit(state.copyWith(
-          status: VillageStatus.success,
-          villages: list,
-        ));
+        emit(state.copyWith(status: VillageStatus.success, villages: list));
       } catch (e) {
-        emit(state.copyWith(
-          status: VillageStatus.failure,
-          errorMessage: 'ไม่พบข้อมูล',
-        ));
+        emit(
+          state.copyWith(
+            status: VillageStatus.failure,
+            errorMessage: 'ไม่พบข้อมูล',
+          ),
+        );
       }
     });
 

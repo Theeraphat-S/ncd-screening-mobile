@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
@@ -17,7 +18,6 @@ class IdCardScannerPage extends StatefulWidget {
 }
 
 class _IdCardScannerPageState extends State<IdCardScannerPage> {
-  bool _isTorchOn = false;
   bool _isProcessing = false;
   final TextEditingController _manualIdController = TextEditingController();
 
@@ -39,7 +39,9 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('ไม่พบเลขบัตรประชาชน 13 หลักที่ถูกต้อง กรุณาลองใหม่อีกครั้ง'),
+              content: Text(
+                'ไม่พบเลขบัตรประชาชน 13 หลักที่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+              ),
               backgroundColor: PColor.riskHigh,
             ),
           );
@@ -58,10 +60,16 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+                const Icon(
+                  Icons.check_circle_rounded,
+                  color: PColor.neutralColor,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text('พบข้อมูล: ${existingPatient.fullName} (ดึงข้อมูลเรียบร้อย)'),
+                  child: Text(
+                    'พบข้อมูล: ${existingPatient.fullName} (ดึงข้อมูลเรียบร้อย)',
+                  ),
                 ),
               ],
             ),
@@ -73,10 +81,8 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => ScreeningFormPage(
-              patient: existingPatient,
-              vhv: widget.vhv,
-            ),
+            builder: (_) =>
+                ScreeningFormPage(patient: existingPatient, vhv: widget.vhv),
           ),
         );
       } else {
@@ -85,10 +91,16 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
           const SnackBar(
             content: Row(
               children: [
-                Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 20),
+                Icon(
+                  Icons.person_add_alt_1_rounded,
+                  color: PColor.neutralColor,
+                  size: 20,
+                ),
                 SizedBox(width: 8),
                 Expanded(
-                  child: Text('ไม่พบประวัติเดิม - ระบบเติมข้อมูลลงทะเบียนใหม่ให้อัตโนมัติ'),
+                  child: Text(
+                    'ไม่พบประวัติเดิม - ระบบเติมข้อมูลลงทะเบียนใหม่ให้อัตโนมัติ',
+                  ),
                 ),
               ],
             ),
@@ -127,7 +139,10 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
           children: [
             Icon(Icons.edit_note_rounded, color: PColor.primaryColor),
             SizedBox(width: 8),
-            Text('ระบุเลขบัตรประชาชน', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'ระบุเลขบัตรประชาชน',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         content: TextField(
@@ -148,14 +163,19 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: PColor.primaryColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             onPressed: () {
               final text = _manualIdController.text.trim();
               Navigator.pop(ctx);
               _processOcrText('เลขประจำตัวประชาชน $text');
             },
-            child: const Text('ตรวจสอบ', style: TextStyle(color: Colors.white)),
+            child: const Text(
+              'ตรวจสอบ',
+              style: TextStyle(color: PColor.neutralColor),
+            ),
           ),
         ],
       ),
@@ -170,26 +190,29 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
         backgroundColor: Colors.black.withValues(alpha: 0.8),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'สแกนบัตรประชาชน (OCR)',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: PColor.neutralColor,
+          ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(
-              _isTorchOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
-              color: _isTorchOn ? Colors.amber : Colors.white,
+            tooltip: 'กรอกเลขบัตรด้วยตนเอง',
+            icon: const Icon(
+              Icons.keyboard_alt_outlined,
+              color: PColor.neutralColor,
             ),
-            onPressed: () {
-              setState(() => _isTorchOn = !_isTorchOn);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.keyboard_alt_outlined, color: Colors.white),
             onPressed: _showManualInputDialog,
           ),
         ],
@@ -207,7 +230,7 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
                   decoration: BoxDecoration(
                     border: Border.all(color: PColor.primaryLight, width: 2.5),
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.white.withValues(alpha: 0.06),
+                    color: PColor.neutralColor.withValues(alpha: 0.06),
                   ),
                   child: Stack(
                     children: [
@@ -220,7 +243,9 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
                               width: 32,
                               height: 24,
                               decoration: BoxDecoration(
-                                color: Colors.amber.shade300.withValues(alpha: 0.6),
+                                color: Colors.amber.shade300.withValues(
+                                  alpha: 0.6,
+                                ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),
@@ -243,7 +268,7 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
                               ? 'กำลังประมวลผล OCR...'
                               : 'วางบัตรประชาชนให้อยู่ในกรอบ',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: PColor.neutralColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
@@ -272,54 +297,71 @@ class _IdCardScannerPageState extends State<IdCardScannerPage> {
                 if (_isProcessing)
                   const Padding(
                     padding: EdgeInsets.only(bottom: 16),
-                    child: CircularProgressIndicator(color: PColor.primaryLight),
+                    child: CircularProgressIndicator(
+                      color: PColor.primaryLight,
+                    ),
                   ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white38),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        icon: const Icon(Icons.person_search_rounded, size: 18),
-                        label: const Text('ทดสอบผู้ป่วยเดิม', style: TextStyle(fontSize: 13)),
-                        onPressed: _isProcessing
-                            ? null
-                            : () {
-                                _processOcrText('''
+                // Test shortcuts with sample OCR text; debug builds only.
+                if (kDebugMode)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: PColor.neutralColor,
+                            side: const BorderSide(color: Colors.white38),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.person_search_rounded,
+                            size: 18,
+                          ),
+                          label: const Text(
+                            'ทดสอบผู้ป่วยเดิม',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          onPressed: _isProcessing
+                              ? null
+                              : () {
+                                  _processOcrText('''
 บัตรประจำตัวประชาชน Thai National ID Card
 เลขประจำตัวประชาชน 1500200000010
 ชื่อ นาย สมชาย ใจดี
                                 ''');
-                              },
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white38),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                },
                         ),
-                        icon: const Icon(Icons.person_add_rounded, size: 18),
-                        label: const Text('ทดสอบคนใหม่', style: TextStyle(fontSize: 13)),
-                        onPressed: _isProcessing
-                            ? null
-                            : () {
-                                _processOcrText('''
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: PColor.neutralColor,
+                            side: const BorderSide(color: Colors.white38),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.person_add_rounded, size: 18),
+                          label: const Text(
+                            'ทดสอบคนใหม่',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          onPressed: _isProcessing
+                              ? null
+                              : () {
+                                  _processOcrText('''
 เลขประจำตัวประชาชน 1500299988877
 ชื่อ นาง วันเพ็ญ สดใส
                                 ''');
-                              },
+                                },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),

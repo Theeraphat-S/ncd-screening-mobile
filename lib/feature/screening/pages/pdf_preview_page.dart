@@ -62,9 +62,10 @@ class PdfPreviewPage extends StatelessWidget {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
+          tooltip: 'ย้อนกลับ',
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -75,7 +76,7 @@ class PdfPreviewPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: PColor.neutralColor,
               ),
             ),
             Text(

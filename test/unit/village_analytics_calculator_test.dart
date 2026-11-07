@@ -365,13 +365,19 @@ void main() {
       expect(analytics.isAllVillages, isTrue);
       expect(analytics.totalVillagesCount, equals(3));
       expect(analytics.totalPatients, equals(6));
-      expect(analytics.screenedPatientsCount, equals(4)); // P001, P002, P004, P005
+      expect(
+        analytics.screenedPatientsCount,
+        equals(4),
+      ); // P001, P002, P004, P005
       expect(analytics.totalScreeningsCount, equals(5));
       // Coverage = 4 / 6 * 100 = 66.7%
       expect(analytics.screeningCoveragePercentage, equals(66.7));
       expect(analytics.pendingReviewsCount, equals(2)); // S002, S004
       expect(analytics.approvedReviewsCount, equals(3)); // S001, S003, S005
-      expect(analytics.highRiskPatientsCount, equals(2)); // P001 (DM, HT), P004 (CVD, OB)
+      expect(
+        analytics.highRiskPatientsCount,
+        equals(2),
+      ); // P001 (DM, HT), P004 (CVD, OB)
     });
 
     test('Computes 4 NCD risk breakdowns from latest screenings correctly', () {
@@ -478,11 +484,17 @@ void main() {
       // Both P001 (DM, HT = 2 conditions) and P004 (CVD, OB = 2 conditions)
       // S002 (P001) is on Feb 15, S004 (P004) is on Feb 12 -> S002 first due to date tiebreaker
       expect(queue[0].patient.patientId, equals('P001'));
-      expect(queue[0].highRiskDiseases, containsAll(['โรคเบาหวาน', 'โรคความดันโลหิตสูง']));
+      expect(
+        queue[0].highRiskDiseases,
+        containsAll(['โรคเบาหวาน', 'โรคความดันโลหิตสูง']),
+      );
       expect(queue[0].highRiskCount, equals(2));
 
       expect(queue[1].patient.patientId, equals('P004'));
-      expect(queue[1].highRiskDiseases, containsAll(['โรคหลอดเลือดหัวใจ', 'โรคอ้วนลงพุง']));
+      expect(
+        queue[1].highRiskDiseases,
+        containsAll(['โรคหลอดเลือดหัวใจ', 'โรคอ้วนลงพุง']),
+      );
       expect(queue[1].highRiskCount, equals(2));
     });
 
@@ -494,7 +506,10 @@ void main() {
         screenings: sampleScreenings,
         sortOrder: AnalyticsSortOrder.highRiskDesc,
       );
-      expect(byHighRisk.villageComparisons.last.village.villageId, equals('V003'));
+      expect(
+        byHighRisk.villageComparisons.last.village.villageId,
+        equals('V003'),
+      );
 
       // 2. screeningCoverageDesc: V002 (2/2 = 100%) > V001 (2/3 = 66.7%) > V003 (0/1 = 0%)
       final byCoverage = VillageAnalyticsCalculator.compute(
@@ -503,10 +518,22 @@ void main() {
         screenings: sampleScreenings,
         sortOrder: AnalyticsSortOrder.screeningCoverageDesc,
       );
-      expect(byCoverage.villageComparisons[0].village.villageId, equals('V002'));
-      expect(byCoverage.villageComparisons[0].screeningCoveragePercentage, equals(100.0));
-      expect(byCoverage.villageComparisons[1].village.villageId, equals('V001'));
-      expect(byCoverage.villageComparisons[2].village.villageId, equals('V003'));
+      expect(
+        byCoverage.villageComparisons[0].village.villageId,
+        equals('V002'),
+      );
+      expect(
+        byCoverage.villageComparisons[0].screeningCoveragePercentage,
+        equals(100.0),
+      );
+      expect(
+        byCoverage.villageComparisons[1].village.villageId,
+        equals('V001'),
+      );
+      expect(
+        byCoverage.villageComparisons[2].village.villageId,
+        equals('V003'),
+      );
 
       // 3. patientCountDesc: V001 (3) > V002 (2) > V003 (1)
       final byPatients = VillageAnalyticsCalculator.compute(
@@ -515,9 +542,18 @@ void main() {
         screenings: sampleScreenings,
         sortOrder: AnalyticsSortOrder.patientCountDesc,
       );
-      expect(byPatients.villageComparisons[0].village.villageId, equals('V001'));
-      expect(byPatients.villageComparisons[1].village.villageId, equals('V002'));
-      expect(byPatients.villageComparisons[2].village.villageId, equals('V003'));
+      expect(
+        byPatients.villageComparisons[0].village.villageId,
+        equals('V001'),
+      );
+      expect(
+        byPatients.villageComparisons[1].village.villageId,
+        equals('V002'),
+      );
+      expect(
+        byPatients.villageComparisons[2].village.villageId,
+        equals('V003'),
+      );
 
       // 4. villageNumberAsc: V001 (1) -> V002 (2) -> V003 (3)
       final byNum = VillageAnalyticsCalculator.compute(
@@ -526,38 +562,43 @@ void main() {
         screenings: sampleScreenings,
         sortOrder: AnalyticsSortOrder.villageNumberAsc,
       );
-      expect(byNum.villageComparisons.map((c) => c.village.villageId).toList(),
-          equals(['V001', 'V002', 'V003']));
-    });
-
-    test('Handles empty datasets without runtime exceptions or divide by zero', () {
-      final analytics = VillageAnalyticsCalculator.compute(
-        villages: [],
-        patients: [],
-        screenings: [],
+      expect(
+        byNum.villageComparisons.map((c) => c.village.villageId).toList(),
+        equals(['V001', 'V002', 'V003']),
       );
-
-      expect(analytics.totalVillagesCount, equals(0));
-      expect(analytics.totalPatients, equals(0));
-      expect(analytics.screenedPatientsCount, equals(0));
-      expect(analytics.totalScreeningsCount, equals(0));
-      expect(analytics.screeningCoveragePercentage, equals(0.0));
-      expect(analytics.highRiskPatientsCount, equals(0));
-      expect(analytics.pendingReviewsCount, equals(0));
-      expect(analytics.approvedReviewsCount, equals(0));
-      expect(analytics.highRiskPriorityQueue, isEmpty);
-      expect(analytics.villageComparisons, isEmpty);
-
-      final demo = analytics.demographics;
-      expect(demo.maleRatio, equals(0.0));
-      expect(demo.femaleRatio, equals(0.0));
-      expect(demo.ageUnder35Ratio, equals(0.0));
-
-      final dm = analytics.diabetesBreakdown!;
-      expect(dm.totalScreened, equals(0));
-      expect(dm.lowPercentage, equals(0.0));
-      expect(dm.moderatePercentage, equals(0.0));
-      expect(dm.highPercentage, equals(0.0));
     });
+
+    test(
+      'Handles empty datasets without runtime exceptions or divide by zero',
+      () {
+        final analytics = VillageAnalyticsCalculator.compute(
+          villages: [],
+          patients: [],
+          screenings: [],
+        );
+
+        expect(analytics.totalVillagesCount, equals(0));
+        expect(analytics.totalPatients, equals(0));
+        expect(analytics.screenedPatientsCount, equals(0));
+        expect(analytics.totalScreeningsCount, equals(0));
+        expect(analytics.screeningCoveragePercentage, equals(0.0));
+        expect(analytics.highRiskPatientsCount, equals(0));
+        expect(analytics.pendingReviewsCount, equals(0));
+        expect(analytics.approvedReviewsCount, equals(0));
+        expect(analytics.highRiskPriorityQueue, isEmpty);
+        expect(analytics.villageComparisons, isEmpty);
+
+        final demo = analytics.demographics;
+        expect(demo.maleRatio, equals(0.0));
+        expect(demo.femaleRatio, equals(0.0));
+        expect(demo.ageUnder35Ratio, equals(0.0));
+
+        final dm = analytics.diabetesBreakdown!;
+        expect(dm.totalScreened, equals(0));
+        expect(dm.lowPercentage, equals(0.0));
+        expect(dm.moderatePercentage, equals(0.0));
+        expect(dm.highPercentage, equals(0.0));
+      },
+    );
   });
 }

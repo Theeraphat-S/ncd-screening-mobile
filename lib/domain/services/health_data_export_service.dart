@@ -42,30 +42,32 @@ class HealthDataExportService {
 
     // CSV Header Row (BOM for Excel Thai utf-8 support)
     buffer.write('\uFEFF');
-    buffer.writeln([
-      'ลำดับ',
-      'เลขบัตรประชาชน',
-      'คำนำหน้า',
-      'ชื่อ-นามสกุล',
-      'เพศ',
-      'อายุ (ปี)',
-      'หมู่บ้าน',
-      'วันที่คัดกรอง',
-      'น้ำหนัก_กก',
-      'ส่วนสูง_ซม',
-      'BMI',
-      'รอบเอว_ซม',
-      'ความดัน_SBP',
-      'ความดัน_DBP',
-      'ชีพจร_ครั้งต่อนาที',
-      'น้ำตาลในเลือด_mgdL',
-      'เสี่ยงเบาหวาน_DM',
-      'เสี่ยงความดัน_HT',
-      'เสี่ยงหัวใจ_CVD',
-      'เสี่ยงอ้วนลงพุง_OBESITY',
-      'สถานะการตรวจรับรอง',
-      'โหมดข้อมูล',
-    ].map(_escapeCsv).join(','));
+    buffer.writeln(
+      [
+        'ลำดับ',
+        'เลขบัตรประชาชน',
+        'คำนำหน้า',
+        'ชื่อ-นามสกุล',
+        'เพศ',
+        'อายุ (ปี)',
+        'หมู่บ้าน',
+        'วันที่คัดกรอง',
+        'น้ำหนัก_กก',
+        'ส่วนสูง_ซม',
+        'BMI',
+        'รอบเอว_ซม',
+        'ความดัน_SBP',
+        'ความดัน_DBP',
+        'ชีพจร_ครั้งต่อนาที',
+        'น้ำตาลในเลือด_mgdL',
+        'เสี่ยงเบาหวาน_DM',
+        'เสี่ยงความดัน_HT',
+        'เสี่ยงหัวใจ_CVD',
+        'เสี่ยงอ้วนลงพุง_OBESITY',
+        'สถานะการตรวจรับรอง',
+        'โหมดข้อมูล',
+      ].map(_escapeCsv).join(','),
+    );
 
     for (int i = 0; i < filteredScreenings.length; i++) {
       final s = filteredScreenings[i];
@@ -74,14 +76,14 @@ class HealthDataExportService {
       final cid = (p == null)
           ? 'N/A'
           : (mode == ExportPrivacyMode.anonymized
-              ? maskCitizenId(p.patientCitizenId)
-              : p.patientCitizenId);
+                ? maskCitizenId(p.patientCitizenId)
+                : p.patientCitizenId);
 
       final fullName = (p == null)
           ? 'N/A'
           : (mode == ExportPrivacyMode.anonymized
-              ? maskName(p.patientTitle, p.patientFname, p.patientLname)
-              : p.fullName);
+                ? maskName(p.patientTitle, p.patientFname, p.patientLname)
+                : p.fullName);
 
       final villageName = (p != null && villageMap.containsKey(p.villageId))
           ? villageMap[p.villageId]!
@@ -106,30 +108,34 @@ class HealthDataExportService {
         }
       }
 
-      buffer.writeln([
-        (i + 1).toString(),
-        cid,
-        p?.patientTitle ?? '',
-        fullName,
-        p?.patientGender ?? 'N/A',
-        s.ageAtScreening.toString(),
-        villageName,
-        dateStr,
-        s.weight.toStringAsFixed(1),
-        s.height.toStringAsFixed(1),
-        s.bmi.toStringAsFixed(2),
-        s.waistCm.toStringAsFixed(1),
-        s.sbp.toInt().toString(),
-        s.dbp.toInt().toString(),
-        s.pulse.toInt().toString(),
-        s.bloodSugar.toStringAsFixed(1),
-        dmRisk,
-        htRisk,
-        cvdRisk,
-        obRisk,
-        s.reviewStatus == ReviewStatus.approved ? 'รับรองแล้ว' : 'รอรับรอง',
-        mode == ExportPrivacyMode.anonymized ? 'PDPA_ANONYMIZED' : 'CLINICAL_FULL',
-      ].map(_escapeCsv).join(','));
+      buffer.writeln(
+        [
+          (i + 1).toString(),
+          cid,
+          p?.patientTitle ?? '',
+          fullName,
+          p?.patientGender ?? 'N/A',
+          s.ageAtScreening.toString(),
+          villageName,
+          dateStr,
+          s.weight.toStringAsFixed(1),
+          s.height.toStringAsFixed(1),
+          s.bmi.toStringAsFixed(2),
+          s.waistCm.toStringAsFixed(1),
+          s.sbp.toInt().toString(),
+          s.dbp.toInt().toString(),
+          s.pulse.toInt().toString(),
+          s.bloodSugar.toStringAsFixed(1),
+          dmRisk,
+          htRisk,
+          cvdRisk,
+          obRisk,
+          s.reviewStatus == ReviewStatus.approved ? 'รับรองแล้ว' : 'รอรับรอง',
+          mode == ExportPrivacyMode.anonymized
+              ? 'PDPA_ANONYMIZED'
+              : 'CLINICAL_FULL',
+        ].map(_escapeCsv).join(','),
+      );
     }
 
     return buffer.toString();

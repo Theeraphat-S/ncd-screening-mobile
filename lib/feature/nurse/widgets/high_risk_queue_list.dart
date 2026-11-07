@@ -19,7 +19,7 @@ class HighRiskQueueList extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -61,11 +61,10 @@ class HighRiskQueueList extends StatelessWidget {
                 ],
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: queue.isEmpty
-                      ? const Color(0xFFECFDF5)
+                      ? PColor.riskLowBg
                       : const Color(0xFFFEE2E2),
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -74,9 +73,7 @@ class HighRiskQueueList extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: queue.isEmpty
-                        ? const Color(0xFF059669)
-                        : PColor.errorColor,
+                    color: queue.isEmpty ? PColor.riskLow : PColor.errorColor,
                   ),
                 ),
               ),
@@ -94,8 +91,11 @@ class HighRiskQueueList extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Icon(Icons.check_circle_outline_rounded,
-                        color: Color(0xFF10B981), size: 40),
+                    Icon(
+                      Icons.check_circle_outline_rounded,
+                      color: Color(0xFF10B981),
+                      size: 40,
+                    ),
                     SizedBox(height: 8),
                     Text(
                       'ไม่พบผู้ป่วยกลุ่มเสี่ยงสูงในพื้นที่ที่เลือก',
@@ -138,9 +138,7 @@ class HighRiskQueueList extends StatelessWidget {
       decoration: BoxDecoration(
         color: PColor.backgroundColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: PColor.errorColor.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: PColor.errorColor.withValues(alpha: 0.25)),
       ),
       child: Material(
         color: Colors.transparent,
@@ -150,10 +148,8 @@ class HighRiskQueueList extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PatientDetailPage(
-                  patient: patient,
-                  nurse: nurse,
-                ),
+                builder: (_) =>
+                    PatientDetailPage(patient: patient, nurse: nurse),
               ),
             );
           },
@@ -165,8 +161,11 @@ class HighRiskQueueList extends StatelessWidget {
                 const CircleAvatar(
                   radius: 20,
                   backgroundColor: Color(0xFFFEE2E2),
-                  child: Icon(Icons.person_rounded,
-                      color: PColor.errorColor, size: 22),
+                  child: Icon(
+                    Icons.person_rounded,
+                    color: PColor.errorColor,
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -213,7 +212,9 @@ class HighRiskQueueList extends StatelessWidget {
                         children: item.highRiskDiseases.map((d) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: PColor.errorColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(8),

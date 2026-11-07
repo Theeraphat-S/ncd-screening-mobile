@@ -14,7 +14,7 @@ class VillageComparisonTable extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -32,8 +32,11 @@ class VillageComparisonTable extends StatelessWidget {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.leaderboard_rounded,
-                      color: PColor.primaryColor, size: 22),
+                  Icon(
+                    Icons.leaderboard_rounded,
+                    color: PColor.primaryColor,
+                    size: 22,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'การเปรียบเทียบสถิติรายหมู่บ้าน',
@@ -84,8 +87,8 @@ class VillageComparisonTable extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: () {
         context.read<VillageAnalyticsBloc>().add(
-              VillageAnalyticsFilterChanged(summary.village.villageId),
-            );
+          VillageAnalyticsFilterChanged(summary.village.villageId),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -112,7 +115,7 @@ class VillageComparisonTable extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: rank == 1 ? Colors.white : PColor.primaryColor,
+                  color: rank == 1 ? PColor.neutralColor : PColor.primaryColor,
                 ),
               ),
             ),
@@ -141,7 +144,7 @@ class VillageComparisonTable extends StatelessWidget {
                             value: summary.totalPatients == 0
                                 ? 0.0
                                 : summary.screenedPatientsCount /
-                                    summary.totalPatients,
+                                      summary.totalPatients,
                             backgroundColor: Colors.grey.shade300,
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               PColor.primaryColor,
@@ -180,8 +183,10 @@ class VillageComparisonTable extends StatelessWidget {
               children: [
                 if (summary.highRiskPatientsCount > 0)
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFEE2E2),
                       borderRadius: BorderRadius.circular(10),
@@ -192,8 +197,11 @@ class VillageComparisonTable extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.warning_amber_rounded,
-                            size: 13, color: PColor.errorColor),
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          size: 13,
+                          color: PColor.errorColor,
+                        ),
                         const SizedBox(width: 3),
                         Text(
                           'เสี่ยงสูง ${summary.highRiskPatientsCount}',
@@ -208,17 +216,19 @@ class VillageComparisonTable extends StatelessWidget {
                   )
                 else
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFECFDF5),
+                      color: PColor.riskLowBg,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Text(
                       'ไม่มีเสี่ยงสูง',
                       style: TextStyle(
                         fontSize: 11,
-                        color: Color(0xFF059669),
+                        color: PColor.riskLow,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -229,7 +239,7 @@ class VillageComparisonTable extends StatelessWidget {
                     'รอตรวจ ${summary.pendingReviewCount}',
                     style: const TextStyle(
                       fontSize: 11,
-                      color: Color(0xFFD97706),
+                      color: PColor.riskModerate,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

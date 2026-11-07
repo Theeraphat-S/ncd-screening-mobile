@@ -25,6 +25,7 @@ class LanguageDropdown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(PRadius.md),
               ),
               child: IconButton(
+                tooltip: 'เปลี่ยนภาษา',
                 onPressed: null,
                 icon: Icon(
                   Icons.language,
@@ -61,9 +62,9 @@ class LanguageDropdown extends StatelessWidget {
             value: state.locale,
             onChanged: (Locale? newLocale) {
               if (newLocale != null) {
-                context
-                    .read<LanguageBloc>()
-                    .add(ChangeLanguageEvent(newLocale));
+                context.read<LanguageBloc>().add(
+                  ChangeLanguageEvent(newLocale),
+                );
               }
             },
             onMenuStateChange: (isOpen) {
@@ -73,9 +74,10 @@ class LanguageDropdown extends StatelessWidget {
               width: 100,
               padding: const EdgeInsets.symmetric(vertical: PSpacing.xs),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(PRadius.xs),
-                  color: Colors.white,
-                  boxShadow: PShadow.dropdown),
+                borderRadius: BorderRadius.circular(PRadius.xs),
+                color: PColor.neutralColor,
+                boxShadow: PShadow.dropdown,
+              ),
               offset: const Offset(-8, -8),
             ),
           ),

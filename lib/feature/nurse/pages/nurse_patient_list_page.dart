@@ -24,8 +24,8 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
   void initState() {
     super.initState();
     context.read<PatientBloc>().add(
-          PatientLoadRequested(villageId: widget.village.villageId),
-        );
+      PatientLoadRequested(villageId: widget.village.villageId),
+    );
   }
 
   @override
@@ -36,7 +36,11 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
         backgroundColor: PColor.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          tooltip: 'ย้อนกลับ',
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: PColor.neutralColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -44,7 +48,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: PColor.neutralColor,
           ),
         ),
         centerTitle: true,
@@ -58,7 +62,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
             child: Text(
               '${widget.village.villageName} • อ.แม่อาย จ.เชียงใหม่',
               style: const TextStyle(
-                color: Colors.white,
+                color: PColor.neutralColor,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -67,8 +71,13 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
           Expanded(
             child: BlocBuilder<PatientBloc, PatientState>(
               builder: (context, state) {
-                if (state.status == PatientStatus.loading && state.patients.isEmpty) {
-                  return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                if (state.status == PatientStatus.loading &&
+                    state.patients.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: PColor.primaryColor,
+                    ),
+                  );
                 }
 
                 if (state.patients.isEmpty) {
@@ -76,7 +85,11 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person_off_outlined, size: 64, color: Colors.grey.shade400),
+                        Icon(
+                          Icons.person_off_outlined,
+                          size: 64,
+                          color: Colors.grey.shade400,
+                        ),
                         const SizedBox(height: 12),
                         const Text(
                           'ไม่พบข้อมูลผู้ป่วยในหมู่บ้านนี้',
@@ -95,8 +108,8 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                   color: PColor.primaryColor,
                   onRefresh: () async {
                     context.read<PatientBloc>().add(
-                          PatientLoadRequested(villageId: widget.village.villageId),
-                        );
+                      PatientLoadRequested(villageId: widget.village.villageId),
+                    );
                   },
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
@@ -117,10 +130,12 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
   }
 
   Widget _buildPatientCard(BuildContext context, Patient patient) {
-    final initials = patient.patientFname.isNotEmpty ? patient.patientFname.substring(0, 1) : 'P';
+    final initials = patient.patientFname.isNotEmpty
+        ? patient.patientFname.substring(0, 1)
+        : 'P';
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PColor.neutralColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
@@ -135,10 +150,8 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PatientDetailPage(
-                  patient: patient,
-                  nurse: widget.nurse,
-                ),
+                builder: (_) =>
+                    PatientDetailPage(patient: patient, nurse: widget.nurse),
               ),
             );
           },

@@ -88,13 +88,13 @@ class VillageAnalyticsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        analytics,
-        villages,
-        selectedVillageId,
-        sortOrder,
-        errorMessage,
-      ];
+    status,
+    analytics,
+    villages,
+    selectedVillageId,
+    sortOrder,
+    errorMessage,
+  ];
 }
 
 // BLOC
@@ -106,8 +106,7 @@ class VillageAnalyticsBloc
   List<Patient> _cachedPatients = [];
   List<Screening> _cachedScreenings = [];
 
-  VillageAnalyticsBloc(this.repository)
-      : super(const VillageAnalyticsState()) {
+  VillageAnalyticsBloc(this.repository) : super(const VillageAnalyticsState()) {
     on<VillageAnalyticsLoadRequested>(_onLoadRequested);
     on<VillageAnalyticsFilterChanged>(_onFilterChanged);
     on<VillageAnalyticsSortOrderChanged>(_onSortOrderChanged);
@@ -119,10 +118,12 @@ class VillageAnalyticsBloc
     String? villageId,
     AnalyticsSortOrder? sortOrder,
   }) async {
-    emit(state.copyWith(
-      status: VillageAnalyticsStatus.loading,
-      errorMessage: null,
-    ));
+    emit(
+      state.copyWith(
+        status: VillageAnalyticsStatus.loading,
+        errorMessage: null,
+      ),
+    );
 
     try {
       final results = await Future.wait([
@@ -146,19 +147,24 @@ class VillageAnalyticsBloc
         sortOrder: activeSortOrder,
       );
 
-      emit(state.copyWith(
-        status: VillageAnalyticsStatus.success,
-        analytics: analytics,
-        villages: _cachedVillages,
-        selectedVillageId: activeVillageId,
-        clearSelectedVillage: activeVillageId == null || activeVillageId.isEmpty,
-        sortOrder: activeSortOrder,
-      ));
+      emit(
+        state.copyWith(
+          status: VillageAnalyticsStatus.success,
+          analytics: analytics,
+          villages: _cachedVillages,
+          selectedVillageId: activeVillageId,
+          clearSelectedVillage:
+              activeVillageId == null || activeVillageId.isEmpty,
+          sortOrder: activeSortOrder,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: VillageAnalyticsStatus.failure,
-        errorMessage: 'ไม่สามารถโหลดข้อมูลสถิติสุขภาพได้: ${e.toString()}',
-      ));
+      emit(
+        state.copyWith(
+          status: VillageAnalyticsStatus.failure,
+          errorMessage: 'ไม่สามารถโหลดข้อมูลสถิติสุขภาพได้: ${e.toString()}',
+        ),
+      );
     }
   }
 
@@ -177,13 +183,15 @@ class VillageAnalyticsBloc
     VillageAnalyticsFilterChanged event,
     Emitter<VillageAnalyticsState> emit,
   ) {
-    final newVillageId = (event.villageId == null ||
+    final newVillageId =
+        (event.villageId == null ||
             event.villageId!.isEmpty ||
             event.villageId == 'ALL')
         ? null
         : event.villageId;
 
-    if (_cachedVillages.isEmpty && state.status != VillageAnalyticsStatus.loading) {
+    if (_cachedVillages.isEmpty &&
+        state.status != VillageAnalyticsStatus.loading) {
       add(VillageAnalyticsLoadRequested(villageId: newVillageId));
       return;
     }
@@ -196,19 +204,22 @@ class VillageAnalyticsBloc
       sortOrder: state.sortOrder,
     );
 
-    emit(state.copyWith(
-      status: VillageAnalyticsStatus.success,
-      analytics: analytics,
-      selectedVillageId: newVillageId,
-      clearSelectedVillage: newVillageId == null,
-    ));
+    emit(
+      state.copyWith(
+        status: VillageAnalyticsStatus.success,
+        analytics: analytics,
+        selectedVillageId: newVillageId,
+        clearSelectedVillage: newVillageId == null,
+      ),
+    );
   }
 
   void _onSortOrderChanged(
     VillageAnalyticsSortOrderChanged event,
     Emitter<VillageAnalyticsState> emit,
   ) {
-    if (_cachedVillages.isEmpty && state.status != VillageAnalyticsStatus.loading) {
+    if (_cachedVillages.isEmpty &&
+        state.status != VillageAnalyticsStatus.loading) {
       add(VillageAnalyticsLoadRequested(sortOrder: event.sortOrder));
       return;
     }
@@ -221,11 +232,13 @@ class VillageAnalyticsBloc
       sortOrder: event.sortOrder,
     );
 
-    emit(state.copyWith(
-      status: VillageAnalyticsStatus.success,
-      analytics: analytics,
-      sortOrder: event.sortOrder,
-    ));
+    emit(
+      state.copyWith(
+        status: VillageAnalyticsStatus.success,
+        analytics: analytics,
+        sortOrder: event.sortOrder,
+      ),
+    );
   }
 
   Future<void> _onRefreshRequested(

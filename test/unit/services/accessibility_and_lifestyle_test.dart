@@ -45,17 +45,20 @@ void main() {
       expect(cubit.state.isHighContrast, isFalse);
     });
 
-    test('increaseTextScale and decreaseTextScale adjust scale within clamp range', () {
-      cubit.increaseTextScale();
-      expect(cubit.state.textScaleFactor, 1.1);
+    test(
+      'increaseTextScale and decreaseTextScale adjust scale within clamp range',
+      () {
+        cubit.increaseTextScale();
+        expect(cubit.state.textScaleFactor, 1.1);
 
-      cubit.increaseTextScale();
-      cubit.increaseTextScale(); // 1.3
-      expect(cubit.state.textScaleFactor, 1.3);
+        cubit.increaseTextScale();
+        cubit.increaseTextScale(); // 1.3
+        expect(cubit.state.textScaleFactor, 1.3);
 
-      cubit.decreaseTextScale();
-      expect(cubit.state.textScaleFactor, 1.2);
-    });
+        cubit.decreaseTextScale();
+        expect(cubit.state.textScaleFactor, 1.2);
+      },
+    );
 
     test('resetAccessibility resets state to default', () {
       cubit.increaseTextScale();
@@ -110,23 +113,33 @@ void main() {
       ],
     );
 
-    test('generates personalized plain Thai advice for high-risk conditions', () {
-      final adviceList = NcdLifestyleAdvisor.generateAdviceList(
-        screening: testScreening,
-        results: testScreening.results,
-      );
+    test(
+      'generates personalized plain Thai advice for high-risk conditions',
+      () {
+        final adviceList = NcdLifestyleAdvisor.generateAdviceList(
+          screening: testScreening,
+          results: testScreening.results,
+        );
 
-      expect(adviceList.length, 2);
+        expect(adviceList.length, 2);
 
-      final dmAdvice = adviceList.firstWhere((a) => a.diseaseName.contains('เบาหวาน'));
-      expect(dmAdvice.riskLevel, RiskLevel.high);
-      expect(dmAdvice.goodFoods, contains('ข้าวกล้อง / ข้าวไรซ์เบอร์รี่'));
-      expect(dmAdvice.avoidFoods, contains('น้ำอัดลม ชาเขียวหวาน ชานม'));
-      expect(dmAdvice.followUpSchedule, contains('รพ.สต.'));
+        final dmAdvice = adviceList.firstWhere(
+          (a) => a.diseaseName.contains('เบาหวาน'),
+        );
+        expect(dmAdvice.riskLevel, RiskLevel.high);
+        expect(dmAdvice.goodFoods, contains('ข้าวกล้อง / ข้าวไรซ์เบอร์รี่'));
+        expect(dmAdvice.avoidFoods, contains('น้ำอัดลม ชาเขียวหวาน ชานม'));
+        expect(dmAdvice.followUpSchedule, contains('รพ.สต.'));
 
-      final htAdvice = adviceList.firstWhere((a) => a.diseaseName.contains('ความดัน'));
-      expect(htAdvice.riskLevel, RiskLevel.high);
-      expect(htAdvice.avoidFoods, contains('น้ำปลา ซีอิ๊ว กะปิ ปลาร้าเข้มข้น'));
-    });
+        final htAdvice = adviceList.firstWhere(
+          (a) => a.diseaseName.contains('ความดัน'),
+        );
+        expect(htAdvice.riskLevel, RiskLevel.high);
+        expect(
+          htAdvice.avoidFoods,
+          contains('น้ำปลา ซีอิ๊ว กะปิ ปลาร้าเข้มข้น'),
+        );
+      },
+    );
   });
 }

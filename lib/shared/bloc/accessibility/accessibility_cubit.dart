@@ -39,17 +39,21 @@ class AccessibilityCubit extends Cubit<AccessibilityState> {
 
   void toggleElderlyMode() {
     final next = !state.isElderlyMode;
-    emit(state.copyWith(
-      isElderlyMode: next,
-      textScaleFactor: next ? elderlyTextScale : defaultTextScale,
-    ));
+    emit(
+      state.copyWith(
+        isElderlyMode: next,
+        textScaleFactor: next ? elderlyTextScale : defaultTextScale,
+      ),
+    );
   }
 
   void setElderlyMode(bool enabled) {
-    emit(state.copyWith(
-      isElderlyMode: enabled,
-      textScaleFactor: enabled ? elderlyTextScale : defaultTextScale,
-    ));
+    emit(
+      state.copyWith(
+        isElderlyMode: enabled,
+        textScaleFactor: enabled ? elderlyTextScale : defaultTextScale,
+      ),
+    );
   }
 
   void toggleHighContrast() {
@@ -65,12 +69,17 @@ class AccessibilityCubit extends Cubit<AccessibilityState> {
   }
 
   void _adjustTextScale(double delta) {
-    final newScale = (state.textScaleFactor + delta).clamp(minTextScale, maxTextScale);
+    final newScale = (state.textScaleFactor + delta).clamp(
+      minTextScale,
+      maxTextScale,
+    );
     final rounded = double.parse(newScale.toStringAsFixed(2));
-    emit(state.copyWith(
-      textScaleFactor: rounded,
-      isElderlyMode: rounded == elderlyTextScale,
-    ));
+    emit(
+      state.copyWith(
+        textScaleFactor: rounded,
+        isElderlyMode: rounded == elderlyTextScale,
+      ),
+    );
   }
 
   void resetAccessibility() {

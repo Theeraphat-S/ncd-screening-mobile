@@ -45,6 +45,9 @@ class SyncBadgeState extends Equatable {
   final int pendingCount;
   final bool isSyncing;
   final bool isOnline;
+
+  /// False while there is no server to sync with (data stays on the device).
+  final bool canSync;
   final DateTime? lastSyncedAt;
   final String? message;
 
@@ -52,6 +55,7 @@ class SyncBadgeState extends Equatable {
     this.pendingCount = 0,
     this.isSyncing = false,
     this.isOnline = true,
+    this.canSync = false,
     this.lastSyncedAt,
     this.message,
   });
@@ -62,6 +66,7 @@ class SyncBadgeState extends Equatable {
     int? pendingCount,
     bool? isSyncing,
     bool? isOnline,
+    bool? canSync,
     DateTime? lastSyncedAt,
     String? message,
   }) {
@@ -69,13 +74,15 @@ class SyncBadgeState extends Equatable {
       pendingCount: pendingCount ?? this.pendingCount,
       isSyncing: isSyncing ?? this.isSyncing,
       isOnline: isOnline ?? this.isOnline,
+      canSync: canSync ?? this.canSync,
       lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
       message: message,
     );
   }
 
   @override
-  List<Object?> get props => [pendingCount, isSyncing, isOnline, lastSyncedAt, message];
+  List<Object?> get props =>
+      [pendingCount, isSyncing, isOnline, canSync, lastSyncedAt, message];
 }
 
 // --- BLoC ---
@@ -85,7 +92,7 @@ class SyncBadgeBloc extends Bloc<SyncBadgeEvent, SyncBadgeState> {
 
   SyncBadgeBloc({required SyncQueueServiceInterface syncService})
       : _syncService = syncService,
-        super(const SyncBadgeState()) {
+        super(SyncBadgeState(canSync: syncService.canSync)) {
     on<SyncBadgeStarted>(_onStarted);
     on<SyncBadgeRefreshRequested>(_onRefresh);
     on<SyncBadgeManualSyncRequested>(_onManualSync);
@@ -112,14 +119,20 @@ class SyncBadgeBloc extends Bloc<SyncBadgeEvent, SyncBadgeState> {
     final count = await _syncService.getPendingCount();
     emit(state.copyWith(pendingCount: count));
 
-    // If online, auto trigger background sync
-    if (state.isOnline) {
+    // Auto-sync only when there is a server to sync with.
+    if (state.isOnline && state.canSync) {
       add(const SyncBadgeManualSyncRequested());
     }
   }
 
   Future<void> _onManualSync(SyncBadgeManualSyncRequested event, Emitter<SyncBadgeState> emit) async {
     if (state.isSyncing) return;
+    if (!state.canSync) {
+      emit(state.copyWith(
+        message: 'ยังไม่มีเซิร์ฟเวอร์ ข้อมูลถูกเก็บไว้ในเครื่องนี้',
+      ));
+      return;
+    }
     if (!state.isOnline) {
       emit(state.copyWith(message: 'ไม่มีสัญญาณอินเทอร์เน็ต'));
       return;
@@ -139,7 +152,7 @@ class SyncBadgeBloc extends Bloc<SyncBadgeEvent, SyncBadgeState> {
 
   void _onNetworkChanged(SyncBadgeNetworkChanged event, Emitter<SyncBadgeState> emit) {
     emit(state.copyWith(isOnline: event.isOnline));
-    if (event.isOnline && state.pendingCount > 0) {
+    if (event.isOnline && state.canSync && state.pendingCount > 0) {
       add(const SyncBadgeManualSyncRequested());
     }
   }

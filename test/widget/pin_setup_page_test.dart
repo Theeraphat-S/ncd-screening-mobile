@@ -28,7 +28,7 @@ void main() {
     finished = 0;
   });
 
-  tearDown(() => locator.reset());
+  tearDown(locator.reset);
 
   Future<void> pumpPage(WidgetTester tester) async {
     await tester.pumpWidget(

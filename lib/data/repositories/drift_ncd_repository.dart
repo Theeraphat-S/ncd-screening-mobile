@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 
 class DriftNcdRepository implements NcdRepositoryInterface {
@@ -119,8 +120,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
   Future<Patient> addPatient(Patient patient) async {
     String newId = patient.patientId;
     if (newId.isEmpty) {
-      final count = (await db.select(db.patientsTable).get()).length;
-      newId = 'P${(count + 1).toString().padLeft(3, '0')}';
+      newId = generateId();
     }
     final created = patient.copyWith(patientId: newId);
     await db.into(db.patientsTable).insert(
@@ -196,8 +196,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
   Future<VHV> addVhv(VHV vhv) async {
     String newId = vhv.vhvId;
     if (newId.isEmpty) {
-      final count = (await db.select(db.vhvsTable).get()).length;
-      newId = 'VHV${(count + 1).toString().padLeft(3, '0')}';
+      newId = generateId();
     }
     final created = vhv.copyWith(vhvId: newId);
     await db.into(db.vhvsTable).insert(
@@ -328,8 +327,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
   Future<Screening> saveScreening(Screening screening) async {
     String newId = screening.screenId;
     if (newId.isEmpty) {
-      final count = (await db.select(db.screeningsTable).get()).length;
-      newId = 'S${(count + 1).toString().padLeft(3, '0')}';
+      newId = generateId();
     }
     final created = screening.copyWith(screenId: newId);
 

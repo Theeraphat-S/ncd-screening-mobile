@@ -19,8 +19,8 @@ void main() {
   });
 
   group('Drift Database - Initialization & Seeding', () {
-    test('Schema version is 3', () {
-      expect(db.schemaVersion, equals(3));
+    test('Schema version is 4', () {
+      expect(db.schemaVersion, equals(4));
     });
 
     test('Initial automatic demo seeding populates all 7 tables correctly',
@@ -185,7 +185,7 @@ void main() {
       );
 
       final added = await repository.addPatient(newPatient);
-      expect(added.patientId, startsWith('P'));
+      expect(added.patientId, isNotEmpty);
       expect(added.patientFname, equals('ทดสอบ'));
 
       final fetched = await repository.getPatientById(added.patientId);
@@ -248,7 +248,7 @@ void main() {
       );
 
       final created = await repository.addVhv(newVhv);
-      expect(created.vhvId, startsWith('VHV'));
+      expect(created.vhvId, isNotEmpty);
       expect(created.vhvFname, equals('ใจดี'));
 
       final fetched = await repository.getVhvById(created.vhvId);
@@ -339,7 +339,7 @@ void main() {
       );
 
       final saved = await repository.saveScreening(newScreening);
-      expect(saved.screenId, startsWith('S'));
+      expect(saved.screenId, isNotEmpty);
 
       final fetched = await repository.getScreeningById(saved.screenId);
       expect(fetched, isNotNull);

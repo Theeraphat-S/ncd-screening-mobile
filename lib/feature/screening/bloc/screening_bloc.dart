@@ -1,3 +1,4 @@
+import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
@@ -206,7 +207,7 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
         if (locator.isRegistered<SyncQueueServiceInterface>()) {
           locator<SyncQueueServiceInterface>().enqueue(
             SyncQueueItem(
-              id: 'SYNC_${saved.screenId}_${DateTime.now().millisecondsSinceEpoch}',
+              id: generateId(),
               entityType: 'screening',
               entityId: saved.screenId,
               action: 'create',

@@ -7,6 +7,7 @@ abstract class NcdRepositoryInterface {
     required UserRole role,
     required String identifier,
     String? password,
+    DateTime? birthDate,
   });
 
   // Villages
@@ -326,14 +327,22 @@ class MockNcdRepository implements NcdRepositoryInterface {
     required UserRole role,
     required String identifier,
     String? password,
+    DateTime? birthDate,
   }) async {
     await Future.delayed(const Duration(milliseconds: 300));
     final trimmedId = identifier.trim();
     if (role == UserRole.patient) {
       final patient = _patients.firstWhere(
         (p) => p.patientCitizenId == trimmedId,
-        orElse: () => throw Exception('รหัสบัตรประชาชนไม่ถูกต้อง'),
+        orElse: () => throw Exception('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง'),
       );
+      final dob = patient.patientBirthDate;
+      if (birthDate == null ||
+          birthDate.year != dob.year ||
+          birthDate.month != dob.month ||
+          birthDate.day != dob.day) {
+        throw Exception('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง');
+      }
       return patient;
     } else if (role == UserRole.vhv) {
       final vhv = _vhvs.firstWhere(
@@ -343,9 +352,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
             v.vhvId == trimmedId,
         orElse: () => throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'),
       );
-      if (password != null &&
-          password.isNotEmpty &&
-          vhv.vhvPassword != password) {
+      if (password == null || password.isEmpty || vhv.vhvPassword != password) {
         throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }
       return vhv;
@@ -357,8 +364,8 @@ class MockNcdRepository implements NcdRepositoryInterface {
             n.nurseEmail == trimmedId,
         orElse: () => throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง'),
       );
-      if (password != null &&
-          password.isNotEmpty &&
+      if (password == null ||
+          password.isEmpty ||
           nurse.nursePassword != password) {
         throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
       }

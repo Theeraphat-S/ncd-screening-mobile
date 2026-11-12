@@ -21,15 +21,17 @@ class AuthLoginSubmitted extends AuthEvent {
   final UserRole role;
   final String identifier;
   final String? password;
+  final DateTime? birthDate;
 
   const AuthLoginSubmitted({
     required this.role,
     required this.identifier,
     this.password,
+    this.birthDate,
   });
 
   @override
-  List<Object?> get props => [role, identifier, password];
+  List<Object?> get props => [role, identifier, password, birthDate];
 }
 
 class AuthLogoutRequested extends AuthEvent {}
@@ -88,6 +90,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           role: event.role,
           identifier: event.identifier,
           password: event.password,
+          birthDate: event.birthDate,
         );
         emit(state.copyWith(
           status: AuthStatus.authenticated,

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
+import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 
 class DriftNcdRepository implements NcdRepositoryInterface {
@@ -15,51 +16,77 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     required UserRole role,
     required String identifier,
     String? password,
+    DateTime? birthDate,
   }) async {
     final trimmedId = identifier.trim();
     if (role == UserRole.patient) {
+      const message = 'เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง';
       final query = db.select(db.patientsTable)
         ..where((t) => t.patientCitizenId.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null) {
-        throw Exception('รหัสบัตรประชาชนไม่ถูกต้อง');
+      if (row == null || birthDate == null) {
+        throw Exception(message);
+      }
+      final dob = row.patientBirthDate;
+      if (birthDate.year != dob.year ||
+          birthDate.month != dob.month ||
+          birthDate.day != dob.day) {
+        throw Exception(message);
       }
       return _mapPatient(row);
     } else if (role == UserRole.vhv) {
+      const message = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
       final query = db.select(db.vhvsTable)
         ..where((t) =>
             t.vhvCitizenId.equals(trimmedId) |
             t.vhvMobile.equals(trimmedId) |
             t.vhvId.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null) {
-        throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      if (row == null || !_passwordMatches(password, row.vhvPassword)) {
+        throw Exception(message);
       }
-      if (password != null &&
-          password.isNotEmpty &&
-          row.vhvPassword != password) {
-        throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      if (!PasswordHasher.isHashed(row.vhvPassword)) {
+        await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals(row.vhvId)))
+            .write(VhvsTableCompanion(
+          vhvPassword: Value(PasswordHasher.hash(password!)),
+        ));
       }
       return _mapVhv(row);
     } else if (role == UserRole.nurse) {
+      const message = 'รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง';
       final query = db.select(db.nursesTable)
         ..where((t) =>
             t.nurseId.equals(trimmedId) |
             t.nurseMobile.equals(trimmedId) |
             t.nurseEmail.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null) {
-        throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
+      if (row == null || !_passwordMatches(password, row.nursePassword)) {
+        throw Exception(message);
       }
-      if (password != null &&
-          password.isNotEmpty &&
-          row.nursePassword != password) {
-        throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
+      if (!PasswordHasher.isHashed(row.nursePassword)) {
+        await (db.update(db.nursesTable)
+              ..where((t) => t.nurseId.equals(row.nurseId)))
+            .write(NursesTableCompanion(
+          nursePassword: Value(PasswordHasher.hash(password!)),
+        ));
       }
       return _mapNurse(row);
     }
     throw Exception('ไม่พบบทบาทผู้ใช้');
   }
+
+  /// Hashed values are verified with PBKDF2. Legacy plaintext rows (written
+  /// before hashing existed) are compared once and upgraded by the caller.
+  bool _passwordMatches(String? supplied, String stored) {
+    if (supplied == null || supplied.isEmpty) return false;
+    return PasswordHasher.isHashed(stored)
+        ? PasswordHasher.verify(supplied, stored)
+        : stored == supplied;
+  }
+
+  /// Keeps an already-hashed value as is; hashes anything else.
+  String _hashIfNeeded(String value) =>
+      PasswordHasher.isHashed(value) ? value : PasswordHasher.hash(value);
 
   // Villages
   @override
@@ -208,7 +235,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             vhvLname: Value(created.vhvLname),
             vhvMobile: Value(created.vhvMobile),
             vhvEmail: Value(created.vhvEmail),
-            vhvPassword: Value(created.vhvPassword),
+            vhvPassword: Value(_hashIfNeeded(created.vhvPassword)),
             vhvBirthDate: Value(created.vhvBirthDate),
             vhvGender: Value(created.vhvGender),
             vhvAddress: Value(created.vhvAddress),
@@ -231,7 +258,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         vhvLname: Value(vhv.vhvLname),
         vhvMobile: Value(vhv.vhvMobile),
         vhvEmail: Value(vhv.vhvEmail),
-        vhvPassword: Value(vhv.vhvPassword),
+        vhvPassword: Value(_hashIfNeeded(vhv.vhvPassword)),
         vhvBirthDate: Value(vhv.vhvBirthDate),
         vhvGender: Value(vhv.vhvGender),
         vhvAddress: Value(vhv.vhvAddress),

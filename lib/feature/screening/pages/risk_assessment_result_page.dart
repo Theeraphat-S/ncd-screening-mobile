@@ -378,6 +378,11 @@ class RiskAssessmentResultPage extends StatelessWidget {
         badgeBg = PColor.riskLowBg;
         break;
     }
+    // A missing measurement is not "low risk": show it as neutral/unknown.
+    if (result.isIncomplete) {
+      badgeColor = PColor.textNeutralColor;
+      badgeBg = PColor.surfaceSubtle;
+    }
 
     if (result.diseaseName.contains('เบาหวาน')) {
       diseaseIcon = Icons.water_drop_outlined;
@@ -430,7 +435,9 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   border: Border.all(color: badgeColor.withValues(alpha: 0.3)),
                 ),
                 child: Text(
-                  'ความเสี่ยง${result.riskLevel.labelTh}',
+                  result.isIncomplete
+                      ? 'ข้อมูลไม่ครบ'
+                      : 'ความเสี่ยง${result.riskLevel.labelTh}',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

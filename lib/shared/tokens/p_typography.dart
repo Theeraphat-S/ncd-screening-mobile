@@ -54,4 +54,34 @@ class PTypography {
     fontSize: 15,
     fontWeight: FontWeight.bold,
   );
+
+  // --- Form fields (field use: readable in sunlight, large enough for tired eyes)
+  static const TextStyle fieldLabel = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle fieldValue = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle fieldHint = TextStyle(
+    fontSize: 15,
+    color: PColor.textNeutralColor,
+  );
+
+  static const TextStyle fieldError = TextStyle(
+    fontSize: 13.5,
+    fontWeight: FontWeight.w600,
+    color: PColor.errorColor,
+  );
+
+  static const TextStyle fieldWarning = TextStyle(
+    fontSize: 13.5,
+    fontWeight: FontWeight.w600,
+    color: PColor.riskModerate,
+  );
 }

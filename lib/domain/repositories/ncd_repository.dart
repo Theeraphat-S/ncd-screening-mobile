@@ -1,3 +1,4 @@
+import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 
@@ -396,13 +397,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
       list = list.where((p) => p.villageId == villageId).toList();
     }
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
-      final q = searchQuery.trim().toLowerCase();
-      list = list.where((p) {
-        return p.patientCitizenId.contains(q) ||
-            p.patientFname.toLowerCase().contains(q) ||
-            p.patientLname.toLowerCase().contains(q) ||
-            p.fullName.toLowerCase().contains(q);
-      }).toList();
+      list = list.where((p) => PatientSearch.matches(p, searchQuery)).toList();
     }
     return list;
   }

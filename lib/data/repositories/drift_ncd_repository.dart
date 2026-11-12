@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
@@ -116,13 +117,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     final rows = await query.get();
     var list = rows.map(_mapPatient).toList();
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
-      final q = searchQuery.trim().toLowerCase();
-      list = list.where((p) {
-        return p.patientCitizenId.contains(q) ||
-            p.patientFname.toLowerCase().contains(q) ||
-            p.patientLname.toLowerCase().contains(q) ||
-            p.fullName.toLowerCase().contains(q);
-      }).toList();
+      list = list.where((p) => PatientSearch.matches(p, searchQuery)).toList();
     }
     return list;
   }

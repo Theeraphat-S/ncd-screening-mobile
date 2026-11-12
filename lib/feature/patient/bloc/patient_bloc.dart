@@ -148,6 +148,9 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
           villageId: event.villageId ?? state.currentVillageId,
           searchQuery: event.query,
         );
+        // A newer keystroke already started another search: drop this stale
+        // answer so slow results cannot overwrite fresher ones.
+        if (state.searchQuery != event.query) return;
         emit(state.copyWith(
           status: PatientStatus.success,
           patients: patients,

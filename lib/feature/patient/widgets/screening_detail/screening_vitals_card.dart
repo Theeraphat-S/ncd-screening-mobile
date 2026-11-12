@@ -46,7 +46,9 @@ class ScreeningVitalsCard extends StatelessWidget {
             _buildMetricRow('ชีพจร', '${screening.pulse.toInt()} ครั้ง/นาที'),
             _buildMetricRow(
               'น้ำตาลในเลือด',
-              '${screening.bloodSugar.toStringAsFixed(1)} mg/dL',
+              screening.bloodSugar == null
+                  ? 'ไม่ได้ตรวจ'
+                  : '${screening.bloodSugar!.toStringAsFixed(1)} mg/dL',
             ),
           ],
         ),

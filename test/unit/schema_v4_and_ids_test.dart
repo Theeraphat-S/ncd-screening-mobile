@@ -30,12 +30,12 @@ Patient _newPatient(String citizenId) => Patient(
     );
 
 void main() {
-  group('Schema v4', () {
-    test('schema version is 4 and new tables exist', () async {
+  group('Schema v4 additions (current schema is v5)', () {
+    test('schema version is 5 and v4 tables exist', () async {
       final db = AppDatabase(NativeDatabase.memory());
       addTearDown(db.close);
 
-      expect(db.schemaVersion, equals(4));
+      expect(db.schemaVersion, equals(5));
       final tables = await _tableNames(db);
       expect(tables, containsAll(['sync_queue', 'screening_drafts']));
     });
@@ -69,7 +69,7 @@ void main() {
       final version = await upgraded
           .customSelect('PRAGMA user_version')
           .getSingle();
-      expect(version.read<int>('user_version'), equals(4));
+      expect(version.read<int>('user_version'), equals(5));
     });
   });
 

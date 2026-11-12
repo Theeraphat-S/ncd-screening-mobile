@@ -328,7 +328,9 @@ class PdfReportService implements PdfReportServiceInterface {
               pw.TableRow(
                 children: [
                   _buildTableCell('${screening.sbp.toInt()} / ${screening.dbp.toInt()} mmHg'),
-                  _buildTableCell('${screening.bloodSugar.toStringAsFixed(0)} mg/dL'),
+                  _buildTableCell(screening.bloodSugar == null
+                      ? 'ไม่ได้ตรวจ'
+                      : '${screening.bloodSugar!.toStringAsFixed(0)} mg/dL'),
                   _buildTableCell('${screening.bmi.toStringAsFixed(1)} kg/m²'),
                   _buildTableCell('${screening.waistCm.toStringAsFixed(1)} ซม.'),
                   _buildTableCell('${screening.pulse.toInt()} bpm'),

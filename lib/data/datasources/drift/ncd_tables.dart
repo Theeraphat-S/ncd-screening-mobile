@@ -107,7 +107,7 @@ class ScreeningsTable extends Table {
   RealColumn get sbp => real()();
   RealColumn get dbp => real()();
   RealColumn get pulse => real()();
-  RealColumn get bloodSugar => real()();
+  RealColumn get bloodSugar => real().nullable()();
 
   @override
   Set<Column> get primaryKey => {screenId};

@@ -2,7 +2,10 @@ import 'package:get_it/get_it.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
+import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
+import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
@@ -25,6 +28,15 @@ Future<void> initLocator() async {
 
   // Register PDF Report Service
   locator.registerLazySingleton<PdfReportServiceInterface>(PdfReportService.new);
+
+  // Device security: secrets in Keychain/Keystore, PIN, biometrics, idle lock
+  locator.registerLazySingleton<SecureStore>(() => const PlatformSecureStore());
+  locator.registerLazySingleton<PinService>(
+      () => PinService(locator<SecureStore>()));
+  locator.registerLazySingleton<DeviceSessionStore>(
+      () => DeviceSessionStore(locator<SecureStore>()));
+  locator.registerLazySingleton<BiometricService>(LocalAuthBiometricService.new);
+  locator.registerLazySingleton<AppLockCubit>(AppLockCubit.new);
 
   // Register Sync Queue Service
   locator.registerLazySingleton<SyncQueueServiceInterface>(SyncQueueService.new);

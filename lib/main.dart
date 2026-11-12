@@ -10,7 +10,10 @@ import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart'
 import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
+import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
+import 'package:ncd_screening_mobile/shared/navigation.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_lock_gate.dart';
 import 'package:ncd_screening_mobile/shared/theme/app_theme.dart';
 
 Future<void> main() async {
@@ -30,6 +33,7 @@ Future<void> main() async {
           create: (context) => locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
         ),
         BlocProvider<AccessibilityCubit>(create: (context) => locator<AccessibilityCubit>()),
+        BlocProvider<AppLockCubit>(create: (context) => locator<AppLockCubit>()),
       ],
       child: const NcdScreeningApp(),
     ),
@@ -48,6 +52,7 @@ class NcdScreeningApp extends StatelessWidget {
         return MaterialApp(
           title: 'NCD Screening Mobile',
           debugShowCheckedModeBanner: false,
+          navigatorKey: appNavigatorKey,
           supportedLocales: const [_thaiLocale],
           localizationsDelegates: const [
             GlobalCupertinoLocalizations.delegate,
@@ -65,7 +70,7 @@ class NcdScreeningApp extends StatelessWidget {
               data: mediaQuery.copyWith(
                 textScaler: TextScaler.linear(systemScale * accessState.textScaleFactor),
               ),
-              child: child ?? const SizedBox.shrink(),
+              child: AppLockGate(child: child ?? const SizedBox.shrink()),
             );
           },
           home: const UserTypeSelectionPage(),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
+import 'package:ncd_screening_mobile/feature/auth/widgets/quick_pin_login_card.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
@@ -96,6 +97,8 @@ class UserTypeSelectionPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 36),
+
+                  const QuickPinLoginCard(),
 
                   // Role Option 1: Patient (บุคคลทั่วไป)
                   _buildRoleCard(

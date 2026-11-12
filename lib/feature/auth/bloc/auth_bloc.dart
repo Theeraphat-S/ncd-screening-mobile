@@ -34,6 +34,15 @@ class AuthLoginSubmitted extends AuthEvent {
   List<Object?> get props => [role, identifier, password, birthDate];
 }
 
+/// Restores a staff session after PIN / biometric verification (no password).
+class AuthSessionRestored extends AuthEvent {
+  final UserRole role;
+  final dynamic user; // VHV | Nurse
+  const AuthSessionRestored({required this.role, required this.user});
+  @override
+  List<Object?> get props => [role, user];
+}
+
 class AuthLogoutRequested extends AuthEvent {}
 
 // STATES
@@ -104,6 +113,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           errorMessage: e.toString().replaceAll('Exception: ', ''),
         ));
       }
+    });
+
+    on<AuthSessionRestored>((event, emit) {
+      emit(state.copyWith(
+        status: AuthStatus.authenticated,
+        selectedRole: event.role,
+        currentUser: event.user,
+        errorMessage: null,
+      ));
     });
 
     on<AuthLogoutRequested>((event, emit) {

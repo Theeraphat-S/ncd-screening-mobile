@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
-import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
+import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_screening_detail_page.dart';
 import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
@@ -46,11 +46,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () {
             if (isPatientSelf) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const UserTypeSelectionPage()),
-                (route) => false,
-              );
+              signOut();
             } else {
               Navigator.pop(context);
             }

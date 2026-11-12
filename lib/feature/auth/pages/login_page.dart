@@ -1,12 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
-import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_village_list_page.dart';
-import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
-import 'package:ncd_screening_mobile/feature/patient/pages/patient_history_list_page.dart';
-import 'package:ncd_screening_mobile/feature/patient/pages/vhv_patient_list_page.dart';
+import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/utils/thai_birth_date.dart';
 
 class LoginPage extends StatefulWidget {
   final UserRole role;
@@ -20,20 +20,28 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _idController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _dayController = TextEditingController();
+  final _monthController = TextEditingController();
+  final _yearController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void initState() {
     super.initState();
-    // Pre-fill demo defaults for convenience during review
-    if (widget.role == UserRole.patient) {
-      _idController.text = '1234567890123';
-    } else if (widget.role == UserRole.vhv) {
-      _idController.text = '1111111111111';
-      _passwordController.text = 'password123';
-    } else if (widget.role == UserRole.nurse) {
-      _idController.text = 'NUR001';
-      _passwordController.text = 'password123';
+    // Demo credentials are pre-filled in debug builds only, never in release.
+    if (kDebugMode) {
+      if (widget.role == UserRole.patient) {
+        _idController.text = '1234567890123';
+        _dayController.text = '1';
+        _monthController.text = '2';
+        _yearController.text = '2523';
+      } else if (widget.role == UserRole.vhv) {
+        _idController.text = '1111111111111';
+        _passwordController.text = 'password123';
+      } else if (widget.role == UserRole.nurse) {
+        _idController.text = 'NUR001';
+        _passwordController.text = 'password123';
+      }
     }
   }
 
@@ -41,6 +49,9 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _idController.dispose();
     _passwordController.dispose();
+    _dayController.dispose();
+    _monthController.dispose();
+    _yearController.dispose();
     super.dispose();
   }
 
@@ -87,9 +98,19 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    DateTime? birthDate;
     if (widget.role == UserRole.patient) {
       if (id.length != 13 || int.tryParse(id) == null) {
         _showWarning('รหัสบัตรประชาชนต้องเป็นตัวเลขความยาว 13 หลัก');
+        return;
+      }
+      birthDate = parseThaiBirthDate(
+        day: _dayController.text,
+        month: _monthController.text,
+        yearBe: _yearController.text,
+      );
+      if (birthDate == null) {
+        _showWarning('กรุณากรอกวัน เดือน ปีเกิด (พ.ศ.) ให้ถูกต้อง');
         return;
       }
     } else if (widget.role == UserRole.vhv) {
@@ -117,6 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             role: widget.role,
             identifier: id,
             password: password.isNotEmpty ? password : null,
+            birthDate: birthDate,
           ),
         );
   }
@@ -131,38 +153,44 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _dobField(TextEditingController controller, String hint, int maxLen) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      maxLength: maxLen,
+      decoration: InputDecoration(
+        hintText: hint,
+        counterText: '',
+        filled: true,
+        fillColor: PColor.backgroundColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: PColor.borderSubtle),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: PColor.borderSubtle),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: PColor.primaryColor, width: 1.5),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
         if (state.status == AuthStatus.error) {
           _showWarning(state.errorMessage ?? 'เข้าสู่ระบบไม่สำเร็จ');
-        } else if (state.status == AuthStatus.authenticated) {
-          if (widget.role == UserRole.patient && state.currentUser is Patient) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => PatientHistoryListPage(patient: state.currentUser as Patient),
-              ),
-            );
-          } else if (widget.role == UserRole.vhv && state.currentUser is VHV) {
-            context.read<PatientBloc>().add(
-                  PatientLoadRequested(villageId: (state.currentUser as VHV).villageId),
-                );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => VhvPatientListPage(vhv: state.currentUser as VHV),
-              ),
-            );
-          } else if (widget.role == UserRole.nurse && state.currentUser is Nurse) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => NurseVillageListPage(nurse: state.currentUser as Nurse),
-              ),
-            );
-          }
+        } else if (state.status == AuthStatus.authenticated &&
+            state.currentUser != null) {
+          completeLogin(context, widget.role, state.currentUser);
         }
       },
       child: Scaffold(
@@ -235,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 6),
                       Text(
                         widget.role == UserRole.patient
-                            ? 'กรุณากรอกรหัสบัตรประจำตัวประชาชนเพื่อยืนยันตัวตน'
+                            ? 'กรุณากรอกเลขบัตรประชาชนและวันเกิดเพื่อยืนยันตัวตน'
                             : 'กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบการทำงาน',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
@@ -328,8 +356,30 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                      ] else
-                        const SizedBox(height: 12),
+                      ] else ...[
+                        const Text(
+                          'วันเกิด (พ.ศ.)',
+                          style: TextStyle(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w600,
+                            color: PColor.contentColor,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(child: _dobField(_dayController, 'วัน', 2)),
+                            const SizedBox(width: 10),
+                            Expanded(child: _dobField(_monthController, 'เดือน', 2)),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              flex: 2,
+                              child: _dobField(_yearController, 'ปี พ.ศ.', 4),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                      ],
 
                       // Submit Button
                       BlocBuilder<AuthBloc, AuthState>(

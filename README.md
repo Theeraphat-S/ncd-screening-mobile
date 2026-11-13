@@ -4,7 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.10+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![BLoC](https://img.shields.io/badge/State-BLoC_v9-8A2BE2)](https://bloclibrary.dev)
 [![Drift](https://img.shields.io/badge/DB-Drift_SQLite-008080)](https://drift.simonbinder.eu/)
-[![Tests](https://img.shields.io/badge/Tests-351_Passing-success)](#-เริ่มต้นใช้งาน)
+[![Tests](https://img.shields.io/badge/Tests-355_Passing-success)](#-เริ่มต้นใช้งาน)
 
 แอป Flutter แบบ **Offline-First** สำหรับคัดกรองความเสี่ยง 4 โรคไม่ติดต่อเรื้อรัง (NCDs) ของ รพ.สต.แม่อาย จ.เชียงใหม่ — ใช้งานได้แม้ไม่มีอินเทอร์เน็ต พร้อมแดชบอร์ดสถิติรายหมู่บ้านและรายงาน PDF ภาษาไทย
 
@@ -62,6 +62,19 @@ flutter test
 - **ยังไม่มีเซิร์ฟเวอร์และการซิงก์** — ข้อมูลทั้งหมดอยู่ในเครื่องนี้ อสม. และพยาบาลต้องใช้เครื่องเดียวกันแล้วสลับบัญชี (`NoServerTransport` เป็นเพียงตัวแทนจนกว่าจะมี backend)
 - **ยังไม่มีการสแกนบัตรประชาชน (OCR)** — นำหน้าสแกนที่ไม่ได้ใช้กล้องจริงออกแล้ว เหลือเพียง `IdCardOcrParser` ไว้ใช้เมื่อทำ OCR จริง
 - **บัญชีทดสอบ** ใช้รหัสผ่านร่วมกันและเลขบัตรสมมติ (ผู้ป่วยเดโมมี check digit ถูกต้อง) ใช้ในโหมดพัฒนาเท่านั้น หน้า login ผู้ป่วยและฟอร์มเพิ่มผู้ป่วยตรวจ check digit ของเลขบัตร
+
+## ⏱️ ผลวัดประสิทธิภาพ
+
+วัดด้วย `tool/device_bench.dart` ใน profile mode บน Android emulator (Android 13, RAM 2 GB, 4 คอร์, ใช้ GPU ของเครื่องพัฒนา) ผู้ป่วย 2,000 คน การคัดกรอง 4,000 รายการ:
+
+| รายการ | เกณฑ์ | ผลวัด |
+|---|---|---|
+| Login อสม. (เปิดครั้งแรกรวม seed / ครั้งต่อมา) | ≤ 1,000 ms | 524 / 199 ms |
+| ปลดล็อกด้วย PIN | ≤ 1,000 ms | 283 ms |
+| โหลดข้อมูล + คำนวณ analytics | ≤ 2,000 ms | 385 ms |
+| สร้าง PDF | ≤ 3,000 ms | 62 ms |
+
+ข้อควรระวัง: emulator ใช้ CPU x86 ของเครื่องพัฒนา จึงเร็วกว่ามือถือ ARM สเปกต่ำจริง ตัวเลข "UI stall" ในสคริปต์ยังมี noise สูงและไม่มีค่า baseline จึงยังสรุปไม่ได้ว่าการย้าย PBKDF2 ไป isolate ลดอาการค้างได้เท่าใด ควรวัดซ้ำบนเครื่องจริงด้วย `flutter run --profile --flavor local -t tool/device_bench.dart -d <device>`
 
 ## 📁 โครงสร้าง
 

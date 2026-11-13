@@ -1,8 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_pad.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
@@ -45,22 +45,23 @@ class _PinUnlockViewState extends State<PinUnlockView> {
   }
 
   Future<void> _prepareBiometric() async {
-    final enabled =
-        await locator<DeviceSessionStore>().isBiometricEnabled(widget.userId);
-    final available = enabled && await locator<BiometricService>().isAvailable();
+    final session = context.read<DeviceSessionStore>();
+    final biometric = context.read<BiometricService>();
+    final enabled = await session.isBiometricEnabled(widget.userId);
+    final available = enabled && await biometric.isAvailable();
     if (!mounted) return;
     setState(() => _biometricReady = available);
     if (available) _tryBiometric();
   }
 
   Future<void> _tryBiometric() async {
-    final ok = await locator<BiometricService>().authenticate('ยืนยันตัวตนเพื่อเข้าใช้งาน');
+    final ok = await context.read<BiometricService>().authenticate('ยืนยันตัวตนเพื่อเข้าใช้งาน');
     if (ok && mounted) widget.onUnlocked();
   }
 
   Future<void> _onPin(String pin) async {
     setState(() => _busy = true);
-    final result = await locator<PinService>().verifyPin(widget.userId, pin);
+    final result = await context.read<PinService>().verifyPin(widget.userId, pin);
     if (!mounted) return;
     switch (result) {
       case PinResult.ok:

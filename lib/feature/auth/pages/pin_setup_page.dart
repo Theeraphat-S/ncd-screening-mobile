@@ -1,8 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_pad.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
@@ -30,7 +30,7 @@ class _PinSetupPageState extends State<PinSetupPage> {
   @override
   void initState() {
     super.initState();
-    locator<BiometricService>().isAvailable().then((available) {
+    context.read<BiometricService>().isAvailable().then((available) {
       if (mounted) setState(() => _biometricAvailable = available);
     });
   }
@@ -51,10 +51,11 @@ class _PinSetupPageState extends State<PinSetupPage> {
       return;
     }
     setState(() => _saving = true);
+    final pins = context.read<PinService>();
+    final session = context.read<DeviceSessionStore>();
     try {
-      await locator<PinService>().setPin(widget.userId, pin);
-      await locator<DeviceSessionStore>()
-          .setBiometricEnabled(widget.userId, _useBiometric);
+      await pins.setPin(widget.userId, pin);
+      await session.setBiometricEnabled(widget.userId, _useBiometric);
       if (mounted) widget.onFinished(context);
     } on PinFormatError catch (e) {
       setState(() {

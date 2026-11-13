@@ -65,7 +65,6 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
     drafts = ScreeningDraftStore(db);
     repo = _FakeRepo();
-    locator.registerSingleton<ScreeningDraftStore>(drafts);
   });
 
   tearDown(() async {
@@ -80,7 +79,9 @@ void main() {
     final bloc = ScreeningBloc(repo);
     addTearDown(bloc.close);
     await tester.pumpWidget(
-      MultiBlocProvider(
+      RepositoryProvider<ScreeningDraftStore>.value(
+        value: drafts,
+        child: MultiBlocProvider(
         providers: [
           BlocProvider.value(value: bloc),
           BlocProvider(create: (_) => AccessibilityCubit()),
@@ -102,6 +103,7 @@ void main() {
             ),
           ),
         ),
+      ),
       ),
     );
     await tester.tap(find.byKey(const Key('open_form')));

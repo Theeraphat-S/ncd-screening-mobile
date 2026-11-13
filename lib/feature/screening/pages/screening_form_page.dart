@@ -15,7 +15,6 @@ import 'package:ncd_screening_mobile/feature/screening/widgets/restored_draft_ba
 import 'package:ncd_screening_mobile/feature/screening/widgets/screening_dialogs.dart';
 import 'package:ncd_screening_mobile/feature/screening/widgets/screening_section_card.dart';
 import 'package:ncd_screening_mobile/feature/screening/widgets/screening_step_indicator.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
@@ -77,9 +76,8 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
   DateTime? _restoredAt;
   Timer? _draftTimer;
 
-  ScreeningDraftStore? get _drafts => locator.isRegistered<ScreeningDraftStore>()
-      ? locator<ScreeningDraftStore>()
-      : null;
+  // Resolved once so later async callbacks never touch a dead context.
+  late final ScreeningDraftStore _drafts = context.read<ScreeningDraftStore>();
 
   @override
   void initState() {
@@ -144,9 +142,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
       };
 
   Future<void> _restoreDraft() async {
-    final store = _drafts;
-    if (store == null) return;
-    final draft = await store.load(widget.patient.patientId, widget.vhv.vhvId);
+    final draft = await _drafts.load(widget.patient.patientId, widget.vhv.vhvId);
     if (draft == null || !mounted) return;
     setState(() {
       for (final f in ScreeningField.values) {
@@ -170,20 +166,19 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
 
   Future<void> _saveDraftNow() async {
     _draftTimer?.cancel();
-    final store = _drafts;
-    if (store == null || _saved) return;
+    if (_saved) return;
     final patientId = widget.patient.patientId;
     final vhvId = widget.vhv.vhvId;
     if (_hasContent) {
-      await store.save(patientId, vhvId, _draftData());
+      await _drafts.save(patientId, vhvId, _draftData());
     } else {
-      await store.delete(patientId, vhvId);
+      await _drafts.delete(patientId, vhvId);
     }
   }
 
   Future<void> _discardDraft() async {
     _draftTimer?.cancel();
-    await _drafts?.delete(widget.patient.patientId, widget.vhv.vhvId);
+    await _drafts.delete(widget.patient.patientId, widget.vhv.vhvId);
   }
 
   void _changed() {

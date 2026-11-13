@@ -151,7 +151,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
     _patients.addAll([
       Patient(
         patientId: 'P001',
-        patientCitizenId: '1234567890123',
+        patientCitizenId: '1234567890121',
         patientTitle: 'นาย',
         patientFname: 'สมชาย',
         patientLname: 'ใจดี',
@@ -163,7 +163,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
       ),
       Patient(
         patientId: 'P002',
-        patientCitizenId: '2222222222222',
+        patientCitizenId: '2222222222227',
         patientTitle: 'นาย',
         patientFname: 'ว่าน',
         patientLname: 'ตัวอย่าง',
@@ -175,7 +175,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
       ),
       Patient(
         patientId: 'P003',
-        patientCitizenId: '3250184930571',
+        patientCitizenId: '3250184930572',
         patientTitle: 'นาง',
         patientFname: 'สมศรี',
         patientLname: 'มีสุข',
@@ -187,7 +187,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
       ),
       Patient(
         patientId: 'P004',
-        patientCitizenId: '1459900234889',
+        patientCitizenId: '1459900234884',
         patientTitle: 'นาย',
         patientFname: 'มั่นคง',
         patientLname: 'ทรหด',
@@ -199,7 +199,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
       ),
       Patient(
         patientId: 'P005',
-        patientCitizenId: '2304055671004',
+        patientCitizenId: '2304055671001',
         patientTitle: 'นาง',
         patientFname: 'วิไล',
         patientLname: 'งามตา',
@@ -211,7 +211,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
       ),
       Patient(
         patientId: 'P006',
-        patientCitizenId: '3102299845662',
+        patientCitizenId: '3102299845660',
         patientTitle: 'นาย',
         patientFname: 'ศักดิ์ดา',
         patientLname: 'กล้าหาญ',

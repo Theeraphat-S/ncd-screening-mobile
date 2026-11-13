@@ -172,18 +172,22 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: riskColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        advice.riskLabelThai,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11 * scale,
-                          fontWeight: FontWeight.bold,
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: riskColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          advice.riskLabelThai,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13 * scale,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),

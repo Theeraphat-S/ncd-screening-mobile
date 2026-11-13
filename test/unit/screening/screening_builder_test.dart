@@ -5,7 +5,7 @@ import 'package:ncd_screening_mobile/domain/services/screening_validator.dart';
 
 final _patient = Patient(
   patientId: 'P1',
-  patientCitizenId: '1234567890123',
+  patientCitizenId: '1234567890121',
   patientTitle: 'นาย',
   patientFname: 'สมชาย',
   patientLname: 'ใจดี',

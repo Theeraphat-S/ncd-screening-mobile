@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ncd_screening_mobile/domain/services/citizen_id.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     // Demo credentials are pre-filled in debug builds only, never in release.
     if (kDebugMode) {
       if (widget.role == UserRole.patient) {
-        _idController.text = '1234567890123';
+        _idController.text = '1234567890121';
         _dayController.text = '1';
         _monthController.text = '2';
         _yearController.text = '2523';
@@ -103,6 +104,10 @@ class _LoginPageState extends State<LoginPage> {
     if (widget.role == UserRole.patient) {
       if (id.length != 13 || int.tryParse(id) == null) {
         _showWarning('รหัสบัตรประชาชนต้องเป็นตัวเลขความยาว 13 หลัก');
+        return;
+      }
+      if (!CitizenId.isValid(id)) {
+        _showWarning('เลขบัตรประชาชนไม่ถูกต้อง กรุณาตรวจสอบตัวเลขอีกครั้ง');
         return;
       }
       birthDate = parseThaiBirthDate(

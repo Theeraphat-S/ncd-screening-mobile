@@ -187,7 +187,7 @@ class AppDatabase extends _$AppDatabase {
         b.insertAll(patientsTable, [
           PatientsTableCompanion(
             patientId: const Value('P001'),
-            patientCitizenId: const Value('1234567890123'),
+            patientCitizenId: const Value('1234567890121'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('สมชาย'),
             patientLname: const Value('ใจดี'),
@@ -200,7 +200,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P002'),
-            patientCitizenId: const Value('2222222222222'),
+            patientCitizenId: const Value('2222222222227'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('ว่าน'),
             patientLname: const Value('ตัวอย่าง'),
@@ -213,7 +213,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P003'),
-            patientCitizenId: const Value('3250184930571'),
+            patientCitizenId: const Value('3250184930572'),
             patientTitle: const Value('นาง'),
             patientFname: const Value('สมศรี'),
             patientLname: const Value('มีสุข'),
@@ -226,7 +226,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P004'),
-            patientCitizenId: const Value('1459900234889'),
+            patientCitizenId: const Value('1459900234884'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('มั่นคง'),
             patientLname: const Value('ทรหด'),
@@ -239,7 +239,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P005'),
-            patientCitizenId: const Value('2304055671004'),
+            patientCitizenId: const Value('2304055671001'),
             patientTitle: const Value('นาง'),
             patientFname: const Value('วิไล'),
             patientLname: const Value('งามตา'),
@@ -252,7 +252,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P006'),
-            patientCitizenId: const Value('3102299845662'),
+            patientCitizenId: const Value('3102299845660'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('ศักดิ์ดา'),
             patientLname: const Value('กล้าหาญ'),

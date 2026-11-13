@@ -20,7 +20,7 @@ class DirectMockNcdRepository implements NcdRepositoryInterface {
   final List<Patient> _patients = [
     Patient(
       patientId: 'P001',
-      patientCitizenId: '1234567890123',
+      patientCitizenId: '1234567890121',
       patientTitle: 'นาย',
       patientFname: 'สมชาย',
       patientLname: 'ใจดี',

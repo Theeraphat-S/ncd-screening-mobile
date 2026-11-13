@@ -31,7 +31,7 @@ class _FakeRepo extends MockNcdRepository {
 
 final _patient = Patient(
   patientId: 'P001',
-  patientCitizenId: '1234567890123',
+  patientCitizenId: '1234567890121',
   patientTitle: 'นาย',
   patientFname: 'สมชาย',
   patientLname: 'ใจดี',

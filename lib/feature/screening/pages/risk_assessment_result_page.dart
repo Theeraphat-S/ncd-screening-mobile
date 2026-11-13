@@ -158,9 +158,11 @@ class RiskAssessmentResultPage extends StatelessWidget {
                     child: const Icon(Icons.tips_and_updates_rounded, color: PColor.primaryDark, size: 18),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'คำแนะนำสุขภาพและการปฏิบัติตัวเฉพาะบุคคล',
-                    style: PTypography.sectionHeader,
+                  const Expanded(
+                    child: Text(
+                      'คำแนะนำสุขภาพและการปฏิบัติตัวเฉพาะบุคคล',
+                      style: PTypography.sectionHeader,
+                    ),
                   ),
                 ],
               ),
@@ -259,15 +261,24 @@ class RiskAssessmentResultPage extends StatelessWidget {
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildStepItem(number: '1', label: 'ข้อมูลผู้ป่วย', isDone: true),
-          _buildStepLine(isActive: true),
-          _buildStepItem(number: '2', label: 'แบบคัดกรอง', isDone: true),
-          _buildStepLine(isActive: true),
-          _buildStepItem(number: '3', label: 'ผลการประเมิน', isDone: true),
-        ],
+      child: Semantics(
+        label: 'ขั้นตอนที่ 3 จาก 3 เสร็จสิ้น แสดงผลการประเมิน',
+        excludeSemantics: true,
+        // Progress strip, not content: clamp so three labels fit a narrow
+        // phone at maximum system text size.
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: 1.3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildStepItem(number: '1', label: 'ข้อมูลผู้ป่วย', isDone: true),
+              _buildStepLine(isActive: true),
+              _buildStepItem(number: '2', label: 'แบบคัดกรอง', isDone: true),
+              _buildStepLine(isActive: true),
+              _buildStepItem(number: '3', label: 'ผลการประเมิน', isDone: true),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -217,7 +217,7 @@ void main() {
         patients: [
           Patient(
             patientId: 'P001',
-            patientCitizenId: '1234567890123',
+            patientCitizenId: '1234567890121',
             patientTitle: 'นาย',
             patientFname: 'สมชาย',
             patientLname: 'ใจดี',
@@ -252,7 +252,7 @@ void main() {
       final bytes = await service.generateScreeningReport(
         patient: Patient(
           patientId: 'P001',
-          patientCitizenId: '1234567890123',
+          patientCitizenId: '1234567890121',
           patientTitle: 'นาย',
           patientFname: 'สมชาย',
           patientLname: 'ใจดี',

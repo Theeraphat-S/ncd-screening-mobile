@@ -60,10 +60,19 @@ class ScreeningVitalsCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: PTypography.bodyMuted),
-          Text(value, style: PTypography.bodyBold),
+          Expanded(child: Text(label, style: PTypography.bodyMuted)),
+          const SizedBox(width: 12),
+          // Flexible + end alignment: at large system text the value wraps
+          // instead of overflowing the card.
+          Flexible(
+            child: Text(
+              value,
+              style: PTypography.bodyBold,
+              textAlign: TextAlign.end,
+            ),
+          ),
         ],
       ),
     );

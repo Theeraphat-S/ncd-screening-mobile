@@ -144,7 +144,7 @@ void main() {
     test('correct citizen ID and birth date succeeds', () async {
       final user = await repo.login(
         role: UserRole.patient,
-        identifier: '1234567890123',
+        identifier: '1234567890121',
         birthDate: DateTime(1980, 2, 1),
       );
       expect((user as Patient).patientId, 'P001');
@@ -153,7 +153,7 @@ void main() {
     test('time-of-day in the supplied birth date is ignored', () async {
       final user = await repo.login(
         role: UserRole.patient,
-        identifier: '1234567890123',
+        identifier: '1234567890121',
         birthDate: DateTime(1980, 2, 1, 14, 30),
       );
       expect(user, isA<Patient>());
@@ -166,7 +166,7 @@ void main() {
       try {
         await repo.login(
           role: UserRole.patient,
-          identifier: '1234567890123',
+          identifier: '1234567890121',
           birthDate: DateTime(1999, 1, 1),
         );
       } catch (e) {
@@ -187,7 +187,7 @@ void main() {
 
     test('missing birth date is rejected', () async {
       await expectLater(
-        repo.login(role: UserRole.patient, identifier: '1234567890123'),
+        repo.login(role: UserRole.patient, identifier: '1234567890121'),
         throwsA(isA<Exception>()),
       );
     });

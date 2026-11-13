@@ -118,7 +118,7 @@ class PdfPreviewPage extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.error_outline_rounded,
-                  color: Colors.red,
+                  color: PColor.errorColor,
                   size: 48,
                 ),
                 const SizedBox(height: 12),

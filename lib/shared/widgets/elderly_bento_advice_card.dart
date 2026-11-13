@@ -130,7 +130,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
             border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: PColor.contentColor.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

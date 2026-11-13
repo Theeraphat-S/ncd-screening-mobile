@@ -86,7 +86,7 @@ class _PatientAccessibilityFloatingBubbleState
                             icon: Icon(
                               Icons.close_rounded,
                               size: 20,
-                              color: isHC ? Colors.white70 : Colors.grey,
+                              color: isHC ? Colors.white70 : PColor.textNeutralColor,
                             ),
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
@@ -213,11 +213,11 @@ class _PatientAccessibilityFloatingBubbleState
                           icon: Icon(
                             Icons.refresh_rounded,
                             size: 14,
-                            color: isHC ? Colors.white70 : Colors.grey,
+                            color: isHC ? Colors.white70 : PColor.textNeutralColor,
                           ),
                           label: Text(
                             'รีเซ็ตค่ามาตรฐาน',
-                            style: PTypography.caption.copyWith(color: isHC ? Colors.white70 : Colors.grey[700]),
+                            style: PTypography.caption.copyWith(color: isHC ? Colors.white70 : PColor.textSecondary),
                           ),
                         ),
                       ),

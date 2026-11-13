@@ -103,7 +103,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
+                      color: PColor.contentColor.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -119,7 +119,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                     prefixIcon: const Icon(Icons.search_rounded, color: PColor.primaryColor),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear_rounded, color: Colors.grey),
+                            icon: const Icon(Icons.clear_rounded, color: PColor.textNeutralColor),
                             tooltip: 'ล้างคำค้นหา',
                             onPressed: _clearSearch,
                           )
@@ -194,13 +194,13 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                     }
 
                     if (_hasSearched && state.patients.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.search_off_rounded, size: 64, color: Colors.grey.shade400),
-                            const SizedBox(height: 12),
-                            const Text(
+                            Icon(Icons.search_off_rounded, size: 64, color: PColor.borderStrong),
+                            SizedBox(height: 12),
+                            Text(
                               'ไม่พบข้อมูล',
                               style: PTypography.bodyMuted,
                             ),

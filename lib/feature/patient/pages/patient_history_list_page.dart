@@ -111,13 +111,13 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                 }
 
                 if (state.historyList.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.history_toggle_off_rounded, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 12),
-                        const Text(
+                        Icon(Icons.history_toggle_off_rounded, size: 64, color: PColor.primaryTint),
+                        SizedBox(height: 12),
+                        Text(
                           'ไม่พบข้อมูลประวัติการคัดกรอง',
                           style: TextStyle(
                             fontSize: 16,
@@ -222,7 +222,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
               ),
               const Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: Color(0xFFBDBDBD),
+                color: PColor.borderStrong,
                 size: 16,
               ),
             ],

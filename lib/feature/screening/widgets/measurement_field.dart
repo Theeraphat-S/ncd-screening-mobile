@@ -62,11 +62,7 @@ class MeasurementField extends StatelessWidget {
               if (optional)
                 const TextSpan(
                   text: '  (ไม่บังคับ)',
-                  style: TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w500,
-                    color: PColor.textNeutralColor,
-                  ),
+                  style: PTypography.bodyMuted,
                 ),
             ],
           ),

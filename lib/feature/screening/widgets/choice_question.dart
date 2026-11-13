@@ -76,8 +76,7 @@ class ChoiceQuestion extends StatelessWidget {
             child: Center(
               child: Text(
                 opt,
-                style: TextStyle(
-                  fontSize: 15,
+                style: PTypography.fieldLabel.copyWith(
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   color: isSelected ? PColor.primaryDark : PColor.textSecondary,
                 ),

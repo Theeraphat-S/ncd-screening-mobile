@@ -101,11 +101,11 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
             children: [
               Container(
                 padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
+                decoration: const BoxDecoration(
+                  color: PColor.statusPendingBg,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.help_outline_rounded, size: 44, color: Colors.orange),
+                child: const Icon(Icons.help_outline_rounded, size: 44, color: PColor.statusPending),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -208,7 +208,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
+                      color: PColor.contentColor.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -347,7 +347,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green.shade600,
+                        backgroundColor: PColor.statusApprovedDark,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
@@ -373,7 +373,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: BorderSide(color: Colors.red.shade400),
+                        side: const BorderSide(color: PColor.riskHigh),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       onPressed: () {
@@ -385,10 +385,10 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       },
                       child: Text(
                         _hasChanges ? 'ปรับระดับความเสี่ยง' : 'ไม่ยอมรับ',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Colors.red.shade600,
+                          color: PColor.riskHighDark,
                         ),
                       ),
                     ),
@@ -419,7 +419,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: PColor.borderStrong),
             borderRadius: BorderRadius.circular(10),
           ),
           child: DropdownButtonHideUnderline(

@@ -48,6 +48,23 @@ class PColor {
   static const Color statusApproved = Color(0xFF059669); // Emerald 600
   static const Color statusApprovedBg = Color(0xFFECFDF5); // Emerald 50
 
+  static const Color primaryTint = Color(0xFF5EEAD4); // Teal 300 (decorative only)
+  static const Color secondaryLight = Color(0xFFE0F2FE); // Sky 100
+  static const Color statusApprovedDark = Color(0xFF047857); // Emerald 700 (button fill, 5.5:1 with white)
+  static const Color riskHighDark = Color(0xFFB91C1C); // Red 700 (text on tint)
+
+  // Role accents (user type selection)
+  static const Color roleSelfBg = Color(0xFFE0F2FE); // Sky 100
+  static const Color roleNurse = Color(0xFF4F46E5); // Indigo 600
+  static const Color roleNurseBg = Color(0xFFEEF2FF); // Indigo 50
+
+  // Data categories (charts) — kept off the risk hues so a chart never reads as a risk level
+  static const Color chartMale = Color(0xFF3B82F6); // Blue 500
+  static const Color chartFemale = Color(0xFFDB2777); // Pink 600
+  static const Color chartAgeYoung = Color(0xFF0369A1); // Sky 700 (also used as text, 5.9:1)
+  static const Color chartAgeMid = Color(0xFF0F766E); // Teal 700 (5.5:1)
+  static const Color chartAgeOld = Color(0xFF4F46E5); // Indigo 600 (6.3:1)
+
   static Color getRiskColor(String? risk) {
     if (risk == null) {
       return riskLow;

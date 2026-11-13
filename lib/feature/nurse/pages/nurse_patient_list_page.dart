@@ -72,13 +72,13 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                 }
 
                 if (state.patients.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person_off_outlined, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 12),
-                        const Text(
+                        Icon(Icons.person_off_outlined, size: 64, color: PColor.primaryTint),
+                        SizedBox(height: 12),
+                        Text(
                           'ไม่พบข้อมูลผู้ป่วยในหมู่บ้านนี้',
                           style: TextStyle(
                             fontSize: 15,

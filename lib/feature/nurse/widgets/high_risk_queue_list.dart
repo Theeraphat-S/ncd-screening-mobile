@@ -23,7 +23,7 @@ class HighRiskQueueList extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: PColor.contentColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -40,7 +40,7 @@ class HighRiskQueueList extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: const BoxDecoration(
-                      color: Color(0xFFFEE2E2),
+                      color: PColor.riskHighBg,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -65,8 +65,8 @@ class HighRiskQueueList extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: queue.isEmpty
-                      ? const Color(0xFFECFDF5)
-                      : const Color(0xFFFEE2E2),
+                      ? PColor.riskLowBg
+                      : PColor.riskHighBg,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -75,7 +75,7 @@ class HighRiskQueueList extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     color: queue.isEmpty
-                        ? const Color(0xFF059669)
+                        ? PColor.riskLow
                         : PColor.errorColor,
                   ),
                 ),
@@ -95,7 +95,7 @@ class HighRiskQueueList extends StatelessWidget {
                 child: Column(
                   children: [
                     Icon(Icons.check_circle_outline_rounded,
-                        color: Color(0xFF10B981), size: 40),
+                        color: PColor.riskLow, size: 40),
                     SizedBox(height: 8),
                     Text(
                       'ไม่พบผู้ป่วยกลุ่มเสี่ยงสูงในพื้นที่ที่เลือก',
@@ -164,7 +164,7 @@ class HighRiskQueueList extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 20,
-                  backgroundColor: Color(0xFFFEE2E2),
+                  backgroundColor: PColor.riskHighBg,
                   child: Icon(Icons.person_rounded,
                       color: PColor.errorColor, size: 22),
                 ),

@@ -18,7 +18,7 @@ class AnalyticsFilterBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: PColor.contentColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -49,7 +49,7 @@ class AnalyticsFilterBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: PColor.borderStrong),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
@@ -117,7 +117,7 @@ class AnalyticsFilterBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: PColor.borderStrong),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<AnalyticsSortOrder>(

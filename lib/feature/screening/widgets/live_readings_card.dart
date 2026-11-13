@@ -41,11 +41,7 @@ class LiveReadingsCard extends StatelessWidget {
                 Text(
                   '$bmi · ${ScreeningValidator.bmiCategory(bmi!)}',
                   key: const Key('live_bmi'),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: PColor.primaryDark,
-                  ),
+                  style: PTypography.cardTitle.copyWith(color: PColor.primaryDark),
                 ),
               ],
             ),

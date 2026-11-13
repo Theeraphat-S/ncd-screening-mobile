@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// "Patient info → screening → result" progress strip at the top of the form.
 class ScreeningStepIndicator extends StatelessWidget {
@@ -67,9 +68,8 @@ class _StepItem extends StatelessWidget {
                 ? const Icon(Icons.check, size: 16, color: Colors.white)
                 : Text(
                     number,
-                    style: TextStyle(
+                    style: PTypography.captionStrong.copyWith(
                       fontSize: 13,
-                      fontWeight: FontWeight.bold,
                       color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
                     ),
                   ),
@@ -78,8 +78,7 @@ class _StepItem extends StatelessWidget {
         const SizedBox(height: 5),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12.5,
+          style: PTypography.captionSecondary.copyWith(
             fontWeight: highlighted ? FontWeight.w700 : FontWeight.w500,
             color: highlighted ? PColor.contentColor : PColor.textNeutralColor,
           ),

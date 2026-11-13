@@ -323,7 +323,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(color: PColor.borderStrong),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: DropdownButtonHideUnderline(
@@ -354,7 +354,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade300),
+                                      border: Border.all(color: PColor.borderStrong),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Row(
@@ -380,7 +380,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: PColor.surfaceSubtle,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -458,11 +458,11 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: const BorderSide(color: PColor.borderStrong),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: const BorderSide(color: PColor.borderStrong),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

@@ -45,7 +45,7 @@ class VillageManagementTab extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: PColor.contentColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -98,7 +98,7 @@ class VillageManagementTab extends StatelessWidget {
                 ),
                 const Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: Color(0xFFBDBDBD),
+                  color: PColor.borderStrong,
                   size: 16,
                 ),
               ],
@@ -167,11 +167,11 @@ class VillageManagementTab extends StatelessWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
+                      color: PColor.secondaryLight,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(Icons.people_outline_rounded,
-                        color: Colors.blue),
+                        color: PColor.secondaryColor),
                   ),
                   title: const Text('รายชื่อผู้ป่วยในหมู่บ้าน',
                       style: TextStyle(fontWeight: FontWeight.bold)),

@@ -67,7 +67,7 @@ class ScreeningLifestyleGuidanceSection extends StatelessWidget {
                     SizedBox(height: 2),
                     Text(
                       'คำแนะนำเข้าใจง่ายสำหรับประชาชนและผู้สูงอายุ',
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
+                      style: TextStyle(color: Colors.white70, fontSize: 14),
                     ),
                   ],
                 ),

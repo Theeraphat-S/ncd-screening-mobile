@@ -3,7 +3,7 @@ export 'p_shadow.dart';
 
 class PColor {
   // Brand & Dominant Clinical Primary (Teal & Sky Medical Palette)
-  static const Color primaryColor = Color(0xFF0D9488); // Teal 600
+  static const Color primaryColor = Color(0xFF0F766E); // Teal 700 (5.5:1 with white)
   static const Color primaryDark = Color(0xFF115E59); // Teal 800
   static const Color primaryLight = Color(0xFFCCFBF1); // Teal 100
   static const Color secondaryColor = Color(0xFF0284C7); // Sky 600
@@ -14,7 +14,7 @@ class PColor {
   static const Color surfaceSubtle = Color(0xFFF1F5F9); // Slate 100
 
   // Typography & Borders
-  static const Color textNeutralColor = Color(0xFF64748B); // Slate 500
+  static const Color textNeutralColor = Color(0xFF5B6B80); // Slate 500, darkened: 5.0:1 on surfaceSubtle
   static const Color textSecondary = Color(0xFF475569); // Slate 600
   static const Color contentColor = Color(0xFF0F172A); // Slate 900
   static const Color borderSubtle = Color(0xFFE2E8F0); // Slate 200
@@ -35,17 +35,17 @@ class PColor {
   ); // High Contrast Muted Text
 
   // Calibrated Clinical Risk Tokens (WCAG AA Compliant)
-  static const Color riskLow = Color(0xFF059669); // Emerald 600
+  static const Color riskLow = Color(0xFF047857); // Emerald 700 (5.2:1 on riskLowBg)
   static const Color riskLowBg = Color(0xFFECFDF5); // Emerald 50
-  static const Color riskModerate = Color(0xFFD97706); // Amber 600
+  static const Color riskModerate = Color(0xFFB45309); // Amber 700 (4.8:1 on riskModerateBg)
   static const Color riskModerateBg = Color(0xFFFFFBEB); // Amber 50
-  static const Color riskHigh = Color(0xFFDC2626); // Red 600
+  static const Color riskHigh = Color(0xFFB91C1C); // Red 700 (5.9:1 on riskHighBg)
   static const Color riskHighBg = Color(0xFFFEF2F2); // Red 50
 
   // Review & Workflow Status Indicators
-  static const Color statusPending = Color(0xFFEA580C); // Orange 600
+  static const Color statusPending = Color(0xFFC2410C); // Orange 700 (4.5:1 on statusPendingBg)
   static const Color statusPendingBg = Color(0xFFFFEDD5); // Orange 100
-  static const Color statusApproved = Color(0xFF059669); // Emerald 600
+  static const Color statusApproved = Color(0xFF047857); // Emerald 700
   static const Color statusApprovedBg = Color(0xFFECFDF5); // Emerald 50
 
   static const Color primaryTint = Color(0xFF5EEAD4); // Teal 300 (decorative only)

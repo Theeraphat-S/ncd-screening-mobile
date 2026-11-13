@@ -83,7 +83,7 @@ class ScreeningRiskSummarySection extends StatelessWidget {
                       Text(
                         'คะแนน: ${res.score} คะแนน',
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           color: PColor.textNeutralColor,
                         ),
                       ),

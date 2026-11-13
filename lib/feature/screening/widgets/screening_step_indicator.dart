@@ -16,15 +16,25 @@ class ScreeningStepIndicator extends StatelessWidget {
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _StepItem(number: '1', label: 'ข้อมูลผู้ป่วย', isDone: true),
-          _StepLine(isActive: true),
-          _StepItem(number: '2', label: 'แบบคัดกรอง', isActive: true),
-          _StepLine(isActive: false),
-          _StepItem(number: '3', label: 'ผลการประเมิน', isActive: false),
-        ],
+      child: Semantics(
+        label: 'ขั้นตอนที่ 2 จาก 3 กำลังกรอกแบบคัดกรอง ข้อมูลผู้ป่วยเสร็จแล้ว',
+        excludeSemantics: true,
+        // A progress strip, not content: clamp so three labels still fit on a
+        // narrow phone when the system text size is at its maximum. The same
+        // information is read out through the Semantics label above.
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: 1.3,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _StepItem(number: '1', label: 'ข้อมูลผู้ป่วย', isDone: true),
+              _StepLine(isActive: true),
+              _StepItem(number: '2', label: 'แบบคัดกรอง', isActive: true),
+              _StepLine(isActive: false),
+              _StepItem(number: '3', label: 'ผลการประเมิน', isActive: false),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -69,7 +79,7 @@ class _StepItem extends StatelessWidget {
                 : Text(
                     number,
                     style: PTypography.captionStrong.copyWith(
-                      fontSize: 13,
+                      fontSize: 14,
                       color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
                     ),
                   ),

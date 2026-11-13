@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show FontLoader, rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
@@ -51,6 +52,12 @@ final _vhv = VHV(
 );
 
 void main() {
+  setUpAll(() async {
+    final loader = FontLoader('Sarabun')
+      ..addFont(rootBundle.load('assets/fonts/Sarabun-Regular.ttf'));
+    await loader.load();
+  });
+
   late _Repo repo;
 
   Future<void> pumpPage(WidgetTester tester) async {
@@ -134,5 +141,36 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(repo.queries, ['มานี']);
+  });
+
+  testWidgets('phone width with 2x system text scale shows results without overflow',
+      (tester) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    repo = _Repo([
+      _patient('1', 'สมชาย', '12/3 หมู่ 1 ตำบลท่าตอน อำเภอแม่อาย'),
+      _patient('2', 'มานี', '99 หมู่ 2 ตำบลท่าตอน อำเภอแม่อาย'),
+    ]);
+    final bloc = PatientBloc(repo);
+    addTearDown(bloc.close);
+    await tester.pumpWidget(
+      BlocProvider.value(
+        value: bloc,
+        child: MaterialApp(
+          theme: ThemeData(fontFamily: 'Sarabun'),
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(2.0)),
+            child: child!,
+          ),
+          home: VhvSearchPatientPage(vhv: _vhv),
+        ),
+      ),
+    );
+    await tester.enterText(find.byType(TextField), 'สม');
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
   });
 }

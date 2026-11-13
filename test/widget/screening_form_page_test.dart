@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show FontLoader, rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
@@ -56,6 +57,14 @@ final _vhv = VHV(
 );
 
 void main() {
+  setUpAll(() async {
+    // Real Thai glyph widths; the default test font (Ahem) makes every glyph
+    // one em wide and exaggerates overflow.
+    final loader = FontLoader('Sarabun')
+      ..addFont(rootBundle.load('assets/fonts/Sarabun-Regular.ttf'));
+    await loader.load();
+  });
+
   late AppDatabase db;
   late ScreeningDraftStore drafts;
   late _FakeRepo repo;
@@ -72,8 +81,13 @@ void main() {
     await db.close();
   });
 
-  Future<void> pumpForm(WidgetTester tester, {Widget? launcher}) async {
-    tester.view.physicalSize = const Size(900, 3200);
+  Future<void> pumpForm(
+    WidgetTester tester, {
+    Widget? launcher,
+    Size size = const Size(900, 3200),
+    double textScale = 1.0,
+  }) async {
+    tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
     final bloc = ScreeningBloc(repo);
@@ -87,6 +101,12 @@ void main() {
           BlocProvider(create: (_) => AccessibilityCubit()),
         ],
         child: MaterialApp(
+          theme: ThemeData(fontFamily: 'Sarabun'),
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
+            child: child!,
+          ),
           home: Builder(
             builder: (context) => Scaffold(
               body: TextButton(
@@ -137,6 +157,16 @@ void main() {
       .widget<TextFormField>(find.byKey(Key('field_$field')))
       .controller!
       .text;
+
+  testWidgets('phone width with 2x system text scale lays out without overflow',
+      (tester) async {
+    await pumpForm(tester, size: const Size(360, 3600), textScale: 2.0);
+    expect(tester.takeException(), isNull);
+    // Submitting empty shows every field error: the widest/tallest state.
+    await tester.tap(find.byKey(const Key('submit_screening')));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('every measurement starts empty (no pre-filled normal values)',
       (tester) async {

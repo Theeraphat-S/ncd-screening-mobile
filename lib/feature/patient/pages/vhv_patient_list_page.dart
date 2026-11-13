@@ -98,7 +98,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                         'พื้นที่รับผิดชอบ: หมู่ที่ ${widget.vhv.villageId.replaceAll('V', '')} รพ.สต.แม่อาย',
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -156,7 +156,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                           const Text(
                             'กดปุ่ม "เพิ่มผู้ป่วย" ด้านล่างเพื่อเริ่มบันทึกข้อมูล',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 14,
                               color: PColor.textNeutralColor,
                             ),
                           ),
@@ -288,7 +288,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                           Text(
                             patient.patientCitizenId,
                             style: const TextStyle(
-                              fontSize: 12.5,
+                              fontSize: 14,
                               color: PColor.textSecondary,
                               fontFamily: 'monospace',
                               fontWeight: FontWeight.w500,

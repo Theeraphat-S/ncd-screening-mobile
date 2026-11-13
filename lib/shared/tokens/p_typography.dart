@@ -35,19 +35,19 @@ class PTypography {
   );
 
   static const TextStyle bodyMuted = TextStyle(
-    fontSize: 13.5,
+    fontSize: 14,
     color: PColor.textNeutralColor,
   );
 
   static const TextStyle caption = TextStyle(
-    fontSize: 12,
+    fontSize: 13,
     color: PColor.textNeutralColor,
   );
 
   static const TextStyle badge = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
-    fontSize: 12.5,
+    fontSize: 13,
   );
 
   static const TextStyle buttonLabel = TextStyle(
@@ -74,13 +74,13 @@ class PTypography {
   );
 
   static const TextStyle fieldError = TextStyle(
-    fontSize: 13.5,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
     color: PColor.errorColor,
   );
 
   static const TextStyle fieldWarning = TextStyle(
-    fontSize: 13.5,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
     color: PColor.riskModerate,
   );
@@ -106,7 +106,7 @@ class PTypography {
   );
 
   static const TextStyle labelSmall = TextStyle(
-    fontSize: 13.5,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
     color: PColor.contentColor,
   );
@@ -117,29 +117,29 @@ class PTypography {
   );
 
   static const TextStyle captionSecondary = TextStyle(
-    fontSize: 12.5,
+    fontSize: 13,
     color: PColor.textSecondary,
   );
 
   static const TextStyle captionContent = TextStyle(
-    fontSize: 12.5,
+    fontSize: 13,
     color: PColor.contentColor,
   );
 
   static const TextStyle captionStrong = TextStyle(
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: FontWeight.bold,
     color: PColor.textNeutralColor,
   );
 
   static const TextStyle captionBold = TextStyle(
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: FontWeight.bold,
     color: PColor.contentColor,
   );
 
   static const TextStyle captionOnPrimary = TextStyle(
-    fontSize: 12,
+    fontSize: 13,
     color: Colors.white70,
   );
 
@@ -156,7 +156,7 @@ class PTypography {
   );
 
   static const TextStyle errorText = TextStyle(
-    fontSize: 13.5,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
     color: PColor.errorColor,
   );

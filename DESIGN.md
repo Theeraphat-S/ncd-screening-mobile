@@ -13,7 +13,7 @@
 The NCD Screening Mobile Application serves three distinct user personas: **Elderly / Rural Patients**, **Community Health Volunteers (VHV/อสม.)** on field tablets/smartphones, and **Primary Care Nurses** reviewing critical health metrics.
 
 The visual direction replaces generic purple gradients and clunky material blocks with a **Nordic Clinical & Public Health Modernism** aesthetic:
-- **Calm, High-Trust Atmosphere**: Off-white canvases (`#F8FAFC` Slate-50) paired with deep surgical teal / cobalt (`#0D9488` / `#0284C7`) rather than oversaturated AI purple glows.
+- **Calm, High-Trust Atmosphere**: Off-white canvases (`#F8FAFC` Slate-50) paired with deep surgical teal / cobalt (`#0F766E` / `#0284C7`) rather than oversaturated AI purple glows.
 - **Immediate Clinical Clarity**: Risk levels (Low, Moderate, High) are calibrated with high contrast, accessible, desaturated status badges with subtle tint backgrounds (`#ECFDF5`, `#FFFBEB`, `#FEF2F2`).
 - **Tactile Ergonomics for Field Work**: Generous touch targets (min 48x48dp), clear elevation without heavy drop shadows, and high-readability Thai typography (Sarabun / System Sans).
 
@@ -27,7 +27,7 @@ The visual direction replaces generic purple gradients and clunky material block
 // lib/shared/tokens/p_colors.dart
 class PColors {
   // Brand & Dominant Clinical Primary
-  static const Color primary = Color(0xFF0D9488);       // Teal 600 - High trust medical teal
+  static const Color primary = Color(0xFF0F766E);       // Teal 700 - High trust medical teal (5.5:1 with white)
   static const Color primaryDark = Color(0xFF115E59);   // Teal 800 - Deep forest teal
   static const Color primaryLight = Color(0xFFCCFBF1);  // Teal 100 - Soft tint background
   static const Color accent = Color(0xFF0284C7);        // Sky 600 - Action secondary
@@ -46,17 +46,17 @@ class PColors {
   static const Color borderStrong = Color(0xFFCBD5E1);   // Slate 300
 
   // Clinical Risk Calibrations (WCAG AA Contrast Compliant)
-  static const Color riskLow = Color(0xFF059669);        // Emerald 600
+  static const Color riskLow = Color(0xFF047857);        // Emerald 700
   static const Color riskLowBg = Color(0xFFECFDF5);      // Emerald 50
-  static const Color riskModerate = Color(0xFFD97706);   // Amber 600
+  static const Color riskModerate = Color(0xFFB45309);   // Amber 700
   static const Color riskModerateBg = Color(0xFFFFFBEB); // Amber 50
-  static const Color riskHigh = Color(0xFFDC2626);       // Red 600
+  static const Color riskHigh = Color(0xFFB91C1C);       // Red 700
   static const Color riskHighBg = Color(0xFFFEF2F2);     // Red 50
 
   // Status Indicators
-  static const Color statusPending = Color(0xFFEA580C);  // Orange 600
+  static const Color statusPending = Color(0xFFC2410C);  // Orange 700
   static const Color statusPendingBg = Color(0xFFFFEDD5);// Orange 100
-  static const Color statusApproved = Color(0xFF059669); // Emerald 600
+  static const Color statusApproved = Color(0xFF047857); // Emerald 700
   static const Color statusApprovedBg = Color(0xFFECFDF5);
 }
 ```

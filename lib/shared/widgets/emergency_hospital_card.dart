@@ -60,7 +60,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                     const Text(
                       'การแจ้งเตือนเคสเร่งด่วน',
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: cardColor,
                         letterSpacing: 0.5,
@@ -110,7 +110,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                   child: Text(
                     triage.recommendedAction,
                     style: const TextStyle(
-                      fontSize: 13.5,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: cardColor,
                     ),
@@ -136,7 +136,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                   label: Text(
                     'โทร $hospitalName\n($hospitalPhone)',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -163,7 +163,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                   label: const Text(
                     'สายด่วนกู้ชีพ\n(1669)',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(

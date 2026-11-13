@@ -48,7 +48,7 @@ class AccessibilityScaleToggle extends StatelessWidget {
                 Text(
                   state.isElderlyMode ? 'โหมดตัวโต (เปิด)' : 'โหมดตัวโต',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),

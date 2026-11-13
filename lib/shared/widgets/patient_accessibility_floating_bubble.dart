@@ -145,7 +145,7 @@ class _PatientAccessibilityFloatingBubbleState
                       // Font Scale Fine Tuning
                       Text(
                         'ขนาดตัวอักษร: ${(state.textScaleFactor * 100).round()}%',
-                        style: PTypography.bodyMuted.copyWith(color: isHC ? Colors.white70 : PColor.textSecondary, fontSize: 13),
+                        style: PTypography.bodyMuted.copyWith(color: isHC ? Colors.white70 : PColor.textSecondary, fontSize: 14),
                       ),
                       const SizedBox(height: 6),
                       Row(

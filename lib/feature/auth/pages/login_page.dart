@@ -159,6 +159,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
     return BlocListener<AuthBloc, AuthState>(
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
@@ -185,10 +188,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   padding: const EdgeInsets.all(PSpacing.xxl),
                   decoration: BoxDecoration(
-                    color: PColor.neutralColor,
+                    color: scheme.surface,
                     borderRadius: BorderRadius.circular(PRadius.xl),
-                    border: Border.all(color: PColor.borderSubtle),
-                    boxShadow: PShadow.card,
+                    border: Border.all(
+                      color: isDark ? PColor.hcAccent : PColor.borderSubtle,
+                      width: isDark ? 2 : 1,
+                    ),
+                    boxShadow: isDark ? null : PShadow.card,
                   ),
                   child: Form(
                     key: _formKey,
@@ -226,7 +232,8 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             _title,
                             textAlign: TextAlign.center,
-                            style: PTypography.pageTitle,
+                            style: PTypography.pageTitle
+                                .copyWith(color: scheme.onSurface),
                           ),
                           PSpacing.gapVerticalSm,
                           Text(
@@ -234,7 +241,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ? 'กรุณากรอกเลขบัตรประชาชนและวันเกิดเพื่อยืนยันตัวตน'
                                 : 'กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบการทำงาน',
                             textAlign: TextAlign.center,
-                            style: PTypography.bodyMuted,
+                            style: PTypography.bodyMuted
+                                .copyWith(color: scheme.onSurfaceVariant),
                           ),
                           PSpacing.gapVerticalXxl,
                           AppTextField(
@@ -249,9 +257,9 @@ class _LoginPageState extends State<LoginPage> {
                                 : [FilteringTextInputFormatter.digitsOnly],
                             maxLength: _isNurse ? null : 13,
                             autofillHints: const [AutofillHints.username],
-                            prefixIcon: const Icon(
+                            prefixIcon: Icon(
                               Icons.badge_outlined,
-                              color: PColor.primaryColor,
+                              color: scheme.primary,
                             ),
                             validator: _validateId,
                           ),
@@ -266,9 +274,9 @@ class _LoginPageState extends State<LoginPage> {
                               obscureText: _obscurePassword,
                               textInputAction: TextInputAction.done,
                               autofillHints: const [AutofillHints.password],
-                              prefixIcon: const Icon(
+                              prefixIcon: Icon(
                                 Icons.lock_outline_rounded,
-                                color: PColor.primaryColor,
+                                color: scheme.primary,
                               ),
                               suffixIcon: IconButton(
                                 tooltip: _obscurePassword

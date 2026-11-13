@@ -67,6 +67,20 @@ void main() {
       expect(dm.adviceText, contains('ตรวจ'));
     });
 
+    test('score 0 on a non-diabetes result (no CVD risk factors) is not "incomplete"',
+        () {
+      const cvd = ScreeningResult(
+        resultId: 'r',
+        screeningId: 's',
+        diseaseName: 'โรคหลอดเลือดหัวใจ',
+        diseaseCode: 'CVD',
+        score: 0,
+        riskLevel: RiskLevel.low,
+        adviceText: '',
+      );
+      expect(cvd.isIncomplete, isFalse);
+    });
+
     test('a measured value is never incomplete', () {
       final dm = _evaluate(sugar: 90)
           .firstWhere((r) => r.diseaseCode == 'DIABETES');

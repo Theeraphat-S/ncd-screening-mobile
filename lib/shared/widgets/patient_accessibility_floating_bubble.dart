@@ -44,7 +44,9 @@ class _PatientAccessibilityFloatingBubbleState
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: isHC ? 0.6 : 0.15),
+                        color: Colors.black.withValues(
+                          alpha: isHC ? 0.6 : 0.15,
+                        ),
                         blurRadius: 16,
                         offset: const Offset(0, 6),
                       ),
@@ -74,7 +76,9 @@ class _PatientAccessibilityFloatingBubbleState
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: isHC ? PColor.hcText : PColor.contentColor,
+                                      color: isHC
+                                          ? PColor.hcText
+                                          : PColor.contentColor,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -101,42 +105,54 @@ class _PatientAccessibilityFloatingBubbleState
                       ),
                       const Divider(height: 20),
                       // Large Font / Elderly Mode Toggle
-                      SwitchListTile.adaptive(
-                        contentPadding: EdgeInsets.zero,
-                        dense: true,
-                        title: Text(
-                          'โหมดตัวโต (ผู้สูงอายุ)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: isHC ? PColor.hcText : PColor.contentColor,
+                      Material(
+                        type: MaterialType.transparency,
+                        child: SwitchListTile.adaptive(
+                          contentPadding: EdgeInsets.zero,
+                          dense: true,
+                          title: Text(
+                            'โหมดตัวโต (ผู้สูงอายุ)',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: isHC ? PColor.hcText : PColor.contentColor,
+                            ),
                           ),
+                          value: state.isElderlyMode,
+                          activeTrackColor: isHC
+                              ? PColor.hcAccent
+                              : PColor.primaryColor,
+                          onChanged: (val) {
+                            context.read<AccessibilityCubit>().setElderlyMode(
+                              val,
+                            );
+                          },
                         ),
-                        value: state.isElderlyMode,
-                        activeTrackColor:
-                            isHC ? PColor.hcAccent : PColor.primaryColor,
-                        onChanged: (val) {
-                          context.read<AccessibilityCubit>().setElderlyMode(val);
-                        },
                       ),
                       // High Contrast Mode Toggle
-                      SwitchListTile.adaptive(
-                        contentPadding: EdgeInsets.zero,
-                        dense: true,
-                        title: Text(
-                          'โหมดคอนทราสต์สูง (AAA)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: isHC ? PColor.hcText : PColor.contentColor,
+                      Material(
+                        type: MaterialType.transparency,
+                        child: SwitchListTile.adaptive(
+                          contentPadding: EdgeInsets.zero,
+                          dense: true,
+                          title: Text(
+                            'โหมดคอนทราสต์สูง (AAA)',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: isHC ? PColor.hcText : PColor.contentColor,
+                            ),
                           ),
+                          value: state.isHighContrast,
+                          activeTrackColor: isHC
+                              ? PColor.hcAccent
+                              : PColor.primaryColor,
+                          onChanged: (_) {
+                            context
+                                .read<AccessibilityCubit>()
+                                .toggleHighContrast();
+                          },
                         ),
-                        value: state.isHighContrast,
-                        activeTrackColor:
-                            isHC ? PColor.hcAccent : PColor.primaryColor,
-                        onChanged: (_) {
-                          context.read<AccessibilityCubit>().toggleHighContrast();
-                        },
                       ),
                       const SizedBox(height: 8),
                       // Font Scale Fine Tuning
@@ -156,7 +172,10 @@ class _PatientAccessibilityFloatingBubbleState
                               onPressed: () => context
                                   .read<AccessibilityCubit>()
                                   .decreaseTextScale(),
-                              icon: const Icon(Icons.text_decrease_rounded, size: 16),
+                              icon: const Icon(
+                                Icons.text_decrease_rounded,
+                                size: 16,
+                              ),
                               label: const Text('A-'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: isHC
@@ -167,7 +186,9 @@ class _PatientAccessibilityFloatingBubbleState
                                       ? PColor.hcAccent
                                       : PColor.borderStrong,
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                               ),
                             ),
                           ),
@@ -177,7 +198,10 @@ class _PatientAccessibilityFloatingBubbleState
                               onPressed: () => context
                                   .read<AccessibilityCubit>()
                                   .increaseTextScale(),
-                              icon: const Icon(Icons.text_increase_rounded, size: 16),
+                              icon: const Icon(
+                                Icons.text_increase_rounded,
+                                size: 16,
+                              ),
                               label: const Text('A+'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: isHC
@@ -188,7 +212,9 @@ class _PatientAccessibilityFloatingBubbleState
                                       ? PColor.hcAccent
                                       : PColor.borderStrong,
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                               ),
                             ),
                           ),
@@ -198,8 +224,9 @@ class _PatientAccessibilityFloatingBubbleState
                       // Reset Button
                       Center(
                         child: TextButton.icon(
-                          onPressed: () =>
-                              context.read<AccessibilityCubit>().resetAccessibility(),
+                          onPressed: () => context
+                              .read<AccessibilityCubit>()
+                              .resetAccessibility(),
                           icon: Icon(
                             Icons.refresh_rounded,
                             size: 14,

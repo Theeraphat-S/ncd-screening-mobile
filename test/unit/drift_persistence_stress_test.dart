@@ -183,7 +183,7 @@ void main() {
     });
 
     group('3. VHV CRUD & Edge Cases', () {
-      test('addVhv with auto-generated ID sequence and update validation',
+      test('addVhv with auto-generated ID and update validation',
           () async {
         final vhv = VHV(
           vhvId: '',
@@ -201,7 +201,7 @@ void main() {
         );
 
         final created = await repository.addVhv(vhv);
-        expect(created.vhvId, startsWith('VHV'));
+        expect(created.vhvId, isNotEmpty);
 
         final fetched = await repository.getVhvById(created.vhvId);
         expect(fetched, isNotNull);
@@ -308,7 +308,7 @@ void main() {
         );
 
         final saved = await repository.saveScreening(screening);
-        expect(saved.screenId, startsWith('S'));
+        expect(saved.screenId, isNotEmpty);
 
         final fetched = await repository.getScreeningById(saved.screenId);
         expect(fetched, isNotNull);

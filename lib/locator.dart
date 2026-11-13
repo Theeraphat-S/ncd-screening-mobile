@@ -1,20 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
-import 'package:ncd_screening_mobile/domain/http_client/ip.dart';
-import 'package:ncd_screening_mobile/domain/http_client/websocket.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
-import 'package:ncd_screening_mobile/feature/home/bloc/websocket/websocket_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
 import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
-import 'package:ncd_screening_mobile/shared/bloc/language/language_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 
 final locator = GetIt.instance;
@@ -33,12 +29,6 @@ Future<void> initLocator() async {
   // Register Sync Queue Service
   locator.registerLazySingleton<SyncQueueServiceInterface>(SyncQueueService.new);
 
-  // Register HttpClient
-  locator.registerLazySingleton<IpClient>(IpClient.new);
-
-  // Register WebSocketClient
-  locator.registerLazySingleton<WebSocketClient>(WebSocketClient.new);
-
   // Register NCD BLoCs
   locator.registerLazySingleton<AuthBloc>(
       () => AuthBloc(locator<NcdRepositoryInterface>()));
@@ -55,8 +45,4 @@ Future<void> initLocator() async {
   locator.registerLazySingleton<SyncBadgeBloc>(
       () => SyncBadgeBloc(syncService: locator<SyncQueueServiceInterface>()));
   locator.registerLazySingleton<AccessibilityCubit>(AccessibilityCubit.new);
-
-  // Register Misc Blocs
-  locator.registerLazySingleton<WebsocketBloc>(WebsocketBloc.new);
-  locator.registerLazySingleton<LanguageBloc>(LanguageBloc.new);
 }

@@ -145,3 +145,36 @@ class ScreeningResultsTable extends Table {
   @override
   Set<Column> get primaryKey => {resultId};
 }
+
+/// Durable offline outbox. Rows are kept until a backend confirms receipt.
+class SyncQueueTable extends Table {
+  @override
+  String get tableName => 'sync_queue';
+
+  TextColumn get id => text()();
+  TextColumn get entityType => text()();
+  TextColumn get entityId => text()();
+  TextColumn get action => text()();
+  TextColumn get payload => text()(); // JSON
+  DateTimeColumn get createdAt => dateTime()();
+  IntColumn get retryCount => integer().withDefault(const Constant(0))();
+  TextColumn get status => text().withDefault(const Constant('pending'))();
+  TextColumn get errorMessage => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Auto-saved, unsubmitted screening form input (one per patient + VHV).
+class ScreeningDraftsTable extends Table {
+  @override
+  String get tableName => 'screening_drafts';
+
+  TextColumn get patientId => text()();
+  TextColumn get vhvId => text()();
+  TextColumn get payload => text()(); // JSON of form fields
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {patientId, vhvId};
+}

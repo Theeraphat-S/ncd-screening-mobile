@@ -13,12 +13,14 @@ part 'app_database.g.dart';
   ScreeningsTable,
   ScreeningHistoriesTable,
   ScreeningResultsTable,
+  SyncQueueTable,
+  ScreeningDraftsTable,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -37,6 +39,10 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(screeningsTable);
             await m.createTable(screeningHistoriesTable);
             await m.createTable(screeningResultsTable);
+          }
+          if (from < 4) {
+            await m.createTable(syncQueueTable);
+            await m.createTable(screeningDraftsTable);
           }
         },
       );

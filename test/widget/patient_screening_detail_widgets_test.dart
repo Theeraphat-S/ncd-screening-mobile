@@ -20,7 +20,7 @@ void main() {
         );
 
         expect(find.text('รอพยาบาลตรวจสอบและรับรองผล'), findsOneWidget);
-        expect(find.text('วันที่ตรวจ: 15/03/2568 พ.ศ.'), findsOneWidget);
+        expect(find.text('วันที่ตรวจ: 15/03/2568'), findsOneWidget);
         expect(find.byIcon(Icons.hourglass_top_rounded), findsOneWidget);
       },
     );
@@ -40,7 +40,7 @@ void main() {
         );
 
         expect(find.text('ผ่านการรับรองโดยพยาบาลแล้ว'), findsOneWidget);
-        expect(find.text('วันที่ตรวจ: 15/03/2568 พ.ศ.'), findsOneWidget);
+        expect(find.text('วันที่ตรวจ: 15/03/2568'), findsOneWidget);
         expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
       },
     );

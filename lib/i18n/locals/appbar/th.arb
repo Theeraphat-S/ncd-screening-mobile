@@ -1,7 +1,0 @@
-{
-    "@@locale": "th",
-    "home_route_name": "หน้าแรก",
-    "@home_route_name": {},
-    "todo_route_name": "รายการที่ต้องทํา",
-    "@todo_route_name": {}
-}

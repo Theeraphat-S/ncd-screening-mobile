@@ -1,3 +1,4 @@
+import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
@@ -75,7 +76,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
       return;
     }
 
-    final screeningId = 'S${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    final screeningId = generateId();
     final bmi = NcdRiskCalculator.calculateBmi(weight, height);
 
     final histories = [

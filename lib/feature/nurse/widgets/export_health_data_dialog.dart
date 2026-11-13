@@ -5,6 +5,9 @@ import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/health_data_export_service.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class ExportHealthDataDialog extends StatefulWidget {
   final Nurse nurse;
@@ -57,28 +60,20 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
 
     if (!mounted) return;
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'ส่งออกข้อมูล ${screenings.length} รายการเรียบร้อยแล้ว (คัดลอกลง Clipboard แล้ว)',
-        ),
-        backgroundColor: PColor.riskLow,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    AppSnackBar.success(context, 'ส่งออกข้อมูล ${screenings.length} รายการเรียบร้อยแล้ว (คัดลอกลง Clipboard แล้ว)');
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.xl)),
       title: const Row(
         children: [
           Icon(Icons.file_download_rounded, color: PColor.primaryColor),
           SizedBox(width: 8),
           Text(
             'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
-            style: TextStyle(fontSize: 16.5, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -89,7 +84,7 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
           children: [
             const Text(
               'เลือกรูปแบบความเป็นส่วนตัวตามมาตรฐานสาธารณสุข:',
-              style: TextStyle(fontSize: 13.5, color: PColor.textSecondary),
+              style: PTypography.bodySecondary,
             ),
             const SizedBox(height: 12),
             RadioGroup<ExportPrivacyMode>(
@@ -143,7 +138,7 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
                   hintStyle: const TextStyle(fontSize: 13),
                   prefixIcon: const Icon(Icons.lock_outline_rounded, size: 18),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -171,7 +166,7 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
           style: ElevatedButton.styleFrom(
             backgroundColor: PColor.primaryColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(PRadius.md),
             ),
           ),
           icon: const Icon(Icons.copy_rounded, color: Colors.white, size: 16),

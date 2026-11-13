@@ -3,6 +3,8 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class HighRiskQueueList extends StatelessWidget {
   final List<HighRiskPriorityPatient> queue;
@@ -20,7 +22,7 @@ class HighRiskQueueList extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -52,11 +54,7 @@ class HighRiskQueueList extends StatelessWidget {
                   const SizedBox(width: 8),
                   const Text(
                     'กลุ่มเสี่ยงสูงที่ต้องติดตามเร่งด่วน',
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.bold,
-                      color: PColor.contentColor,
-                    ),
+                    style: PTypography.sectionHeader,
                   ),
                 ],
               ),
@@ -67,7 +65,7 @@ class HighRiskQueueList extends StatelessWidget {
                   color: queue.isEmpty
                       ? PColor.riskLowBg
                       : PColor.riskHighBg,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: Text(
                   '${queue.length} คน',
@@ -85,7 +83,7 @@ class HighRiskQueueList extends StatelessWidget {
           const SizedBox(height: 4),
           const Text(
             'ผู้ป่วยที่มีผลคัดกรองความเสี่ยงระดับสูง กดเพื่อดูรายละเอียดหรือวางแผนลงพื้นที่',
-            style: TextStyle(fontSize: 11.5, color: PColor.textNeutralColor),
+            style: TextStyle(fontSize: 12, color: PColor.textNeutralColor),
           ),
           const Divider(height: 20),
           if (queue.isEmpty)
@@ -99,10 +97,7 @@ class HighRiskQueueList extends StatelessWidget {
                     SizedBox(height: 8),
                     Text(
                       'ไม่พบผู้ป่วยกลุ่มเสี่ยงสูงในพื้นที่ที่เลือก',
-                      style: TextStyle(
-                        fontSize: 13.5,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.bodyMuted,
                     ),
                   ],
                 ),
@@ -137,7 +132,7 @@ class HighRiskQueueList extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: PColor.backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(PRadius.md),
         border: Border.all(
           color: PColor.errorColor.withValues(alpha: 0.25),
         ),
@@ -145,7 +140,7 @@ class HighRiskQueueList extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(PRadius.md),
           onTap: () {
             Navigator.push(
               context,
@@ -179,18 +174,14 @@ class HighRiskQueueList extends StatelessWidget {
                           Flexible(
                             child: Text(
                               patient.fullName,
-                              style: const TextStyle(
-                                fontSize: 14.5,
-                                fontWeight: FontWeight.bold,
-                                color: PColor.contentColor,
-                              ),
+                              style: PTypography.cardTitle,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Text(
                             'ตรวจ: $dateStr',
                             style: const TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                               color: PColor.textNeutralColor,
                             ),
                           ),
@@ -216,7 +207,7 @@ class HighRiskQueueList extends StatelessWidget {
                                 horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
                               color: PColor.errorColor.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(PRadius.sm),
                               border: Border.all(
                                 color: PColor.errorColor.withValues(alpha: 0.3),
                               ),
@@ -224,7 +215,7 @@ class HighRiskQueueList extends StatelessWidget {
                             child: Text(
                               'เสี่ยงสูง: $d',
                               style: const TextStyle(
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: PColor.errorColor,
                               ),

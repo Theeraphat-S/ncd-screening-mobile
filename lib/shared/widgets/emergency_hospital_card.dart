@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/services/clinical_triage_service.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class EmergencyHospitalCard extends StatelessWidget {
   final ClinicalTriageAssessment triage;
@@ -28,7 +29,7 @@ class EmergencyHospitalCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(PRadius.xl),
         border: Border.all(color: cardColor, width: 2),
         boxShadow: [
           BoxShadow(
@@ -48,7 +49,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: cardColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: const Icon(Icons.emergency_rounded, color: Colors.white, size: 24),
               ),
@@ -98,7 +99,7 @@ class EmergencyHospitalCard extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(PRadius.md),
               border: Border.all(color: cardColor.withValues(alpha: 0.3)),
             ),
             child: Row(
@@ -129,7 +130,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: cardColor,
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                     elevation: 0,
                   ),
                   icon: const Icon(Icons.phone_in_talk_rounded, color: Colors.white, size: 18),
@@ -156,7 +157,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                     foregroundColor: cardColor,
                     side: const BorderSide(color: cardColor, width: 1.5),
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                     backgroundColor: Colors.white,
                   ),
                   icon: const Icon(Icons.support_agent_rounded, size: 18),

@@ -72,13 +72,8 @@ class _PinSetupPageState extends State<PinSetupPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'ตั้งรหัส PIN',
-          style: PTypography.appBarTitle,
-        ),
-        centerTitle: true,
+        title: const Text('ตั้งรหัส PIN'),
       ),
       body: SafeArea(
         child: Center(

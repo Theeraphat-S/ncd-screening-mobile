@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class AnalyticsKpiSection extends StatelessWidget {
   final VillageAnalytics analytics;
@@ -86,7 +87,7 @@ class AnalyticsKpiSection extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         border: isAlert
             ? Border.all(color: PColor.errorColor.withValues(alpha: 0.4), width: 1.5)
             : Border.all(color: PColor.borderSubtle),
@@ -107,7 +108,7 @@ class AnalyticsKpiSection extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: PColor.textNeutralColor,
                 ),
@@ -116,7 +117,7 @@ class AnalyticsKpiSection extends StatelessWidget {
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(PRadius.sm),
                 ),
                 child: Icon(icon, color: iconColor, size: 18),
               ),
@@ -151,7 +152,7 @@ class AnalyticsKpiSection extends StatelessWidget {
           Text(
             subtitle,
             style: const TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               color: PColor.textNeutralColor,
             ),
             overflow: TextOverflow.ellipsis,

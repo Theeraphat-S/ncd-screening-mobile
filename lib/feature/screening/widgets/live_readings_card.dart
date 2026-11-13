@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/services/screening_validator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// BMI and blood-pressure level calculated while the VHV is still typing, so
 /// an obviously wrong entry is noticed before saving.
@@ -28,7 +29,7 @@ class LiveReadingsCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: PColor.primaryColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(PRadius.md),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +58,7 @@ class LiveReadingsCard extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: _bpColor(bpLevel!),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(PRadius.xl),
                   ),
                   child: Text(
                     ScreeningValidator.bpLabel(bpLevel!),

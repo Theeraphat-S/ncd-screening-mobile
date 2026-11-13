@@ -157,7 +157,7 @@ class VillageAnalyticsBloc
     } catch (e) {
       emit(state.copyWith(
         status: VillageAnalyticsStatus.failure,
-        errorMessage: 'ไม่สามารถโหลดข้อมูลสถิติสุขภาพได้: ${e.toString()}',
+        errorMessage: 'ไม่สามารถโหลดข้อมูลสถิติสุขภาพได้ ตรวจสอบแล้วลองอีกครั้ง',
       ));
     }
   }

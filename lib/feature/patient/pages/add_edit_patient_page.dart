@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
-import 'package:ncd_screening_mobile/domain/services/citizen_id.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
-import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/tokens.dart';
+import 'package:ncd_screening_mobile/shared/utils/form_validators.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_dialogs.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_text_field.dart';
 
 class AddEditPatientPage extends StatefulWidget {
   final VHV? vhv;
@@ -41,6 +45,12 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
   String _gender = 'ชาย';
   DateTime _birthDate = DateTime(1980, 1, 1);
   bool get _isEdit => widget.patient != null;
+
+  /// True once the user changed anything; guards against losing input.
+  bool _dirty = false;
+  bool _submitting = false;
+  bool _showErrorsAsYouType = false;
+  String? _formError;
 
   @override
   void initState() {
@@ -87,353 +97,149 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
     return age;
   }
 
+  String get _birthDateText =>
+      '${_birthDate.day.toString().padLeft(2, '0')}/'
+      '${_birthDate.month.toString().padLeft(2, '0')}/'
+      '${_birthDate.year + 543}';
+
+  void _markDirty() {
+    if (!_dirty) setState(() => _dirty = true);
+  }
+
   Future<void> _selectBirthDate() async {
     final picked = await showDatePicker(
       context: context,
       initialDate: _birthDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: PColor.primaryColor,
-              onPrimary: Colors.white,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
-      setState(() => _birthDate = picked);
+      setState(() {
+        _birthDate = picked;
+        _dirty = true;
+      });
     }
   }
 
+  /// Existing records keep their stored ID unless the user changes it, so
+  /// the checksum is only enforced on a new or edited number.
+  String? _validateCitizenId(String? value) => FormValidators.citizenId(
+        value,
+        checkDigit: widget.patient?.patientCitizenId != value?.trim(),
+      );
+
   void _onSave() {
-    final citizenId = _citizenIdController.text.trim();
+    FocusScope.of(context).unfocus();
+    final invalid = _formKey.currentState!.validateGranularly();
+    if (invalid.isNotEmpty) {
+      setState(() {
+        _showErrorsAsYouType = true;
+        _formError =
+            'ยังบันทึกไม่ได้ กรุณาแก้ไข ${invalid.length} ช่องที่มีข้อความสีแดง';
+      });
+      Scrollable.ensureVisible(
+        invalid.first.context,
+        alignment: 0.2,
+        duration: PDuration.normal,
+      );
+      return;
+    }
+
     final title = _titleController.text.trim();
-    final fname = _fnameController.text.trim();
-    final lname = _lnameController.text.trim();
-    final address = _addressController.text.trim();
-
-    // SRS Form Validations
-    if (citizenId.length != 13 || int.tryParse(citizenId) == null) {
-      _showError('เลขบัตรประชาชนต้องเป็นตัวเลข 13 ตัวอักษร');
-      return;
-    }
-    // Existing records keep their stored ID unless the user changes it.
-    final idChanged = widget.patient?.patientCitizenId != citizenId;
-    if (idChanged && !CitizenId.isValid(citizenId)) {
-      _showError('เลขบัตรประชาชนไม่ถูกต้อง กรุณาตรวจสอบตัวเลขอีกครั้ง');
-      return;
-    }
-    if (fname.length < 2 || fname.length > 100) {
-      _showError('ชื่อต้องมีความยาว 3 ถึง 100 ตัวอักษร');
-      return;
-    }
-    if (lname.length < 2 || lname.length > 100) {
-      _showError('นามสกุลต้องมีความยาว 3 ถึง 100 ตัวอักษร');
-      return;
-    }
-    if (address.isEmpty) {
-      _showError('กรุณากรอกที่อยู่ให้ครบถ้วน');
-      return;
-    }
-
-    final newPatient = Patient(
+    final patient = Patient(
       patientId: widget.patient?.patientId ?? '',
-      patientCitizenId: citizenId,
+      patientCitizenId: _citizenIdController.text.trim(),
       patientTitle: title.isNotEmpty ? title : (_gender == 'ชาย' ? 'นาย' : 'นาง'),
-      patientFname: fname,
-      patientLname: lname,
+      patientFname: _fnameController.text.trim(),
+      patientLname: _lnameController.text.trim(),
       patientGender: _gender,
       patientBirthDate: _birthDate,
-      patientAddress: address,
+      patientAddress: _addressController.text.trim(),
       patientMobile: _mobileController.text.trim(),
       villageId: widget.villageId,
     );
 
-    if (_isEdit) {
-      context.read<PatientBloc>().add(PatientUpdateRequested(newPatient));
-    } else {
-      context.read<PatientBloc>().add(PatientAddRequested(newPatient));
-    }
-
-    Navigator.pop(context);
+    setState(() {
+      _submitting = true;
+      _formError = null;
+    });
+    context.read<PatientBloc>().add(
+          _isEdit
+              ? PatientUpdateRequested(patient)
+              : PatientAddRequested(patient),
+        );
   }
 
-  void _showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: PColor.errorColor,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+  /// The page stays open until the save is confirmed, so a failed save
+  /// never throws the typed data away.
+  void _onSaveResult(BuildContext context, PatientState state) {
+    if (state.status == PatientStatus.success) {
+      Navigator.pop(context);
+      return;
+    }
+    setState(() {
+      _submitting = false;
+      _formError =
+          '${state.errorMessage ?? 'บันทึกข้อมูลไม่สำเร็จ'} กรุณาตรวจสอบข้อมูลแล้วลองอีกครั้ง';
+    });
+  }
+
+  Future<void> _confirmLeave() async {
+    final leave = await confirmDiscardChanges(context);
+    if (leave && mounted) Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PColor.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          _isEdit ? 'แก้ไขผู้ป่วย' : 'เพิ่มผู้ป่วย',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    return BlocListener<PatientBloc, PatientState>(
+      listenWhen: (prev, curr) =>
+          _submitting &&
+          prev.status == PatientStatus.loading &&
+          ((curr.status == PatientStatus.success && curr.message != null) ||
+              curr.status == PatientStatus.failure),
+      listener: _onSaveResult,
+      child: PopScope(
+        canPop: !_dirty,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _confirmLeave();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(_isEdit ? 'แก้ไขผู้ป่วย' : 'เพิ่มผู้ป่วย'),
           ),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Image Upload Card
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 36,
-                        backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
-                        child: const Icon(Icons.person, size: 40, color: PColor.primaryColor),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'รูปผู้ป่วย (ไม่บังคับ)',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: PColor.contentColor,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            OutlinedButton.icon(
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('เลือกรูปภาพเรียบร้อยแล้ว'),
-                                    duration: Duration(seconds: 1),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.image_outlined, size: 18, color: PColor.primaryColor),
-                              label: Text(
-                                _isEdit ? 'เปลี่ยนรูป' : 'แนบรูป',
-                                style: const TextStyle(color: PColor.primaryColor, fontWeight: FontWeight.bold),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: PColor.primaryColor),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: PSpacing.edgeInsetsAllXl,
+              child: Form(
+                key: _formKey,
+                autovalidateMode: _showErrorsAsYouType
+                    ? AutovalidateMode.onUserInteraction
+                    : AutovalidateMode.disabled,
+                onChanged: _markDirty,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildFieldsCard(),
+                    PSpacing.gapVerticalXxl,
+                    if (_formError != null) ...[
+                      InlineAlert(_formError!),
+                      PSpacing.gapVerticalMd,
                     ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Fields Card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Citizen ID
-                      _buildLabel('เลขบัตรประชาชน (13 หลัก)'),
-                      TextFormField(
-                        controller: _citizenIdController,
-                        keyboardType: TextInputType.number,
-                        maxLength: 13,
-                        decoration: _inputDecoration('กรอกเลขบัตรประชาชน 13 หลัก'),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Title & First Name
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildLabel('คำนำหน้า'),
-                                TextFormField(
-                                  controller: _titleController,
-                                  decoration: _inputDecoration('นาย / นาง'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            flex: 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildLabel('ชื่อ'),
-                                TextFormField(
-                                  controller: _fnameController,
-                                  decoration: _inputDecoration('ชื่อจริง'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Last Name
-                      _buildLabel('นามสกุล'),
-                      TextFormField(
-                        controller: _lnameController,
-                        decoration: _inputDecoration('นามสกุล'),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Gender & Birthdate
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildLabel('เพศ'),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: PColor.borderStrong),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: _gender,
-                                      isExpanded: true,
-                                      items: const [
-                                        DropdownMenuItem(value: 'ชาย', child: Text('ชาย')),
-                                        DropdownMenuItem(value: 'หญิง', child: Text('หญิง')),
-                                      ],
-                                      onChanged: (v) {
-                                        if (v != null) setState(() => _gender = v);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildLabel('วันเกิด'),
-                                InkWell(
-                                  onTap: _selectBirthDate,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: PColor.borderStrong),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '${_birthDate.day.toString().padLeft(2, '0')}/${_birthDate.month.toString().padLeft(2, '0')}/${_birthDate.year + 543}',
-                                          style: const TextStyle(fontSize: 13.5),
-                                        ),
-                                        const Icon(Icons.calendar_today_outlined, size: 18, color: PColor.primaryColor),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Auto-calculated age
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: PColor.surfaceSubtle,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'อายุ (คำนวณอัตโนมัติ): $_calculatedAge ปี',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: PColor.contentColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Address
-                      _buildLabel('ที่อยู่ (เลขที่บ้าน ซอย ถนน)'),
-                      TextFormField(
-                        controller: _addressController,
-                        maxLines: 2,
-                        decoration: _inputDecoration('เช่น 60 หมู่ 1 บ้านท่าตอน อ.แม่อาย'),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Save Button
-                ElevatedButton.icon(
-                  onPressed: _onSave,
-                  icon: const Icon(Icons.save_outlined, color: Colors.white),
-                  label: const Text(
-                    'บันทึก',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    ElevatedButton.icon(
+                      onPressed: _submitting ? null : _onSave,
+                      icon: _submitting
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2.5),
+                            )
+                          : const Icon(Icons.save_outlined),
+                      label: Text(_submitting ? 'กำลังบันทึก…' : 'บันทึก'),
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: PColor.primaryColor,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    elevation: 2,
-                  ),
+                    PSpacing.gapVerticalXl,
+                  ],
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         ),
@@ -441,39 +247,105 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6.0),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 13.5,
-          fontWeight: FontWeight.w600,
-          color: PColor.contentColor,
+  Widget _buildFieldsCard() {
+    return Card(
+      child: Padding(
+        padding: PSpacing.edgeInsetsAllXl,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppTextField(
+              label: 'เลขบัตรประชาชน',
+              hint: 'ตัวเลข 13 หลัก',
+              controller: _citizenIdController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              maxLength: 13,
+              validator: _validateCitizenId,
+            ),
+            PSpacing.gapVerticalLg,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: AppTextField(
+                    label: 'คำนำหน้า',
+                    hint: 'นาย / นาง',
+                    controller: _titleController,
+                  ),
+                ),
+                PSpacing.gapHorizontalMd,
+                Expanded(
+                  flex: 5,
+                  child: AppTextField(
+                    label: 'ชื่อ',
+                    hint: 'ชื่อจริง',
+                    controller: _fnameController,
+                    autofillHints: const [AutofillHints.givenName],
+                    validator: (v) => FormValidators.personName(v, 'ชื่อ'),
+                  ),
+                ),
+              ],
+            ),
+            PSpacing.gapVerticalLg,
+            AppTextField(
+              label: 'นามสกุล',
+              hint: 'นามสกุล',
+              controller: _lnameController,
+              autofillHints: const [AutofillHints.familyName],
+              validator: (v) => FormValidators.personName(v, 'นามสกุล'),
+            ),
+            PSpacing.gapVerticalLg,
+            const AppFieldLabel('เพศ'),
+            DropdownButtonFormField<String>(
+              initialValue: _gender,
+              isExpanded: true,
+              items: const [
+                DropdownMenuItem(value: 'ชาย', child: Text('ชาย')),
+                DropdownMenuItem(value: 'หญิง', child: Text('หญิง')),
+              ],
+              onChanged: (v) {
+                if (v != null) setState(() => _gender = v);
+              },
+            ),
+            PSpacing.gapVerticalLg,
+            AppPickerField(
+              label: 'วันเกิด (พ.ศ.)',
+              value: _birthDateText,
+              icon: Icons.calendar_today_outlined,
+              helper: 'อายุ $_calculatedAge ปี (คำนวณอัตโนมัติ)',
+              onTap: _selectBirthDate,
+            ),
+            PSpacing.gapVerticalLg,
+            AppTextField(
+              label: 'ที่อยู่',
+              hint: 'เช่น 60 หมู่ 1 บ้านท่าตอน อ.แม่อาย',
+              helper: 'เลขที่บ้าน ซอย ถนน',
+              controller: _addressController,
+              maxLines: 2,
+              keyboardType: TextInputType.streetAddress,
+              validator: (v) =>
+                  FormValidators.required(v, 'กรุณากรอกที่อยู่ให้ครบถ้วน'),
+            ),
+            PSpacing.gapVerticalLg,
+            AppTextField(
+              label: 'เบอร์มือถือ',
+              optional: true,
+              hint: 'เช่น 0812345678',
+              controller: _mobileController,
+              keyboardType: TextInputType.phone,
+              textInputAction: TextInputAction.done,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              autofillHints: const [AutofillHints.telephoneNumber],
+              maxLength: 10,
+              // A number already on record is kept as it is.
+              validator: (v) => v?.trim() == widget.patient?.patientMobile
+                  ? null
+                  : FormValidators.thaiMobile(v, optional: true),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration(String hint) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 13.5),
-      filled: true,
-      fillColor: Colors.white,
-      counterText: '',
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: PColor.borderStrong),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: PColor.borderStrong),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: PColor.primaryColor, width: 1.8),
       ),
     );
   }

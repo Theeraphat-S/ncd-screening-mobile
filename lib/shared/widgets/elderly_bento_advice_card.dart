@@ -4,6 +4,7 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_lifestyle_advisor.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class AccessibilityScaleToggle extends StatelessWidget {
   const AccessibilityScaleToggle({super.key});
@@ -24,13 +25,13 @@ class AccessibilityScaleToggle extends StatelessWidget {
     return BlocBuilder<AccessibilityCubit, AccessibilityState>(
       builder: (context, state) {
         return InkWell(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(PRadius.xl),
           onTap: () => context.read<AccessibilityCubit>().toggleElderlyMode(),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: state.isElderlyMode ? PColor.riskModerate : Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(PRadius.xl),
               border: Border.all(
                 color: state.isElderlyMode ? PColor.riskModerate : Colors.white54,
                 width: 1.2,
@@ -126,7 +127,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 16),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(PRadius.xl),
             border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
             boxShadow: [
               BoxShadow(
@@ -144,7 +145,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: riskBg,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(PRadius.lg)),
                 ),
                 child: Row(
                   children: [
@@ -165,7 +166,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                           Text(
                             advice.conditionSummary,
                             style: TextStyle(
-                              fontSize: 12.5 * scale,
+                              fontSize: 13 * scale,
                               color: PColor.textSecondary,
                             ),
                           ),
@@ -178,7 +179,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: riskColor,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(PRadius.md),
                         ),
                         child: Text(
                           advice.riskLabelThai,
@@ -235,7 +236,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: PColor.surfaceSubtle,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(PRadius.md),
                       ),
                       child: Row(
                         children: [
@@ -245,7 +246,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                             child: Text(
                               'นัดติดตาม: ${advice.followUpSchedule}',
                               style: TextStyle(
-                                fontSize: 12.5 * scale,
+                                fontSize: 13 * scale,
                                 fontWeight: FontWeight.w600,
                                 color: PColor.primaryDark,
                               ),
@@ -279,7 +280,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: TextStyle(
-                fontSize: 13.5 * scale,
+                fontSize: 14 * scale,
                 color: PColor.contentColor,
                 fontFamily: 'Sarabun',
               ),

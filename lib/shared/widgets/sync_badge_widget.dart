@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class SyncBadgeWidget extends StatelessWidget {
   const SyncBadgeWidget({super.key});
@@ -30,7 +31,7 @@ class SyncBadgeWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: PColor.primaryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                     ),
                     child: const Icon(Icons.cloud_sync_rounded, color: PColor.primaryDark, size: 24),
                   ),
@@ -63,7 +64,7 @@ class SyncBadgeWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: PColor.surfaceSubtle,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: Row(
                   children: [
@@ -88,7 +89,7 @@ class SyncBadgeWidget extends StatelessWidget {
                             : state.isOnline
                                 ? 'สถานะเครือข่าย: ออนไลน์ (พร้อมซิงค์)'
                                 : 'สถานะเครือข่าย: ออฟไลน์',
-                        style: PTypography.labelSmall.copyWith(color: !state.canSync ? PColor.textSecondary : state.isOnline ? PColor.riskLow : PColor.riskHigh, fontSize: 14.5),
+                        style: PTypography.labelSmall.copyWith(color: !state.canSync ? PColor.textSecondary : state.isOnline ? PColor.riskLow : PColor.riskHigh, fontSize: 15),
                       ),
                     ),
                   ],
@@ -101,7 +102,7 @@ class SyncBadgeWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: queueClear ? PColor.riskLowBg : PColor.riskModerateBg,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                   border: Border.all(
                     color: queueClear ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
                   ),
@@ -138,7 +139,7 @@ class SyncBadgeWidget extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PColor.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                   ),
                   icon: state.isSyncing
                       ? const SizedBox(
@@ -202,14 +203,14 @@ class SyncBadgeWidget extends StatelessWidget {
 
         if (state.canSync && state.pendingCount > 0) {
           return InkWell(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(PRadius.xl),
             onTap: () => _showSyncDetailModal(context, state),
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: PColor.riskModerate,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(PRadius.xl),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.15),

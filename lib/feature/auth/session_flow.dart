@@ -13,6 +13,7 @@ import 'package:ncd_screening_mobile/feature/patient/pages/vhv_patient_list_page
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/shared/navigation.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_dialogs.dart';
 
 /// Id used to key a staff member's PIN / biometric settings.
 String? staffUserId(dynamic user) {
@@ -60,6 +61,12 @@ Future<void> completeLogin(BuildContext context, UserRole role, dynamic user) as
             }),
     ),
   );
+}
+
+/// Sign-out asked for from a page: confirmed first, because it is easy to hit
+/// by accident and the user then has to log in again.
+Future<void> requestSignOut(BuildContext context) async {
+  if (await confirmSignOut(context)) signOut();
 }
 
 /// Ends the session and returns to role selection. Uses the root navigator

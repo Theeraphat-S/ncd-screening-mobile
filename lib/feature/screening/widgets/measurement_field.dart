@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// Numeric measurement input with its unit, an error line and a non-blocking
 /// warning line. Large type and a 56dp-high field keep it usable outdoors.
@@ -47,7 +48,7 @@ class MeasurementField extends StatelessWidget {
 
     OutlineInputBorder border(Color color, [double width = 1]) =>
         OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(PRadius.md),
           borderSide: BorderSide(color: color, width: width),
         );
 

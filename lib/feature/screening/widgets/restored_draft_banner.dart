@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// Tells the VHV that earlier input was restored, with a "start over" action.
 class RestoredDraftBanner extends StatelessWidget {
@@ -29,7 +30,7 @@ class RestoredDraftBanner extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: PColor.riskModerateBg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(PRadius.md),
         border: Border.all(color: PColor.riskModerate.withValues(alpha: 0.4)),
       ),
       child: Row(

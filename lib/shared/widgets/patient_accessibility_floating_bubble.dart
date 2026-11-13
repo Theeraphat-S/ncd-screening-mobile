@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class PatientAccessibilityFloatingBubble extends StatefulWidget {
   const PatientAccessibilityFloatingBubble({super.key});
@@ -38,7 +39,7 @@ class _PatientAccessibilityFloatingBubbleState
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: isHC ? PColor.hcSurface : Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(PRadius.xl),
                     border: Border.all(
                       color: isHC ? PColor.hcAccent : PColor.borderSubtle,
                       width: isHC ? 2 : 1,
@@ -233,7 +234,7 @@ class _PatientAccessibilityFloatingBubbleState
                 backgroundColor: bubbleBg,
                 foregroundColor: iconColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                   side: isHC
                       ? const BorderSide(color: Colors.white, width: 2)
                       : BorderSide.none,

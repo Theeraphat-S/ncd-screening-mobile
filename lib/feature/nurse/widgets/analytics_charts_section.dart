@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class AnalyticsChartsSection extends StatelessWidget {
   final VillageAnalytics analytics;
@@ -13,7 +15,7 @@ class AnalyticsChartsSection extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -32,11 +34,7 @@ class AnalyticsChartsSection extends StatelessWidget {
               SizedBox(width: 8),
               Text(
                 'สถิติความเสี่ยงรายโรค NCDs (4 โรค)',
-                style: TextStyle(
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.sectionHeader,
               ),
             ],
           ),
@@ -100,18 +98,14 @@ class AnalyticsChartsSection extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   breakdown.diseaseName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: PColor.contentColor,
-                  ),
+                  style: PTypography.bodyBold,
                 ),
               ],
             ),
             Text(
               'คัดกรองแล้ว $total คน',
               style: const TextStyle(
-                fontSize: 11.5,
+                fontSize: 12,
                 color: PColor.textNeutralColor,
               ),
             ),
@@ -121,7 +115,7 @@ class AnalyticsChartsSection extends StatelessWidget {
 
         // Multi-segment horizontal progress bar
         ClipRRect(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(PRadius.sm),
           child: SizedBox(
             height: 12,
             child: total == 0
@@ -204,7 +198,7 @@ class AnalyticsChartsSection extends StatelessWidget {
         Text(
           '$label: $count ($percentage%)',
           style: const TextStyle(
-            fontSize: 11,
+            fontSize: 12,
             color: PColor.contentColor,
             fontWeight: FontWeight.w500,
           ),

@@ -12,6 +12,7 @@ import 'package:ncd_screening_mobile/shared/widgets/elderly_bento_advice_card.da
 import 'package:ncd_screening_mobile/shared/widgets/emergency_hospital_card.dart';
 
 import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class RiskAssessmentResultPage extends StatelessWidget {
   final Patient patient;
@@ -30,17 +31,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'แนวโน้มความเสี่ยง',
-          style: PTypography.appBarTitle,
-        ),
-        centerTitle: true,
+        title: const Text('แนวโน้มความเสี่ยง'),
         actions: [
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -89,7 +80,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                   border: Border.all(color: PColor.borderSubtle),
                   boxShadow: PShadow.card,
                 ),
@@ -100,7 +91,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                       height: 46,
                       decoration: BoxDecoration(
                         color: PColor.primaryLight,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(PRadius.md),
                       ),
                       child: Center(
                         child: Text(
@@ -153,7 +144,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: PColor.primaryLight,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(PRadius.sm),
                     ),
                     child: const Icon(Icons.tips_and_updates_rounded, color: PColor.primaryDark, size: 18),
                   ),
@@ -200,7 +191,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: PColor.primaryColor, width: 1.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                     ),
                     backgroundColor: Colors.white,
                   ),
@@ -232,7 +223,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                     backgroundColor: PColor.primaryColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                     ),
                   ),
                   child: const Text(
@@ -257,7 +248,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
@@ -369,7 +360,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
@@ -382,7 +373,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: badgeBg,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: Icon(diseaseIcon, color: badgeColor, size: 20),
               ),
@@ -397,7 +388,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: badgeBg,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(PRadius.xl),
                   border: Border.all(color: badgeColor.withValues(alpha: 0.3)),
                 ),
                 child: Text(
@@ -424,7 +415,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 color: PColor.surfaceSubtle,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(PRadius.md),
                 border: Border.all(color: PColor.borderSubtle),
               ),
               child: Row(

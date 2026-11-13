@@ -5,6 +5,9 @@ import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_add_edit_vhv_page
 import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_vhv_detail_page.dart';
 import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class NurseVhvListPage extends StatefulWidget {
   final Nurse nurse;
@@ -34,21 +37,7 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'รายชื่อ อสม. ในหมู่ ${widget.village.villageNumber}',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: Text('รายชื่อ อสม. ในหมู่ ${widget.village.villageNumber}'),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),
@@ -86,18 +75,26 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
             child: BlocConsumer<VhvBloc, VhvState>(
               listener: (context, state) {
                 if (state.message != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message!),
-                      backgroundColor: PColor.primaryDark,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
+                  AppSnackBar.success(context, state.message!);
+                } else if (state.status == VhvStatus.failure &&
+                    state.errorMessage != null &&
+                    (ModalRoute.of(context)?.isCurrent ?? true)) {
+                  // A form on top reports its own save failure in place.
+                  AppSnackBar.error(context, state.errorMessage!);
                 }
               },
               builder: (context, state) {
                 if (state.status == VhvStatus.loading && state.vhvs.isEmpty) {
                   return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                }
+
+                if (state.status == VhvStatus.failure && state.vhvs.isEmpty) {
+                  return ErrorStateView(
+                    message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+                    onRetry: () => context.read<VhvBloc>().add(
+                          VhvListLoadRequested(villageId: widget.village.villageId),
+                        ),
+                  );
                 }
 
                 if (state.vhvs.isEmpty) {
@@ -148,10 +145,10 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
   Widget _buildVhvCard(BuildContext context, VHV vhv) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(PRadius.md),
       elevation: 1.5,
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         onTap: () {
           context.read<VhvBloc>().add(VhvSelected(vhv));
           Navigator.push(
@@ -181,19 +178,12 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
                   children: [
                     Text(
                       vhv.fullName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
+                      style: PTypography.sectionHeader,
                     ),
                     const SizedBox(height: 3),
                     Text(
                       'โทร: ${vhv.vhvMobile}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.caption,
                     ),
                   ],
                 ),

@@ -39,11 +39,7 @@ class ScreeningDetailActionButtons extends StatelessWidget {
           ),
           label: const Text(
             'ดูตัวอย่าง / พิมพ์เอกสารสรุปผล (PDF)',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: PColor.primaryColor,
-            ),
+            style: PTypography.actionPrimary,
           ),
           style: OutlinedButton.styleFrom(
             side: const BorderSide(color: PColor.primaryColor, width: 1.5),

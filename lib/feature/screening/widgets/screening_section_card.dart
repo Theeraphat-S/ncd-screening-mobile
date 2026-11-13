@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// White card with an icon + title header, used for each part of the form.
 class ScreeningSectionCard extends StatelessWidget {
@@ -21,7 +22,7 @@ class ScreeningSectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(PRadius.xl),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
@@ -34,7 +35,7 @@ class ScreeningSectionCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: PColor.primaryLight,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: Icon(icon, color: PColor.primaryColor, size: 20),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// 6-digit PIN entry with a large on-screen keypad.
 ///
@@ -130,7 +131,7 @@ class _PinPadState extends State<PinPad> {
               backgroundColor: PColor.primaryLight,
               foregroundColor: PColor.contentColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(PRadius.lg),
               ),
             ),
             child: Text(

@@ -7,6 +7,7 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/pin_login_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// "Continue as NAME with PIN" shortcut shown on the role-selection page
 /// when a staff member on this device already set a PIN.
@@ -45,9 +46,9 @@ class QuickPinLoginCard extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 18),
           child: Material(
             color: PColor.primaryLight,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(PRadius.lg),
             child: InkWell(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(PRadius.lg),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(

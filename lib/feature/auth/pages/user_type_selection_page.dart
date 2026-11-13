@@ -6,6 +6,7 @@ import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/quick_pin_login_card.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
   const UserTypeSelectionPage({super.key});
@@ -75,7 +76,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                     decoration: BoxDecoration(
                       color: PColor.surfaceSubtle,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(PRadius.xl),
                       border: Border.all(color: PColor.borderSubtle),
                     ),
                     child: Text(
@@ -143,15 +144,15 @@ class UserTypeSelectionPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle, width: 1),
         boxShadow: PShadow.card,
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(PRadius.lg),
           onTap: () {
             context.read<AuthBloc>().add(AuthSelectRole(role));
             Navigator.push(
@@ -170,7 +171,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     color: accentBg,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: Icon(icon, color: accentColor, size: 26),
                 ),

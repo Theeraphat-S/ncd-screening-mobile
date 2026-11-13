@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 /// A question with a row of large tap targets (มี / ไม่มี / ไม่ทราบ).
 ///
@@ -61,13 +62,13 @@ class ChoiceQuestion extends StatelessWidget {
         label: opt,
         child: InkWell(
           key: Key('${keyPrefix}_$opt'),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(PRadius.md),
           onTap: () => onChanged(opt),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
               color: isSelected ? PColor.primaryLight : PColor.surfaceSubtle,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(PRadius.md),
               border: Border.all(
                 color: isSelected ? PColor.primaryColor : PColor.borderSubtle,
                 width: isSelected ? 1.5 : 1,

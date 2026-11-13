@@ -5,6 +5,9 @@ import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_patient_list_page.dart';
 import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_vhv_list_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class VillageManagementTab extends StatelessWidget {
   final Nurse nurse;
@@ -18,6 +21,13 @@ class VillageManagementTab extends StatelessWidget {
         if (state.status == VillageStatus.loading && state.villages.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(color: PColor.primaryColor),
+          );
+        }
+
+        if (state.status == VillageStatus.failure && state.villages.isEmpty) {
+          return ErrorStateView(
+            message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+            onRetry: () => context.read<VillageBloc>().add(VillageListLoadRequested()),
           );
         }
 
@@ -42,7 +52,7 @@ class VillageManagementTab extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -54,7 +64,7 @@ class VillageManagementTab extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(PRadius.md),
           onTap: () => _showVillageActionSheet(context, village),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
@@ -64,7 +74,7 @@ class VillageManagementTab extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: PColor.primaryLight.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: const Icon(
                     Icons.location_city_rounded,
@@ -79,19 +89,12 @@ class VillageManagementTab extends StatelessWidget {
                     children: [
                       Text(
                         'หมู่ ${village.villageNumber} ${village.villageName}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.sectionHeader,
                       ),
                       const SizedBox(height: 4),
                       const Text(
                         'กดเพื่อดูรายชื่อ อสม. หรือ ผู้ป่วยในหมู่บ้าน',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: PColor.textNeutralColor,
-                        ),
+                        style: PTypography.caption,
                       ),
                     ],
                   ),
@@ -113,7 +116,7 @@ class VillageManagementTab extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(PRadius.xl)),
       ),
       builder: (bottomSheetContext) {
         return SafeArea(
@@ -125,11 +128,7 @@ class VillageManagementTab extends StatelessWidget {
               children: [
                 Text(
                   'หมู่ ${village.villageNumber} ${village.villageName}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: PColor.primaryDark,
-                  ),
+                  style: PTypography.emphasisPrimary,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 18),
@@ -138,7 +137,7 @@ class VillageManagementTab extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: PColor.primaryLight.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(PRadius.sm),
                     ),
                     child: const Icon(Icons.volunteer_activism_rounded,
                         color: PColor.primaryColor),
@@ -168,7 +167,7 @@ class VillageManagementTab extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: PColor.secondaryLight,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(PRadius.sm),
                     ),
                     child: const Icon(Icons.people_outline_rounded,
                         color: PColor.secondaryColor),

@@ -17,6 +17,8 @@ import 'package:ncd_screening_mobile/feature/screening/widgets/screening_section
 import 'package:ncd_screening_mobile/feature/screening/widgets/screening_step_indicator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 const _personalNcdOptions = [
   'โรคเบาหวาน',
@@ -224,15 +226,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
   // ---- submit ----------------------------------------------------------
 
   void _showSnack(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: PColor.errorColor,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+    AppSnackBar.error(context, message);
   }
 
   Future<void> _onSubmit() async {
@@ -352,15 +346,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
         child: Scaffold(
           backgroundColor: PColor.backgroundColor,
           appBar: AppBar(
-            backgroundColor: PColor.primaryColor,
-            elevation: 0,
-            leading: IconButton(
-              tooltip: 'ย้อนกลับ',
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-              onPressed: () => Navigator.of(context).maybePop(),
-            ),
-            title: const Text('แบบฟอร์มคัดกรองโรค', style: PTypography.appBarTitle),
-            centerTitle: true,
+            title: const Text('แบบฟอร์มคัดกรองโรค'),
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -455,7 +441,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                       backgroundColor: PColor.primaryColor,
                       disabledBackgroundColor: PColor.primaryColor.withValues(alpha: 0.6),
                       minimumSize: const Size.fromHeight(56),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                       elevation: 3,
                     ),
                   ),

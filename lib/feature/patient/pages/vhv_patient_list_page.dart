@@ -8,6 +8,9 @@ import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.d
 import 'package:ncd_screening_mobile/feature/patient/pages/vhv_search_patient_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class VhvPatientListPage extends StatefulWidget {
   final VHV vhv;
@@ -32,21 +35,12 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: const IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: signOut,
+        leading: IconButton(
+          tooltip: 'ออกจากระบบ',
+          icon: const Icon(Icons.logout_rounded),
+          onPressed: () => requestSignOut(context),
         ),
-        title: const Text(
-          'รายชื่อผู้ป่วย',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: const Text('รายชื่อผู้ป่วย'),
         actions: [
           const SyncBadgeWidget(),
           IconButton(
@@ -77,7 +71,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(PRadius.sm),
                   ),
                   child: const Icon(Icons.volunteer_activism_rounded, color: Colors.white, size: 18),
                 ),
@@ -112,18 +106,26 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
             child: BlocConsumer<PatientBloc, PatientState>(
               listener: (context, state) {
                 if (state.message != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message!),
-                      backgroundColor: PColor.primaryDark,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
+                  AppSnackBar.success(context, state.message!);
+                } else if (state.status == PatientStatus.failure &&
+                    state.errorMessage != null &&
+                    (ModalRoute.of(context)?.isCurrent ?? true)) {
+                  // A form on top reports its own save failure in place.
+                  AppSnackBar.error(context, state.errorMessage!);
                 }
               },
               builder: (context, state) {
                 if (state.status == PatientStatus.loading && state.patients.isEmpty) {
                   return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                }
+
+                if (state.status == PatientStatus.failure && state.patients.isEmpty) {
+                  return ErrorStateView(
+                    message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+                    onRetry: () => context.read<PatientBloc>().add(
+                          PatientLoadRequested(villageId: widget.vhv.villageId),
+                        ),
+                  );
                 }
 
                 if (state.patients.isEmpty) {
@@ -155,10 +157,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                           const SizedBox(height: 6),
                           const Text(
                             'กดปุ่ม "เพิ่มผู้ป่วย" ด้านล่างเพื่อเริ่มบันทึกข้อมูล',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: PColor.textNeutralColor,
-                            ),
+                            style: PTypography.bodyMuted,
                           ),
                         ],
                       ),
@@ -197,7 +196,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w700,
-            fontSize: 14.5,
+            fontSize: 15,
             letterSpacing: -0.2,
           ),
         ),
@@ -221,15 +220,15 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(PRadius.lg),
           onTap: () {
             context.read<PatientBloc>().add(PatientSelected(patient));
             Navigator.push(
@@ -252,16 +251,12 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                   height: 46,
                   decoration: BoxDecoration(
                     color: PColor.primaryLight,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: Center(
                     child: Text(
                       initials,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: PColor.primaryDark,
-                      ),
+                      style: PTypography.emphasisPrimary,
                     ),
                   ),
                 ),
@@ -274,7 +269,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                       Text(
                         patient.fullName,
                         style: const TextStyle(
-                          fontSize: 15.5,
+                          fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: PColor.contentColor,
                           letterSpacing: -0.2,

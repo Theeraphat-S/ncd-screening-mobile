@@ -20,6 +20,9 @@ class PColor {
   static const Color borderSubtle = Color(0xFFE2E8F0); // Slate 200
   static const Color borderStrong = Color(0xFFCBD5E1); // Slate 300
   static const Color errorColor = Color(0xFFDC2626); // Red 600
+  // Input outlines must reach 3:1 against the surface (WCAG 1.4.11).
+  static const Color borderInput = Color(0xFF7C8BA1); // 3.5:1 on white
+  static const Color secondaryDark = Color(0xFF075985); // Sky 800
 
   // High Contrast (WCAG AAA) Accessibility Tokens
   static const Color hcBackground = Color(0xFF121212); // Dark Charcoal
@@ -33,6 +36,7 @@ class PColor {
   static const Color hcTextMuted = Color(
     0xFFB0B0B0,
   ); // High Contrast Muted Text
+  static const Color hcError = Color(0xFFFF8A80); // 8.2:1 on hcBackground
 
   // Calibrated Clinical Risk Tokens (WCAG AA Compliant)
   static const Color riskLow = Color(0xFF047857); // Emerald 700 (5.2:1 on riskLowBg)

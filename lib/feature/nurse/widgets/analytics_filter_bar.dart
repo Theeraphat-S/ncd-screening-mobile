@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class AnalyticsFilterBar extends StatelessWidget {
   final VillageAnalyticsState state;
@@ -15,7 +17,7 @@ class AnalyticsFilterBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -35,11 +37,7 @@ class AnalyticsFilterBar extends StatelessWidget {
               const SizedBox(width: 8),
               const Text(
                 'เลือกพื้นที่:',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.bodyBold,
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -48,7 +46,7 @@ class AnalyticsFilterBar extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                     border: Border.all(color: PColor.borderStrong),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -57,11 +55,7 @@ class AnalyticsFilterBar extends StatelessWidget {
                       value: state.selectedVillageId ?? 'ALL',
                       icon: const Icon(Icons.arrow_drop_down_rounded,
                           color: PColor.primaryColor),
-                      style: const TextStyle(
-                        fontSize: 13.5,
-                        color: PColor.contentColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: PTypography.labelSmall,
                       onChanged: (val) {
                         context.read<VillageAnalyticsBloc>().add(
                               VillageAnalyticsFilterChanged(
@@ -116,7 +110,7 @@ class AnalyticsFilterBar extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                     border: Border.all(color: PColor.borderStrong),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -125,10 +119,7 @@ class AnalyticsFilterBar extends StatelessWidget {
                       value: state.sortOrder,
                       icon: const Icon(Icons.arrow_drop_down_rounded,
                           color: PColor.textNeutralColor),
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: PColor.contentColor,
-                      ),
+                      style: PTypography.captionContent,
                       onChanged: (order) {
                         if (order != null) {
                           context.read<VillageAnalyticsBloc>().add(

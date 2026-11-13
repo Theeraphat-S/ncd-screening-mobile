@@ -15,6 +15,8 @@ import 'package:ncd_screening_mobile/feature/nurse/widgets/village_comparison_ta
 import 'package:ncd_screening_mobile/feature/nurse/widgets/village_management_tab.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 
 class NurseVillageListPage extends StatefulWidget {
   final Nurse nurse;
@@ -50,21 +52,12 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: const IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: signOut,
+        leading: IconButton(
+          tooltip: 'ออกจากระบบ',
+          icon: const Icon(Icons.logout_rounded),
+          onPressed: () => requestSignOut(context),
         ),
-        title: const Text(
-          'ระบบพยาบาล รพ.สต.แม่อาย',
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: const Text('ระบบพยาบาล รพ.สต.แม่อาย'),
         actions: [
           const SyncBadgeWidget(),
           IconButton(
@@ -131,7 +124,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                         'พยาบาล: ${widget.nurse.fullName}',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 13.5,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -140,7 +133,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                         'พื้นที่รับผิดชอบ: ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่',
                         style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 11.5,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -151,7 +144,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
@@ -163,7 +156,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                         'รพ.สต.แม่อาย',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 11.5,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -205,38 +198,11 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
 
         if (state.status == VillageAnalyticsStatus.failure &&
             state.analytics == null) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline_rounded,
-                      color: PColor.errorColor, size: 48),
-                  const SizedBox(height: 12),
-                  Text(
-                    state.errorMessage ?? 'เกิดข้อผิดพลาดในการโหลดข้อมูล',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 14, color: PColor.contentColor),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      context
-                          .read<VillageAnalyticsBloc>()
-                          .add(const VillageAnalyticsLoadRequested());
-                    },
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('ลองใหม่'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: PColor.primaryColor,
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return ErrorStateView(
+            message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+            onRetry: () => context
+                .read<VillageAnalyticsBloc>()
+                .add(const VillageAnalyticsLoadRequested()),
           );
         }
 

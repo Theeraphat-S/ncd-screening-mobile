@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class DemographicsSection extends StatelessWidget {
   final DemographicDistribution demographics;
@@ -13,7 +15,7 @@ class DemographicsSection extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -32,11 +34,7 @@ class DemographicsSection extends StatelessWidget {
               SizedBox(width: 8),
               Text(
                 'การกระจายตัวของประชากร',
-                style: TextStyle(
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.sectionHeader,
               ),
             ],
           ),
@@ -53,7 +51,7 @@ class DemographicsSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           ClipRRect(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(PRadius.sm),
             child: SizedBox(
               height: 12,
               child: demographics.totalPatients == 0
@@ -91,7 +89,7 @@ class DemographicsSection extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     'ชาย: ${demographics.maleCount} คน (${demographics.maleRatio}%)',
-                    style: const TextStyle(fontSize: 11.5),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -108,7 +106,7 @@ class DemographicsSection extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     'หญิง: ${demographics.femaleCount} คน (${demographics.femaleRatio}%)',
-                    style: const TextStyle(fontSize: 11.5),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -175,7 +173,7 @@ class DemographicsSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(PRadius.md),
         border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Column(
@@ -192,23 +190,19 @@ class DemographicsSection extends StatelessWidget {
           Text(
             desc,
             style: const TextStyle(
-              fontSize: 10.5,
+              fontSize: 12,
               color: PColor.textNeutralColor,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             '$count คน',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: PColor.contentColor,
-            ),
+            style: PTypography.bodyBold,
           ),
           Text(
             '$percentage%',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: color,
             ),

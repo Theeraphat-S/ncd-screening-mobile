@@ -4,6 +4,9 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class NursePatientListPage extends StatefulWidget {
   final Nurse nurse;
@@ -33,21 +36,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'ผู้ป่วยในหมู่ ${widget.village.villageNumber}',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: Text('ผู้ป่วยในหมู่ ${widget.village.villageNumber}'),
       ),
       body: Column(
         children: [
@@ -69,6 +58,15 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
               builder: (context, state) {
                 if (state.status == PatientStatus.loading && state.patients.isEmpty) {
                   return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
+                }
+
+                if (state.status == PatientStatus.failure && state.patients.isEmpty) {
+                  return ErrorStateView(
+                    message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+                    onRetry: () => context.read<PatientBloc>().add(
+                          PatientLoadRequested(villageId: widget.village.villageId),
+                        ),
+                  );
                 }
 
                 if (state.patients.isEmpty) {
@@ -121,15 +119,15 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(PRadius.lg),
           onTap: () {
             context.read<PatientBloc>().add(PatientSelected(patient));
             Navigator.push(
@@ -151,16 +149,12 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                   height: 46,
                   decoration: BoxDecoration(
                     color: PColor.primaryLight,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: Center(
                     child: Text(
                       initials,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: PColor.primaryDark,
-                      ),
+                      style: PTypography.emphasisPrimary,
                     ),
                   ),
                 ),
@@ -172,7 +166,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                       Text(
                         patient.fullName,
                         style: const TextStyle(
-                          fontSize: 15.5,
+                          fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: PColor.contentColor,
                           letterSpacing: -0.2,
@@ -182,7 +176,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                       Text(
                         'เลขบัตร: ${patient.patientCitizenId} • อายุ ${patient.age} ปี',
                         style: const TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           color: PColor.textSecondary,
                           fontFamily: 'monospace',
                         ),

@@ -7,6 +7,7 @@ import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/id_card_scanner_page.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class VhvSearchPatientPage extends StatefulWidget {
   final VHV vhv;
@@ -84,11 +85,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
         ),
         title: const Text(
           'ค้นหาผู้ป่วย',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: PTypography.appBarTitle,
         ),
         centerTitle: true,
       ),
@@ -118,7 +115,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
                     hintText: 'ชื่อ นามสกุล เลขบัตร หรือบ้านเลขที่',
-                    hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                    hintStyle: PTypography.bodyMuted,
                     prefixIcon: const Icon(Icons.search_rounded, color: PColor.primaryColor),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
@@ -145,11 +142,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                       icon: const Icon(Icons.search_rounded, color: Colors.white, size: 20),
                       label: const Text(
                         'ค้นหา',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: PTypography.buttonOnPrimary,
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.primaryColor,
@@ -176,11 +169,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                       icon: const Icon(Icons.document_scanner_rounded, color: PColor.primaryColor, size: 19),
                       label: const Text(
                         'สแกน OCR',
-                        style: TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w700,
-                          color: PColor.primaryColor,
-                        ),
+                        style: PTypography.actionPrimary,
                       ),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: PColor.primaryColor, width: 1.5),
@@ -213,11 +202,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                             const SizedBox(height: 12),
                             const Text(
                               'ไม่พบข้อมูล',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: PColor.textNeutralColor,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: PTypography.bodyMuted,
                             ),
                           ],
                         ),
@@ -228,10 +213,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                       return const Center(
                         child: Text(
                           'พิมพ์ชื่อ นามสกุล เลขบัตร หรือบ้านเลขที่เพื่อค้นหา',
-                          style: TextStyle(
-                            color: PColor.textNeutralColor,
-                            fontSize: 14,
-                          ),
+                          style: PTypography.bodyMuted,
                         ),
                       );
                     }
@@ -289,35 +271,22 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   children: [
                     Text(
                       patient.fullName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
+                      style: PTypography.sectionHeader,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'เลขบัตร: ${patient.patientCitizenId}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.bodyMuted,
                     ),
                     Text(
                       'บ้านเลขที่: ${patient.patientAddress}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.bodyMuted,
                     ),
                     Text(
                       'อายุ: ${patient.age} ปี • เพศ: ${patient.patientGender}',
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.caption,
                     ),
                   ],
                 ),

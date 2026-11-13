@@ -1,24 +1,32 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
-import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
+import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/pin_login_page.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// "Continue as NAME with PIN" shortcut shown on the role-selection page
 /// when a staff member on this device already set a PIN.
 class QuickPinLoginCard extends StatelessWidget {
   const QuickPinLoginCard({super.key});
 
-  Future<({UserRole role, String userId, String name})?> _load() async {
-    if (!locator.isRegistered<DeviceSessionStore>()) return null;
-    final last = await locator<DeviceSessionStore>().lastUser();
-    if (last == null || !await locator<PinService>().hasPin(last.userId)) {
-      return null;
+  Future<({UserRole role, String userId, String name})?> _load(
+      BuildContext context) async {
+    final DeviceSessionStore session;
+    final PinService pins;
+    final NcdRepositoryInterface repo;
+    try {
+      session = context.read<DeviceSessionStore>();
+      pins = context.read<PinService>();
+      repo = context.read<NcdRepositoryInterface>();
+    } on ProviderNotFoundException {
+      return null; // PIN login is not set up in this app instance
     }
-    final repo = locator<NcdRepositoryInterface>();
+    final last = await session.lastUser();
+    if (last == null || !await pins.hasPin(last.userId)) return null;
     final String? name = last.role == UserRole.vhv
         ? (await repo.getVhvById(last.userId))?.fullName
         : (await repo.getNurseById(last.userId))?.fullName;
@@ -29,7 +37,7 @@ class QuickPinLoginCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _load(),
+      future: _load(context),
       builder: (context, snapshot) {
         final data = snapshot.data;
         if (data == null) return const SizedBox.shrink();
@@ -62,16 +70,12 @@ class QuickPinLoginCard extends StatelessWidget {
                         children: [
                           const Text(
                             'เข้าสู่ระบบด้วย PIN',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: PColor.contentColor,
-                            ),
+                            style: PTypography.sectionHeader,
                           ),
                           const SizedBox(height: 2),
                           Text(
                             data.name,
-                            style: const TextStyle(fontSize: 14, color: PColor.textSecondary),
+                            style: PTypography.bodySecondary,
                           ),
                         ],
                       ),

@@ -1,4 +1,7 @@
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
+import 'package:ncd_screening_mobile/data/repositories/screening_draft_store.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
@@ -66,9 +69,12 @@ void main() {
 
   Widget buildTestWidget() {
     // The real app provides ScreeningBloc above the navigator (see main.dart).
-    return BlocProvider<ScreeningBloc>(
-      create: (_) => ScreeningBloc(mockRepo),
-      child: MaterialApp(home: IdCardScannerPage(vhv: testVhv)),
+    return RepositoryProvider<ScreeningDraftStore>.value(
+      value: ScreeningDraftStore(AppDatabase(NativeDatabase.memory())),
+      child: BlocProvider<ScreeningBloc>(
+        create: (_) => ScreeningBloc(mockRepo),
+        child: MaterialApp(home: IdCardScannerPage(vhv: testVhv)),
+      ),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class PatientAccessibilityFloatingBubble extends StatefulWidget {
   const PatientAccessibilityFloatingBubble({super.key});
@@ -73,13 +74,7 @@ class _PatientAccessibilityFloatingBubbleState
                                 Flexible(
                                   child: Text(
                                     'ปรับการแสดงผล',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: isHC
-                                          ? PColor.hcText
-                                          : PColor.contentColor,
-                                    ),
+                                    style: PTypography.cardTitle.copyWith(color: isHC ? PColor.hcText : PColor.contentColor),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -112,11 +107,7 @@ class _PatientAccessibilityFloatingBubbleState
                           dense: true,
                           title: Text(
                             'โหมดตัวโต (ผู้สูงอายุ)',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: isHC ? PColor.hcText : PColor.contentColor,
-                            ),
+                            style: PTypography.labelSmall.copyWith(color: isHC ? PColor.hcText : PColor.contentColor, fontSize: 14),
                           ),
                           value: state.isElderlyMode,
                           activeTrackColor: isHC
@@ -137,11 +128,7 @@ class _PatientAccessibilityFloatingBubbleState
                           dense: true,
                           title: Text(
                             'โหมดคอนทราสต์สูง (AAA)',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: isHC ? PColor.hcText : PColor.contentColor,
-                            ),
+                            style: PTypography.labelSmall.copyWith(color: isHC ? PColor.hcText : PColor.contentColor, fontSize: 14),
                           ),
                           value: state.isHighContrast,
                           activeTrackColor: isHC
@@ -158,11 +145,7 @@ class _PatientAccessibilityFloatingBubbleState
                       // Font Scale Fine Tuning
                       Text(
                         'ขนาดตัวอักษร: ${(state.textScaleFactor * 100).round()}%',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: isHC ? Colors.white70 : PColor.textSecondary,
-                        ),
+                        style: PTypography.bodyMuted.copyWith(color: isHC ? Colors.white70 : PColor.textSecondary, fontSize: 13),
                       ),
                       const SizedBox(height: 6),
                       Row(
@@ -234,10 +217,7 @@ class _PatientAccessibilityFloatingBubbleState
                           ),
                           label: Text(
                             'รีเซ็ตค่ามาตรฐาน',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isHC ? Colors.white70 : Colors.grey[700],
-                            ),
+                            style: PTypography.caption.copyWith(color: isHC ? Colors.white70 : Colors.grey[700]),
                           ),
                         ),
                       ),

@@ -1,9 +1,10 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
+import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_pad.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// Lets a staff member create a 6-digit PIN (and optionally biometric unlock)
 /// right after signing in with their password.
@@ -29,7 +30,7 @@ class _PinSetupPageState extends State<PinSetupPage> {
   @override
   void initState() {
     super.initState();
-    locator<BiometricService>().isAvailable().then((available) {
+    context.read<BiometricService>().isAvailable().then((available) {
       if (mounted) setState(() => _biometricAvailable = available);
     });
   }
@@ -50,10 +51,11 @@ class _PinSetupPageState extends State<PinSetupPage> {
       return;
     }
     setState(() => _saving = true);
+    final pins = context.read<PinService>();
+    final session = context.read<DeviceSessionStore>();
     try {
-      await locator<PinService>().setPin(widget.userId, pin);
-      await locator<DeviceSessionStore>()
-          .setBiometricEnabled(widget.userId, _useBiometric);
+      await pins.setPin(widget.userId, pin);
+      await session.setBiometricEnabled(widget.userId, _useBiometric);
       if (mounted) widget.onFinished(context);
     } on PinFormatError catch (e) {
       setState(() {
@@ -74,7 +76,7 @@ class _PinSetupPageState extends State<PinSetupPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           'ตั้งรหัส PIN',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          style: PTypography.appBarTitle,
         ),
         centerTitle: true,
       ),
@@ -90,17 +92,13 @@ class _PinSetupPageState extends State<PinSetupPage> {
                   const SizedBox(height: 12),
                   Text(
                     confirming ? 'ยืนยัน PIN อีกครั้ง' : 'ตั้ง PIN 6 หลัก',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: PColor.contentColor,
-                    ),
+                    style: PTypography.pageTitle,
                   ),
                   const SizedBox(height: 6),
                   const Text(
                     'ใช้เข้าแอปครั้งต่อไปแทนการกรอกรหัสผ่าน',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: PColor.textNeutralColor),
+                    style: PTypography.bodyMuted,
                   ),
                   const SizedBox(height: 24),
                   PinPad(onCompleted: _onPin, enabled: !_saving, errorText: _error),

@@ -7,9 +7,9 @@ import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
 import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_unlock_view.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// Cold-start quick login for a staff member who already set a PIN.
 class PinLoginPage extends StatelessWidget {
@@ -25,12 +25,13 @@ class PinLoginPage extends StatelessWidget {
   });
 
   Future<void> _onUnlocked(BuildContext context) async {
-    final repo = locator<NcdRepositoryInterface>();
+    final repo = context.read<NcdRepositoryInterface>();
+    final pins = context.read<PinService>();
     final dynamic user =
         role == UserRole.vhv ? await repo.getVhvById(userId) : await repo.getNurseById(userId);
     if (!context.mounted) return;
     if (user == null) {
-      await locator<PinService>().clearPin(userId);
+      await pins.clearPin(userId);
       if (context.mounted) _usePassword(context);
       return;
     }
@@ -56,7 +57,7 @@ class PinLoginPage extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text(
           'เข้าสู่ระบบด้วย PIN',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          style: PTypography.appBarTitle,
         ),
         centerTitle: true,
       ),

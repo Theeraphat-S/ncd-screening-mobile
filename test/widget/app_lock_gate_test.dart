@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
-import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
+import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/locator.dart';
@@ -27,6 +27,7 @@ void main() {
   late AuthBloc auth;
   late AppLockCubit lock;
   late PinService pins;
+  late DeviceSessionStore sessions;
   late VHV vhv;
 
   setUp(() async {
@@ -36,7 +37,8 @@ void main() {
     final store = InMemorySecureStore();
     locator.registerSingleton<NcdRepositoryInterface>(repo);
     locator.registerSingleton<PinService>(pins);
-    locator.registerSingleton<DeviceSessionStore>(DeviceSessionStore(store));
+    sessions = DeviceSessionStore(store);
+    locator.registerSingleton<DeviceSessionStore>(sessions);
     locator.registerSingleton<BiometricService>(const NoBiometricService());
 
     vhv = (await repo.getVhvById('VHV001'))!;
@@ -63,15 +65,23 @@ void main() {
 
   Future<void> pumpApp(WidgetTester tester) async {
     await tester.pumpWidget(
-      MultiBlocProvider(
+      MultiRepositoryProvider(
         providers: [
-          BlocProvider<AuthBloc>.value(value: auth),
-          BlocProvider<AppLockCubit>.value(value: lock),
+          RepositoryProvider<NcdRepositoryInterface>.value(value: repo),
+          RepositoryProvider<PinService>.value(value: pins),
+          RepositoryProvider<DeviceSessionStore>.value(value: sessions),
+          RepositoryProvider<BiometricService>.value(value: const NoBiometricService()),
         ],
-        child: MaterialApp(
-          navigatorKey: appNavigatorKey,
-          builder: (context, child) => AppLockGate(child: child!),
-          home: const Scaffold(body: Center(child: Text('หน้าหลัก'))),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthBloc>.value(value: auth),
+            BlocProvider<AppLockCubit>.value(value: lock),
+          ],
+          child: MaterialApp(
+            navigatorKey: appNavigatorKey,
+            builder: (context, child) => AppLockGate(child: child!),
+            home: const Scaffold(body: Center(child: Text('หน้าหลัก'))),
+          ),
         ),
       ),
     );

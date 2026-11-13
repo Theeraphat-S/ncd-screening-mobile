@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
+import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/data/repositories/screening_draft_store.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
@@ -26,21 +29,51 @@ Future<void> main() async {
   unawaited(locator<ScreeningDraftStore>().purgeExpired());
 
   runApp(
-    MultiBlocProvider(
+    MultiRepositoryProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (context) => locator<AuthBloc>()),
-        BlocProvider<PatientBloc>(create: (context) => locator<PatientBloc>()),
-        BlocProvider<ScreeningBloc>(create: (context) => locator<ScreeningBloc>()),
-        BlocProvider<VhvBloc>(create: (context) => locator<VhvBloc>()),
-        BlocProvider<VillageBloc>(create: (context) => locator<VillageBloc>()),
-        BlocProvider<VillageAnalyticsBloc>(create: (context) => locator<VillageAnalyticsBloc>()),
-        BlocProvider<SyncBadgeBloc>(
-          create: (context) => locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
+        RepositoryProvider<NcdRepositoryInterface>.value(
+          value: locator<NcdRepositoryInterface>(),
         ),
-        BlocProvider<AccessibilityCubit>(create: (context) => locator<AccessibilityCubit>()),
-        BlocProvider<AppLockCubit>(create: (context) => locator<AppLockCubit>()),
+        RepositoryProvider<ScreeningDraftStore>.value(
+          value: locator<ScreeningDraftStore>(),
+        ),
+        RepositoryProvider<PinService>.value(value: locator<PinService>()),
+        RepositoryProvider<BiometricService>.value(
+          value: locator<BiometricService>(),
+        ),
+        RepositoryProvider<DeviceSessionStore>.value(
+          value: locator<DeviceSessionStore>(),
+        ),
       ],
-      child: const NcdScreeningApp(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(create: (context) => locator<AuthBloc>()),
+          BlocProvider<PatientBloc>(
+            create: (context) => locator<PatientBloc>(),
+          ),
+          BlocProvider<ScreeningBloc>(
+            create: (context) => locator<ScreeningBloc>(),
+          ),
+          BlocProvider<VhvBloc>(create: (context) => locator<VhvBloc>()),
+          BlocProvider<VillageBloc>(
+            create: (context) => locator<VillageBloc>(),
+          ),
+          BlocProvider<VillageAnalyticsBloc>(
+            create: (context) => locator<VillageAnalyticsBloc>(),
+          ),
+          BlocProvider<SyncBadgeBloc>(
+            create: (context) =>
+                locator<SyncBadgeBloc>()..add(const SyncBadgeStarted()),
+          ),
+          BlocProvider<AccessibilityCubit>(
+            create: (context) => locator<AccessibilityCubit>(),
+          ),
+          BlocProvider<AppLockCubit>(
+            create: (context) => locator<AppLockCubit>(),
+          ),
+        ],
+        child: const NcdScreeningApp(),
+      ),
     ),
   );
 }
@@ -73,7 +106,9 @@ class NcdScreeningApp extends StatelessWidget {
             final systemScale = mediaQuery.textScaler.scale(1.0);
             return MediaQuery(
               data: mediaQuery.copyWith(
-                textScaler: TextScaler.linear(systemScale * accessState.textScaleFactor),
+                textScaler: TextScaler.linear(
+                  systemScale * accessState.textScaleFactor,
+                ),
               ),
               child: AppLockGate(child: child ?? const SizedBox.shrink()),
             );

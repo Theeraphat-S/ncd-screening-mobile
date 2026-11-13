@@ -6,9 +6,9 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_unlock_view.dart';
-import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// Wraps the whole app: feeds touches to the idle timer, re-checks the idle
 /// time when the app returns to the foreground, and covers the UI with a lock
@@ -87,7 +87,7 @@ class _LockScreenState extends State<LockScreen> {
     final userId = staffUserId(context.read<AuthBloc>().state.currentUser);
     _hasPin = userId == null
         ? Future.value(false)
-        : locator<PinService>().hasPin(userId);
+        : context.read<PinService>().hasPin(userId);
   }
 
   @override
@@ -156,7 +156,8 @@ class _PasswordUnlockState extends State<_PasswordUnlock> {
       _error = null;
     });
     try {
-      await locator<NcdRepositoryInterface>()
+      await context
+          .read<NcdRepositoryInterface>()
           .login(role: role, identifier: id, password: _controller.text);
       if (mounted) context.read<AppLockCubit>().unlock();
     } catch (_) {
@@ -184,7 +185,7 @@ class _PasswordUnlockState extends State<_PasswordUnlock> {
               const Text(
                 'หน้าจอถูกล็อก',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: PColor.contentColor),
+                style: PTypography.pageTitle,
               ),
               if (widget.name.isNotEmpty) ...[
                 const SizedBox(height: 6),

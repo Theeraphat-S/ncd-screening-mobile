@@ -1,6 +1,7 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
+import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/pin_setup_page.dart';
 import 'package:ncd_screening_mobile/locator.dart';
@@ -16,6 +17,7 @@ Future<void> _tapPin(WidgetTester tester, String pin) async {
 
 void main() {
   late PinService pins;
+  late DeviceSessionStore sessions;
   late int finished;
 
   setUp(() async {
@@ -23,7 +25,8 @@ void main() {
     final store = InMemorySecureStore();
     pins = PinService(store);
     locator.registerSingleton<PinService>(pins);
-    locator.registerSingleton<DeviceSessionStore>(DeviceSessionStore(store));
+    sessions = DeviceSessionStore(store);
+    locator.registerSingleton<DeviceSessionStore>(sessions);
     locator.registerSingleton<BiometricService>(const NoBiometricService());
     finished = 0;
   });
@@ -32,8 +35,15 @@ void main() {
 
   Future<void> pumpPage(WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: PinSetupPage(userId: 'VHV001', onFinished: (_) => finished++),
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<PinService>.value(value: pins),
+          RepositoryProvider<DeviceSessionStore>.value(value: sessions),
+          RepositoryProvider<BiometricService>.value(value: const NoBiometricService()),
+        ],
+        child: MaterialApp(
+          home: PinSetupPage(userId: 'VHV001', onFinished: (_) => finished++),
+        ),
       ),
     );
     await tester.pump();

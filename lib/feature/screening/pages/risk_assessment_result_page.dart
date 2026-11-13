@@ -7,6 +7,7 @@ import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/vhv_patient_list_page.dart';
 import 'package:ncd_screening_mobile/feature/screening/pages/pdf_preview_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/widgets/elderly_bento_advice_card.dart';
 import 'package:ncd_screening_mobile/shared/widgets/emergency_hospital_card.dart';
 
@@ -37,11 +38,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
         ),
         title: const Text(
           'แนวโน้มความเสี่ยง',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: PTypography.appBarTitle,
         ),
         centerTitle: true,
         actions: [
@@ -108,11 +105,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                       child: Center(
                         child: Text(
                           patient.patientFname.isNotEmpty ? patient.patientFname.substring(0, 1) : 'P',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: PColor.primaryDark,
-                          ),
+                          style: PTypography.emphasisPrimary,
                         ),
                       ),
                     ),
@@ -123,20 +116,12 @@ class RiskAssessmentResultPage extends StatelessWidget {
                         children: [
                           Text(
                             'ผู้ป่วย: ${patient.fullName}',
-                            style: const TextStyle(
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w700,
-                              color: PColor.contentColor,
-                            ),
+                            style: PTypography.sectionHeader,
                           ),
                           const SizedBox(height: 2),
                           Text(
                             'เลขบัตร: ${patient.patientCitizenId} • อายุ ${screening.ageAtScreening} ปี',
-                            style: const TextStyle(
-                              fontSize: 12.5,
-                              color: PColor.textSecondary,
-                              fontFamily: 'monospace',
-                            ),
+                            style: PTypography.captionSecondary,
                           ),
                         ],
                       ),
@@ -151,12 +136,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                 child: Text(
                   'มีแนวโน้มความเสี่ยงที่จะเป็น',
-                  style: TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w700,
-                    color: PColor.contentColor,
-                    letterSpacing: -0.2,
-                  ),
+                  style: PTypography.sectionHeader,
                 ),
               ),
               const SizedBox(height: 8),
@@ -180,12 +160,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   const SizedBox(width: 8),
                   const Text(
                     'คำแนะนำสุขภาพและการปฏิบัติตัวเฉพาะบุคคล',
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.w700,
-                      color: PColor.contentColor,
-                      letterSpacing: -0.2,
-                    ),
+                    style: PTypography.sectionHeader,
                   ),
                 ],
               ),
@@ -218,11 +193,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   icon: const Icon(Icons.picture_as_pdf_outlined, color: PColor.primaryColor, size: 20),
                   label: const Text(
                     'ดูตัวอย่างและพิมพ์รายงาน PDF (Export PDF)',
-                    style: TextStyle(
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w700,
-                      color: PColor.primaryColor,
-                    ),
+                    style: PTypography.actionPrimary,
                   ),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: PColor.primaryColor, width: 1.5),
@@ -264,11 +235,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   ),
                   child: const Text(
                     'กลับไปหน้ารายชื่อผู้ป่วย',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                    style: PTypography.buttonOnPrimary,
                   ),
                 ),
               ),
@@ -328,22 +295,14 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 ? const Icon(Icons.check, size: 16, color: Colors.white)
                 : Text(
                     number,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: PColor.textNeutralColor,
-                    ),
+                    style: PTypography.captionStrong,
                   ),
           ),
         ),
         const SizedBox(height: 5),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w700,
-            color: PColor.contentColor,
-          ),
+          style: PTypography.captionBold,
         ),
       ],
     );
@@ -420,11 +379,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
               Expanded(
                 child: Text(
                   result.diseaseName,
-                  style: const TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w700,
-                    color: PColor.contentColor,
-                  ),
+                  style: PTypography.sectionHeader,
                 ),
               ),
               Container(
@@ -450,11 +405,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             result.criteriaText,
-            style: const TextStyle(
-              fontSize: 13,
-              color: PColor.textSecondary,
-              height: 1.35,
-            ),
+            style: PTypography.captionSecondary,
           ),
           if (result.adviceText.isNotEmpty) ...[
             const SizedBox(height: 10),
@@ -473,11 +424,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'คำแนะนำ: ${result.adviceText}',
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: PColor.contentColor,
-                        height: 1.35,
-                      ),
+                      style: PTypography.captionContent,
                     ),
                   ),
                 ],

@@ -6,6 +6,7 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/utils/thai_birth_date.dart';
 
 class LoginPage extends StatefulWidget {
@@ -204,11 +205,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           title: Text(
             _title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: PTypography.appBarTitle,
           ),
           centerTitle: true,
         ),
@@ -253,12 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         _title,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: PColor.contentColor,
-                          letterSpacing: -0.2,
-                        ),
+                        style: PTypography.pageTitle,
                       ),
                       const SizedBox(height: 6),
                       Text(
@@ -266,22 +258,14 @@ class _LoginPageState extends State<LoginPage> {
                             ? 'กรุณากรอกเลขบัตรประชาชนและวันเกิดเพื่อยืนยันตัวตน'
                             : 'กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบการทำงาน',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: PColor.textNeutralColor,
-                          height: 1.3,
-                        ),
+                        style: PTypography.bodyMuted,
                       ),
                       const SizedBox(height: 28),
 
                       // Identifier Field
                       Text(
                         _idLabel,
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w600,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.labelSmall,
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -292,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                         maxLength: widget.role == UserRole.nurse ? null : 13,
                         decoration: InputDecoration(
                           hintText: _idHint,
-                          hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                          hintStyle: PTypography.bodyMuted,
                           filled: true,
                           fillColor: PColor.backgroundColor,
                           counterText: '',
@@ -317,11 +301,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (widget.role != UserRole.patient) ...[
                         const Text(
                           'รหัสผ่าน',
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            fontWeight: FontWeight.w600,
-                            color: PColor.contentColor,
-                          ),
+                          style: PTypography.labelSmall,
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
@@ -329,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: _obscurePassword,
                           decoration: InputDecoration(
                             hintText: 'กรอกรหัสผ่าน',
-                            hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
+                            hintStyle: PTypography.bodyMuted,
                             filled: true,
                             fillColor: PColor.backgroundColor,
                             prefixIcon: const Icon(Icons.lock_outline_rounded, color: PColor.primaryColor, size: 22),
@@ -359,11 +339,7 @@ class _LoginPageState extends State<LoginPage> {
                       ] else ...[
                         const Text(
                           'วันเกิด (พ.ศ.)',
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            fontWeight: FontWeight.w600,
-                            color: PColor.contentColor,
-                          ),
+                          style: PTypography.labelSmall,
                         ),
                         const SizedBox(height: 8),
                         Row(

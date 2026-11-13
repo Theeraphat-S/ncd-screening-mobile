@@ -430,8 +430,10 @@ class ScreeningResult {
   });
 
   /// True when the assessment could not be made because a required
-  /// measurement is missing (score 0 is never produced by a real assessment).
-  bool get isIncomplete => score == 0;
+  /// measurement is missing. Only diabetes can be incomplete (no fasting
+  /// blood sugar): for it score 0 is never produced by a real reading, whereas
+  /// a cardiovascular score of 0 legitimately means "no risk factors".
+  bool get isIncomplete => diseaseCode == 'DIABETES' && score == 0;
 
   ScreeningResult copyWith({
     String? resultId,

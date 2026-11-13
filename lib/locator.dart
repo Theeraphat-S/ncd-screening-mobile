@@ -4,7 +4,7 @@ import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart
 import 'package:ncd_screening_mobile/data/repositories/drift_sync_queue_service.dart';
 import 'package:ncd_screening_mobile/data/repositories/screening_draft_store.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
-import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
+import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';

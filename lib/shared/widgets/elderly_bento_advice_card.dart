@@ -5,6 +5,8 @@ import 'package:ncd_screening_mobile/domain/services/ncd_lifestyle_advisor.dart'
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class AccessibilityScaleToggle extends StatelessWidget {
   const AccessibilityScaleToggle({super.key});
@@ -28,7 +30,7 @@ class AccessibilityScaleToggle extends StatelessWidget {
           borderRadius: BorderRadius.circular(PRadius.xl),
           onTap: () => context.read<AccessibilityCubit>().toggleElderlyMode(),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
             decoration: BoxDecoration(
               color: state.isElderlyMode ? PColor.riskModerate : Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(PRadius.xl),
@@ -45,14 +47,10 @@ class AccessibilityScaleToggle extends StatelessWidget {
                   size: 16,
                   color: state.isElderlyMode ? Colors.white : Colors.white,
                 ),
-                const SizedBox(width: 4),
+                PSpacing.gapHorizontalXs,
                 Text(
                   state.isElderlyMode ? 'โหมดตัวโต (เปิด)' : 'โหมดตัวโต',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: PTypography.onPrimaryLabel,
                 ),
               ],
             ),
@@ -124,7 +122,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
     final riskBg = _getRiskBgColor(advice.riskLevel);
 
         return Container(
-          margin: const EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: PSpacing.lg),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(PRadius.xl),
@@ -142,7 +140,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
             children: [
               // Header Pill
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.md),
                 decoration: BoxDecoration(
                   color: riskBg,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(PRadius.lg)),
@@ -150,7 +148,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(_getRiskIcon(advice.riskLevel), color: riskColor, size: 22 * scale),
-                    const SizedBox(width: 10),
+                    PSpacing.gapHorizontalMd,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,10 +171,10 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    PSpacing.gapHorizontalSm,
                     Flexible(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                         decoration: BoxDecoration(
                           color: riskColor,
                           borderRadius: BorderRadius.circular(PRadius.md),
@@ -198,7 +196,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
 
               // Content Body Bento Sections
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(PSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -210,7 +208,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                       content: advice.goodFoods.join(', '),
                       scale: scale,
                     ),
-                    const SizedBox(height: 10),
+                    PSpacing.gapVerticalMd,
                     _buildAdviceRow(
                       icon: Icons.do_not_disturb_alt_rounded,
                       iconColor: PColor.riskHigh,
@@ -219,7 +217,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                       content: advice.avoidFoods.join(', '),
                       scale: scale,
                     ),
-                    const SizedBox(height: 10),
+                    PSpacing.gapVerticalMd,
                     _buildAdviceRow(
                       icon: Icons.directions_walk_rounded,
                       iconColor: PColor.primaryDark,
@@ -228,12 +226,12 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                       content: advice.exerciseTip,
                       scale: scale,
                     ),
-                    const SizedBox(height: 10),
+                    PSpacing.gapVerticalMd,
 
                     // Followup Schedule
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(PSpacing.md),
                       decoration: BoxDecoration(
                         color: PColor.surfaceSubtle,
                         borderRadius: BorderRadius.circular(PRadius.md),
@@ -241,7 +239,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                       child: Row(
                         children: [
                           const Icon(Icons.calendar_month_rounded, size: 16, color: PColor.textNeutralColor),
-                          const SizedBox(width: 8),
+                          PSpacing.gapHorizontalSm,
                           Expanded(
                             child: Text(
                               'นัดติดตาม: ${advice.followUpSchedule}',
@@ -275,7 +273,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, color: iconColor, size: 18),
-        const SizedBox(width: 8),
+        PSpacing.gapHorizontalSm,
         Expanded(
           child: RichText(
             text: TextSpan(

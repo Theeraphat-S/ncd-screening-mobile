@@ -75,7 +75,7 @@ class ScreeningRiskSummarySection extends StatelessWidget {
                         res.diseaseName,
                         style: PTypography.cardTitle,
                       ),
-                      const SizedBox(height: 2),
+                      PSpacing.gapVerticalXs,
                       Text(
                         'คะแนน: ${res.score} คะแนน',
                         style: PTypography.bodyMuted,
@@ -85,8 +85,8 @@ class ScreeningRiskSummarySection extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                    horizontal: PSpacing.md,
+                    vertical: PSpacing.sm,
                   ),
                   decoration: BoxDecoration(
                     color: res.riskLevel.color,

@@ -3,6 +3,7 @@ import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class AnalyticsChartsSection extends StatelessWidget {
   final VillageAnalytics analytics;
@@ -12,7 +13,7 @@ class AnalyticsChartsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(PSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(PRadius.lg),
@@ -31,17 +32,17 @@ class AnalyticsChartsSection extends StatelessWidget {
             children: [
               Icon(Icons.monitor_heart_rounded,
                   color: PColor.primaryColor, size: 22),
-              SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               Text(
                 'สถิติความเสี่ยงรายโรค NCDs (4 โรค)',
                 style: PTypography.sectionHeader,
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          PSpacing.gapVerticalXs,
           const Text(
             'ประเมินจากผลการคัดกรองล่าสุดของผู้ป่วยแต่ละราย',
-            style: TextStyle(fontSize: 12, color: PColor.textNeutralColor),
+            style: PTypography.micro,
           ),
           const Divider(height: 24),
 
@@ -51,7 +52,7 @@ class AnalyticsChartsSection extends StatelessWidget {
               icon: Icons.bloodtype_outlined,
               breakdown: analytics.diabetesBreakdown!,
             ),
-          const SizedBox(height: 16),
+          PSpacing.gapVerticalLg,
 
           // 2. Hypertension
           if (analytics.hypertensionBreakdown != null)
@@ -59,7 +60,7 @@ class AnalyticsChartsSection extends StatelessWidget {
               icon: Icons.speed_rounded,
               breakdown: analytics.hypertensionBreakdown!,
             ),
-          const SizedBox(height: 16),
+          PSpacing.gapVerticalLg,
 
           // 3. CVD
           if (analytics.cvdBreakdown != null)
@@ -67,7 +68,7 @@ class AnalyticsChartsSection extends StatelessWidget {
               icon: Icons.favorite_border_rounded,
               breakdown: analytics.cvdBreakdown!,
             ),
-          const SizedBox(height: 16),
+          PSpacing.gapVerticalLg,
 
           // 4. Metabolic Obesity
           if (analytics.obesityBreakdown != null)
@@ -95,7 +96,7 @@ class AnalyticsChartsSection extends StatelessWidget {
             Row(
               children: [
                 Icon(icon, size: 17, color: PColor.primaryColor),
-                const SizedBox(width: 6),
+                PSpacing.gapHorizontalSm,
                 Text(
                   breakdown.diseaseName,
                   style: PTypography.bodyBold,
@@ -104,14 +105,11 @@ class AnalyticsChartsSection extends StatelessWidget {
             ),
             Text(
               'คัดกรองแล้ว $total คน',
-              style: const TextStyle(
-                fontSize: 12,
-                color: PColor.textNeutralColor,
-              ),
+              style: PTypography.micro,
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        PSpacing.gapVerticalSm,
 
         // Multi-segment horizontal progress bar
         ClipRRect(
@@ -147,7 +145,7 @@ class AnalyticsChartsSection extends StatelessWidget {
                   ),
           ),
         ),
-        const SizedBox(height: 8),
+        PSpacing.gapVerticalSm,
 
         // Legend with exact counts & percentages
         Row(
@@ -194,7 +192,7 @@ class AnalyticsChartsSection extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 4),
+        PSpacing.gapHorizontalXs,
         Text(
           '$label: $count ($percentage%)',
           style: const TextStyle(

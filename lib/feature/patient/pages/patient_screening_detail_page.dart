@@ -101,7 +101,7 @@ class PatientScreeningDetailPage extends StatelessWidget {
       title: Text('ผลคัดกรอง: ${patient.patientFname} ${patient.patientLname}'),
       actions: [
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+          padding: EdgeInsets.symmetric(vertical: PSpacing.md, horizontal: PSpacing.xs),
           child: AccessibilityScaleToggle(),
         ),
         IconButton(

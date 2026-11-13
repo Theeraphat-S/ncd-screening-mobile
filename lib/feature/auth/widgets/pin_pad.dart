@@ -4,6 +4,7 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// 6-digit PIN entry with a large on-screen keypad.
 ///
@@ -59,7 +60,7 @@ class _PinPadState extends State<PinPad> {
           children: List.generate(PinService.pinLength, (i) {
             final filled = i < _entered.length;
             return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
+              margin: const EdgeInsets.symmetric(horizontal: PSpacing.sm),
               width: 16,
               height: 16,
               decoration: BoxDecoration(
@@ -72,7 +73,7 @@ class _PinPadState extends State<PinPad> {
             );
           }),
         ),
-        const SizedBox(height: 12),
+        PSpacing.gapVerticalMd,
         SizedBox(
           height: 20,
           child: widget.errorText == null
@@ -82,21 +83,21 @@ class _PinPadState extends State<PinPad> {
                   style: PTypography.errorText,
                 ),
         ),
-        const SizedBox(height: 12),
+        PSpacing.gapVerticalMd,
         for (final row in const [
           ['1', '2', '3'],
           ['4', '5', '6'],
           ['7', '8', '9'],
         ])
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
+            padding: const EdgeInsets.symmetric(vertical: PSpacing.sm),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [for (final d in row) _key(d)],
             ),
           ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.symmetric(vertical: PSpacing.sm),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -116,7 +117,7 @@ class _PinPadState extends State<PinPad> {
 
   Widget _key(String digit) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: PSpacing.sm),
       child: SizedBox(
         key: Key('pin_key_$digit'),
         width: 76,
@@ -146,7 +147,7 @@ class _PinPadState extends State<PinPad> {
 
   Widget _backspaceKey() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: PSpacing.sm),
       child: SizedBox(
         key: const Key('pin_key_backspace'),
         width: 76,

@@ -8,6 +8,7 @@ import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.d
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class VhvSearchPatientPage extends StatefulWidget {
   final VHV vhv;
@@ -85,11 +86,11 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(PSpacing.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 12),
+                PSpacing.gapVerticalMd,
                 // Search Input Box
                 Container(
                   decoration: BoxDecoration(
@@ -119,13 +120,13 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                             )
                           : null,
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
                     ),
                     onChanged: _onQueryChanged,
                     onSubmitted: (_) => _searchNow(),
                   ),
                 ),
-                const SizedBox(height: 16),
+                PSpacing.gapVerticalLg,
                 // Search action
                 Row(
                   children: [
@@ -140,7 +141,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PColor.primaryColor,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(PRadius.md),
                           ),
@@ -150,7 +151,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                PSpacing.gapVerticalXxl,
 
                 // Results Section
                 Expanded(
@@ -167,7 +168,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.search_off_rounded, size: 64, color: PColor.borderStrong),
-                              SizedBox(height: 12),
+                              PSpacing.gapVerticalMd,
                               Text(
                                 'ไม่พบข้อมูล',
                                 style: PTypography.bodyMuted,
@@ -188,7 +189,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
 
                       return ListView.separated(
                         itemCount: state.patients.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
                         itemBuilder: (context, index) {
                           final patient = state.patients[index];
                           return _buildPatientResultCard(context, patient);
@@ -225,7 +226,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(PSpacing.lg),
           child: Row(
             children: [
               CircleAvatar(
@@ -233,7 +234,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                 backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                 child: const Icon(Icons.person, color: PColor.primaryColor, size: 30),
               ),
-              const SizedBox(width: 14),
+              PSpacing.gapHorizontalLg,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +243,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                       patient.fullName,
                       style: PTypography.sectionHeader,
                     ),
-                    const SizedBox(height: 4),
+                    PSpacing.gapVerticalXs,
                     Text(
                       'เลขบัตร: ${patient.patientCitizenId}',
                       style: PTypography.bodyMuted,

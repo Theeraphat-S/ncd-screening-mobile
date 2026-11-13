@@ -43,7 +43,7 @@ class ScreeningDetailActionButtons extends StatelessWidget {
           ),
           style: OutlinedButton.styleFrom(
             side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
             shape: RoundedRectangleBorder(borderRadius: PRadius.borderCard),
             backgroundColor: Colors.white,
           ),
@@ -67,17 +67,13 @@ class ScreeningDetailActionButtons extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: PColor.primaryColor,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
               shape: RoundedRectangleBorder(borderRadius: PRadius.borderCard),
               elevation: 2,
             ),
             child: const Text(
               'ประเมินและยืนยันผล (Submit)',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: PTypography.onPrimaryLabelLg,
             ),
           ),
           PSpacing.gapVerticalXl,

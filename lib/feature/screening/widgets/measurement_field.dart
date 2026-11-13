@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// Numeric measurement input with its unit, an error line and a non-blocking
 /// warning line. Large type and a 56dp-high field keep it usable outdoors.
@@ -68,7 +69,7 @@ class MeasurementField extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 6),
+        PSpacing.gapVerticalSm,
         TextFormField(
           key: fieldKey,
           controller: controller,
@@ -91,7 +92,7 @@ class MeasurementField extends StatelessWidget {
             fillColor: PColor.backgroundColor,
             constraints: const BoxConstraints(minHeight: 56),
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
             border: border(borderColor),
             enabledBorder: border(borderColor, hasError || hasWarning ? 1.5 : 1),
             focusedBorder: border(
@@ -102,26 +103,26 @@ class MeasurementField extends StatelessWidget {
         ),
         if (hasError)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: PSpacing.sm),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(Icons.error_outline_rounded,
                     size: 16, color: PColor.errorColor),
-                const SizedBox(width: 4),
+                PSpacing.gapHorizontalXs,
                 Expanded(child: Text(errorText!, style: PTypography.fieldError)),
               ],
             ),
           )
         else if (hasWarning)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: PSpacing.sm),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(Icons.warning_amber_rounded,
                     size: 16, color: PColor.riskModerate),
-                const SizedBox(width: 4),
+                PSpacing.gapHorizontalXs,
                 Expanded(
                     child: Text(warningText!, style: PTypography.fieldWarning)),
               ],

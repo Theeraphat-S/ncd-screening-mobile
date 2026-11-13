@@ -200,6 +200,78 @@ class PTypography {
     color: PColor.contentColor,
   );
 
+  // --- Recurring variants (list rows, badges, headings on cards)
+  static const TextStyle micro = TextStyle(
+    height: _readingHeight,
+    fontSize: 12,
+    color: PColor.textNeutralColor,
+  );
+
+  static const TextStyle microError = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: PColor.errorColor,
+  );
+
+  static const TextStyle headingMd = TextStyle(
+    height: _headingHeight,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle cardTitleAccent = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: PColor.primaryDark,
+  );
+
+  static const TextStyle bodyMutedMedium = TextStyle(
+    height: _readingHeight,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: PColor.textNeutralColor,
+  );
+
+  static const TextStyle bodyLargeMuted = TextStyle(
+    height: _readingHeight,
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: PColor.textNeutralColor,
+  );
+
+  static const TextStyle captionLabelMuted = TextStyle(
+    height: _readingHeight,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: PColor.textNeutralColor,
+  );
+
+  static const TextStyle captionSemibold = TextStyle(
+    height: _readingHeight,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle onPrimaryLabel = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  static const TextStyle onPrimaryLabelLg = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  static const TextStyle onPrimarySemibold = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
   static const TextStyle pinDigit = TextStyle(
     fontSize: 26,
     fontWeight: FontWeight.w600,

@@ -7,6 +7,7 @@ import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class NursePatientListPage extends StatefulWidget {
   final Nurse nurse;
@@ -42,15 +43,11 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.md),
             color: PColor.primaryDark,
             child: Text(
               '${widget.village.villageName} • อ.แม่อาย จ.เชียงใหม่',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              style: PTypography.onPrimarySemibold,
             ),
           ),
           Expanded(
@@ -75,14 +72,10 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.person_off_outlined, size: 64, color: PColor.primaryTint),
-                        SizedBox(height: 12),
+                        PSpacing.gapVerticalMd,
                         Text(
                           'ไม่พบข้อมูลผู้ป่วยในหมู่บ้านนี้',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: PColor.textNeutralColor,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: PTypography.bodyLargeMuted,
                         ),
                       ],
                     ),
@@ -97,9 +90,9 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                         );
                   },
                   child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(PSpacing.lg),
                     itemCount: state.patients.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
                     itemBuilder: (context, index) {
                       final patient = state.patients[index];
                       return _buildPatientCard(context, patient);
@@ -141,7 +134,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
             child: Row(
               children: [
                 Container(
@@ -158,7 +151,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                PSpacing.gapHorizontalLg,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +165,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                           letterSpacing: -0.2,
                         ),
                       ),
-                      const SizedBox(height: 3),
+                      PSpacing.gapVerticalXs,
                       Text(
                         'เลขบัตร: ${patient.patientCitizenId} • อายุ ${patient.age} ปี',
                         style: const TextStyle(

@@ -10,6 +10,7 @@ import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floati
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class PatientHistoryListPage extends StatefulWidget {
   final Patient patient;
@@ -61,12 +62,12 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           // Header Patient Info Card
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
             color: PColor.primaryDark,
             child: Row(
               children: [
                 const Icon(Icons.account_circle, color: Colors.white, size: 28),
-                const SizedBox(width: 12),
+                PSpacing.gapHorizontalMd,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +80,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      PSpacing.gapVerticalXs,
                       Text(
                         '(${widget.patient.patientCitizenId})',
                         style: const TextStyle(
@@ -117,7 +118,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.history_toggle_off_rounded, size: 64, color: PColor.primaryTint),
-                        SizedBox(height: 12),
+                        PSpacing.gapVerticalMd,
                         Text(
                           'ไม่พบข้อมูลประวัติการคัดกรอง',
                           style: TextStyle(
@@ -139,9 +140,9 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                         );
                   },
                   child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(PSpacing.lg),
                     itemCount: state.historyList.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
                     itemBuilder: (context, index) {
                       final item = state.historyList[index];
                       return _buildHistoryCard(context, item);
@@ -186,18 +187,18 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(PSpacing.md),
                 decoration: BoxDecoration(
                   color: PColor.primaryLight.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: const Icon(Icons.assignment_outlined, color: PColor.primaryColor, size: 24),
               ),
-              const SizedBox(width: 14),
+              PSpacing.gapHorizontalLg,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +207,7 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                       'วันที่คัดกรอง: $dateStr',
                       style: PTypography.cardTitle,
                     ),
-                    const SizedBox(height: 3),
+                    PSpacing.gapVerticalXs,
                     Text(
                       'เวลา: $dateStr $timeStr',
                       style: PTypography.caption,

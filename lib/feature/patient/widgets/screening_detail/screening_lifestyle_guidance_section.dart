@@ -64,7 +64,7 @@ class ScreeningLifestyleGuidanceSection extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    PSpacing.gapVerticalXs,
                     Text(
                       'คำแนะนำเข้าใจง่ายสำหรับประชาชนและผู้สูงอายุ',
                       style: TextStyle(color: Colors.white70, fontSize: 14),

@@ -7,6 +7,7 @@ import 'package:ncd_screening_mobile/feature/auth/widgets/quick_pin_login_card.d
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
   const UserTypeSelectionPage({super.key});
@@ -18,13 +19,13 @@ class UserTypeSelectionPage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xxl, vertical: PSpacing.xxxl),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 12),
+                  PSpacing.gapVerticalMd,
                   // Hospital / MOPH Emblem Container with Nordic Clinical Styling
                   Container(
                     width: 104,
@@ -53,27 +54,27 @@ class UserTypeSelectionPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  PSpacing.gapVerticalXxl,
                   const Text(
                     'คัดกรองความเสี่ยง\n4 โรคไม่ติดต่อเรื้อรัง',
                     textAlign: TextAlign.center,
                     style: PTypography.heroTitle,
                   ),
-                  const SizedBox(height: 8),
+                  PSpacing.gapVerticalSm,
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.location_on_outlined, size: 16, color: PColor.textNeutralColor),
-                      SizedBox(width: 4),
+                      PSpacing.gapHorizontalXs,
                       Text(
                         'รพ.สต.แม่อาย จ.เชียงใหม่',
                         style: PTypography.bodySecondary,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  PSpacing.gapVerticalLg,
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.sm),
                     decoration: BoxDecoration(
                       color: PColor.surfaceSubtle,
                       borderRadius: BorderRadius.circular(PRadius.xl),
@@ -84,7 +85,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                       style: PTypography.labelSmall.copyWith(color: PColor.textSecondary, fontSize: 13),
                     ),
                   ),
-                  const SizedBox(height: 36),
+                  PSpacing.gapVerticalXxxl,
 
                   const QuickPinLoginCard(),
 
@@ -98,7 +99,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                     accentColor: PColor.secondaryColor,
                     accentBg: PColor.roleSelfBg,
                   ),
-                  const SizedBox(height: 14),
+                  PSpacing.gapVerticalLg,
 
                   // Role Option 2: VHV (อสม.)
                   _buildRoleCard(
@@ -110,7 +111,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                     accentColor: PColor.primaryColor,
                     accentBg: PColor.primaryLight,
                   ),
-                  const SizedBox(height: 14),
+                  PSpacing.gapVerticalLg,
 
                   // Role Option 3: Nurse (พยาบาล)
                   _buildRoleCard(
@@ -122,7 +123,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                     accentColor: PColor.roleNurse,
                     accentBg: PColor.roleNurseBg,
                   ),
-                  const SizedBox(height: 28),
+                  PSpacing.gapVerticalXxxl,
                 ],
               ),
             ),
@@ -163,7 +164,7 @@ class UserTypeSelectionPage extends StatelessWidget {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
             child: Row(
               children: [
                 Container(
@@ -175,7 +176,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                   ),
                   child: Icon(icon, color: accentColor, size: 26),
                 ),
-                const SizedBox(width: 16),
+                PSpacing.gapHorizontalLg,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +185,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                         title,
                         style: PTypography.sectionHeader,
                       ),
-                      const SizedBox(height: 3),
+                      PSpacing.gapVerticalXs,
                       Text(
                         subtitle,
                         style: PTypography.caption,
@@ -192,7 +193,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
+                PSpacing.gapHorizontalSm,
                 Container(
                   width: 32,
                   height: 32,

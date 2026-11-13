@@ -5,6 +5,7 @@ import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.d
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class AnalyticsFilterBar extends StatelessWidget {
   final VillageAnalyticsState state;
@@ -14,7 +15,7 @@ class AnalyticsFilterBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(PRadius.md),
@@ -34,16 +35,16 @@ class AnalyticsFilterBar extends StatelessWidget {
             children: [
               const Icon(Icons.filter_alt_rounded,
                   color: PColor.primaryColor, size: 20),
-              const SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               const Text(
                 'เลือกพื้นที่:',
                 style: PTypography.bodyBold,
               ),
-              const SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               Expanded(
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
                     borderRadius: BorderRadius.circular(PRadius.md),
@@ -87,27 +88,23 @@ class AnalyticsFilterBar extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          PSpacing.gapVerticalMd,
 
           // Sort Order Selector
           Row(
             children: [
               const Icon(Icons.sort_rounded,
                   color: PColor.textNeutralColor, size: 20),
-              const SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               const Text(
                 'เรียงลำดับ:',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: PColor.textNeutralColor,
-                ),
+                style: PTypography.captionLabelMuted,
               ),
-              const SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               Expanded(
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                   decoration: BoxDecoration(
                     color: PColor.backgroundColor,
                     borderRadius: BorderRadius.circular(PRadius.md),

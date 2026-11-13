@@ -11,6 +11,7 @@ import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class VhvPatientListPage extends StatefulWidget {
   final VHV vhv;
@@ -61,32 +62,28 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
           // Subheader Info
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.md),
             decoration: const BoxDecoration(
               color: PColor.primaryDark,
             ),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(PSpacing.sm),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(PRadius.sm),
                   ),
                   child: const Icon(Icons.volunteer_activism_rounded, color: Colors.white, size: 18),
                 ),
-                const SizedBox(width: 10),
+                PSpacing.gapHorizontalMd,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'อสม. ${widget.vhv.fullName}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: PTypography.onPrimaryLabel,
                       ),
                       Text(
                         'พื้นที่รับผิดชอบ: หมู่ที่ ${widget.vhv.villageId.replaceAll('V', '')} รพ.สต.แม่อาย',
@@ -131,7 +128,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                 if (state.patients.isEmpty) {
                   return Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(32.0),
+                      padding: const EdgeInsets.all(PSpacing.xxxl),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -145,7 +142,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                             ),
                             child: const Icon(Icons.person_search_rounded, size: 40, color: PColor.textNeutralColor),
                           ),
-                          const SizedBox(height: 16),
+                          PSpacing.gapVerticalLg,
                           const Text(
                             'ยังไม่มีรายชื่อผู้ป่วยในหมู่บ้านนี้',
                             style: TextStyle(
@@ -154,7 +151,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          PSpacing.gapVerticalSm,
                           const Text(
                             'กดปุ่ม "เพิ่มผู้ป่วย" ด้านล่างเพื่อเริ่มบันทึกข้อมูล',
                             style: PTypography.bodyMuted,
@@ -173,9 +170,9 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                         );
                   },
                   child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
                     itemCount: state.patients.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
                     itemBuilder: (context, index) {
                       final patient = state.patients[index];
                       return _buildPatientCard(context, patient);
@@ -242,7 +239,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
             child: Row(
               children: [
                 // Initials Avatar
@@ -260,7 +257,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                PSpacing.gapHorizontalLg,
                 // Info
                 Expanded(
                   child: Column(
@@ -275,11 +272,11 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                           letterSpacing: -0.2,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      PSpacing.gapVerticalXs,
                       Row(
                         children: [
                           const Icon(Icons.credit_card_outlined, size: 14, color: PColor.textNeutralColor),
-                          const SizedBox(width: 4),
+                          PSpacing.gapHorizontalXs,
                           Text(
                             patient.patientCitizenId,
                             style: const TextStyle(

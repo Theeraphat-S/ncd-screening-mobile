@@ -8,6 +8,7 @@ import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class ExportHealthDataDialog extends StatefulWidget {
   final Nurse nurse;
@@ -70,7 +71,7 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
       title: const Row(
         children: [
           Icon(Icons.file_download_rounded, color: PColor.primaryColor),
-          SizedBox(width: 8),
+          PSpacing.gapHorizontalSm,
           Text(
             'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -86,7 +87,7 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
               'เลือกรูปแบบความเป็นส่วนตัวตามมาตรฐานสาธารณสุข:',
               style: PTypography.bodySecondary,
             ),
-            const SizedBox(height: 12),
+            PSpacing.gapVerticalMd,
             RadioGroup<ExportPrivacyMode>(
               groupValue: _selectedMode,
               onChanged: (val) {
@@ -129,7 +130,7 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
               ),
             ),
             if (_selectedMode == ExportPrivacyMode.clinicalFull) ...[
-              const SizedBox(height: 10),
+              PSpacing.gapVerticalMd,
               TextField(
                 controller: _passwordController,
                 obscureText: true,
@@ -141,14 +142,14 @@ class _ExportHealthDataDialogState extends State<ExportHealthDataDialog> {
                     borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 12,
+                    horizontal: PSpacing.md,
+                    vertical: PSpacing.md,
                   ),
                 ),
               ),
             ],
             if (_errorMessage != null) ...[
-              const SizedBox(height: 8),
+              PSpacing.gapVerticalSm,
               Text(
                 _errorMessage!,
                 style: const TextStyle(color: PColor.riskHigh, fontSize: 12),

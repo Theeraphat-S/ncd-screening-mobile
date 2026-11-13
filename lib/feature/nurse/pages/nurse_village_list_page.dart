@@ -17,6 +17,8 @@ import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class NurseVillageListPage extends StatefulWidget {
   final Nurse nurse;
@@ -111,7 +113,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
           // Nurse Area Header Banner
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.md),
             color: PColor.primaryDark,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,13 +124,9 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                     children: [
                       Text(
                         'พยาบาล: ${widget.nurse.fullName}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: PTypography.onPrimaryLabel,
                       ),
-                      const SizedBox(height: 2),
+                      PSpacing.gapVerticalXs,
                       const Text(
                         'พื้นที่รับผิดชอบ: ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่',
                         style: TextStyle(
@@ -141,7 +139,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                 ),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(PRadius.md),
@@ -151,7 +149,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                     children: [
                       Icon(Icons.shield_outlined,
                           color: Colors.white, size: 14),
-                      SizedBox(width: 4),
+                      PSpacing.gapHorizontalXs,
                       Text(
                         'รพ.สต.แม่อาย',
                         style: TextStyle(
@@ -220,31 +218,31 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Filter Controls (Village Filter & Sort Order)
                 AnalyticsFilterBar(state: state),
-                const SizedBox(height: 16),
+                PSpacing.gapVerticalLg,
 
                 // 4 KPI Summary Cards
                 AnalyticsKpiSection(analytics: analytics),
-                const SizedBox(height: 20),
+                PSpacing.gapVerticalXl,
 
                 // 4 NCD Risk Breakdown Progress Meters
                 AnalyticsChartsSection(analytics: analytics),
-                const SizedBox(height: 20),
+                PSpacing.gapVerticalXl,
 
                 // Demographic Distribution (Gender & Age)
                 DemographicsSection(demographics: analytics.demographics),
-                const SizedBox(height: 20),
+                PSpacing.gapVerticalXl,
 
                 // Village Comparison Ranking (Visible when All Villages is selected)
                 if (analytics.isAllVillages &&
                     analytics.villageComparisons.isNotEmpty) ...[
                   VillageComparisonTable(analytics: analytics),
-                  const SizedBox(height: 20),
+                  PSpacing.gapVerticalXl,
                 ],
 
                 // High-Risk Patient Priority Queue
@@ -252,7 +250,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                   queue: analytics.highRiskPriorityQueue,
                   nurse: widget.nurse,
                 ),
-                const SizedBox(height: 24),
+                PSpacing.gapVerticalXxl,
               ],
             ),
           ),

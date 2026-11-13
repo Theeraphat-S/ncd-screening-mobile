@@ -57,7 +57,7 @@ class ScreeningStatusBanner extends StatelessWidget {
                         : PColor.statusApproved,
                   ),
                 ),
-                const SizedBox(height: 2),
+                PSpacing.gapVerticalXs,
                 Text(
                   'วันที่ตรวจ: $dateStr',
                   style: PTypography.bodyMuted,

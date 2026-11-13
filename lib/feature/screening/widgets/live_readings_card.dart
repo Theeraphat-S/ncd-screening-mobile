@@ -3,6 +3,7 @@ import 'package:ncd_screening_mobile/domain/services/screening_validator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// BMI and blood-pressure level calculated while the VHV is still typing, so
 /// an obviously wrong entry is noticed before saving.
@@ -25,8 +26,8 @@ class LiveReadingsCard extends StatelessWidget {
     return Container(
       key: const Key('live_readings_card'),
       width: double.infinity,
-      margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(top: PSpacing.md),
+      padding: const EdgeInsets.all(PSpacing.lg),
       decoration: BoxDecoration(
         color: PColor.primaryColor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(PRadius.md),
@@ -46,7 +47,7 @@ class LiveReadingsCard extends StatelessWidget {
                 ),
               ],
             ),
-          if (bmi != null && bpLevel != null) const SizedBox(height: 8),
+          if (bmi != null && bpLevel != null) PSpacing.gapVerticalSm,
           if (bpLevel != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,7 +56,7 @@ class LiveReadingsCard extends StatelessWidget {
                 Container(
                   key: const Key('live_bp'),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                   decoration: BoxDecoration(
                     color: _bpColor(bpLevel!),
                     borderRadius: BorderRadius.circular(PRadius.xl),

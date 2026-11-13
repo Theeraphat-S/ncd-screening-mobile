@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 enum LeaveChoice { stay, keepDraft, discard }
 
@@ -45,10 +46,10 @@ Future<bool> confirmAbnormalValues(
         children: [
           for (final w in warnings)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: PSpacing.sm),
               child: Text('• $w'),
             ),
-          const SizedBox(height: 4),
+          PSpacing.gapVerticalXs,
           const Text('ตรวจสอบค่าอีกครั้งก่อนบันทึก หรือยืนยันหากวัดซ้ำแล้ว'),
         ],
       ),

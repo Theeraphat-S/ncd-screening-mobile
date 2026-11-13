@@ -8,6 +8,7 @@ import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class VillageManagementTab extends StatelessWidget {
   final Nurse nurse;
@@ -36,9 +37,9 @@ class VillageManagementTab extends StatelessWidget {
         }
 
         return ListView.separated(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(PSpacing.lg),
           itemCount: state.villages.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
           itemBuilder: (context, index) {
             final village = state.villages[index];
             return _buildVillageCard(context, village);
@@ -67,11 +68,11 @@ class VillageManagementTab extends StatelessWidget {
           borderRadius: BorderRadius.circular(PRadius.md),
           onTap: () => _showVillageActionSheet(context, village),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(PSpacing.md),
                   decoration: BoxDecoration(
                     color: PColor.primaryLight.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(PRadius.md),
@@ -82,7 +83,7 @@ class VillageManagementTab extends StatelessWidget {
                     size: 24,
                   ),
                 ),
-                const SizedBox(width: 16),
+                PSpacing.gapHorizontalLg,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +92,7 @@ class VillageManagementTab extends StatelessWidget {
                         'หมู่ ${village.villageNumber} ${village.villageName}',
                         style: PTypography.sectionHeader,
                       ),
-                      const SizedBox(height: 4),
+                      PSpacing.gapVerticalXs,
                       const Text(
                         'กดเพื่อดูรายชื่อ อสม. หรือ ผู้ป่วยในหมู่บ้าน',
                         style: PTypography.caption,
@@ -121,7 +122,7 @@ class VillageManagementTab extends StatelessWidget {
       builder: (bottomSheetContext) {
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.xxl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -131,10 +132,10 @@ class VillageManagementTab extends StatelessWidget {
                   style: PTypography.emphasisPrimary,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 18),
+                PSpacing.gapVerticalXl,
                 ListTile(
                   leading: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(PSpacing.sm),
                     decoration: BoxDecoration(
                       color: PColor.primaryLight.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(PRadius.sm),
@@ -164,7 +165,7 @@ class VillageManagementTab extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   leading: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(PSpacing.sm),
                     decoration: BoxDecoration(
                       color: PColor.secondaryLight,
                       borderRadius: BorderRadius.circular(PRadius.sm),

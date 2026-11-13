@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// "Patient info → screening → result" progress strip at the top of the form.
 class ScreeningStepIndicator extends StatelessWidget {
@@ -10,7 +11,7 @@ class ScreeningStepIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+      padding: const EdgeInsets.symmetric(vertical: PSpacing.lg, horizontal: PSpacing.xl),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(PRadius.lg),
@@ -86,7 +87,7 @@ class _StepItem extends StatelessWidget {
                   ),
           ),
         ),
-        const SizedBox(height: 5),
+        PSpacing.gapVerticalXs,
         Text(
           label,
           style: PTypography.captionSecondary.copyWith(
@@ -108,7 +109,7 @@ class _StepLine extends StatelessWidget {
     return Expanded(
       child: Container(
         height: 2,
-        margin: const EdgeInsets.only(bottom: 18),
+        margin: const EdgeInsets.only(bottom: PSpacing.xl),
         color: isActive ? PColor.primaryColor : PColor.borderSubtle,
       ),
     );

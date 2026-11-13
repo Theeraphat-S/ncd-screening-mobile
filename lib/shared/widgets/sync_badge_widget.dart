@@ -8,6 +8,8 @@ class SyncBadgeWidget extends StatelessWidget {
   const SyncBadgeWidget({super.key});
 
   void _showSyncDetailModal(BuildContext context, SyncBadgeState state) {
+    // With no server nothing is "pending": the data is saved on this device.
+    final queueClear = state.pendingCount == 0 || !state.canSync;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -42,7 +44,7 @@ class SyncBadgeWidget extends StatelessWidget {
                           style: PTypography.sectionHeader,
                         ),
                         Text(
-                          'ระบบจัดเก็บออฟไลน์ปลอดภัย 100%',
+                          'บันทึกในเครื่องนี้ ใช้งานได้โดยไม่ต้องมีสัญญาณ',
                           style: PTypography.captionSecondary,
                         ),
                       ],
@@ -98,30 +100,30 @@ class SyncBadgeWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: state.pendingCount == 0 ? PColor.riskLowBg : PColor.riskModerateBg,
+                  color: queueClear ? PColor.riskLowBg : PColor.riskModerateBg,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: state.pendingCount == 0 ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
+                    color: queueClear ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      state.pendingCount == 0 ? Icons.check_circle_outline_rounded : Icons.hourglass_top_rounded,
-                      color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate,
+                      queueClear ? Icons.check_circle_outline_rounded : Icons.hourglass_top_rounded,
+                      color: queueClear ? PColor.riskLow : PColor.riskModerate,
                       size: 22,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        state.pendingCount == 0
-                            ? (state.canSync
+                        !state.canSync
+                            ? (state.pendingCount == 0
+                                ? 'ยังไม่มีข้อมูลที่บันทึก'
+                                : 'บันทึกในเครื่องนี้แล้ว ${state.pendingCount} รายการ (ยังไม่มีเซิร์ฟเวอร์)')
+                            : (state.pendingCount == 0
                                 ? 'ข้อมูลทั้งหมดส่งขึ้นระบบเรียบร้อยแล้ว'
-                                : 'ยังไม่มีข้อมูลรอส่ง')
-                            : (state.canSync
-                                ? 'มี ${state.pendingCount} รายการรอส่งขึ้นระบบคลาวด์'
-                                : 'รอส่ง ${state.pendingCount} รายการ (ยังไม่มีเซิร์ฟเวอร์ เก็บไว้ในเครื่องนี้)'),
-                        style: PTypography.labelSmall.copyWith(color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate, fontSize: 14),
+                                : 'มี ${state.pendingCount} รายการรอส่งขึ้นระบบคลาวด์'),
+                        style: PTypography.labelSmall.copyWith(color: queueClear ? PColor.riskLow : PColor.riskModerate, fontSize: 14),
                       ),
                     ),
                   ],
@@ -198,7 +200,7 @@ class SyncBadgeWidget extends StatelessWidget {
           );
         }
 
-        if (state.pendingCount > 0) {
+        if (state.canSync && state.pendingCount > 0) {
           return InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: () => _showSyncDetailModal(context, state),
@@ -238,8 +240,8 @@ class SyncBadgeWidget extends StatelessWidget {
         // No server yet: never show the "synced" check.
         if (!state.canSync) {
           return IconButton(
-            tooltip: 'ยังไม่มีเซิร์ฟเวอร์ ข้อมูลเก็บไว้ในเครื่อง',
-            icon: const Icon(Icons.cloud_off_rounded, color: Colors.white, size: 22),
+            tooltip: 'บันทึกในเครื่องนี้แล้ว (ยังไม่มีเซิร์ฟเวอร์)',
+            icon: const Icon(Icons.offline_pin_rounded, color: Colors.white, size: 22),
             onPressed: () => _showSyncDetailModal(context, state),
           );
         }

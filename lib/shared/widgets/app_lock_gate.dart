@@ -9,6 +9,7 @@ import 'package:ncd_screening_mobile/feature/auth/widgets/pin_unlock_view.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// Wraps the whole app: feeds touches to the idle timer, re-checks the idle
 /// time when the app returns to the foreground, and covers the UI with a lock
@@ -174,24 +175,24 @@ class _PasswordUnlockState extends State<_PasswordUnlock> {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(PSpacing.xxl),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Icon(Icons.lock_rounded, size: 40, color: PColor.primaryColor),
-              const SizedBox(height: 12),
+              PSpacing.gapVerticalMd,
               const Text(
                 'หน้าจอถูกล็อก',
                 textAlign: TextAlign.center,
                 style: PTypography.pageTitle,
               ),
               if (widget.name.isNotEmpty) ...[
-                const SizedBox(height: 6),
+                PSpacing.gapVerticalSm,
                 Text(widget.name, textAlign: TextAlign.center),
               ],
-              const SizedBox(height: 24),
+              PSpacing.gapVerticalXxl,
               TextField(
                 controller: _controller,
                 obscureText: true,
@@ -203,7 +204,7 @@ class _PasswordUnlockState extends State<_PasswordUnlock> {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 16),
+              PSpacing.gapVerticalLg,
               SizedBox(
                 height: 48,
                 child: ElevatedButton(

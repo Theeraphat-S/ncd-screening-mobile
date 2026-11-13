@@ -7,6 +7,10 @@ import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart'
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
 import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class PatientHistoryListPage extends StatefulWidget {
   final Patient patient;
@@ -40,27 +44,16 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () {
-            if (isPatientSelf) {
-              signOut();
-            } else {
-              Navigator.pop(context);
-            }
-          },
-        ),
-        title: Text(
-          isPatientSelf ? 'ประวัติการคัดกรองของฉัน' : 'ประวัติการคัดกรอง',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        // A patient's own history is their home page: leaving it ends the
+        // session, so it is labelled and confirmed as a sign-out, not a "back".
+        leading: isPatientSelf
+            ? IconButton(
+                tooltip: 'ออกจากระบบ',
+                icon: const Icon(Icons.logout_rounded),
+                onPressed: () => requestSignOut(context),
+              )
+            : null,
+        title: Text(isPatientSelf ? 'ประวัติการคัดกรองของฉัน' : 'ประวัติการคัดกรอง'),
       ),
       body: Stack(
         children: [
@@ -69,12 +62,12 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           // Header Patient Info Card
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
             color: PColor.primaryDark,
             child: Row(
               children: [
                 const Icon(Icons.account_circle, color: Colors.white, size: 28),
-                const SizedBox(width: 12),
+                PSpacing.gapHorizontalMd,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,12 +80,12 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      PSpacing.gapVerticalXs,
                       Text(
                         '(${widget.patient.patientCitizenId})',
                         style: const TextStyle(
                           color: Colors.white70,
-                          fontSize: 12.5,
+                          fontSize: 13,
                         ),
                       ),
                     ],
@@ -110,13 +103,22 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                   return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
                 }
 
+                if (state.status == ScreeningStatus.failure && state.historyList.isEmpty) {
+                  return ErrorStateView(
+                    message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+                    onRetry: () => context.read<ScreeningBloc>().add(
+                          ScreeningHistoryLoadRequested(widget.patient.patientId),
+                        ),
+                  );
+                }
+
                 if (state.historyList.isEmpty) {
                   return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.history_toggle_off_rounded, size: 64, color: PColor.primaryTint),
-                        SizedBox(height: 12),
+                        PSpacing.gapVerticalMd,
                         Text(
                           'ไม่พบข้อมูลประวัติการคัดกรอง',
                           style: TextStyle(
@@ -138,9 +140,9 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
                         );
                   },
                   child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(PSpacing.lg),
                     itemCount: state.historyList.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
                     itemBuilder: (context, index) {
                       final item = state.historyList[index];
                       return _buildHistoryCard(context, item);
@@ -166,10 +168,10 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
 
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(PRadius.md),
       elevation: 1.5,
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         onTap: () {
           context.read<ScreeningBloc>().add(ScreeningDetailSelected(item));
           Navigator.push(
@@ -185,37 +187,30 @@ class _PatientHistoryListPageState extends State<PatientHistoryListPage> {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(PSpacing.md),
                 decoration: BoxDecoration(
                   color: PColor.primaryLight.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: const Icon(Icons.assignment_outlined, color: PColor.primaryColor, size: 24),
               ),
-              const SizedBox(width: 14),
+              PSpacing.gapHorizontalLg,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'วันที่คัดกรอง: $dateStr',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
+                      style: PTypography.cardTitle,
                     ),
-                    const SizedBox(height: 3),
+                    PSpacing.gapVerticalXs,
                     Text(
                       'เวลา: $dateStr $timeStr',
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.caption,
                     ),
                   ],
                 ),

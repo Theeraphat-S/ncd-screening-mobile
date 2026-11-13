@@ -9,7 +9,6 @@ import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_unlock_view.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
-import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// Cold-start quick login for a staff member who already set a PIN.
 class PinLoginPage extends StatelessWidget {
@@ -53,13 +52,8 @@ class PinLoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'เข้าสู่ระบบด้วย PIN',
-          style: PTypography.appBarTitle,
-        ),
-        centerTitle: true,
+        title: const Text('เข้าสู่ระบบด้วย PIN'),
       ),
       body: SafeArea(
         child: PinUnlockView(

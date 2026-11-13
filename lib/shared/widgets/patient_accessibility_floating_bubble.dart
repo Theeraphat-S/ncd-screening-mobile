@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/accessibility/accessibility_cubit.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class PatientAccessibilityFloatingBubble extends StatefulWidget {
   const PatientAccessibilityFloatingBubble({super.key});
@@ -34,11 +36,11 @@ class _PatientAccessibilityFloatingBubbleState
               if (_isExpanded) ...[
                 Container(
                   width: 300,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(bottom: PSpacing.md),
+                  padding: const EdgeInsets.all(PSpacing.lg),
                   decoration: BoxDecoration(
                     color: isHC ? PColor.hcSurface : Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(PRadius.xl),
                     border: Border.all(
                       color: isHC ? PColor.hcAccent : PColor.borderSubtle,
                       width: isHC ? 2 : 1,
@@ -70,7 +72,7 @@ class _PatientAccessibilityFloatingBubbleState
                                       ? PColor.hcAccent
                                       : PColor.primaryColor,
                                 ),
-                                const SizedBox(width: 8),
+                                PSpacing.gapHorizontalSm,
                                 Flexible(
                                   child: Text(
                                     'ปรับการแสดงผล',
@@ -141,13 +143,13 @@ class _PatientAccessibilityFloatingBubbleState
                           },
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      PSpacing.gapVerticalSm,
                       // Font Scale Fine Tuning
                       Text(
                         'ขนาดตัวอักษร: ${(state.textScaleFactor * 100).round()}%',
                         style: PTypography.bodyMuted.copyWith(color: isHC ? Colors.white70 : PColor.textSecondary, fontSize: 14),
                       ),
-                      const SizedBox(height: 6),
+                      PSpacing.gapVerticalSm,
                       Row(
                         children: [
                           Expanded(
@@ -170,12 +172,12 @@ class _PatientAccessibilityFloatingBubbleState
                                       : PColor.borderStrong,
                                 ),
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
+                                  vertical: PSpacing.sm,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          PSpacing.gapHorizontalSm,
                           Expanded(
                             child: OutlinedButton.icon(
                               onPressed: () => context
@@ -196,14 +198,14 @@ class _PatientAccessibilityFloatingBubbleState
                                       : PColor.borderStrong,
                                 ),
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
+                                  vertical: PSpacing.sm,
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      PSpacing.gapVerticalMd,
                       // Reset Button
                       Center(
                         child: TextButton.icon(
@@ -233,7 +235,7 @@ class _PatientAccessibilityFloatingBubbleState
                 backgroundColor: bubbleBg,
                 foregroundColor: iconColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                   side: isHC
                       ? const BorderSide(color: Colors.white, width: 2)
                       : BorderSide.none,

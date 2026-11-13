@@ -43,7 +43,7 @@ class ScreeningLifestyleGuidanceSection extends StatelessWidget {
                 padding: const EdgeInsets.all(PSpacing.sm),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: const Icon(
                   Icons.health_and_safety_rounded,
@@ -64,7 +64,7 @@ class ScreeningLifestyleGuidanceSection extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    PSpacing.gapVerticalXs,
                     Text(
                       'คำแนะนำเข้าใจง่ายสำหรับประชาชนและผู้สูงอายุ',
                       style: TextStyle(color: Colors.white70, fontSize: 14),

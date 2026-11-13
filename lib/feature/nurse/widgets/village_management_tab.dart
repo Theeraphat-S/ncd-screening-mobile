@@ -5,6 +5,10 @@ import 'package:ncd_screening_mobile/feature/nurse/bloc/village_bloc.dart';
 import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_patient_list_page.dart';
 import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_vhv_list_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class VillageManagementTab extends StatelessWidget {
   final Nurse nurse;
@@ -21,14 +25,21 @@ class VillageManagementTab extends StatelessWidget {
           );
         }
 
+        if (state.status == VillageStatus.failure && state.villages.isEmpty) {
+          return ErrorStateView(
+            message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+            onRetry: () => context.read<VillageBloc>().add(VillageListLoadRequested()),
+          );
+        }
+
         if (state.villages.isEmpty) {
           return const Center(child: Text('ไม่พบข้อมูลหมู่บ้าน'));
         }
 
         return ListView.separated(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(PSpacing.lg),
           itemCount: state.villages.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
           itemBuilder: (context, index) {
             final village = state.villages[index];
             return _buildVillageCard(context, village);
@@ -42,7 +53,7 @@ class VillageManagementTab extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -54,17 +65,17 @@ class VillageManagementTab extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(PRadius.md),
           onTap: () => _showVillageActionSheet(context, village),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(PSpacing.md),
                   decoration: BoxDecoration(
                     color: PColor.primaryLight.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: const Icon(
                     Icons.location_city_rounded,
@@ -72,26 +83,19 @@ class VillageManagementTab extends StatelessWidget {
                     size: 24,
                   ),
                 ),
-                const SizedBox(width: 16),
+                PSpacing.gapHorizontalLg,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'หมู่ ${village.villageNumber} ${village.villageName}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.sectionHeader,
                       ),
-                      const SizedBox(height: 4),
+                      PSpacing.gapVerticalXs,
                       const Text(
                         'กดเพื่อดูรายชื่อ อสม. หรือ ผู้ป่วยในหมู่บ้าน',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: PColor.textNeutralColor,
-                        ),
+                        style: PTypography.caption,
                       ),
                     ],
                   ),
@@ -113,32 +117,28 @@ class VillageManagementTab extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(PRadius.xl)),
       ),
       builder: (bottomSheetContext) {
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.xxl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   'หมู่ ${village.villageNumber} ${village.villageName}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: PColor.primaryDark,
-                  ),
+                  style: PTypography.emphasisPrimary,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 18),
+                PSpacing.gapVerticalXl,
                 ListTile(
                   leading: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(PSpacing.sm),
                     decoration: BoxDecoration(
                       color: PColor.primaryLight.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(PRadius.sm),
                     ),
                     child: const Icon(Icons.volunteer_activism_rounded,
                         color: PColor.primaryColor),
@@ -165,10 +165,10 @@ class VillageManagementTab extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   leading: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(PSpacing.sm),
                     decoration: BoxDecoration(
                       color: PColor.secondaryLight,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(PRadius.sm),
                     ),
                     child: const Icon(Icons.people_outline_rounded,
                         color: PColor.secondaryColor),

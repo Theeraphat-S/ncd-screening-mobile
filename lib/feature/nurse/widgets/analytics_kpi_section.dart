@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class AnalyticsKpiSection extends StatelessWidget {
   final VillageAnalytics analytics;
@@ -24,7 +27,7 @@ class AnalyticsKpiSection extends StatelessWidget {
                 bgColor: PColor.roleNurseBg,
               ),
             ),
-            const SizedBox(width: 12),
+            PSpacing.gapHorizontalMd,
             Expanded(
               child: _buildKpiCard(
                 title: 'ความครอบคลุม',
@@ -39,7 +42,7 @@ class AnalyticsKpiSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        PSpacing.gapVerticalMd,
         Row(
           children: [
             Expanded(
@@ -54,7 +57,7 @@ class AnalyticsKpiSection extends StatelessWidget {
                 isAlert: analytics.highRiskPatientsCount > 0,
               ),
             ),
-            const SizedBox(width: 12),
+            PSpacing.gapHorizontalMd,
             Expanded(
               child: _buildKpiCard(
                 title: 'รอพยาบาลตรวจ',
@@ -83,10 +86,10 @@ class AnalyticsKpiSection extends StatelessWidget {
     bool isAlert = false,
   }) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(PSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(PRadius.md),
         border: isAlert
             ? Border.all(color: PColor.errorColor.withValues(alpha: 0.4), width: 1.5)
             : Border.all(color: PColor.borderSubtle),
@@ -106,23 +109,19 @@ class AnalyticsKpiSection extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: PColor.textNeutralColor,
-                ),
+                style: PTypography.captionLabelMuted,
               ),
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(PSpacing.sm),
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(PRadius.sm),
                 ),
                 child: Icon(icon, color: iconColor, size: 18),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          PSpacing.gapVerticalSm,
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -136,24 +135,18 @@ class AnalyticsKpiSection extends StatelessWidget {
                 ),
               ),
               if (unit.isNotEmpty) ...[
-                const SizedBox(width: 4),
+                PSpacing.gapHorizontalXs,
                 Text(
                   unit,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: PColor.textNeutralColor,
-                  ),
+                  style: PTypography.micro,
                 ),
               ],
             ],
           ),
-          const SizedBox(height: 4),
+          PSpacing.gapVerticalXs,
           Text(
             subtitle,
-            style: const TextStyle(
-              fontSize: 11,
-              color: PColor.textNeutralColor,
-            ),
+            style: PTypography.micro,
             overflow: TextOverflow.ellipsis,
           ),
         ],

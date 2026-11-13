@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class DemographicsSection extends StatelessWidget {
   final DemographicDistribution demographics;
@@ -10,10 +13,10 @@ class DemographicsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(PSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -29,31 +32,23 @@ class DemographicsSection extends StatelessWidget {
             children: [
               Icon(Icons.pie_chart_outline_rounded,
                   color: PColor.primaryColor, size: 22),
-              SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               Text(
                 'การกระจายตัวของประชากร',
-                style: TextStyle(
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.sectionHeader,
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          PSpacing.gapVerticalLg,
 
           // Gender Ratio
           const Text(
             'สัดส่วนเพศ (Gender Ratio)',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: PColor.contentColor,
-            ),
+            style: PTypography.captionSemibold,
           ),
-          const SizedBox(height: 8),
+          PSpacing.gapVerticalSm,
           ClipRRect(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(PRadius.sm),
             child: SizedBox(
               height: 12,
               child: demographics.totalPatients == 0
@@ -74,7 +69,7 @@ class DemographicsSection extends StatelessWidget {
                     ),
             ),
           ),
-          const SizedBox(height: 8),
+          PSpacing.gapVerticalSm,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -88,10 +83,10 @@ class DemographicsSection extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  PSpacing.gapHorizontalXs,
                   Text(
                     'ชาย: ${demographics.maleCount} คน (${demographics.maleRatio}%)',
-                    style: const TextStyle(fontSize: 11.5),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -105,10 +100,10 @@ class DemographicsSection extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  PSpacing.gapHorizontalXs,
                   Text(
                     'หญิง: ${demographics.femaleCount} คน (${demographics.femaleRatio}%)',
-                    style: const TextStyle(fontSize: 11.5),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -119,13 +114,9 @@ class DemographicsSection extends StatelessWidget {
           // Age Brackets
           const Text(
             'กลุ่มช่วงอายุ (Age Groups)',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: PColor.contentColor,
-            ),
+            style: PTypography.captionSemibold,
           ),
-          const SizedBox(height: 10),
+          PSpacing.gapVerticalMd,
           Row(
             children: [
               Expanded(
@@ -137,7 +128,7 @@ class DemographicsSection extends StatelessWidget {
                   color: PColor.chartAgeYoung,
                 ),
               ),
-              const SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               Expanded(
                 child: _buildAgeBracketCard(
                   label: '35–59 ปี',
@@ -147,7 +138,7 @@ class DemographicsSection extends StatelessWidget {
                   color: PColor.chartAgeMid,
                 ),
               ),
-              const SizedBox(width: 8),
+              PSpacing.gapHorizontalSm,
               Expanded(
                 child: _buildAgeBracketCard(
                   label: '≥ 60 ปี',
@@ -172,10 +163,10 @@ class DemographicsSection extends StatelessWidget {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.md),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(PRadius.md),
         border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Column(
@@ -188,27 +179,20 @@ class DemographicsSection extends StatelessWidget {
               color: color,
             ),
           ),
-          const SizedBox(height: 2),
+          PSpacing.gapVerticalXs,
           Text(
             desc,
-            style: const TextStyle(
-              fontSize: 10.5,
-              color: PColor.textNeutralColor,
-            ),
+            style: PTypography.micro,
           ),
-          const SizedBox(height: 6),
+          PSpacing.gapVerticalSm,
           Text(
             '$count คน',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: PColor.contentColor,
-            ),
+            style: PTypography.bodyBold,
           ),
           Text(
             '$percentage%',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: color,
             ),

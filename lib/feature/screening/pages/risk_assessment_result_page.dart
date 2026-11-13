@@ -12,6 +12,8 @@ import 'package:ncd_screening_mobile/shared/widgets/elderly_bento_advice_card.da
 import 'package:ncd_screening_mobile/shared/widgets/emergency_hospital_card.dart';
 
 import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class RiskAssessmentResultPage extends StatelessWidget {
   final Patient patient;
@@ -30,20 +32,10 @@ class RiskAssessmentResultPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'แนวโน้มความเสี่ยง',
-          style: PTypography.appBarTitle,
-        ),
-        centerTitle: true,
+        title: const Text('แนวโน้มความเสี่ยง'),
         actions: [
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+            padding: EdgeInsets.symmetric(vertical: PSpacing.md, horizontal: PSpacing.xs),
             child: AccessibilityScaleToggle(),
           ),
           IconButton(
@@ -68,7 +60,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
         children: [
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -82,14 +74,14 @@ class RiskAssessmentResultPage extends StatelessWidget {
 
               // Step Indicator
               _buildStepIndicator(),
-              const SizedBox(height: 16),
+              PSpacing.gapVerticalLg,
 
               // Patient Header Card
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(PSpacing.lg),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                   border: Border.all(color: PColor.borderSubtle),
                   boxShadow: PShadow.card,
                 ),
@@ -100,7 +92,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                       height: 46,
                       decoration: BoxDecoration(
                         color: PColor.primaryLight,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(PRadius.md),
                       ),
                       child: Center(
                         child: Text(
@@ -109,7 +101,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    PSpacing.gapHorizontalLg,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +110,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                             'ผู้ป่วย: ${patient.fullName}',
                             style: PTypography.sectionHeader,
                           ),
-                          const SizedBox(height: 2),
+                          PSpacing.gapVerticalXs,
                           Text(
                             'เลขบัตร: ${patient.patientCitizenId} • อายุ ${screening.ageAtScreening} ปี',
                             style: PTypography.captionSecondary,
@@ -129,35 +121,35 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 18),
+              PSpacing.gapVerticalXl,
 
               // Title
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                padding: EdgeInsets.symmetric(horizontal: PSpacing.xs, vertical: PSpacing.xs),
                 child: Text(
                   'มีแนวโน้มความเสี่ยงที่จะเป็น',
                   style: PTypography.sectionHeader,
                 ),
               ),
-              const SizedBox(height: 8),
+              PSpacing.gapVerticalSm,
 
               // 4 Disease Risk Cards
               ...screening.results.map(_buildDiseaseCard),
 
-              const SizedBox(height: 18),
+              PSpacing.gapVerticalXl,
 
               // Plain Thai Lifestyle Guidance Header (Elderly Friendly)
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(PSpacing.sm),
                     decoration: BoxDecoration(
                       color: PColor.primaryLight,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(PRadius.sm),
                     ),
                     child: const Icon(Icons.tips_and_updates_rounded, color: PColor.primaryDark, size: 18),
                   ),
-                  const SizedBox(width: 8),
+                  PSpacing.gapHorizontalSm,
                   const Expanded(
                     child: Text(
                       'คำแนะนำสุขภาพและการปฏิบัติตัวเฉพาะบุคคล',
@@ -166,7 +158,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              PSpacing.gapVerticalMd,
 
               // Plain Thai Bento Cards
               ...NcdLifestyleAdvisor.generateAdviceList(
@@ -174,7 +166,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 results: screening.results,
               ).map((adv) => ElderlyBentoAdviceCard(advice: adv)),
 
-              const SizedBox(height: 12),
+              PSpacing.gapVerticalMd,
 
               // PDF Export Action Button
               SizedBox(
@@ -200,13 +192,13 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: PColor.primaryColor, width: 1.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                     ),
                     backgroundColor: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              PSpacing.gapVerticalMd,
 
               // Back to Patient List Button
               SizedBox(
@@ -232,7 +224,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                     backgroundColor: PColor.primaryColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                     ),
                   ),
                   child: const Text(
@@ -241,7 +233,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              PSpacing.gapVerticalXl,
             ],
           ),
         ),
@@ -254,10 +246,10 @@ class RiskAssessmentResultPage extends StatelessWidget {
 
   Widget _buildStepIndicator() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+      padding: const EdgeInsets.symmetric(vertical: PSpacing.lg, horizontal: PSpacing.xl),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
@@ -310,7 +302,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
                   ),
           ),
         ),
-        const SizedBox(height: 5),
+        PSpacing.gapVerticalXs,
         Text(
           label,
           style: PTypography.captionBold,
@@ -323,7 +315,7 @@ class RiskAssessmentResultPage extends StatelessWidget {
     return Expanded(
       child: Container(
         height: 2,
-        margin: const EdgeInsets.only(bottom: 18),
+        margin: const EdgeInsets.only(bottom: PSpacing.xl),
         color: PColor.primaryColor,
       ),
     );
@@ -365,11 +357,11 @@ class RiskAssessmentResultPage extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(18),
+      margin: const EdgeInsets.only(bottom: PSpacing.md),
+      padding: const EdgeInsets.all(PSpacing.xl),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
@@ -379,14 +371,14 @@ class RiskAssessmentResultPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(PSpacing.sm),
                 decoration: BoxDecoration(
                   color: badgeBg,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(PRadius.md),
                 ),
                 child: Icon(diseaseIcon, color: badgeColor, size: 20),
               ),
-              const SizedBox(width: 10),
+              PSpacing.gapHorizontalMd,
               Expanded(
                 child: Text(
                   result.diseaseName,
@@ -394,10 +386,10 @@ class RiskAssessmentResultPage extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                 decoration: BoxDecoration(
                   color: badgeBg,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(PRadius.xl),
                   border: Border.all(color: badgeColor.withValues(alpha: 0.3)),
                 ),
                 child: Text(
@@ -413,25 +405,25 @@ class RiskAssessmentResultPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          PSpacing.gapVerticalMd,
           Text(
             result.criteriaText,
             style: PTypography.captionSecondary,
           ),
           if (result.adviceText.isNotEmpty) ...[
-            const SizedBox(height: 10),
+            PSpacing.gapVerticalMd,
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.md),
               decoration: BoxDecoration(
                 color: PColor.surfaceSubtle,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(PRadius.md),
                 border: Border.all(color: PColor.borderSubtle),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.info_outline_rounded, size: 16, color: PColor.primaryColor),
-                  const SizedBox(width: 8),
+                  PSpacing.gapHorizontalSm,
                   Expanded(
                     child: Text(
                       'คำแนะนำ: ${result.adviceText}',

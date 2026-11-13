@@ -7,6 +7,9 @@ import 'package:ncd_screening_mobile/feature/patient/pages/patient_history_list_
 import 'package:ncd_screening_mobile/feature/screening/pages/screening_form_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/patient_accessibility_floating_bubble.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class PatientDetailPage extends StatelessWidget {
   final Patient patient;
@@ -25,13 +28,13 @@ class PatientDetailPage extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.xl)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: PSpacing.xxl, vertical: PSpacing.xxxl),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(PSpacing.lg),
                 decoration: const BoxDecoration(
                   color: PColor.statusPendingBg,
                   shape: BoxShape.circle,
@@ -42,17 +45,13 @@ class PatientDetailPage extends StatelessWidget {
                   color: PColor.statusPending,
                 ),
               ),
-              const SizedBox(height: 18),
+              PSpacing.gapVerticalXl,
               const Text(
                 'ต้องการลบผู้ป่วยรายนี้ไหม?',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.headingMd,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              PSpacing.gapVerticalSm,
               Text(
                 patient.fullName,
                 style: const TextStyle(
@@ -62,24 +61,21 @@ class PatientDetailPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 6),
+              PSpacing.gapVerticalSm,
               const Text(
                 'ข้อมูลจะถูกลบออกจากระบบอย่างถาวร',
-                style: TextStyle(
-                  fontSize: 12.5,
-                  color: PColor.textNeutralColor,
-                ),
+                style: PTypography.caption,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              PSpacing.gapVerticalXxl,
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.md),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(PRadius.md),
                         ),
                       ),
                       onPressed: () => Navigator.pop(dialogContext),
@@ -89,14 +85,14 @@ class PatientDetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  PSpacing.gapHorizontalMd,
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.errorColor,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.md),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(PRadius.md),
                         ),
                       ),
                       onPressed: () {
@@ -134,21 +130,7 @@ class PatientDetailPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: PColor.backgroundColor,
           appBar: AppBar(
-            backgroundColor: PColor.primaryColor,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
-            ),
-            title: const Text(
-              'รายละเอียดผู้ป่วย',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            centerTitle: true,
+            title: const Text('รายละเอียดผู้ป่วย'),
             actions: [
               if (vhv != null) ...[
                 IconButton(
@@ -176,16 +158,16 @@ class PatientDetailPage extends StatelessWidget {
           body: Stack(
             children: [
               SingleChildScrollView(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(PSpacing.xl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Top Card with Avatar & Header
                     Container(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(PSpacing.xxl),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(PRadius.xl),
                         border: Border.all(color: PColor.borderSubtle),
                         boxShadow: PShadow.card,
                       ),
@@ -210,7 +192,7 @@ class PatientDetailPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          PSpacing.gapVerticalLg,
                           Text(
                             currentPatient.fullName,
                             style: const TextStyle(
@@ -220,18 +202,18 @@ class PatientDetailPage extends StatelessWidget {
                               letterSpacing: -0.2,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          PSpacing.gapVerticalSm,
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                             decoration: BoxDecoration(
                               color: PColor.surfaceSubtle,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(PRadius.xl),
                               border: Border.all(color: PColor.borderSubtle),
                             ),
                             child: Text(
                               'HN: ${currentPatient.patientId} • หมู่ ${currentPatient.villageId.replaceAll('V', '')}',
                               style: const TextStyle(
-                                fontSize: 12.5,
+                                fontSize: 13,
                                 color: PColor.textSecondary,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -240,14 +222,14 @@ class PatientDetailPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    PSpacing.gapVerticalLg,
 
                     // Patient Information Card
                     Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(PSpacing.xl),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(PRadius.xl),
                         border: Border.all(color: PColor.borderSubtle),
                         boxShadow: PShadow.card,
                       ),
@@ -256,13 +238,9 @@ class PatientDetailPage extends StatelessWidget {
                     children: [
                       const Text(
                         'ข้อมูลประจำตัวผู้ป่วย',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.cardTitle,
                       ),
-                      const SizedBox(height: 14),
+                      PSpacing.gapVerticalLg,
                       _buildInfoRow('เลขบัตรประชาชน', currentPatient.patientCitizenId),
                       const Divider(height: 20, color: PColor.borderSubtle),
                       _buildInfoRow('เพศ', currentPatient.patientGender),
@@ -278,7 +256,7 @@ class PatientDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                PSpacing.gapVerticalXxl,
 
                 // Action 1: Start Screening (If VHV is logged in)
                 if (vhv != null) ...[
@@ -299,22 +277,18 @@ class PatientDetailPage extends StatelessWidget {
                       icon: const Icon(Icons.assignment_add, color: Colors.white, size: 20),
                       label: const Text(
                         'เริ่มคัดกรอง / ประเมินความเสี่ยง',
-                        style: TextStyle(
-                          fontSize: 15.5,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                        style: PTypography.onPrimaryLabelLg,
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.primaryColor,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(PRadius.md),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  PSpacing.gapVerticalMd,
                 ],
 
                 // Action 2: View Screening History
@@ -337,7 +311,7 @@ class PatientDetailPage extends StatelessWidget {
                     label: const Text(
                       'ดูประวัติการคัดกรองสุขภาพ',
                       style: TextStyle(
-                        fontSize: 15.5,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: PColor.primaryColor,
                       ),
@@ -345,12 +319,12 @@ class PatientDetailPage extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: PColor.primaryColor, width: 1.5),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(PRadius.md),
                       ),
                     ),
                   ),
                 ),
-                  const SizedBox(height: 20),
+                  PSpacing.gapVerticalXl,
                 ],
               ),
             ),
@@ -370,21 +344,13 @@ class PatientDetailPage extends StatelessWidget {
           width: 120,
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 13.5,
-              color: PColor.textNeutralColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: PTypography.bodyMutedMedium,
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: PColor.contentColor,
-            ),
+            style: PTypography.labelSmall,
           ),
         ),
       ],

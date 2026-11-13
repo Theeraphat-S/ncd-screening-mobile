@@ -50,20 +50,17 @@ class ScreeningStatusBanner extends StatelessWidget {
                       ? 'รอพยาบาลตรวจสอบและรับรองผล'
                       : 'ผ่านการรับรองโดยพยาบาลแล้ว',
                   style: TextStyle(
-                    fontSize: 14.5,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: isPending
                         ? PColor.statusPending
                         : PColor.statusApproved,
                   ),
                 ),
-                const SizedBox(height: 2),
+                PSpacing.gapVerticalXs,
                 Text(
                   'วันที่ตรวจ: $dateStr',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: PColor.textNeutralColor,
-                  ),
+                  style: PTypography.bodyMuted,
                 ),
               ],
             ),

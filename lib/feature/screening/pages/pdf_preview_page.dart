@@ -5,6 +5,7 @@ import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:printing/printing.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
   final Patient patient;
@@ -102,7 +103,7 @@ class PdfPreviewPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(color: PColor.primaryColor),
-              SizedBox(height: 12),
+              PSpacing.gapVerticalMd,
               Text(
                 'กำลังสร้างเอกสารรายงาน PDF...',
                 style: PTypography.bodyMuted,
@@ -112,7 +113,7 @@ class PdfPreviewPage extends StatelessWidget {
         ),
         onError: (context, error) => Center(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(PSpacing.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -121,12 +122,12 @@ class PdfPreviewPage extends StatelessWidget {
                   color: PColor.errorColor,
                   size: 48,
                 ),
-                const SizedBox(height: 12),
+                PSpacing.gapVerticalMd,
                 const Text(
                   'เกิดข้อผิดพลาดในการสร้างเอกสาร PDF',
                   style: PTypography.sectionHeader,
                 ),
-                const SizedBox(height: 6),
+                PSpacing.gapVerticalSm,
                 Text(
                   error.toString(),
                   textAlign: TextAlign.center,

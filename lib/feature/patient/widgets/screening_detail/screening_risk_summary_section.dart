@@ -73,27 +73,20 @@ class ScreeningRiskSummarySection extends StatelessWidget {
                     children: [
                       Text(
                         res.diseaseName,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.cardTitle,
                       ),
-                      const SizedBox(height: 2),
+                      PSpacing.gapVerticalXs,
                       Text(
                         'คะแนน: ${res.score} คะแนน',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: PColor.textNeutralColor,
-                        ),
+                        style: PTypography.bodyMuted,
                       ),
                     ],
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                    horizontal: PSpacing.md,
+                    vertical: PSpacing.sm,
                   ),
                   decoration: BoxDecoration(
                     color: res.riskLevel.color,

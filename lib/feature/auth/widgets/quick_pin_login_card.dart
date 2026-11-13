@@ -7,6 +7,8 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/pin_login_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// "Continue as NAME with PIN" shortcut shown on the role-selection page
 /// when a staff member on this device already set a PIN.
@@ -42,12 +44,12 @@ class QuickPinLoginCard extends StatelessWidget {
         final data = snapshot.data;
         if (data == null) return const SizedBox.shrink();
         return Padding(
-          padding: const EdgeInsets.only(bottom: 18),
+          padding: const EdgeInsets.only(bottom: PSpacing.xl),
           child: Material(
             color: PColor.primaryLight,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(PRadius.lg),
             child: InkWell(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(PRadius.lg),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -59,11 +61,11 @@ class QuickPinLoginCard extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(PSpacing.lg),
                 child: Row(
                   children: [
                     const Icon(Icons.lock_open_rounded, color: PColor.primaryColor, size: 28),
-                    const SizedBox(width: 14),
+                    PSpacing.gapHorizontalLg,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +74,7 @@ class QuickPinLoginCard extends StatelessWidget {
                             'เข้าสู่ระบบด้วย PIN',
                             style: PTypography.sectionHeader,
                           ),
-                          const SizedBox(height: 2),
+                          PSpacing.gapVerticalXs,
                           Text(
                             data.name,
                             style: PTypography.bodySecondary,

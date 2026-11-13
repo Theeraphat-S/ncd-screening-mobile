@@ -5,6 +5,7 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_pad.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// PIN (or biometric) challenge shared by the cold-start quick login and the
 /// idle lock screen.
@@ -81,27 +82,27 @@ class _PinUnlockViewState extends State<PinUnlockView> {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(PSpacing.xxl),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
             children: [
               const Icon(Icons.lock_rounded, size: 40, color: PColor.primaryColor),
-              const SizedBox(height: 12),
+              PSpacing.gapVerticalMd,
               Text(
                 widget.title,
                 textAlign: TextAlign.center,
                 style: PTypography.pageTitle,
               ),
               if (widget.subtitle != null) ...[
-                const SizedBox(height: 6),
+                PSpacing.gapVerticalSm,
                 Text(
                   widget.subtitle!,
                   textAlign: TextAlign.center,
                   style: PTypography.bodyMuted,
                 ),
               ],
-              const SizedBox(height: 24),
+              PSpacing.gapVerticalXxl,
               PinPad(
                 onCompleted: _onPin,
                 enabled: !_busy,
@@ -114,7 +115,7 @@ class _PinUnlockViewState extends State<PinUnlockView> {
                       )
                     : null,
               ),
-              const SizedBox(height: 8),
+              PSpacing.gapVerticalSm,
               TextButton(
                 onPressed: widget.onUsePassword,
                 child: const Text('ใช้รหัสผ่านแทน / ออกจากระบบ'),

@@ -17,6 +17,9 @@ import 'package:ncd_screening_mobile/feature/screening/widgets/screening_section
 import 'package:ncd_screening_mobile/feature/screening/widgets/screening_step_indicator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 const _personalNcdOptions = [
   'โรคเบาหวาน',
@@ -224,15 +227,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
   // ---- submit ----------------------------------------------------------
 
   void _showSnack(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: PColor.errorColor,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+    AppSnackBar.error(context, message);
   }
 
   Future<void> _onSubmit() async {
@@ -352,32 +347,24 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
         child: Scaffold(
           backgroundColor: PColor.backgroundColor,
           appBar: AppBar(
-            backgroundColor: PColor.primaryColor,
-            elevation: 0,
-            leading: IconButton(
-              tooltip: 'ย้อนกลับ',
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-              onPressed: () => Navigator.of(context).maybePop(),
-            ),
-            title: const Text('แบบฟอร์มคัดกรองโรค', style: PTypography.appBarTitle),
-            centerTitle: true,
+            title: const Text('แบบฟอร์มคัดกรองโรค'),
           ),
           body: SafeArea(
             child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const ScreeningStepIndicator(),
-                  const SizedBox(height: 18),
+                  PSpacing.gapVerticalXl,
                   if (_restoredAt != null) ...[
                     RestoredDraftBanner(
                       key: const Key('restored_banner'),
                       savedAt: _restoredAt!,
                       onStartOver: _startOver,
                     ),
-                    const SizedBox(height: 14),
+                    PSpacing.gapVerticalLg,
                   ],
                   ScreeningSectionCard(
                     title: 'ตอนที่ 1: สัญญาณชีพ / ค่าตรวจวัดร่างกาย',
@@ -390,35 +377,35 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                             Expanded(
                               child: field(ScreeningField.weight, 'น้ำหนัก', 'กก.', 'เช่น 60'),
                             ),
-                            const SizedBox(width: 12),
+                            PSpacing.gapHorizontalMd,
                             Expanded(
                               child: field(ScreeningField.height, 'ส่วนสูง', 'ซม.', 'เช่น 165'),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 14),
+                        PSpacing.gapVerticalLg,
                         field(ScreeningField.waist, 'รอบเอว', 'ซม.', 'เช่น 80'),
-                        const SizedBox(height: 14),
+                        PSpacing.gapVerticalLg,
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: field(ScreeningField.sbp, 'ความดันตัวบน (SBP)', 'mmHg', 'เช่น 120'),
                             ),
-                            const SizedBox(width: 12),
+                            PSpacing.gapHorizontalMd,
                             Expanded(
                               child: field(ScreeningField.dbp, 'ความดันตัวล่าง (DBP)', 'mmHg', 'เช่น 80'),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 14),
+                        PSpacing.gapVerticalLg,
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: field(ScreeningField.pulse, 'ชีพจร', 'ครั้ง/นาที', 'เช่น 72'),
                             ),
-                            const SizedBox(width: 12),
+                            PSpacing.gapHorizontalMd,
                             Expanded(
                               child: field(
                                 ScreeningField.bloodSugar,
@@ -434,9 +421,9 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  PSpacing.gapVerticalLg,
                   _buildQuestionnaire(),
-                  const SizedBox(height: 24),
+                  PSpacing.gapVerticalXxl,
                   ElevatedButton.icon(
                     key: const Key('submit_screening'),
                     onPressed: _saving ? null : _onSubmit,
@@ -455,11 +442,11 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                       backgroundColor: PColor.primaryColor,
                       disabledBackgroundColor: PColor.primaryColor.withValues(alpha: 0.6),
                       minimumSize: const Size.fromHeight(56),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                       elevation: 3,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  PSpacing.gapVerticalXxl,
                 ],
               ),
             ),
@@ -525,7 +512,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
 
   List<Widget> _buildDiseaseChecklist() => [
         Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 4.0, bottom: 6.0),
+          padding: const EdgeInsets.only(left: PSpacing.sm, top: PSpacing.xs, bottom: PSpacing.sm),
           child: Text(
             'เลือกโรคที่ป่วย (เลือกได้มากกว่า 1 ข้อ):',
             style: PTypography.labelSmall

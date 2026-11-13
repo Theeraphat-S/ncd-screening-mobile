@@ -5,6 +5,9 @@ import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_add_edit_vhv_page
 import 'package:ncd_screening_mobile/feature/nurse/pages/nurse_patient_list_page.dart';
 import 'package:ncd_screening_mobile/feature/vhv/bloc/vhv_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class NurseVhvDetailPage extends StatelessWidget {
   final Nurse nurse;
@@ -33,33 +36,19 @@ class NurseVhvDetailPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: PColor.backgroundColor,
           appBar: AppBar(
-            backgroundColor: PColor.primaryColor,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
-            ),
-            title: const Text(
-              'รายละเอียด อสม.',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            centerTitle: true,
+            title: const Text('รายละเอียด อสม.'),
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(PSpacing.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Top Header Card
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(PSpacing.xl),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(PRadius.lg),
                     boxShadow: [
                       BoxShadow(
                         color: PColor.contentColor.withValues(alpha: 0.05),
@@ -79,34 +68,27 @@ class NurseVhvDetailPage extends StatelessWidget {
                           color: PColor.primaryColor,
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      PSpacing.gapVerticalLg,
                       Text(
                         currentVhv.fullName,
-                        style: const TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.pageTitle,
                       ),
-                      const SizedBox(height: 4),
+                      PSpacing.gapVerticalXs,
                       Text(
                         'หมู่ ${village.villageNumber} ${village.villageName}',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: PColor.textNeutralColor,
-                        ),
+                        style: PTypography.caption,
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                PSpacing.gapVerticalLg,
 
                 // Details Card
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(PSpacing.xl),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(PRadius.lg),
                     boxShadow: [
                       BoxShadow(
                         color: PColor.contentColor.withValues(alpha: 0.05),
@@ -129,7 +111,7 @@ class NurseVhvDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                PSpacing.gapVerticalXxl,
 
                 // Button 1: View Patients in this village
                 ElevatedButton.icon(
@@ -147,20 +129,16 @@ class NurseVhvDetailPage extends StatelessWidget {
                   icon: const Icon(Icons.people_alt_outlined, color: Colors.white),
                   label: const Text(
                     'ดูรายชื่อผู้ป่วยในหมู่บ้านนี้',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: PTypography.onPrimaryLabelLg,
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PColor.primaryColor,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                     elevation: 2,
                   ),
                 ),
-                const SizedBox(height: 12),
+                PSpacing.gapVerticalMd,
 
                 // Button 2: Edit VHV
                 OutlinedButton.icon(
@@ -186,9 +164,9 @@ class NurseVhvDetailPage extends StatelessWidget {
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
                     side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                   ),
                 ),
               ],
@@ -207,21 +185,13 @@ class NurseVhvDetailPage extends StatelessWidget {
           width: 90,
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 13.5,
-              color: PColor.textNeutralColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: PTypography.bodyMutedMedium,
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: PColor.contentColor,
-            ),
+            style: PTypography.labelSmall,
           ),
         ),
       ],

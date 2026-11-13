@@ -127,3 +127,16 @@ class PColors {
 - [x] **No Emojis in Clinical UI**: Replaced with high-grade SVG icons / Material Symbols.
 - [x] **Clear Information Hierarchy**: Bold metrics with units, distinct risk badges, no cluttered unseparated card walls.
 - [x] **Mobile Responsive Hardening**: Safe area compliance, dynamic scroll physics, keyboard-aware bottom padding.
+
+---
+
+## 6. Implementation Rules (as built)
+
+- **Theme first**: `lib/shared/theme/app_theme.dart` sets the defaults for app bars, buttons, inputs, dialogs, snack bars and the back icon. Pages do not restate them (no `backgroundColor`/`centerTitle`/title `TextStyle` on `AppBar`, no per-page `InputDecoration` borders).
+- **Type scale (sp)**: 12 · 13 · 14 · 15 · 16 · 18 · 20 · 22 · 26, from `PTypography`. Nothing below 12, no fractional sizes. Text typed into fields is 16.
+- **Radius**: only `PRadius` values (`xs` 4, `sm` 8, `md` 12, `lg`/`card` 16, `xl` 20).
+- **Input outlines**: `PColor.borderInput` (3.5:1 on white). `borderSubtle`/`borderStrong` are for dividers and cards only.
+- **Forms**: build with `AppTextField` / `AppPickerField` inside a `Form`; validate with `FormValidators`; show each error under its field plus one `InlineAlert` above the submit button. Keep the page open until the save succeeds and guard unsaved input with `PopScope` + `confirmDiscardChanges`.
+- **Feedback**: `AppSnackBar.success/error/info` for transient results, `InlineAlert` for errors the user must fix in place, `ErrorStateView` (with retry) when a list fails to load.
+- **Navigation**: the default themed back button only goes back. Ending the session is a labelled `logout` action that goes through `requestSignOut` (confirmation).
+

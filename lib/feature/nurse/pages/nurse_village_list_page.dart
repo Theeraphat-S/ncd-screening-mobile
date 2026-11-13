@@ -15,6 +15,10 @@ import 'package:ncd_screening_mobile/feature/nurse/widgets/village_comparison_ta
 import 'package:ncd_screening_mobile/feature/nurse/widgets/village_management_tab.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class NurseVillageListPage extends StatefulWidget {
   final Nurse nurse;
@@ -50,21 +54,12 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: const IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: signOut,
+        leading: IconButton(
+          tooltip: 'ออกจากระบบ',
+          icon: const Icon(Icons.logout_rounded),
+          onPressed: () => requestSignOut(context),
         ),
-        title: const Text(
-          'ระบบพยาบาล รพ.สต.แม่อาย',
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: const Text('ระบบพยาบาล รพ.สต.แม่อาย'),
         actions: [
           const SyncBadgeWidget(),
           IconButton(
@@ -118,7 +113,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
           // Nurse Area Header Banner
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.md),
             color: PColor.primaryDark,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,18 +124,14 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                     children: [
                       Text(
                         'พยาบาล: ${widget.nurse.fullName}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: PTypography.onPrimaryLabel,
                       ),
-                      const SizedBox(height: 2),
+                      PSpacing.gapVerticalXs,
                       const Text(
                         'พื้นที่รับผิดชอบ: ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่',
                         style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 11.5,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -148,22 +139,22 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                 ),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: PSpacing.md, vertical: PSpacing.xs),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.shield_outlined,
                           color: Colors.white, size: 14),
-                      SizedBox(width: 4),
+                      PSpacing.gapHorizontalXs,
                       Text(
                         'รพ.สต.แม่อาย',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 11.5,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -205,38 +196,11 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
 
         if (state.status == VillageAnalyticsStatus.failure &&
             state.analytics == null) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline_rounded,
-                      color: PColor.errorColor, size: 48),
-                  const SizedBox(height: 12),
-                  Text(
-                    state.errorMessage ?? 'เกิดข้อผิดพลาดในการโหลดข้อมูล',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 14, color: PColor.contentColor),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      context
-                          .read<VillageAnalyticsBloc>()
-                          .add(const VillageAnalyticsLoadRequested());
-                    },
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('ลองใหม่'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: PColor.primaryColor,
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return ErrorStateView(
+            message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+            onRetry: () => context
+                .read<VillageAnalyticsBloc>()
+                .add(const VillageAnalyticsLoadRequested()),
           );
         }
 
@@ -254,31 +218,31 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Filter Controls (Village Filter & Sort Order)
                 AnalyticsFilterBar(state: state),
-                const SizedBox(height: 16),
+                PSpacing.gapVerticalLg,
 
                 // 4 KPI Summary Cards
                 AnalyticsKpiSection(analytics: analytics),
-                const SizedBox(height: 20),
+                PSpacing.gapVerticalXl,
 
                 // 4 NCD Risk Breakdown Progress Meters
                 AnalyticsChartsSection(analytics: analytics),
-                const SizedBox(height: 20),
+                PSpacing.gapVerticalXl,
 
                 // Demographic Distribution (Gender & Age)
                 DemographicsSection(demographics: analytics.demographics),
-                const SizedBox(height: 20),
+                PSpacing.gapVerticalXl,
 
                 // Village Comparison Ranking (Visible when All Villages is selected)
                 if (analytics.isAllVillages &&
                     analytics.villageComparisons.isNotEmpty) ...[
                   VillageComparisonTable(analytics: analytics),
-                  const SizedBox(height: 20),
+                  PSpacing.gapVerticalXl,
                 ],
 
                 // High-Risk Patient Priority Queue
@@ -286,7 +250,7 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
                   queue: analytics.highRiskPriorityQueue,
                   nurse: widget.nurse,
                 ),
-                const SizedBox(height: 24),
+                PSpacing.gapVerticalXxl,
               ],
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_pad.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// Lets a staff member create a 6-digit PIN (and optionally biometric unlock)
 /// right after signing in with their password.
@@ -72,38 +73,33 @@ class _PinSetupPageState extends State<PinSetupPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'ตั้งรหัส PIN',
-          style: PTypography.appBarTitle,
-        ),
-        centerTitle: true,
+        title: const Text('ตั้งรหัส PIN'),
       ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(PSpacing.xxl),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400),
               child: Column(
                 children: [
                   const Icon(Icons.lock_outline_rounded, size: 40, color: PColor.primaryColor),
-                  const SizedBox(height: 12),
+                  PSpacing.gapVerticalMd,
                   Text(
                     confirming ? 'ยืนยัน PIN อีกครั้ง' : 'ตั้ง PIN 6 หลัก',
                     style: PTypography.pageTitle,
                   ),
-                  const SizedBox(height: 6),
+                  PSpacing.gapVerticalSm,
                   const Text(
                     'ใช้เข้าแอปครั้งต่อไปแทนการกรอกรหัสผ่าน',
                     textAlign: TextAlign.center,
                     style: PTypography.bodyMuted,
                   ),
-                  const SizedBox(height: 24),
+                  PSpacing.gapVerticalXxl,
                   PinPad(onCompleted: _onPin, enabled: !_saving, errorText: _error),
                   if (_biometricAvailable) ...[
-                    const SizedBox(height: 8),
+                    PSpacing.gapVerticalSm,
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
                       title: const Text('ใช้ลายนิ้วมือ / ใบหน้าปลดล็อก'),
@@ -111,7 +107,7 @@ class _PinSetupPageState extends State<PinSetupPage> {
                       onChanged: (v) => setState(() => _useBiometric = v),
                     ),
                   ],
-                  const SizedBox(height: 8),
+                  PSpacing.gapVerticalSm,
                   TextButton(
                     onPressed: _saving ? null : () => widget.onFinished(context),
                     child: const Text('ข้ามไปก่อน (ใช้รหัสผ่านครั้งหน้า)'),

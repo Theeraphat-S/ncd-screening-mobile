@@ -58,12 +58,12 @@ class ScreeningVitalsCard extends StatelessWidget {
 
   Widget _buildMetricRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: PSpacing.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(child: Text(label, style: PTypography.bodyMuted)),
-          const SizedBox(width: 12),
+          PSpacing.gapHorizontalMd,
           // Flexible + end alignment: at large system text the value wraps
           // instead of overflowing the card.
           Flexible(

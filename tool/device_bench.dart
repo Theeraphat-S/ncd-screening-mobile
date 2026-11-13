@@ -51,15 +51,31 @@ Future<(int ms, int maxGapMs)> _measure(Future<void> Function() body) async {
 Future<void> _run() async {
   final stored = PasswordHasher.hash('password123');
 
-  var r = await _measure(() async {
-    PasswordHasher.verify('password123', stored); // old behaviour, UI thread
-  });
-  _log('verify on UI thread: ${r.$1} ms, longest UI stall ${r.$2} ms');
+  // Baseline first: how long a gap does the watcher see when nothing runs?
+  // Then the same verify on the UI thread vs on a worker isolate, 7 trials
+  // each, reporting the median so one noisy run cannot decide the outcome.
+  Future<void> trials(String name, Future<void> Function() body) async {
+    final totals = <int>[];
+    final stalls = <int>[];
+    for (var i = 0; i < 7; i++) {
+      final m = await _measure(body);
+      totals.add(m.$1);
+      stalls.add(m.$2);
+    }
+    totals.sort();
+    stalls.sort();
+    _log('$name: median ${totals[3]} ms, median UI stall ${stalls[3]} ms, '
+        'worst stall ${stalls.last} ms');
+  }
 
-  r = await _measure(() async {
+  await trials('baseline (no work)', () async {});
+  await trials('verify on UI thread', () async {
+    PasswordHasher.verify('password123', stored);
+  });
+  await trials('verify on isolate', () async {
     await PasswordHasher.verifyAsync('password123', stored);
   });
-  _log('verify on isolate:   ${r.$1} ms, longest UI stall ${r.$2} ms');
+  late (int, int) r;
 
   final pins = PinService(InMemorySecureStore());
   await pins.setPin('U1', '135790');

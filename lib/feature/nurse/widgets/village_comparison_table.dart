@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/village_analytics.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class VillageComparisonTable extends StatelessWidget {
   final VillageAnalytics analytics;
@@ -12,10 +15,10 @@ class VillageComparisonTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(PSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         boxShadow: [
           BoxShadow(
             color: PColor.contentColor.withValues(alpha: 0.05),
@@ -34,37 +37,30 @@ class VillageComparisonTable extends StatelessWidget {
                 children: [
                   Icon(Icons.leaderboard_rounded,
                       color: PColor.primaryColor, size: 22),
-                  SizedBox(width: 8),
+                  PSpacing.gapHorizontalSm,
                   Text(
                     'การเปรียบเทียบสถิติรายหมู่บ้าน',
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.bold,
-                      color: PColor.contentColor,
-                    ),
+                    style: PTypography.sectionHeader,
                   ),
                 ],
               ),
               Text(
                 '${analytics.villageComparisons.length} หมู่บ้าน',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: PColor.textNeutralColor,
-                ),
+                style: PTypography.micro,
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          PSpacing.gapVerticalXs,
           const Text(
             'กดที่หมู่บ้านเพื่อดูรายละเอียดเฉพาะพื้นที่ (Drill-down)',
-            style: TextStyle(fontSize: 11.5, color: PColor.textNeutralColor),
+            style: PTypography.micro,
           ),
-          const SizedBox(height: 12),
+          PSpacing.gapVerticalMd,
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: analytics.villageComparisons.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
             itemBuilder: (context, index) {
               final item = analytics.villageComparisons[index];
               return _buildVillageComparisonCard(context, item, index + 1);
@@ -81,17 +77,17 @@ class VillageComparisonTable extends StatelessWidget {
     int rank,
   ) {
     return InkWell(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(PRadius.md),
       onTap: () {
         context.read<VillageAnalyticsBloc>().add(
               VillageAnalyticsFilterChanged(summary.village.villageId),
             );
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(PSpacing.md),
         decoration: BoxDecoration(
           color: PColor.backgroundColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(PRadius.md),
           border: Border.all(color: PColor.borderSubtle),
         ),
         child: Row(
@@ -116,7 +112,7 @@ class VillageComparisonTable extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            PSpacing.gapHorizontalMd,
 
             // Village Info & Coverage
             Expanded(
@@ -125,18 +121,14 @@ class VillageComparisonTable extends StatelessWidget {
                 children: [
                   Text(
                     'หมู่ ${summary.village.villageNumber} ${summary.village.villageName}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: PColor.contentColor,
-                    ),
+                    style: PTypography.bodyBold,
                   ),
-                  const SizedBox(height: 4),
+                  PSpacing.gapVerticalXs,
                   Row(
                     children: [
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(PRadius.xs),
                           child: LinearProgressIndicator(
                             value: summary.totalPatients == 0
                                 ? 0.0
@@ -150,29 +142,26 @@ class VillageComparisonTable extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      PSpacing.gapHorizontalSm,
                       Text(
                         '${summary.screeningCoveragePercentage}%',
                         style: const TextStyle(
-                          fontSize: 11.5,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: PColor.primaryColor,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2),
+                  PSpacing.gapVerticalXs,
                   Text(
                     'คัดกรอง ${summary.screenedPatientsCount}/${summary.totalPatients} คน',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: PColor.textNeutralColor,
-                    ),
+                    style: PTypography.micro,
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
+            PSpacing.gapHorizontalMd,
 
             // High Risk & Pending Badges
             Column(
@@ -181,10 +170,10 @@ class VillageComparisonTable extends StatelessWidget {
                 if (summary.highRiskPatientsCount > 0)
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        const EdgeInsets.symmetric(horizontal: PSpacing.sm, vertical: PSpacing.xs),
                     decoration: BoxDecoration(
                       color: PColor.riskHighBg,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                       border: Border.all(
                         color: PColor.errorColor.withValues(alpha: 0.3),
                       ),
@@ -194,14 +183,10 @@ class VillageComparisonTable extends StatelessWidget {
                       children: [
                         const Icon(Icons.warning_amber_rounded,
                             size: 13, color: PColor.errorColor),
-                        const SizedBox(width: 3),
+                        PSpacing.gapHorizontalXs,
                         Text(
                           'เสี่ยงสูง ${summary.highRiskPatientsCount}',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: PColor.errorColor,
-                          ),
+                          style: PTypography.microError,
                         ),
                       ],
                     ),
@@ -209,33 +194,33 @@ class VillageComparisonTable extends StatelessWidget {
                 else
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        const EdgeInsets.symmetric(horizontal: PSpacing.sm, vertical: PSpacing.xs),
                     decoration: BoxDecoration(
                       color: PColor.riskLowBg,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(PRadius.md),
                     ),
                     child: const Text(
                       'ไม่มีเสี่ยงสูง',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         color: PColor.riskLow,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                const SizedBox(height: 4),
+                PSpacing.gapVerticalXs,
                 if (summary.pendingReviewCount > 0)
                   Text(
                     'รอตรวจ ${summary.pendingReviewCount}',
                     style: const TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       color: PColor.riskModerate,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
               ],
             ),
-            const SizedBox(width: 4),
+            PSpacing.gapHorizontalXs,
             const Icon(
               Icons.chevron_right_rounded,
               color: PColor.textNeutralColor,

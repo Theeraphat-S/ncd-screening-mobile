@@ -4,6 +4,10 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class NursePatientListPage extends StatefulWidget {
   final Nurse nurse;
@@ -33,35 +37,17 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'ผู้ป่วยในหมู่ ${widget.village.villageNumber}',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: Text('ผู้ป่วยในหมู่ ${widget.village.villageNumber}'),
       ),
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.xl, vertical: PSpacing.md),
             color: PColor.primaryDark,
             child: Text(
               '${widget.village.villageName} • อ.แม่อาย จ.เชียงใหม่',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              style: PTypography.onPrimarySemibold,
             ),
           ),
           Expanded(
@@ -71,20 +57,25 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                   return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
                 }
 
+                if (state.status == PatientStatus.failure && state.patients.isEmpty) {
+                  return ErrorStateView(
+                    message: state.errorMessage ?? 'กรุณาลองอีกครั้ง',
+                    onRetry: () => context.read<PatientBloc>().add(
+                          PatientLoadRequested(villageId: widget.village.villageId),
+                        ),
+                  );
+                }
+
                 if (state.patients.isEmpty) {
                   return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.person_off_outlined, size: 64, color: PColor.primaryTint),
-                        SizedBox(height: 12),
+                        PSpacing.gapVerticalMd,
                         Text(
                           'ไม่พบข้อมูลผู้ป่วยในหมู่บ้านนี้',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: PColor.textNeutralColor,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: PTypography.bodyLargeMuted,
                         ),
                       ],
                     ),
@@ -99,9 +90,9 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                         );
                   },
                   child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(PSpacing.lg),
                     itemCount: state.patients.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => PSpacing.gapVerticalMd,
                     itemBuilder: (context, index) {
                       final patient = state.patients[index];
                       return _buildPatientCard(context, patient);
@@ -121,15 +112,15 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         border: Border.all(color: PColor.borderSubtle),
         boxShadow: PShadow.card,
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(PRadius.lg),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(PRadius.lg),
           onTap: () {
             context.read<PatientBloc>().add(PatientSelected(patient));
             Navigator.push(
@@ -143,7 +134,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg, vertical: PSpacing.lg),
             child: Row(
               children: [
                 Container(
@@ -151,20 +142,16 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                   height: 46,
                   decoration: BoxDecoration(
                     color: PColor.primaryLight,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(PRadius.md),
                   ),
                   child: Center(
                     child: Text(
                       initials,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: PColor.primaryDark,
-                      ),
+                      style: PTypography.emphasisPrimary,
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                PSpacing.gapHorizontalLg,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,17 +159,17 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
                       Text(
                         patient.fullName,
                         style: const TextStyle(
-                          fontSize: 15.5,
+                          fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: PColor.contentColor,
                           letterSpacing: -0.2,
                         ),
                       ),
-                      const SizedBox(height: 3),
+                      PSpacing.gapVerticalXs,
                       Text(
                         'เลขบัตร: ${patient.patientCitizenId} • อายุ ${patient.age} ปี',
                         style: const TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           color: PColor.textSecondary,
                           fontFamily: 'monospace',
                         ),

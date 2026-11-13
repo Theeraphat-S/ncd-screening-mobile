@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 class NurseApproveRiskPage extends StatefulWidget {
   final Nurse nurse;
@@ -79,13 +83,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
             updatedResults: _buildUpdatedResults(),
           ),
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('อนุมัติผลการประเมินความเสี่ยงสำเร็จ'),
-        backgroundColor: PColor.primaryDark,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    AppSnackBar.success(context, 'อนุมัติผลการประเมินความเสี่ยงสำเร็จ');
     Navigator.pop(context);
   }
 
@@ -94,30 +92,26 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.xl)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: PSpacing.xxl, vertical: PSpacing.xxl),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(PSpacing.lg),
                 decoration: const BoxDecoration(
                   color: PColor.statusPendingBg,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.help_outline_rounded, size: 44, color: PColor.statusPending),
               ),
-              const SizedBox(height: 16),
+              PSpacing.gapVerticalLg,
               const Text(
                 'ยืนยันการเปลี่ยนระดับความเสี่ยง',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.headingMd,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              PSpacing.gapVerticalSm,
               const Text(
                 'คุณแน่ใจที่จะปรับเปลี่ยนระดับความเสี่ยงตามที่เลือกไว้ และทำการอนุมัติผลการประเมินใช่หรือไม่?',
                 style: TextStyle(
@@ -127,14 +121,14 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 22),
+              PSpacing.gapVerticalXxl,
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.md),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                       ),
                       onPressed: () => Navigator.pop(dialogContext),
                       child: const Text(
@@ -143,13 +137,13 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  PSpacing.gapHorizontalMd,
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.primaryColor,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.md),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                       ),
                       onPressed: () {
                         Navigator.pop(dialogContext);
@@ -178,34 +172,20 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
     return Scaffold(
       backgroundColor: PColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: PColor.primaryColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'ยืนยันผลการประเมิน',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+        title: const Text('ยืนยันผลการประเมิน'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(PSpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Patient Avatar & Name Header
               Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(PSpacing.xl),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                   boxShadow: [
                     BoxShadow(
                       color: PColor.contentColor.withValues(alpha: 0.05),
@@ -221,58 +201,50 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       backgroundColor: PColor.primaryLight.withValues(alpha: 0.15),
                       child: const Icon(Icons.person, size: 38, color: PColor.primaryColor),
                     ),
-                    const SizedBox(height: 10),
+                    PSpacing.gapVerticalMd,
                     Text(
                       widget.patient.fullName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
+                      style: PTypography.headingMd,
                     ),
-                    const SizedBox(height: 4),
+                    PSpacing.gapVerticalXs,
                     Text(
                       'วันที่รับการคัดกรอง : $dateStr',
-                      style: const TextStyle(fontSize: 13, color: PColor.textNeutralColor),
+                      style: PTypography.caption,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              PSpacing.gapVerticalLg,
 
               // Original Evaluation Results (4 Diseases)
               Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(PSpacing.xl),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'ผลการประเมินเดิม (4 โรค)',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.primaryDark,
-                      ),
+                      style: PTypography.cardTitleAccent,
                     ),
                     const Divider(height: 20),
                     ...widget.screening.results.map((res) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.xs),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               res.diseaseName,
-                              style: const TextStyle(fontSize: 13.5, color: PColor.contentColor),
+                              style: PTypography.body,
                             ),
                             Text(
                               res.riskLevel.labelTh,
                               style: TextStyle(
-                                fontSize: 13.5,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: PColor.getRiskColor(res.riskLevel.labelTh),
                               ),
@@ -284,25 +256,21 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              PSpacing.gapVerticalLg,
 
               // Edit Risk Levels Card
               Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(PSpacing.xl),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(PRadius.lg),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'แก้ไขระดับความเสี่ยง (เลือกได้: ต่ำ/ปานกลาง/สูง)',
-                      style: TextStyle(
-                        fontSize: 14.5,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.primaryDark,
-                      ),
+                      style: PTypography.cardTitleAccent,
                     ),
                     const Divider(height: 20),
 
@@ -312,7 +280,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       currentValue: _dmRisk,
                       onChanged: (val) => setState(() => _dmRisk = val!),
                     ),
-                    const SizedBox(height: 14),
+                    PSpacing.gapVerticalLg,
 
                     // 2. Hypertension
                     _buildRiskDropdown(
@@ -320,7 +288,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       currentValue: _htRisk,
                       onChanged: (val) => setState(() => _htRisk = val!),
                     ),
-                    const SizedBox(height: 14),
+                    PSpacing.gapVerticalLg,
 
                     // 3. CVD
                     _buildRiskDropdown(
@@ -328,7 +296,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       currentValue: _cvdRisk,
                       onChanged: (val) => setState(() => _cvdRisk = val!),
                     ),
-                    const SizedBox(height: 14),
+                    PSpacing.gapVerticalLg,
 
                     // 4. Obesity
                     _buildRiskDropdown(
@@ -339,7 +307,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              PSpacing.gapVerticalXxl,
 
               // Action Buttons
               Row(
@@ -348,8 +316,8 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.statusApprovedDark,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                       ),
                       onPressed: () {
                         if (_hasChanges) {
@@ -368,13 +336,13 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  PSpacing.gapHorizontalMd,
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: PSpacing.lg),
                         side: const BorderSide(color: PColor.riskHigh),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PRadius.md)),
                       ),
                       onPressed: () {
                         if (_hasChanges) {
@@ -395,7 +363,7 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              PSpacing.gapVerticalXl,
             ],
           ),
         ),
@@ -413,14 +381,14 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: PColor.contentColor),
+          style: PTypography.captionSemibold,
         ),
-        const SizedBox(height: 6),
+        PSpacing.gapVerticalSm,
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: PSpacing.lg),
           decoration: BoxDecoration(
             border: Border.all(color: PColor.borderStrong),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(PRadius.md),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<RiskLevel>(
@@ -439,8 +407,8 @@ class _NurseApproveRiskPageState extends State<NurseApproveRiskPage> {
                                 color: PColor.getRiskColor(r.labelTh),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Text(r.labelTh, style: const TextStyle(fontSize: 13.5)),
+                            PSpacing.gapHorizontalSm,
+                            Text(r.labelTh, style: const TextStyle(fontSize: 14)),
                           ],
                         ),
                       ))

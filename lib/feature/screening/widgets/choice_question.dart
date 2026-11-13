@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
 /// A question with a row of large tap targets (มี / ไม่มี / ไม่ทราบ).
 ///
@@ -37,14 +39,14 @@ class ChoiceQuestion extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+          padding: const EdgeInsets.only(top: PSpacing.sm, bottom: PSpacing.xs),
           child: Row(
             children: [for (final o in options) Expanded(child: _option(o))],
           ),
         ),
         if (showMissing)
           const Padding(
-            padding: EdgeInsets.only(top: 6, left: 4),
+            padding: EdgeInsets.only(top: PSpacing.sm, left: PSpacing.xs),
             child: Text('กรุณาเลือกคำตอบ', style: PTypography.fieldError),
           ),
       ],
@@ -54,20 +56,20 @@ class ChoiceQuestion extends StatelessWidget {
   Widget _option(String opt) {
     final isSelected = value == opt;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: PSpacing.xs),
       child: Semantics(
         button: true,
         selected: isSelected,
         label: opt,
         child: InkWell(
           key: Key('${keyPrefix}_$opt'),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(PRadius.md),
           onTap: () => onChanged(opt),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
               color: isSelected ? PColor.primaryLight : PColor.surfaceSubtle,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(PRadius.md),
               border: Border.all(
                 color: isSelected ? PColor.primaryColor : PColor.borderSubtle,
                 width: isSelected ? 1.5 : 1,

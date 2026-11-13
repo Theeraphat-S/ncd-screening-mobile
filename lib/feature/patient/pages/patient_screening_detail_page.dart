@@ -98,20 +98,10 @@ class PatientScreeningDetailPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context, Screening currentScreening) {
     return AppBar(
-      backgroundColor: PColor.primaryColor,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Text(
-        'ผลคัดกรอง: ${patient.patientFname} ${patient.patientLname}',
-        style: PTypography.appBarTitle,
-      ),
-      centerTitle: true,
+      title: Text('ผลคัดกรอง: ${patient.patientFname} ${patient.patientLname}'),
       actions: [
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+          padding: EdgeInsets.symmetric(vertical: PSpacing.md, horizontal: PSpacing.xs),
           child: AccessibilityScaleToggle(),
         ),
         IconButton(

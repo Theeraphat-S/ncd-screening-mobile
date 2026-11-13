@@ -49,7 +49,7 @@ class PinService {
 
   Future<void> setPin(String userId, String pin) async {
     _validate(pin);
-    await _store.write(_pinKey(userId), PasswordHasher.hash(pin));
+    await _store.write(_pinKey(userId), await PasswordHasher.hashAsync(pin));
     await _store.delete(_attemptsKey(userId));
   }
 
@@ -57,7 +57,7 @@ class PinService {
     final stored = await _store.read(_pinKey(userId));
     if (stored == null) return PinResult.notSet;
 
-    if (PasswordHasher.verify(pin, stored)) {
+    if (await PasswordHasher.verifyAsync(pin, stored)) {
       await _store.delete(_attemptsKey(userId));
       return PinResult.ok;
     }

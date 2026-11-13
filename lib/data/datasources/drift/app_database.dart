@@ -6,10 +6,8 @@ import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 
 part 'app_database.g.dart';
 
-/// Demo accounts share one password; hash it once per process (PBKDF2 is
-/// deliberately slow) instead of once per seeded row.
-final String _seedPasswordHash = PasswordHasher.hash('password123');
-
+// Seeded demo accounts share one password, hashed once per seeding on a
+// worker isolate (PBKDF2 is deliberately slow).
 @DriftDatabase(tables: [
   VillagesTable,
   NursesTable,
@@ -64,6 +62,7 @@ class AppDatabase extends _$AppDatabase {
       return;
     }
 
+    final seedPasswordHash = await PasswordHasher.hashAsync('password123');
     await transaction(() async {
       // 1. Seed Villages
       await batch((b) {
@@ -126,7 +125,7 @@ class AppDatabase extends _$AppDatabase {
             nurseLname: const Value('ใจดี'),
             nurseMobile: const Value('0823456789'),
             nurseEmail: const Value('nurse01@example.com'),
-            nursePassword: Value(_seedPasswordHash),
+            nursePassword: Value(seedPasswordHash),
             nurseGender: const Value('หญิง'),
             nurseBirthDate: Value(DateTime(1990, 10, 15)),
             subdistrictId: const Value('SD001'),
@@ -145,7 +144,7 @@ class AppDatabase extends _$AppDatabase {
             vhvLname: const Value('ตัวอย่าง1'),
             vhvMobile: const Value('0800000001'),
             vhvEmail: const Value('vhv001@example.com'),
-            vhvPassword: Value(_seedPasswordHash),
+            vhvPassword: Value(seedPasswordHash),
             vhvBirthDate: Value(DateTime(1995, 5, 20)),
             vhvGender: const Value('ชาย'),
             vhvAddress: const Value(
@@ -160,7 +159,7 @@ class AppDatabase extends _$AppDatabase {
             vhvLname: const Value('จิตอาสา'),
             vhvMobile: const Value('0647700893'),
             vhvEmail: const Value('somjai@example.com'),
-            vhvPassword: Value(_seedPasswordHash),
+            vhvPassword: Value(seedPasswordHash),
             vhvBirthDate: Value(DateTime(1988, 3, 12)),
             vhvGender: const Value('หญิง'),
             vhvAddress: const Value('หมู่ 1 บ้านท่าตอน อ.แม่อาย'),
@@ -174,7 +173,7 @@ class AppDatabase extends _$AppDatabase {
             vhvLname: const Value('ช่วยหมู่บ้าน'),
             vhvMobile: const Value('0812345678'),
             vhvEmail: const Value('mana@example.com'),
-            vhvPassword: Value(_seedPasswordHash),
+            vhvPassword: Value(seedPasswordHash),
             vhvBirthDate: Value(DateTime(1982, 8, 25)),
             vhvGender: const Value('ชาย'),
             vhvAddress: const Value('หมู่ 1 บ้านท่าตอน อ.แม่อาย'),

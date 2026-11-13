@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 
 /// Salted PBKDF2-HMAC-SHA256 password hashing.
 ///
@@ -19,7 +21,30 @@ class PasswordHasher {
 
   static final _random = Random.secure();
 
+  /// When true (default) the async variants run PBKDF2 on a worker isolate so
+  /// the UI thread never blocks. Widget tests run under a fake clock where
+  /// isolate results never arrive, so they switch this off.
+  @visibleForTesting
+  static bool runInIsolate = true;
+
   static bool isHashed(String stored) => stored.startsWith('$_prefix\$');
+
+  /// Same as [hash] but off the UI thread. Prefer this in app code.
+  static Future<String> hashAsync(
+    String password, {
+    int iterations = _defaultIterations,
+  }) {
+    if (!runInIsolate) {
+      return Future.value(hash(password, iterations: iterations));
+    }
+    return Isolate.run(() => hash(password, iterations: iterations));
+  }
+
+  /// Same as [verify] but off the UI thread. Prefer this in app code.
+  static Future<bool> verifyAsync(String password, String stored) {
+    if (!runInIsolate) return Future.value(verify(password, stored));
+    return Isolate.run(() => verify(password, stored));
+  }
 
   static String hash(String password, {int iterations = _defaultIterations}) {
     final salt = Uint8List.fromList(

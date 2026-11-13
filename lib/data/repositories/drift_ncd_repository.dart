@@ -43,13 +43,13 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             t.vhvMobile.equals(trimmedId) |
             t.vhvId.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null || !_passwordMatches(password, row.vhvPassword)) {
+      if (row == null || !await _passwordMatches(password, row.vhvPassword)) {
         throw Exception(message);
       }
       if (!PasswordHasher.isHashed(row.vhvPassword)) {
         await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals(row.vhvId)))
             .write(VhvsTableCompanion(
-          vhvPassword: Value(PasswordHasher.hash(password!)),
+          vhvPassword: Value(await PasswordHasher.hashAsync(password!)),
         ));
       }
       return _mapVhv(row);
@@ -61,14 +61,14 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             t.nurseMobile.equals(trimmedId) |
             t.nurseEmail.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null || !_passwordMatches(password, row.nursePassword)) {
+      if (row == null || !await _passwordMatches(password, row.nursePassword)) {
         throw Exception(message);
       }
       if (!PasswordHasher.isHashed(row.nursePassword)) {
         await (db.update(db.nursesTable)
               ..where((t) => t.nurseId.equals(row.nurseId)))
             .write(NursesTableCompanion(
-          nursePassword: Value(PasswordHasher.hash(password!)),
+          nursePassword: Value(await PasswordHasher.hashAsync(password!)),
         ));
       }
       return _mapNurse(row);
@@ -78,16 +78,16 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   /// Hashed values are verified with PBKDF2. Legacy plaintext rows (written
   /// before hashing existed) are compared once and upgraded by the caller.
-  bool _passwordMatches(String? supplied, String stored) {
+  Future<bool> _passwordMatches(String? supplied, String stored) async {
     if (supplied == null || supplied.isEmpty) return false;
     return PasswordHasher.isHashed(stored)
-        ? PasswordHasher.verify(supplied, stored)
+        ? await PasswordHasher.verifyAsync(supplied, stored)
         : stored == supplied;
   }
 
   /// Keeps an already-hashed value as is; hashes anything else.
-  String _hashIfNeeded(String value) =>
-      PasswordHasher.isHashed(value) ? value : PasswordHasher.hash(value);
+  Future<String> _hashIfNeeded(String value) async =>
+      PasswordHasher.isHashed(value) ? value : await PasswordHasher.hashAsync(value);
 
   // Villages
   @override
@@ -221,6 +221,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       newId = generateId();
     }
     final created = vhv.copyWith(vhvId: newId);
+    final passwordHash = await _hashIfNeeded(created.vhvPassword);
     await db.into(db.vhvsTable).insert(
           VhvsTableCompanion(
             vhvId: Value(created.vhvId),
@@ -230,7 +231,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             vhvLname: Value(created.vhvLname),
             vhvMobile: Value(created.vhvMobile),
             vhvEmail: Value(created.vhvEmail),
-            vhvPassword: Value(_hashIfNeeded(created.vhvPassword)),
+            vhvPassword: Value(passwordHash),
             vhvBirthDate: Value(created.vhvBirthDate),
             vhvGender: Value(created.vhvGender),
             vhvAddress: Value(created.vhvAddress),
@@ -243,6 +244,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   @override
   Future<VHV> updateVhv(VHV vhv) async {
+    final passwordHash = await _hashIfNeeded(vhv.vhvPassword);
     final rowsAffected = await (db.update(db.vhvsTable)
           ..where((t) => t.vhvId.equals(vhv.vhvId)))
         .write(
@@ -253,7 +255,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         vhvLname: Value(vhv.vhvLname),
         vhvMobile: Value(vhv.vhvMobile),
         vhvEmail: Value(vhv.vhvEmail),
-        vhvPassword: Value(_hashIfNeeded(vhv.vhvPassword)),
+        vhvPassword: Value(passwordHash),
         vhvBirthDate: Value(vhv.vhvBirthDate),
         vhvGender: Value(vhv.vhvGender),
         vhvAddress: Value(vhv.vhvAddress),

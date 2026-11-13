@@ -23,6 +23,18 @@ void main() {
       expect(PasswordHasher.verify('', hash), isFalse);
     });
 
+    test('async variants produce interoperable hashes on a worker isolate',
+        () async {
+      PasswordHasher.runInIsolate = true;
+      addTearDown(() => PasswordHasher.runInIsolate = false);
+
+      final hash = await PasswordHasher.hashAsync('correct-horse');
+      expect(hash, startsWith(r'pbkdf2$'));
+      expect(await PasswordHasher.verifyAsync('correct-horse', hash), isTrue);
+      expect(await PasswordHasher.verifyAsync('wrong-horse', hash), isFalse);
+      expect(PasswordHasher.verify('correct-horse', hash), isTrue);
+    });
+
     test('verify rejects malformed or legacy plaintext stored values', () {
       expect(PasswordHasher.verify('password123', 'password123'), isFalse);
       expect(PasswordHasher.verify('x', r'pbkdf2$bad'), isFalse);

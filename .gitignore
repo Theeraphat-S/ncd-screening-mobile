@@ -62,3 +62,5 @@ android/fastlane/build/.last_build_id
 .claude/settings.local.json
 .env
 .agents/
+# Android build output
+android/build/

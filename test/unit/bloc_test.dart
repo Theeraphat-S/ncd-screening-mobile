@@ -22,9 +22,10 @@ void main() {
 
     test('Patient login emits authenticated with Patient', () async {
       final bloc = AuthBloc(repository);
-      bloc.add(const AuthLoginSubmitted(
+      bloc.add(AuthLoginSubmitted(
         role: UserRole.patient,
-        identifier: '1234567890123',
+        identifier: '1234567890121',
+        birthDate: DateTime(1980, 2, 1),
       ));
 
       await expectLater(

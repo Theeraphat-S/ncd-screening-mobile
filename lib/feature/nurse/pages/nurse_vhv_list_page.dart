@@ -101,13 +101,13 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
                 }
 
                 if (state.vhvs.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person_off_outlined, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 12),
-                        const Text(
+                        Icon(Icons.person_off_outlined, size: 64, color: PColor.primaryTint),
+                        SizedBox(height: 12),
+                        Text(
                           'ยังไม่มีรายชื่อ อสม. ในหมู่บ้านนี้',
                           style: TextStyle(
                             fontSize: 15,
@@ -200,7 +200,7 @@ class _NurseVhvListPageState extends State<NurseVhvListPage> {
               ),
               const Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: Color(0xFFBDBDBD),
+                color: PColor.borderStrong,
                 size: 16,
               ),
             ],

@@ -122,7 +122,7 @@ class HealthDataExportService {
         s.sbp.toInt().toString(),
         s.dbp.toInt().toString(),
         s.pulse.toInt().toString(),
-        s.bloodSugar.toStringAsFixed(1),
+        s.bloodSugar?.toStringAsFixed(1) ?? '',
         dmRisk,
         htRisk,
         cvdRisk,

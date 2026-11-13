@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
-import 'package:ncd_screening_mobile/feature/patient/pages/id_card_scanner_page.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class VhvSearchPatientPage extends StatefulWidget {
   final VHV vhv;
@@ -16,30 +18,50 @@ class VhvSearchPatientPage extends StatefulWidget {
 }
 
 class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
+  static const _debounce = Duration(milliseconds: 300);
+
   final _searchController = TextEditingController();
+  Timer? _debounceTimer;
   bool _hasSearched = false;
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }
 
-  void _onSearch() {
+  /// Search while typing: wait until the user pauses so each keystroke does
+  /// not trigger its own query.
+  void _onQueryChanged(String _) {
+    setState(() {}); // refresh the clear button
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(_debounce, _runSearch);
+  }
+
+  void _runSearch() {
     final query = _searchController.text.trim();
     if (query.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('กรุณากรอกเลขบัตรประชาชนในการค้นหา'),
-          backgroundColor: PColor.errorColor,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _clearSearch();
       return;
     }
     setState(() => _hasSearched = true);
     context.read<PatientBloc>().add(
           PatientSearchChanged(query, villageId: widget.vhv.villageId),
+        );
+  }
+
+  void _searchNow() {
+    _debounceTimer?.cancel();
+    _runSearch();
+  }
+
+  void _clearSearch() {
+    _debounceTimer?.cancel();
+    _searchController.clear();
+    setState(() => _hasSearched = false);
+    context.read<PatientBloc>().add(
+          PatientLoadRequested(villageId: widget.vhv.villageId),
         );
   }
 
@@ -62,11 +84,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
         ),
         title: const Text(
           'ค้นหาผู้ป่วย',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: PTypography.appBarTitle,
         ),
         centerTitle: true,
       ),
@@ -84,7 +102,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
+                      color: PColor.contentColor.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -92,45 +110,38 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                 ),
                 child: TextField(
                   controller: _searchController,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: 'เลขบัตรประชาชนผู้ป่วย (13 หลัก)',
-                    hintStyle: const TextStyle(color: PColor.textNeutralColor, fontSize: 14),
-                    prefixIcon: const Icon(Icons.badge_outlined, color: PColor.primaryColor),
+                    hintText: 'ชื่อ นามสกุล เลขบัตร หรือบ้านเลขที่',
+                    hintStyle: PTypography.bodyMuted,
+                    prefixIcon: const Icon(Icons.search_rounded, color: PColor.primaryColor),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear_rounded, color: Colors.grey),
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() => _hasSearched = false);
-                              context.read<PatientBloc>().add(
-                                    PatientLoadRequested(villageId: widget.vhv.villageId),
-                                  );
-                            },
+                            icon: const Icon(Icons.clear_rounded, color: PColor.textNeutralColor),
+                            tooltip: 'ล้างคำค้นหา',
+                            onPressed: _clearSearch,
                           )
                         : null,
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
-                  onSubmitted: (_) => _onSearch(),
+                  onChanged: _onQueryChanged,
+                  onSubmitted: (_) => _searchNow(),
                 ),
               ),
               const SizedBox(height: 16),
-              // Actions Row (Search + OCR Scan)
+              // Search action
               Row(
                 children: [
                   Expanded(
                     flex: 3,
                     child: ElevatedButton.icon(
-                      onPressed: _onSearch,
+                      onPressed: _searchNow,
                       icon: const Icon(Icons.search_rounded, color: Colors.white, size: 20),
                       label: const Text(
                         'ค้นหา',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: PTypography.buttonOnPrimary,
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PColor.primaryColor,
@@ -142,36 +153,6 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 2,
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => IdCardScannerPage(vhv: widget.vhv),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.document_scanner_rounded, color: PColor.primaryColor, size: 19),
-                      label: const Text(
-                        'สแกน OCR',
-                        style: TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w700,
-                          color: PColor.primaryColor,
-                        ),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 24),
@@ -180,24 +161,21 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
               Expanded(
                 child: BlocBuilder<PatientBloc, PatientState>(
                   builder: (context, state) {
-                    if (state.status == PatientStatus.loading) {
+                    // Keep showing the previous results while a new query runs (no flicker).
+                    if (state.status == PatientStatus.loading && state.patients.isEmpty) {
                       return const Center(child: CircularProgressIndicator(color: PColor.primaryColor));
                     }
 
                     if (_hasSearched && state.patients.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.search_off_rounded, size: 64, color: Colors.grey.shade400),
-                            const SizedBox(height: 12),
-                            const Text(
+                            Icon(Icons.search_off_rounded, size: 64, color: PColor.borderStrong),
+                            SizedBox(height: 12),
+                            Text(
                               'ไม่พบข้อมูล',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: PColor.textNeutralColor,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: PTypography.bodyMuted,
                             ),
                           ],
                         ),
@@ -207,11 +185,8 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                     if (!_hasSearched) {
                       return const Center(
                         child: Text(
-                          'กรอกเลขบัตรประชาชน 13 หลักเพื่อค้นหา',
-                          style: TextStyle(
-                            color: PColor.textNeutralColor,
-                            fontSize: 14,
-                          ),
+                          'พิมพ์ชื่อ นามสกุล เลขบัตร หรือบ้านเลขที่เพื่อค้นหา',
+                          style: PTypography.bodyMuted,
                         ),
                       );
                     }
@@ -269,26 +244,22 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                   children: [
                     Text(
                       patient.fullName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PColor.contentColor,
-                      ),
+                      style: PTypography.sectionHeader,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'เลขบัตร: ${patient.patientCitizenId}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.bodyMuted,
+                    ),
+                    Text(
+                      'บ้านเลขที่: ${patient.patientAddress}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: PTypography.bodyMuted,
                     ),
                     Text(
                       'อายุ: ${patient.age} ปี • เพศ: ${patient.patientGender}',
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: PColor.textNeutralColor,
-                      ),
+                      style: PTypography.caption,
                     ),
                   ],
                 ),

@@ -58,7 +58,7 @@ class ClinicalTriageService {
       );
     }
 
-    if (bs >= 250) {
+    if (bs != null && bs >= 250) {
       return ClinicalTriageAssessment(
         urgencyLevel: TriageUrgencyLevel.emergency,
         requiresImmediateVisit: true,
@@ -80,7 +80,7 @@ class ClinicalTriageService {
     }
 
     // 3. Moderate: Single High Risk or Elevated Vitals
-    if (highRiskCount == 1 || sbp >= 140 || dbp >= 90 || bs >= 126) {
+    if (highRiskCount == 1 || sbp >= 140 || dbp >= 90 || (bs != null && bs >= 126)) {
       return const ClinicalTriageAssessment(
         urgencyLevel: TriageUrgencyLevel.moderate,
         requiresImmediateVisit: false,
@@ -130,7 +130,7 @@ class ClinicalTriageService {
         'action': triage.recommendedAction,
         'requiresImmediateVisit': triage.requiresImmediateVisit,
       },
-      'message': '🚨 [แจ้งเตือนเคสด่วน] ${triage.urgencyLabel}\nผู้ป่วย: ${patient.fullName} (หมู่ ${patient.villageId})\nBP: ${screening.sbp.toInt()}/${screening.dbp.toInt()} mmHg, Sugar: ${screening.bloodSugar} mg/dL\nการดำเนินการ: ${triage.recommendedAction}',
+      'message': '🚨 [แจ้งเตือนเคสด่วน] ${triage.urgencyLabel}\nผู้ป่วย: ${patient.fullName} (หมู่ ${patient.villageId})\nBP: ${screening.sbp.toInt()}/${screening.dbp.toInt()} mmHg, Sugar: ${screening.bloodSugar ?? 'ไม่ได้ตรวจ'} mg/dL\nการดำเนินการ: ${triage.recommendedAction}',
     };
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/services/citizen_id.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
@@ -119,6 +120,12 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
     // SRS Form Validations
     if (citizenId.length != 13 || int.tryParse(citizenId) == null) {
       _showError('เลขบัตรประชาชนต้องเป็นตัวเลข 13 ตัวอักษร');
+      return;
+    }
+    // Existing records keep their stored ID unless the user changes it.
+    final idChanged = widget.patient?.patientCitizenId != citizenId;
+    if (idChanged && !CitizenId.isValid(citizenId)) {
+      _showError('เลขบัตรประชาชนไม่ถูกต้อง กรุณาตรวจสอบตัวเลขอีกครั้ง');
       return;
     }
     if (fname.length < 2 || fname.length > 100) {
@@ -323,7 +330,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(color: PColor.borderStrong),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: DropdownButtonHideUnderline(
@@ -354,7 +361,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade300),
+                                      border: Border.all(color: PColor.borderStrong),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Row(
@@ -380,7 +387,7 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: PColor.surfaceSubtle,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -458,11 +465,11 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: const BorderSide(color: PColor.borderStrong),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: const BorderSide(color: PColor.borderStrong),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

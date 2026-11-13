@@ -61,7 +61,7 @@ class ScreeningStatusBanner extends StatelessWidget {
                 Text(
                   'วันที่ตรวจ: $dateStr',
                   style: const TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 14,
                     color: PColor.textNeutralColor,
                   ),
                 ),

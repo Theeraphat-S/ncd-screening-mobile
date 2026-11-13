@@ -3,6 +3,7 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
@@ -72,15 +73,11 @@ class PdfPreviewPage extends StatelessWidget {
           children: [
             const Text(
               'ตัวอย่างรายงาน PDF',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: PTypography.appBarTitle,
             ),
             Text(
               '${patient.fullName} • ${screening.screenId}',
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: PTypography.captionOnPrimary,
             ),
           ],
         ),
@@ -108,7 +105,7 @@ class PdfPreviewPage extends StatelessWidget {
               SizedBox(height: 12),
               Text(
                 'กำลังสร้างเอกสารรายงาน PDF...',
-                style: TextStyle(color: PColor.textNeutralColor, fontSize: 13),
+                style: PTypography.bodyMuted,
               ),
             ],
           ),
@@ -121,26 +118,19 @@ class PdfPreviewPage extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.error_outline_rounded,
-                  color: Colors.red,
+                  color: PColor.errorColor,
                   size: 48,
                 ),
                 const SizedBox(height: 12),
                 const Text(
                   'เกิดข้อผิดพลาดในการสร้างเอกสาร PDF',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: PColor.contentColor,
-                  ),
+                  style: PTypography.sectionHeader,
                 ),
                 const SizedBox(height: 6),
                 Text(
                   error.toString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: PColor.textNeutralColor,
-                  ),
+                  style: PTypography.caption,
                 ),
               ],
             ),

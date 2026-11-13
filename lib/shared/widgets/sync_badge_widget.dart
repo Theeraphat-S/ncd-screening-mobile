@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class SyncBadgeWidget extends StatelessWidget {
   const SyncBadgeWidget({super.key});
 
   void _showSyncDetailModal(BuildContext context, SyncBadgeState state) {
+    // With no server nothing is "pending": the data is saved on this device.
+    final queueClear = state.pendingCount == 0 || !state.canSync;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -38,15 +41,11 @@ class SyncBadgeWidget extends StatelessWidget {
                       children: [
                         Text(
                           'สถานะการประสานข้อมูล (Sync)',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: PColor.contentColor,
-                          ),
+                          style: PTypography.sectionHeader,
                         ),
                         Text(
-                          'ระบบจัดเก็บออฟไลน์ปลอดภัย 100%',
-                          style: TextStyle(fontSize: 13, color: PColor.textSecondary),
+                          'บันทึกในเครื่องนี้ ใช้งานได้โดยไม่ต้องมีสัญญาณ',
+                          style: PTypography.captionSecondary,
                         ),
                       ],
                     ),
@@ -69,17 +68,27 @@ class SyncBadgeWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      state.isOnline ? Icons.wifi_rounded : Icons.wifi_off_rounded,
-                      color: state.isOnline ? PColor.riskLow : PColor.riskHigh,
+                      !state.canSync
+                          ? Icons.cloud_off_rounded
+                          : state.isOnline
+                              ? Icons.wifi_rounded
+                              : Icons.wifi_off_rounded,
+                      color: !state.canSync
+                          ? PColor.textNeutralColor
+                          : state.isOnline
+                              ? PColor.riskLow
+                              : PColor.riskHigh,
                       size: 22,
                     ),
                     const SizedBox(width: 12),
-                    Text(
-                      state.isOnline ? 'สถานะเครือข่าย: ออนไลน์ (พร้อมซิงค์)' : 'สถานะเครือข่าย: ออฟไลน์',
-                      style: TextStyle(
-                        fontSize: 14.5,
-                        fontWeight: FontWeight.w600,
-                        color: state.isOnline ? PColor.riskLow : PColor.riskHigh,
+                    Expanded(
+                      child: Text(
+                        !state.canSync
+                            ? 'ยังไม่มีเซิร์ฟเวอร์ ข้อมูลเก็บไว้ในเครื่องนี้'
+                            : state.isOnline
+                                ? 'สถานะเครือข่าย: ออนไลน์ (พร้อมซิงค์)'
+                                : 'สถานะเครือข่าย: ออฟไลน์',
+                        style: PTypography.labelSmall.copyWith(color: !state.canSync ? PColor.textSecondary : state.isOnline ? PColor.riskLow : PColor.riskHigh, fontSize: 14.5),
                       ),
                     ),
                   ],
@@ -91,30 +100,30 @@ class SyncBadgeWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: state.pendingCount == 0 ? PColor.riskLowBg : PColor.riskModerateBg,
+                  color: queueClear ? PColor.riskLowBg : PColor.riskModerateBg,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: state.pendingCount == 0 ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
+                    color: queueClear ? PColor.riskLow.withValues(alpha: 0.3) : PColor.riskModerate.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      state.pendingCount == 0 ? Icons.check_circle_outline_rounded : Icons.hourglass_top_rounded,
-                      color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate,
+                      queueClear ? Icons.check_circle_outline_rounded : Icons.hourglass_top_rounded,
+                      color: queueClear ? PColor.riskLow : PColor.riskModerate,
                       size: 22,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        state.pendingCount == 0
-                            ? 'ข้อมูลทั้งหมดส่งขึ้นระบบเรียบร้อยแล้ว'
-                            : 'มี ${state.pendingCount} รายการรอส่งขึ้นระบบคลาวด์',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate,
-                        ),
+                        !state.canSync
+                            ? (state.pendingCount == 0
+                                ? 'ยังไม่มีข้อมูลที่บันทึก'
+                                : 'บันทึกในเครื่องนี้แล้ว ${state.pendingCount} รายการ (ยังไม่มีเซิร์ฟเวอร์)')
+                            : (state.pendingCount == 0
+                                ? 'ข้อมูลทั้งหมดส่งขึ้นระบบเรียบร้อยแล้ว'
+                                : 'มี ${state.pendingCount} รายการรอส่งขึ้นระบบคลาวด์'),
+                        style: PTypography.labelSmall.copyWith(color: queueClear ? PColor.riskLow : PColor.riskModerate, fontSize: 14),
                       ),
                     ),
                   ],
@@ -139,10 +148,14 @@ class SyncBadgeWidget extends StatelessWidget {
                         )
                       : const Icon(Icons.sync_rounded, color: Colors.white, size: 20),
                   label: Text(
-                    state.isSyncing ? 'กำลังส่งข้อมูล...' : 'สั่งซิงค์ข้อมูลทันที',
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                    state.isSyncing
+                        ? 'กำลังส่งข้อมูล...'
+                        : state.canSync
+                            ? 'สั่งซิงค์ข้อมูลทันที'
+                            : 'ยังไม่เปิดให้ซิงค์',
+                    style: PTypography.buttonOnPrimary,
                   ),
-                  onPressed: state.isSyncing
+                  onPressed: (state.isSyncing || !state.canSync)
                       ? null
                       : () {
                           context.read<SyncBadgeBloc>().add(const SyncBadgeManualSyncRequested());
@@ -187,7 +200,7 @@ class SyncBadgeWidget extends StatelessWidget {
           );
         }
 
-        if (state.pendingCount > 0) {
+        if (state.canSync && state.pendingCount > 0) {
           return InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: () => _showSyncDetailModal(context, state),
@@ -221,6 +234,15 @@ class SyncBadgeWidget extends StatelessWidget {
                 ],
               ),
             ),
+          );
+        }
+
+        // No server yet: never show the "synced" check.
+        if (!state.canSync) {
+          return IconButton(
+            tooltip: 'บันทึกในเครื่องนี้แล้ว (ยังไม่มีเซิร์ฟเวอร์)',
+            icon: const Icon(Icons.offline_pin_rounded, color: Colors.white, size: 22),
+            onPressed: () => _showSyncDetailModal(context, state),
           );
         }
 

@@ -429,6 +429,12 @@ class ScreeningResult {
     this.criteriaText = '',
   });
 
+  /// True when the assessment could not be made because a required
+  /// measurement is missing. Only diabetes can be incomplete (no fasting
+  /// blood sugar): for it score 0 is never produced by a real reading, whereas
+  /// a cardiovascular score of 0 legitimately means "no risk factors".
+  bool get isIncomplete => diseaseCode == 'DIABETES' && score == 0;
+
   ScreeningResult copyWith({
     String? resultId,
     String? screeningId,
@@ -494,7 +500,7 @@ class Screening {
   final double sbp; // mmHg
   final double dbp; // mmHg
   final double pulse; // bpm
-  final double bloodSugar; // mg/dL
+  final double? bloodSugar; // mg/dL; null when no fasting glucose was taken
 
   final List<ScreeningHistory> histories;
   final List<ScreeningResult> results;
@@ -516,7 +522,7 @@ class Screening {
     required this.sbp,
     required this.dbp,
     required this.pulse,
-    required this.bloodSugar,
+    this.bloodSugar,
     this.histories = const [],
     this.results = const [],
   });
@@ -608,7 +614,7 @@ class Screening {
         sbp: (map['sbp'] as num?)?.toDouble() ?? 0.0,
         dbp: (map['dbp'] as num?)?.toDouble() ?? 0.0,
         pulse: (map['pulse'] as num?)?.toDouble() ?? 0.0,
-        bloodSugar: (map['bloodSugar'] as num?)?.toDouble() ?? 0.0,
+        bloodSugar: (map['bloodSugar'] as num?)?.toDouble(),
         histories: (map['histories'] as List<dynamic>?)
                 ?.map((x) => ScreeningHistory.fromMap(x))
                 .toList() ??

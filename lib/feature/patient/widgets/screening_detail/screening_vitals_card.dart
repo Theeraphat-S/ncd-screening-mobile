@@ -46,7 +46,9 @@ class ScreeningVitalsCard extends StatelessWidget {
             _buildMetricRow('ชีพจร', '${screening.pulse.toInt()} ครั้ง/นาที'),
             _buildMetricRow(
               'น้ำตาลในเลือด',
-              '${screening.bloodSugar.toStringAsFixed(1)} mg/dL',
+              screening.bloodSugar == null
+                  ? 'ไม่ได้ตรวจ'
+                  : '${screening.bloodSugar!.toStringAsFixed(1)} mg/dL',
             ),
           ],
         ),
@@ -58,10 +60,19 @@ class ScreeningVitalsCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: PTypography.bodyMuted),
-          Text(value, style: PTypography.bodyBold),
+          Expanded(child: Text(label, style: PTypography.bodyMuted)),
+          const SizedBox(width: 12),
+          // Flexible + end alignment: at large system text the value wraps
+          // instead of overflowing the card.
+          Flexible(
+            child: Text(
+              value,
+              style: PTypography.bodyBold,
+              textAlign: TextAlign.end,
+            ),
+          ),
         ],
       ),
     );

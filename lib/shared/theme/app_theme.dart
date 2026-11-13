@@ -7,10 +7,62 @@ class AppTheme {
           seedColor: PColor.primaryColor,
           primary: PColor.primaryColor,
           secondary: PColor.secondaryColor,
+          onPrimary: Colors.white,
+          primaryContainer: PColor.primaryLight,
+          onPrimaryContainer: PColor.primaryDark,
+          secondaryContainer: PColor.secondaryLight,
+          onSecondaryContainer: const Color(0xFF075985), // Sky 800
           surface: PColor.neutralColor,
+          onSurface: PColor.contentColor,
+          onSurfaceVariant: PColor.textSecondary,
+          surfaceContainerHighest: PColor.surfaceSubtle,
+          outline: PColor.borderStrong,
+          outlineVariant: PColor.borderSubtle,
           error: PColor.errorColor,
         ),
         scaffoldBackgroundColor: PColor.backgroundColor,
+        dividerTheme: const DividerThemeData(
+          color: PColor.borderSubtle,
+          thickness: 1,
+          space: 1,
+        ),
+        chipTheme: const ChipThemeData(
+          backgroundColor: PColor.surfaceSubtle,
+          selectedColor: PColor.primaryLight,
+          side: BorderSide(color: PColor.borderSubtle),
+          labelStyle: TextStyle(
+            fontFamily: 'Sarabun',
+            color: PColor.textSecondary,
+          ),
+          secondaryLabelStyle: TextStyle(
+            fontFamily: 'Sarabun',
+            color: PColor.primaryDark,
+            fontWeight: FontWeight.w600,
+          ),
+          checkmarkColor: PColor.primaryDark,
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: PColor.primaryColor,
+          linearTrackColor: PColor.borderSubtle,
+        ),
+        switchTheme: SwitchThemeData(
+          thumbColor: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? Colors.white : PColor.borderStrong,
+          ),
+          trackColor: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.selected)
+                ? PColor.primaryColor
+                : PColor.surfaceSubtle,
+          ),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: PColor.primaryColor,
+          foregroundColor: Colors.white,
+        ),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: PColor.contentColor,
+          contentTextStyle: TextStyle(fontFamily: 'Sarabun', color: Colors.white),
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: PColor.primaryColor,
           foregroundColor: Colors.white,

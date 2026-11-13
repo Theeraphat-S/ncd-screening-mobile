@@ -2,9 +2,12 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/ncd_tables.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 
 part 'app_database.g.dart';
 
+// Seeded demo accounts share one password, hashed once per seeding on a
+// worker isolate (PBKDF2 is deliberately slow).
 @DriftDatabase(tables: [
   VillagesTable,
   NursesTable,
@@ -20,7 +23,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -44,6 +47,11 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(syncQueueTable);
             await m.createTable(screeningDraftsTable);
           }
+          if (from < 5) {
+            // blood_sugar became nullable (fasting glucose is optional).
+            // ignore: experimental_member_use
+            await m.alterTable(TableMigration(screeningsTable));
+          }
         },
       );
 
@@ -54,6 +62,7 @@ class AppDatabase extends _$AppDatabase {
       return;
     }
 
+    final seedPasswordHash = await PasswordHasher.hashAsync('password123');
     await transaction(() async {
       // 1. Seed Villages
       await batch((b) {
@@ -116,7 +125,7 @@ class AppDatabase extends _$AppDatabase {
             nurseLname: const Value('ใจดี'),
             nurseMobile: const Value('0823456789'),
             nurseEmail: const Value('nurse01@example.com'),
-            nursePassword: const Value('password123'),
+            nursePassword: Value(seedPasswordHash),
             nurseGender: const Value('หญิง'),
             nurseBirthDate: Value(DateTime(1990, 10, 15)),
             subdistrictId: const Value('SD001'),
@@ -135,7 +144,7 @@ class AppDatabase extends _$AppDatabase {
             vhvLname: const Value('ตัวอย่าง1'),
             vhvMobile: const Value('0800000001'),
             vhvEmail: const Value('vhv001@example.com'),
-            vhvPassword: const Value('password123'),
+            vhvPassword: Value(seedPasswordHash),
             vhvBirthDate: Value(DateTime(1995, 5, 20)),
             vhvGender: const Value('ชาย'),
             vhvAddress: const Value(
@@ -150,7 +159,7 @@ class AppDatabase extends _$AppDatabase {
             vhvLname: const Value('จิตอาสา'),
             vhvMobile: const Value('0647700893'),
             vhvEmail: const Value('somjai@example.com'),
-            vhvPassword: const Value('password123'),
+            vhvPassword: Value(seedPasswordHash),
             vhvBirthDate: Value(DateTime(1988, 3, 12)),
             vhvGender: const Value('หญิง'),
             vhvAddress: const Value('หมู่ 1 บ้านท่าตอน อ.แม่อาย'),
@@ -164,7 +173,7 @@ class AppDatabase extends _$AppDatabase {
             vhvLname: const Value('ช่วยหมู่บ้าน'),
             vhvMobile: const Value('0812345678'),
             vhvEmail: const Value('mana@example.com'),
-            vhvPassword: const Value('password123'),
+            vhvPassword: Value(seedPasswordHash),
             vhvBirthDate: Value(DateTime(1982, 8, 25)),
             vhvGender: const Value('ชาย'),
             vhvAddress: const Value('หมู่ 1 บ้านท่าตอน อ.แม่อาย'),
@@ -178,7 +187,7 @@ class AppDatabase extends _$AppDatabase {
         b.insertAll(patientsTable, [
           PatientsTableCompanion(
             patientId: const Value('P001'),
-            patientCitizenId: const Value('1234567890123'),
+            patientCitizenId: const Value('1234567890121'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('สมชาย'),
             patientLname: const Value('ใจดี'),
@@ -191,7 +200,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P002'),
-            patientCitizenId: const Value('2222222222222'),
+            patientCitizenId: const Value('2222222222227'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('ว่าน'),
             patientLname: const Value('ตัวอย่าง'),
@@ -204,7 +213,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P003'),
-            patientCitizenId: const Value('3250184930571'),
+            patientCitizenId: const Value('3250184930572'),
             patientTitle: const Value('นาง'),
             patientFname: const Value('สมศรี'),
             patientLname: const Value('มีสุข'),
@@ -217,7 +226,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P004'),
-            patientCitizenId: const Value('1459900234889'),
+            patientCitizenId: const Value('1459900234884'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('มั่นคง'),
             patientLname: const Value('ทรหด'),
@@ -230,7 +239,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P005'),
-            patientCitizenId: const Value('2304055671004'),
+            patientCitizenId: const Value('2304055671001'),
             patientTitle: const Value('นาง'),
             patientFname: const Value('วิไล'),
             patientLname: const Value('งามตา'),
@@ -243,7 +252,7 @@ class AppDatabase extends _$AppDatabase {
           ),
           PatientsTableCompanion(
             patientId: const Value('P006'),
-            patientCitizenId: const Value('3102299845662'),
+            patientCitizenId: const Value('3102299845660'),
             patientTitle: const Value('นาย'),
             patientFname: const Value('ศักดิ์ดา'),
             patientLname: const Value('กล้าหาญ'),

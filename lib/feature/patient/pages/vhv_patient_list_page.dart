@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
-import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
+import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/add_edit_patient_page.dart';
-import 'package:ncd_screening_mobile/feature/patient/pages/id_card_scanner_page.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/vhv_search_patient_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
@@ -35,15 +34,9 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
       appBar: AppBar(
         backgroundColor: PColor.primaryColor,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const UserTypeSelectionPage()),
-              (route) => false,
-            );
-          },
+        leading: const IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: signOut,
         ),
         title: const Text(
           'รายชื่อผู้ป่วย',
@@ -56,18 +49,6 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
         centerTitle: true,
         actions: [
           const SyncBadgeWidget(),
-          IconButton(
-            tooltip: 'สแกนบัตร ปชช.',
-            icon: const Icon(Icons.document_scanner_rounded, color: Colors.white, size: 24),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => IdCardScannerPage(vhv: widget.vhv),
-                ),
-              );
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.search_rounded, color: Colors.white, size: 26),
             onPressed: () {
@@ -117,7 +98,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                         'พื้นที่รับผิดชอบ: หมู่ที่ ${widget.vhv.villageId.replaceAll('V', '')} รพ.สต.แม่อาย',
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -175,7 +156,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                           const Text(
                             'กดปุ่ม "เพิ่มผู้ป่วย" ด้านล่างเพื่อเริ่มบันทึกข้อมูล',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 14,
                               color: PColor.textNeutralColor,
                             ),
                           ),
@@ -307,7 +288,7 @@ class _VhvPatientListPageState extends State<VhvPatientListPage> {
                           Text(
                             patient.patientCitizenId,
                             style: const TextStyle(
-                              fontSize: 12.5,
+                              fontSize: 14,
                               color: PColor.textSecondary,
                               fontFamily: 'monospace',
                               fontWeight: FontWeight.w500,

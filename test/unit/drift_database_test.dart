@@ -19,8 +19,8 @@ void main() {
   });
 
   group('Drift Database - Initialization & Seeding', () {
-    test('Schema version is 4', () {
-      expect(db.schemaVersion, equals(4));
+    test('Schema version is 5', () {
+      expect(db.schemaVersion, equals(5));
     });
 
     test('Initial automatic demo seeding populates all 7 tables correctly',
@@ -56,7 +56,8 @@ void main() {
     test('Patient login succeeds with valid 13-digit citizen ID', () async {
       final user = await repository.login(
         role: UserRole.patient,
-        identifier: '1234567890123',
+        identifier: '1234567890121',
+        birthDate: DateTime(1980, 2, 1),
       );
 
       expect(user, isA<Patient>());
@@ -150,7 +151,7 @@ void main() {
       expect(resultsByName.first.patientFname, equals('สมชาย'));
 
       final resultsById =
-          await repository.getPatients(searchQuery: '1234567890123');
+          await repository.getPatients(searchQuery: '1234567890121');
       expect(resultsById.length, equals(1));
       expect(resultsById.first.patientId, equals('P001'));
     });
@@ -162,7 +163,7 @@ void main() {
       expect(patientById!.patientFname, equals('สมชาย'));
 
       final patientByCitizenId =
-          await repository.getPatientByCitizenId('1234567890123');
+          await repository.getPatientByCitizenId('1234567890121');
       expect(patientByCitizenId, isNotNull);
       expect(patientByCitizenId!.patientId, equals('P001'));
 

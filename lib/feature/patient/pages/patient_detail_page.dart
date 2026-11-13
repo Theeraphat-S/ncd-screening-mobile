@@ -32,14 +32,14 @@ class PatientDetailPage extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
+                decoration: const BoxDecoration(
+                  color: PColor.statusPendingBg,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.warning_amber_rounded,
                   size: 48,
-                  color: Colors.orange,
+                  color: PColor.statusPending,
                 ),
               ),
               const SizedBox(height: 18),

@@ -2890,9 +2890,9 @@ class $ScreeningsTableTable extends ScreeningsTable
   late final GeneratedColumn<double> bloodSugar = GeneratedColumn<double>(
     'blood_sugar',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.double,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -3065,8 +3065,6 @@ class $ScreeningsTableTable extends ScreeningsTable
         _bloodSugarMeta,
         bloodSugar.isAcceptableOrUnknown(data['blood_sugar']!, _bloodSugarMeta),
       );
-    } else if (isInserting) {
-      context.missing(_bloodSugarMeta);
     }
     return context;
   }
@@ -3155,11 +3153,10 @@ class $ScreeningsTableTable extends ScreeningsTable
             DriftSqlType.double,
             data['${effectivePrefix}pulse'],
           )!,
-      bloodSugar:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}blood_sugar'],
-          )!,
+      bloodSugar: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}blood_sugar'],
+      ),
     );
   }
 
@@ -3187,7 +3184,7 @@ class ScreeningsTableData extends DataClass
   final double sbp;
   final double dbp;
   final double pulse;
-  final double bloodSugar;
+  final double? bloodSugar;
   const ScreeningsTableData({
     required this.screenId,
     required this.patientId,
@@ -3205,7 +3202,7 @@ class ScreeningsTableData extends DataClass
     required this.sbp,
     required this.dbp,
     required this.pulse,
-    required this.bloodSugar,
+    this.bloodSugar,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3230,7 +3227,9 @@ class ScreeningsTableData extends DataClass
     map['sbp'] = Variable<double>(sbp);
     map['dbp'] = Variable<double>(dbp);
     map['pulse'] = Variable<double>(pulse);
-    map['blood_sugar'] = Variable<double>(bloodSugar);
+    if (!nullToAbsent || bloodSugar != null) {
+      map['blood_sugar'] = Variable<double>(bloodSugar);
+    }
     return map;
   }
 
@@ -3258,7 +3257,10 @@ class ScreeningsTableData extends DataClass
       sbp: Value(sbp),
       dbp: Value(dbp),
       pulse: Value(pulse),
-      bloodSugar: Value(bloodSugar),
+      bloodSugar:
+          bloodSugar == null && nullToAbsent
+              ? const Value.absent()
+              : Value(bloodSugar),
     );
   }
 
@@ -3286,7 +3288,7 @@ class ScreeningsTableData extends DataClass
       sbp: serializer.fromJson<double>(json['sbp']),
       dbp: serializer.fromJson<double>(json['dbp']),
       pulse: serializer.fromJson<double>(json['pulse']),
-      bloodSugar: serializer.fromJson<double>(json['bloodSugar']),
+      bloodSugar: serializer.fromJson<double?>(json['bloodSugar']),
     );
   }
   @override
@@ -3309,7 +3311,7 @@ class ScreeningsTableData extends DataClass
       'sbp': serializer.toJson<double>(sbp),
       'dbp': serializer.toJson<double>(dbp),
       'pulse': serializer.toJson<double>(pulse),
-      'bloodSugar': serializer.toJson<double>(bloodSugar),
+      'bloodSugar': serializer.toJson<double?>(bloodSugar),
     };
   }
 
@@ -3330,7 +3332,7 @@ class ScreeningsTableData extends DataClass
     double? sbp,
     double? dbp,
     double? pulse,
-    double? bloodSugar,
+    Value<double?> bloodSugar = const Value.absent(),
   }) => ScreeningsTableData(
     screenId: screenId ?? this.screenId,
     patientId: patientId ?? this.patientId,
@@ -3351,7 +3353,7 @@ class ScreeningsTableData extends DataClass
     sbp: sbp ?? this.sbp,
     dbp: dbp ?? this.dbp,
     pulse: pulse ?? this.pulse,
-    bloodSugar: bloodSugar ?? this.bloodSugar,
+    bloodSugar: bloodSugar.present ? bloodSugar.value : this.bloodSugar,
   );
   ScreeningsTableData copyWithCompanion(ScreeningsTableCompanion data) {
     return ScreeningsTableData(
@@ -3473,7 +3475,7 @@ class ScreeningsTableCompanion extends UpdateCompanion<ScreeningsTableData> {
   final Value<double> sbp;
   final Value<double> dbp;
   final Value<double> pulse;
-  final Value<double> bloodSugar;
+  final Value<double?> bloodSugar;
   final Value<int> rowid;
   const ScreeningsTableCompanion({
     this.screenId = const Value.absent(),
@@ -3512,7 +3514,7 @@ class ScreeningsTableCompanion extends UpdateCompanion<ScreeningsTableData> {
     required double sbp,
     required double dbp,
     required double pulse,
-    required double bloodSugar,
+    this.bloodSugar = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : screenId = Value(screenId),
        patientId = Value(patientId),
@@ -3526,8 +3528,7 @@ class ScreeningsTableCompanion extends UpdateCompanion<ScreeningsTableData> {
        waistCm = Value(waistCm),
        sbp = Value(sbp),
        dbp = Value(dbp),
-       pulse = Value(pulse),
-       bloodSugar = Value(bloodSugar);
+       pulse = Value(pulse);
   static Insertable<ScreeningsTableData> custom({
     Expression<String>? screenId,
     Expression<String>? patientId,
@@ -3587,7 +3588,7 @@ class ScreeningsTableCompanion extends UpdateCompanion<ScreeningsTableData> {
     Value<double>? sbp,
     Value<double>? dbp,
     Value<double>? pulse,
-    Value<double>? bloodSugar,
+    Value<double?>? bloodSugar,
     Value<int>? rowid,
   }) {
     return ScreeningsTableCompanion(
@@ -6962,7 +6963,7 @@ typedef $$ScreeningsTableTableCreateCompanionBuilder =
       required double sbp,
       required double dbp,
       required double pulse,
-      required double bloodSugar,
+      Value<double?> bloodSugar,
       Value<int> rowid,
     });
 typedef $$ScreeningsTableTableUpdateCompanionBuilder =
@@ -6983,7 +6984,7 @@ typedef $$ScreeningsTableTableUpdateCompanionBuilder =
       Value<double> sbp,
       Value<double> dbp,
       Value<double> pulse,
-      Value<double> bloodSugar,
+      Value<double?> bloodSugar,
       Value<int> rowid,
     });
 
@@ -7310,7 +7311,7 @@ class $$ScreeningsTableTableTableManager
                 Value<double> sbp = const Value.absent(),
                 Value<double> dbp = const Value.absent(),
                 Value<double> pulse = const Value.absent(),
-                Value<double> bloodSugar = const Value.absent(),
+                Value<double?> bloodSugar = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ScreeningsTableCompanion(
                 screenId: screenId,
@@ -7350,7 +7351,7 @@ class $$ScreeningsTableTableTableManager
                 required double sbp,
                 required double dbp,
                 required double pulse,
-                required double bloodSugar,
+                Value<double?> bloodSugar = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ScreeningsTableCompanion.insert(
                 screenId: screenId,

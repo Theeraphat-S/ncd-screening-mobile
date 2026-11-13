@@ -3,7 +3,7 @@ import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 abstract class PdfReportServiceInterface {
   Future<Uint8List> generateScreeningReport({
@@ -23,6 +23,9 @@ class PdfReportService implements PdfReportServiceInterface {
     this.fontRegularLoader,
     this.fontBoldLoader,
   });
+
+  static Future<pw.Font> _bundledFont(String asset) async =>
+      pw.Font.ttf(await rootBundle.load(asset));
 
   @override
   Future<Uint8List> generateScreeningReport({
@@ -47,8 +50,8 @@ class PdfReportService implements PdfReportServiceInterface {
         regularFont = await fontRegularLoader!();
         boldFont = await fontBoldLoader!();
       } else {
-        regularFont = await PdfGoogleFonts.sarabunRegular();
-        boldFont = await PdfGoogleFonts.sarabunBold();
+        regularFont = await _bundledFont('assets/fonts/Sarabun-Regular.ttf');
+        boldFont = await _bundledFont('assets/fonts/Sarabun-Bold.ttf');
       }
     } catch (_) {
       regularFont = pw.Font.helvetica();
@@ -328,7 +331,9 @@ class PdfReportService implements PdfReportServiceInterface {
               pw.TableRow(
                 children: [
                   _buildTableCell('${screening.sbp.toInt()} / ${screening.dbp.toInt()} mmHg'),
-                  _buildTableCell('${screening.bloodSugar.toStringAsFixed(0)} mg/dL'),
+                  _buildTableCell(screening.bloodSugar == null
+                      ? 'ไม่ได้ตรวจ'
+                      : '${screening.bloodSugar!.toStringAsFixed(0)} mg/dL'),
                   _buildTableCell('${screening.bmi.toStringAsFixed(1)} kg/m²'),
                   _buildTableCell('${screening.waistCm.toStringAsFixed(1)} ซม.'),
                   _buildTableCell('${screening.pulse.toInt()} bpm'),

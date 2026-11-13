@@ -48,7 +48,7 @@ class AccessibilityScaleToggle extends StatelessWidget {
                 Text(
                   state.isElderlyMode ? 'โหมดตัวโต (เปิด)' : 'โหมดตัวโต',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -130,7 +130,7 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
             border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: PColor.contentColor.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -172,18 +172,22 @@ class ElderlyBentoAdviceCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: riskColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        advice.riskLabelThai,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11 * scale,
-                          fontWeight: FontWeight.bold,
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: riskColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          advice.riskLabelThai,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13 * scale,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),

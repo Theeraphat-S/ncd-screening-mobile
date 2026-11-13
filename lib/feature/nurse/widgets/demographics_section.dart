@@ -16,7 +16,7 @@ class DemographicsSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: PColor.contentColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -57,18 +57,18 @@ class DemographicsSection extends StatelessWidget {
             child: SizedBox(
               height: 12,
               child: demographics.totalPatients == 0
-                  ? Container(color: Colors.grey.shade200)
+                  ? Container(color: PColor.borderSubtle)
                   : Row(
                       children: [
                         if (demographics.maleCount > 0)
                           Expanded(
                             flex: demographics.maleCount,
-                            child: Container(color: const Color(0xFF3B82F6)),
+                            child: Container(color: PColor.chartMale),
                           ),
                         if (demographics.femaleCount > 0)
                           Expanded(
                             flex: demographics.femaleCount,
-                            child: Container(color: const Color(0xFFEC4899)),
+                            child: Container(color: PColor.chartFemale),
                           ),
                       ],
                     ),
@@ -84,7 +84,7 @@ class DemographicsSection extends StatelessWidget {
                     width: 8,
                     height: 8,
                     decoration: const BoxDecoration(
-                      color: Color(0xFF3B82F6),
+                      color: PColor.chartMale,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -101,7 +101,7 @@ class DemographicsSection extends StatelessWidget {
                     width: 8,
                     height: 8,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFEC4899),
+                      color: PColor.chartFemale,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -134,7 +134,7 @@ class DemographicsSection extends StatelessWidget {
                   desc: 'วัยหนุ่มสาว',
                   count: demographics.ageUnder35Count,
                   percentage: demographics.ageUnder35Ratio,
-                  color: const Color(0xFF10B981),
+                  color: PColor.chartAgeYoung,
                 ),
               ),
               const SizedBox(width: 8),
@@ -144,7 +144,7 @@ class DemographicsSection extends StatelessWidget {
                   desc: 'วัยทำงาน',
                   count: demographics.age35To59Count,
                   percentage: demographics.age35To59Ratio,
-                  color: const Color(0xFFF59E0B),
+                  color: PColor.chartAgeMid,
                 ),
               ),
               const SizedBox(width: 8),
@@ -154,7 +154,7 @@ class DemographicsSection extends StatelessWidget {
                   desc: 'ผู้สูงอายุ',
                   count: demographics.age60AndAboveCount,
                   percentage: demographics.age60AndAboveRatio,
-                  color: const Color(0xFF8B5CF6),
+                  color: PColor.chartAgeOld,
                 ),
               ),
             ],

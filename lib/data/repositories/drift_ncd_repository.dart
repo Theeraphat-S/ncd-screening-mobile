@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
+import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
+import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 
 class DriftNcdRepository implements NcdRepositoryInterface {
@@ -15,51 +17,77 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     required UserRole role,
     required String identifier,
     String? password,
+    DateTime? birthDate,
   }) async {
     final trimmedId = identifier.trim();
     if (role == UserRole.patient) {
+      const message = 'เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง';
       final query = db.select(db.patientsTable)
         ..where((t) => t.patientCitizenId.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null) {
-        throw Exception('รหัสบัตรประชาชนไม่ถูกต้อง');
+      if (row == null || birthDate == null) {
+        throw Exception(message);
+      }
+      final dob = row.patientBirthDate;
+      if (birthDate.year != dob.year ||
+          birthDate.month != dob.month ||
+          birthDate.day != dob.day) {
+        throw Exception(message);
       }
       return _mapPatient(row);
     } else if (role == UserRole.vhv) {
+      const message = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
       final query = db.select(db.vhvsTable)
         ..where((t) =>
             t.vhvCitizenId.equals(trimmedId) |
             t.vhvMobile.equals(trimmedId) |
             t.vhvId.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null) {
-        throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      if (row == null || !await _passwordMatches(password, row.vhvPassword)) {
+        throw Exception(message);
       }
-      if (password != null &&
-          password.isNotEmpty &&
-          row.vhvPassword != password) {
-        throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      if (!PasswordHasher.isHashed(row.vhvPassword)) {
+        await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals(row.vhvId)))
+            .write(VhvsTableCompanion(
+          vhvPassword: Value(await PasswordHasher.hashAsync(password!)),
+        ));
       }
       return _mapVhv(row);
     } else if (role == UserRole.nurse) {
+      const message = 'รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง';
       final query = db.select(db.nursesTable)
         ..where((t) =>
             t.nurseId.equals(trimmedId) |
             t.nurseMobile.equals(trimmedId) |
             t.nurseEmail.equals(trimmedId));
       final row = await query.getSingleOrNull();
-      if (row == null) {
-        throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
+      if (row == null || !await _passwordMatches(password, row.nursePassword)) {
+        throw Exception(message);
       }
-      if (password != null &&
-          password.isNotEmpty &&
-          row.nursePassword != password) {
-        throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
+      if (!PasswordHasher.isHashed(row.nursePassword)) {
+        await (db.update(db.nursesTable)
+              ..where((t) => t.nurseId.equals(row.nurseId)))
+            .write(NursesTableCompanion(
+          nursePassword: Value(await PasswordHasher.hashAsync(password!)),
+        ));
       }
       return _mapNurse(row);
     }
     throw Exception('ไม่พบบทบาทผู้ใช้');
   }
+
+  /// Hashed values are verified with PBKDF2. Legacy plaintext rows (written
+  /// before hashing existed) are compared once and upgraded by the caller.
+  Future<bool> _passwordMatches(String? supplied, String stored) async {
+    if (supplied == null || supplied.isEmpty) return false;
+    return PasswordHasher.isHashed(stored)
+        ? await PasswordHasher.verifyAsync(supplied, stored)
+        : stored == supplied;
+  }
+
+  /// Keeps an already-hashed value as is; hashes anything else.
+  Future<String> _hashIfNeeded(String value) async =>
+      PasswordHasher.isHashed(value) ? value : await PasswordHasher.hashAsync(value);
 
   // Villages
   @override
@@ -89,13 +117,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     final rows = await query.get();
     var list = rows.map(_mapPatient).toList();
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
-      final q = searchQuery.trim().toLowerCase();
-      list = list.where((p) {
-        return p.patientCitizenId.contains(q) ||
-            p.patientFname.toLowerCase().contains(q) ||
-            p.patientLname.toLowerCase().contains(q) ||
-            p.fullName.toLowerCase().contains(q);
-      }).toList();
+      list = list.where((p) => PatientSearch.matches(p, searchQuery)).toList();
     }
     return list;
   }
@@ -199,6 +221,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       newId = generateId();
     }
     final created = vhv.copyWith(vhvId: newId);
+    final passwordHash = await _hashIfNeeded(created.vhvPassword);
     await db.into(db.vhvsTable).insert(
           VhvsTableCompanion(
             vhvId: Value(created.vhvId),
@@ -208,7 +231,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             vhvLname: Value(created.vhvLname),
             vhvMobile: Value(created.vhvMobile),
             vhvEmail: Value(created.vhvEmail),
-            vhvPassword: Value(created.vhvPassword),
+            vhvPassword: Value(passwordHash),
             vhvBirthDate: Value(created.vhvBirthDate),
             vhvGender: Value(created.vhvGender),
             vhvAddress: Value(created.vhvAddress),
@@ -221,6 +244,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   @override
   Future<VHV> updateVhv(VHV vhv) async {
+    final passwordHash = await _hashIfNeeded(vhv.vhvPassword);
     final rowsAffected = await (db.update(db.vhvsTable)
           ..where((t) => t.vhvId.equals(vhv.vhvId)))
         .write(
@@ -231,7 +255,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         vhvLname: Value(vhv.vhvLname),
         vhvMobile: Value(vhv.vhvMobile),
         vhvEmail: Value(vhv.vhvEmail),
-        vhvPassword: Value(vhv.vhvPassword),
+        vhvPassword: Value(passwordHash),
         vhvBirthDate: Value(vhv.vhvBirthDate),
         vhvGender: Value(vhv.vhvGender),
         vhvAddress: Value(vhv.vhvAddress),
@@ -261,51 +285,57 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       ..where((t) => t.patientId.equals(patientId))
       ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
     final rows = await query.get();
-    final screenings = <Screening>[];
-    for (final row in rows) {
-      final histories = await (db.select(db.screeningHistoriesTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
-          .get();
-      final results = await (db.select(db.screeningResultsTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
-          .get();
-      screenings.add(_mapScreening(row, histories, results));
-    }
-    return screenings;
+    return _hydrateScreenings(rows);
   }
 
   @override
   Future<List<Screening>> getAllScreenings({String? villageId}) async {
-    List<ScreeningsTableData> rows;
+    final query = db.select(db.screeningsTable)
+      ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
     if (villageId != null && villageId.isNotEmpty) {
-      final patientsInVillage = await (db.select(db.patientsTable)
-            ..where((t) => t.villageId.equals(villageId)))
-          .get();
-      final patientIds = patientsInVillage.map((p) => p.patientId).toList();
-      if (patientIds.isEmpty) {
-        return [];
-      }
-      final query = db.select(db.screeningsTable)
-        ..where((t) => t.patientId.isIn(patientIds))
-        ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
-      rows = await query.get();
-    } else {
-      final query = db.select(db.screeningsTable)
-        ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
-      rows = await query.get();
+      // Sub-select instead of a bound id list: SQLite caps bound variables
+      // (999 on older Android builds), and a village can hold more patients.
+      final inVillage = db.selectOnly(db.patientsTable)
+        ..addColumns([db.patientsTable.patientId])
+        ..where(db.patientsTable.villageId.equals(villageId));
+      query.where((t) => t.patientId.isInQuery(inVillage));
     }
+    return _hydrateScreenings(await query.get());
+  }
 
-    final screenings = <Screening>[];
-    for (final row in rows) {
-      final histories = await (db.select(db.screeningHistoriesTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
+  /// Attaches histories and results with two batched queries per chunk
+  /// instead of two queries per screening (N+1).
+  Future<List<Screening>> _hydrateScreenings(
+    List<ScreeningsTableData> rows,
+  ) async {
+    if (rows.isEmpty) return const [];
+    const chunkSize = 500;
+    final histories = <String, List<ScreeningHistoriesTableData>>{};
+    final results = <String, List<ScreeningResultsTableData>>{};
+    for (var i = 0; i < rows.length; i += chunkSize) {
+      final end = i + chunkSize < rows.length ? i + chunkSize : rows.length;
+      final ids = [for (final r in rows.sublist(i, end)) r.screenId];
+      final historyRows = await (db.select(db.screeningHistoriesTable)
+            ..where((t) => t.screeningId.isIn(ids)))
           .get();
-      final results = await (db.select(db.screeningResultsTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
+      for (final h in historyRows) {
+        histories.putIfAbsent(h.screeningId, () => []).add(h);
+      }
+      final resultRows = await (db.select(db.screeningResultsTable)
+            ..where((t) => t.screeningId.isIn(ids)))
           .get();
-      screenings.add(_mapScreening(row, histories, results));
+      for (final r in resultRows) {
+        results.putIfAbsent(r.screeningId, () => []).add(r);
+      }
     }
-    return screenings;
+    return [
+      for (final row in rows)
+        _mapScreening(
+          row,
+          histories[row.screenId] ?? const [],
+          results[row.screenId] ?? const [],
+        ),
+    ];
   }
 
   @override

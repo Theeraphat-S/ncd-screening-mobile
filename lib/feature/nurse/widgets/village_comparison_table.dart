@@ -18,7 +18,7 @@ class VillageComparisonTable extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: PColor.contentColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -92,7 +92,7 @@ class VillageComparisonTable extends StatelessWidget {
         decoration: BoxDecoration(
           color: PColor.backgroundColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: PColor.borderSubtle),
         ),
         child: Row(
           children: [
@@ -142,7 +142,7 @@ class VillageComparisonTable extends StatelessWidget {
                                 ? 0.0
                                 : summary.screenedPatientsCount /
                                     summary.totalPatients,
-                            backgroundColor: Colors.grey.shade300,
+                            backgroundColor: PColor.borderStrong,
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               PColor.primaryColor,
                             ),
@@ -183,7 +183,7 @@ class VillageComparisonTable extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFEE2E2),
+                      color: PColor.riskHighBg,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: PColor.errorColor.withValues(alpha: 0.3),
@@ -211,14 +211,14 @@ class VillageComparisonTable extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFECFDF5),
+                      color: PColor.riskLowBg,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Text(
                       'ไม่มีเสี่ยงสูง',
                       style: TextStyle(
                         fontSize: 11,
-                        color: Color(0xFF059669),
+                        color: PColor.riskLow,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -229,7 +229,7 @@ class VillageComparisonTable extends StatelessWidget {
                     'รอตรวจ ${summary.pendingReviewCount}',
                     style: const TextStyle(
                       fontSize: 11,
-                      color: Color(0xFFD97706),
+                      color: PColor.riskModerate,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

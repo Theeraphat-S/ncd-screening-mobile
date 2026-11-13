@@ -16,7 +16,7 @@ class AnalyticsChartsSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: PColor.contentColor.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -125,7 +125,7 @@ class AnalyticsChartsSection extends StatelessWidget {
           child: SizedBox(
             height: 12,
             child: total == 0
-                ? Container(color: Colors.grey.shade200)
+                ? Container(color: PColor.borderSubtle)
                 : Row(
                     children: [
                       if (breakdown.lowCount > 0)

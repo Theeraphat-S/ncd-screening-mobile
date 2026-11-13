@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
-import 'package:ncd_screening_mobile/feature/patient/pages/id_card_scanner_page.dart';
 import 'package:ncd_screening_mobile/feature/patient/pages/patient_detail_page.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
@@ -132,7 +131,7 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Actions Row (Search + OCR Scan)
+              // Search action
               Row(
                 children: [
                   Expanded(
@@ -151,32 +150,6 @@ class _VhvSearchPatientPageState extends State<VhvSearchPatientPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: 2,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 2,
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => IdCardScannerPage(vhv: widget.vhv),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.document_scanner_rounded, color: PColor.primaryColor, size: 19),
-                      label: const Text(
-                        'สแกน OCR',
-                        style: PTypography.actionPrimary,
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: PColor.primaryColor, width: 1.5),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
                       ),
                     ),
                   ),

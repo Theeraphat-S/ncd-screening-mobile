@@ -64,7 +64,7 @@ class DirectMockNcdRepository implements NcdRepositoryInterface {
   ];
 
   @override
-  Future<dynamic> login({required UserRole role, required String identifier, String? password}) async => null;
+  Future<dynamic> login({required UserRole role, required String identifier, String? password, DateTime? birthDate}) async => null;
 
   @override
   Future<List<Village>> getVillages() async => _villages;

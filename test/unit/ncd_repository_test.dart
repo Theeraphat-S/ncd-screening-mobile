@@ -14,6 +14,7 @@ void main() {
       final user = await repository.login(
         role: UserRole.patient,
         identifier: '1234567890123',
+        birthDate: DateTime(1980, 2, 1),
       );
 
       expect(user, isA<Patient>());

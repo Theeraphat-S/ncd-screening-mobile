@@ -5,6 +5,7 @@ import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/login_page.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/quick_pin_login_card.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
   const UserTypeSelectionPage({super.key});
@@ -55,13 +56,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                   const Text(
                     'คัดกรองความเสี่ยง\n4 โรคไม่ติดต่อเรื้อรัง',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: PColor.contentColor,
-                      height: 1.3,
-                      letterSpacing: -0.3,
-                    ),
+                    style: PTypography.heroTitle,
                   ),
                   const SizedBox(height: 8),
                   const Row(
@@ -71,11 +66,7 @@ class UserTypeSelectionPage extends StatelessWidget {
                       SizedBox(width: 4),
                       Text(
                         'รพ.สต.แม่อาย จ.เชียงใหม่',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: PColor.textSecondary,
-                        ),
+                        style: PTypography.bodySecondary,
                       ),
                     ],
                   ),
@@ -87,13 +78,9 @@ class UserTypeSelectionPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: PColor.borderSubtle),
                     ),
-                    child: const Text(
+                    child: Text(
                       'เลือกประเภทผู้ใช้งานเพื่อเข้าสู่ระบบ',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: PColor.textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: PTypography.labelSmall.copyWith(color: PColor.textSecondary, fontSize: 13),
                     ),
                   ),
                   const SizedBox(height: 36),
@@ -194,20 +181,12 @@ class UserTypeSelectionPage extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: PColor.contentColor,
-                        ),
+                        style: PTypography.sectionHeader,
                       ),
                       const SizedBox(height: 3),
                       Text(
                         subtitle,
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          color: PColor.textNeutralColor,
-                          height: 1.3,
-                        ),
+                        style: PTypography.caption,
                       ),
                     ],
                   ),

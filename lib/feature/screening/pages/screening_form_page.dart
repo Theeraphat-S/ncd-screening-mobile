@@ -557,7 +557,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                         : const Icon(Icons.analytics_outlined, color: Colors.white),
                     label: Text(
                       _saving ? 'กำลังบันทึก...' : 'บันทึกและประเมินความเสี่ยง',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: PTypography.appBarTitle,
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: PColor.primaryColor,
@@ -634,11 +634,11 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
           ),
           if (q1Missing) _missingAnswer(),
           if (_q1PersonalNcd == 'มี') ...[
-            const Padding(
-              padding: EdgeInsets.only(left: 8.0, top: 4.0, bottom: 6.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 4.0, bottom: 6.0),
               child: Text(
                 'เลือกโรคที่ป่วย (เลือกได้มากกว่า 1 ข้อ):',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: PColor.primaryDark),
+                style: PTypography.labelSmall.copyWith(color: PColor.primaryDark, fontSize: 14),
               ),
             ),
             ...['โรคเบาหวาน', 'โรคความดันโลหิตสูง', 'โรคหลอดเลือดหัวใจ', 'โรคอ้วนลงพุง'].map(
@@ -754,11 +754,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
                 ? const Icon(Icons.check, size: 16, color: Colors.white)
                 : Text(
                     number,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: isActive ? PColor.primaryDark : PColor.textNeutralColor,
-                    ),
+                    style: PTypography.bodyBold.copyWith(color: isActive ? PColor.primaryDark : PColor.textNeutralColor, fontSize: 13),
                   ),
           ),
         ),
@@ -826,12 +822,7 @@ class _ScreeningFormPageState extends State<ScreeningFormPage> {
   Widget _buildQuestionTitle(String text) {
     return Text(
       text,
-      style: const TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: PColor.contentColor,
-        height: 1.3,
-      ),
+      style: PTypography.labelSmall,
     );
   }
 

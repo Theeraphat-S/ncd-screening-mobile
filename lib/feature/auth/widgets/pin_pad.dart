@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// 6-digit PIN entry with a large on-screen keypad.
 ///
@@ -77,11 +78,7 @@ class _PinPadState extends State<PinPad> {
               ? null
               : Text(
                   widget.errorText!,
-                  style: const TextStyle(
-                    color: PColor.errorColor,
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: PTypography.errorText,
                 ),
         ),
         const SizedBox(height: 12),
@@ -138,7 +135,7 @@ class _PinPadState extends State<PinPad> {
             ),
             child: Text(
               digit,
-              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
+              style: PTypography.pinDigit,
             ),
           ),
         ),

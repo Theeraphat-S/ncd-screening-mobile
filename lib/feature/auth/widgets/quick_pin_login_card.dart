@@ -6,6 +6,7 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/pin_login_page.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// "Continue as NAME with PIN" shortcut shown on the role-selection page
 /// when a staff member on this device already set a PIN.
@@ -62,16 +63,12 @@ class QuickPinLoginCard extends StatelessWidget {
                         children: [
                           const Text(
                             'เข้าสู่ระบบด้วย PIN',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: PColor.contentColor,
-                            ),
+                            style: PTypography.sectionHeader,
                           ),
                           const SizedBox(height: 2),
                           Text(
                             data.name,
-                            style: const TextStyle(fontSize: 14, color: PColor.textSecondary),
+                            style: PTypography.bodySecondary,
                           ),
                         ],
                       ),

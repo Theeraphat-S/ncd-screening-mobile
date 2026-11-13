@@ -84,4 +84,85 @@ class PTypography {
     fontWeight: FontWeight.w600,
     color: PColor.riskModerate,
   );
+
+  // --- Headings / extras used by auth, search and result pages
+  static const TextStyle pageTitle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle heroTitle = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    color: PColor.contentColor,
+    height: 1.3,
+  );
+
+  static const TextStyle emphasisPrimary = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: PColor.primaryDark,
+  );
+
+  static const TextStyle labelSmall = TextStyle(
+    fontSize: 13.5,
+    fontWeight: FontWeight.w600,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle bodySecondary = TextStyle(
+    fontSize: 14,
+    color: PColor.textSecondary,
+  );
+
+  static const TextStyle captionSecondary = TextStyle(
+    fontSize: 12.5,
+    color: PColor.textSecondary,
+  );
+
+  static const TextStyle captionContent = TextStyle(
+    fontSize: 12.5,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle captionStrong = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: PColor.textNeutralColor,
+  );
+
+  static const TextStyle captionBold = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: PColor.contentColor,
+  );
+
+  static const TextStyle captionOnPrimary = TextStyle(
+    fontSize: 12,
+    color: Colors.white70,
+  );
+
+  static const TextStyle buttonOnPrimary = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  static const TextStyle actionPrimary = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: PColor.primaryColor,
+  );
+
+  static const TextStyle errorText = TextStyle(
+    fontSize: 13.5,
+    fontWeight: FontWeight.w600,
+    color: PColor.errorColor,
+  );
+
+  static const TextStyle pinDigit = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.w600,
+  );
 }

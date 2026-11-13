@@ -4,6 +4,7 @@ import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/feature/auth/widgets/pin_pad.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 /// PIN (or biometric) challenge shared by the cold-start quick login and the
 /// idle lock screen.
@@ -89,18 +90,14 @@ class _PinUnlockViewState extends State<PinUnlockView> {
               Text(
                 widget.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: PColor.contentColor,
-                ),
+                style: PTypography.pageTitle,
               ),
               if (widget.subtitle != null) ...[
                 const SizedBox(height: 6),
                 Text(
                   widget.subtitle!,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14, color: PColor.textNeutralColor),
+                  style: PTypography.bodyMuted,
                 ),
               ],
               const SizedBox(height: 24),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/shared/bloc/sync_badge_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
+import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 
 class SyncBadgeWidget extends StatelessWidget {
   const SyncBadgeWidget({super.key});
@@ -38,15 +39,11 @@ class SyncBadgeWidget extends StatelessWidget {
                       children: [
                         Text(
                           'สถานะการประสานข้อมูล (Sync)',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: PColor.contentColor,
-                          ),
+                          style: PTypography.sectionHeader,
                         ),
                         Text(
                           'ระบบจัดเก็บออฟไลน์ปลอดภัย 100%',
-                          style: TextStyle(fontSize: 13, color: PColor.textSecondary),
+                          style: PTypography.captionSecondary,
                         ),
                       ],
                     ),
@@ -89,15 +86,7 @@ class SyncBadgeWidget extends StatelessWidget {
                             : state.isOnline
                                 ? 'สถานะเครือข่าย: ออนไลน์ (พร้อมซิงค์)'
                                 : 'สถานะเครือข่าย: ออฟไลน์',
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w600,
-                          color: !state.canSync
-                              ? PColor.textSecondary
-                              : state.isOnline
-                                  ? PColor.riskLow
-                                  : PColor.riskHigh,
-                        ),
+                        style: PTypography.labelSmall.copyWith(color: !state.canSync ? PColor.textSecondary : state.isOnline ? PColor.riskLow : PColor.riskHigh, fontSize: 14.5),
                       ),
                     ),
                   ],
@@ -132,11 +121,7 @@ class SyncBadgeWidget extends StatelessWidget {
                             : (state.canSync
                                 ? 'มี ${state.pendingCount} รายการรอส่งขึ้นระบบคลาวด์'
                                 : 'รอส่ง ${state.pendingCount} รายการ (ยังไม่มีเซิร์ฟเวอร์ เก็บไว้ในเครื่องนี้)'),
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate,
-                        ),
+                        style: PTypography.labelSmall.copyWith(color: state.pendingCount == 0 ? PColor.riskLow : PColor.riskModerate, fontSize: 14),
                       ),
                     ),
                   ],
@@ -166,7 +151,7 @@ class SyncBadgeWidget extends StatelessWidget {
                         : state.canSync
                             ? 'สั่งซิงค์ข้อมูลทันที'
                             : 'ยังไม่เปิดให้ซิงค์',
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: PTypography.buttonOnPrimary,
                   ),
                   onPressed: (state.isSyncing || !state.canSync)
                       ? null

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/services/citizen_id.dart';
 import 'package:ncd_screening_mobile/feature/patient/bloc/patient_bloc.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 
@@ -119,6 +120,12 @@ class _AddEditPatientPageState extends State<AddEditPatientPage> {
     // SRS Form Validations
     if (citizenId.length != 13 || int.tryParse(citizenId) == null) {
       _showError('เลขบัตรประชาชนต้องเป็นตัวเลข 13 ตัวอักษร');
+      return;
+    }
+    // Existing records keep their stored ID unless the user changes it.
+    final idChanged = widget.patient?.patientCitizenId != citizenId;
+    if (idChanged && !CitizenId.isValid(citizenId)) {
+      _showError('เลขบัตรประชาชนไม่ถูกต้อง กรุณาตรวจสอบตัวเลขอีกครั้ง');
       return;
     }
     if (fname.length < 2 || fname.length > 100) {

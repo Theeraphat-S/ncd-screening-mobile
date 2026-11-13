@@ -19,7 +19,7 @@ class NcdRiskCalculator {
     required double sbp,
     required double dbp,
     required double pulse,
-    required double bloodSugar,
+    double? bloodSugar,
     required String gender,
     bool hasDirectFamilyNcd = false,
     bool hasPersonalNcd = false,
@@ -33,7 +33,23 @@ class NcdRiskCalculator {
     String dmAdvice;
     int dmScore = 0;
 
-    if (bloodSugar >= 126 || (hasPersonalNcd && (personalNcdDetail?.contains('เบาหวาน') ?? false))) {
+    final hasDiabetesHistory =
+        hasPersonalNcd && (personalNcdDetail?.contains('เบาหวาน') ?? false);
+
+    if (bloodSugar == null && !hasDiabetesHistory) {
+      // No glucose reading and no known diabetes: do not call it "low risk".
+      dmRisk = RiskLevel.low;
+      dmCriteria =
+          'ข้อมูลไม่ครบ: ไม่ได้ตรวจระดับน้ำตาลในเลือด จึงประเมินเบาหวานจากค่าตรวจไม่ได้';
+      dmAdvice = 'ควรตรวจระดับน้ำตาลในเลือด (FBS) เพื่อประเมินความเสี่ยงเบาหวานให้ครบถ้วน';
+      dmScore = 0;
+    } else if (bloodSugar == null) {
+      dmRisk = RiskLevel.high;
+      dmCriteria =
+          'มีประวัติเป็นโรคเบาหวาน (ไม่ได้ตรวจระดับน้ำตาลในเลือดครั้งนี้ ประเมินจากประวัติ)';
+      dmAdvice = 'มีประวัติเบาหวาน ควรพบแพทย์เพื่อติดตามการรักษาและตรวจระดับน้ำตาล';
+      dmScore = 3;
+    } else if (bloodSugar >= 126 || hasDiabetesHistory) {
       dmRisk = RiskLevel.high;
       dmCriteria = 'ค่าน้ำตาลในเลือด ≥ 126 mg/dL (ปัจจุบัน ${bloodSugar.toStringAsFixed(0)} mg/dL)';
       dmAdvice = 'สงสัยโรคเบาหวาน ควรพบแพทย์เพื่อตรวจยืนยันและรับการรักษา';
@@ -137,7 +153,7 @@ class NcdRiskCalculator {
     // 4. โรคหลอดเลือดหัวใจ (Cardiovascular Disease - CVD)
     int cvdRiskCount = 0;
     if (sbp >= 140 || dbp >= 90) cvdRiskCount++;
-    if (bloodSugar >= 126) cvdRiskCount++;
+    if ((bloodSugar ?? 0) >= 126) cvdRiskCount++;
     if (isWaistOver || isBmiOver) cvdRiskCount++;
     if (pulse > 100 || pulse < 60) cvdRiskCount++;
     if (hasDirectFamilyNcd) cvdRiskCount++;
@@ -149,7 +165,7 @@ class NcdRiskCalculator {
 
     if (cvdRiskCount >= 3) {
       cvdRisk = RiskLevel.high;
-      cvdCriteria = 'มีปัจจัยเสี่ยง $cvdRiskCount ข้อ (BP $sbp/$dbp, น้ำตาล $bloodSugar mg/dL, ชีพจร $pulse bpm)';
+      cvdCriteria = 'มีปัจจัยเสี่ยง $cvdRiskCount ข้อ (BP $sbp/$dbp, น้ำตาล ${bloodSugar ?? 'ไม่ได้ตรวจ'} mg/dL, ชีพจร $pulse bpm)';
       cvdAdvice = 'มีความเสี่ยงสูงต่อโรคหลอดเลือดหัวใจ แนะนำให้พบแพทย์ตรวจระบบหัวใจและหลอดเลือดอย่างละเอียด';
     } else if (cvdRiskCount >= 2) {
       cvdRisk = RiskLevel.moderate;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ncd_screening_mobile/feature/screening/bloc/screening_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
@@ -63,8 +65,10 @@ void main() {
   });
 
   Widget buildTestWidget() {
-    return MaterialApp(
-      home: IdCardScannerPage(vhv: testVhv),
+    // The real app provides ScreeningBloc above the navigator (see main.dart).
+    return BlocProvider<ScreeningBloc>(
+      create: (_) => ScreeningBloc(mockRepo),
+      child: MaterialApp(home: IdCardScannerPage(vhv: testVhv)),
     );
   }
 

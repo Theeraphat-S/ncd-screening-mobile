@@ -95,7 +95,37 @@ class NcdLifestyleAdvisor {
     }
   }
 
-  static PlainHealthAdvice _buildDiabetesAdvice(double bloodSugar, RiskLevel level) {
+  static PlainHealthAdvice _buildDiabetesAdviceWithoutReading(RiskLevel level) {
+    if (level == RiskLevel.high) {
+      return const PlainHealthAdvice(
+        diseaseName: 'โรคเบาหวาน (ระดับน้ำตาลในเลือด)',
+        conditionSummary: 'มีประวัติเป็นโรคเบาหวาน (ยังไม่ได้ตรวจระดับน้ำตาลครั้งนี้)',
+        riskLevel: RiskLevel.high,
+        riskLabelThai: 'เสี่ยงสูง (มีประวัติเบาหวาน)',
+        goodFoods: ['ข้าวกล้อง / ข้าวไรซ์เบอร์รี่', 'ผักใบเขียวต้ม', 'ต้มจืดเต้าหู้ปลา'],
+        avoidFoods: ['น้ำอัดลม ชาเขียวหวาน ชานม', 'ขนมหวาน ขนมเชื่อม', 'ผลไม้หวานจัด'],
+        exerciseTip: 'เดินเร็วหรือแกว่งแขนวันละ 30 นาที หลังมื้ออาหาร',
+        dailyAdvice: 'ควบคุมอาหารหวาน มัน เค็ม และรับประทานยาตามแพทย์สั่ง',
+        followUpSchedule: 'ควรมาตรวจระดับน้ำตาลและพบแพทย์ที่ รพ.สต. ตามนัด',
+      );
+    }
+    return const PlainHealthAdvice(
+      diseaseName: 'โรคเบาหวาน (ระดับน้ำตาลในเลือด)',
+      conditionSummary: 'ยังไม่ได้ตรวจระดับน้ำตาลในเลือด (ข้อมูลไม่ครบ)',
+      riskLevel: RiskLevel.low,
+      riskLabelThai: 'ข้อมูลไม่ครบ',
+      goodFoods: ['อาหารครบ 5 หมู่', 'ผักผลไม้ตามฤดูกาล'],
+      avoidFoods: ['เครื่องดื่มและขนมหวานจัด'],
+      exerciseTip: 'ออกกำลังกายสม่ำเสมอ รักษาน้ำหนักตัวให้คงที่',
+      dailyAdvice: 'ลดอาหารหวาน มัน เค็ม ระหว่างรอตรวจน้ำตาล',
+      followUpSchedule: 'ขอให้ อสม. หรือ รพ.สต. ตรวจน้ำตาลในเลือด (FBS) เพื่อประเมินให้ครบถ้วน',
+    );
+  }
+
+  static PlainHealthAdvice _buildDiabetesAdvice(double? bloodSugar, RiskLevel level) {
+    if (bloodSugar == null) {
+      return _buildDiabetesAdviceWithoutReading(level);
+    }
     if (level == RiskLevel.high || bloodSugar >= 126) {
       return PlainHealthAdvice(
         diseaseName: 'โรคเบาหวาน (ระดับน้ำตาลในเลือด)',

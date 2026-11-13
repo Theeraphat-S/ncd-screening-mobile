@@ -19,8 +19,8 @@ void main() {
   });
 
   group('Drift Database - Initialization & Seeding', () {
-    test('Schema version is 4', () {
-      expect(db.schemaVersion, equals(4));
+    test('Schema version is 5', () {
+      expect(db.schemaVersion, equals(5));
     });
 
     test('Initial automatic demo seeding populates all 7 tables correctly',

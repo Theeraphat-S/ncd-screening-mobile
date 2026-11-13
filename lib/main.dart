@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ncd_screening_mobile/data/repositories/screening_draft_store.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/pages/user_type_selection_page.dart';
 import 'package:ncd_screening_mobile/feature/nurse/bloc/village_analytics_bloc.dart';
@@ -19,6 +22,8 @@ import 'package:ncd_screening_mobile/shared/theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initLocator();
+  // Health data in abandoned drafts must not linger on the device.
+  unawaited(locator<ScreeningDraftStore>().purgeExpired());
 
   runApp(
     MultiBlocProvider(

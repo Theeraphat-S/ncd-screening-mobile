@@ -25,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -48,6 +48,11 @@ class AppDatabase extends _$AppDatabase {
           if (from < 4) {
             await m.createTable(syncQueueTable);
             await m.createTable(screeningDraftsTable);
+          }
+          if (from < 5) {
+            // blood_sugar became nullable (fasting glucose is optional).
+            // ignore: experimental_member_use
+            await m.alterTable(TableMigration(screeningsTable));
           }
         },
       );

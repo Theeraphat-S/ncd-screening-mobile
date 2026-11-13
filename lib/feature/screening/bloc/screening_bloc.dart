@@ -38,7 +38,7 @@ class ScreeningCalculateRiskRequested extends ScreeningEvent {
   final double sbp;
   final double dbp;
   final double pulse;
-  final double bloodSugar;
+  final double? bloodSugar;
   final String gender;
   final bool hasDirectFamilyNcd;
   final bool hasPersonalNcd;
@@ -53,7 +53,7 @@ class ScreeningCalculateRiskRequested extends ScreeningEvent {
     required this.sbp,
     required this.dbp,
     required this.pulse,
-    required this.bloodSugar,
+    this.bloodSugar,
     required this.gender,
     this.hasDirectFamilyNcd = false,
     this.hasPersonalNcd = false,

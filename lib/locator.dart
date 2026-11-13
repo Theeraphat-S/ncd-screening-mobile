@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_sync_queue_service.dart';
+import 'package:ncd_screening_mobile/data/repositories/screening_draft_store.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/services/device_security_services.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
@@ -27,6 +28,10 @@ Future<void> initLocator() async {
   // Register NCD Repository (Offline-first Drift SQLite database persistence)
   locator.registerLazySingleton<NcdRepositoryInterface>(
       () => DriftNcdRepository(locator<AppDatabase>()));
+
+  // Auto-saved screening form drafts
+  locator.registerLazySingleton<ScreeningDraftStore>(
+      () => ScreeningDraftStore(locator<AppDatabase>()));
 
   // Register PDF Report Service
   locator.registerLazySingleton<PdfReportServiceInterface>(PdfReportService.new);

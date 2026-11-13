@@ -138,6 +138,20 @@ void main() {
       expect(header, equals('%PDF-'));
     });
 
+    test('default fonts are the bundled Sarabun, so Thai works with no network',
+        () async {
+      final pdfBytes = await PdfReportService().generateScreeningReport(
+        patient: samplePatient,
+        screening: samplePendingScreening,
+        vhv: sampleVhv,
+        village: sampleVillage,
+      );
+
+      final raw = latin1.decode(pdfBytes);
+      expect(raw, contains('Sarabun'));
+      expect(raw, isNot(contains('Helvetica')));
+    });
+
     test('generates valid PDF bytes for approved screening with nurse sign-off', () async {
       final pdfBytes = await pdfService.generateScreeningReport(
         patient: samplePatient,

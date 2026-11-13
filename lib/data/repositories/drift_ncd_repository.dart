@@ -285,51 +285,57 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       ..where((t) => t.patientId.equals(patientId))
       ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
     final rows = await query.get();
-    final screenings = <Screening>[];
-    for (final row in rows) {
-      final histories = await (db.select(db.screeningHistoriesTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
-          .get();
-      final results = await (db.select(db.screeningResultsTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
-          .get();
-      screenings.add(_mapScreening(row, histories, results));
-    }
-    return screenings;
+    return _hydrateScreenings(rows);
   }
 
   @override
   Future<List<Screening>> getAllScreenings({String? villageId}) async {
-    List<ScreeningsTableData> rows;
+    final query = db.select(db.screeningsTable)
+      ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
     if (villageId != null && villageId.isNotEmpty) {
-      final patientsInVillage = await (db.select(db.patientsTable)
-            ..where((t) => t.villageId.equals(villageId)))
-          .get();
-      final patientIds = patientsInVillage.map((p) => p.patientId).toList();
-      if (patientIds.isEmpty) {
-        return [];
-      }
-      final query = db.select(db.screeningsTable)
-        ..where((t) => t.patientId.isIn(patientIds))
-        ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
-      rows = await query.get();
-    } else {
-      final query = db.select(db.screeningsTable)
-        ..orderBy([(t) => OrderingTerm.desc(t.screeningDate)]);
-      rows = await query.get();
+      // Sub-select instead of a bound id list: SQLite caps bound variables
+      // (999 on older Android builds), and a village can hold more patients.
+      final inVillage = db.selectOnly(db.patientsTable)
+        ..addColumns([db.patientsTable.patientId])
+        ..where(db.patientsTable.villageId.equals(villageId));
+      query.where((t) => t.patientId.isInQuery(inVillage));
     }
+    return _hydrateScreenings(await query.get());
+  }
 
-    final screenings = <Screening>[];
-    for (final row in rows) {
-      final histories = await (db.select(db.screeningHistoriesTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
+  /// Attaches histories and results with two batched queries per chunk
+  /// instead of two queries per screening (N+1).
+  Future<List<Screening>> _hydrateScreenings(
+    List<ScreeningsTableData> rows,
+  ) async {
+    if (rows.isEmpty) return const [];
+    const chunkSize = 500;
+    final histories = <String, List<ScreeningHistoriesTableData>>{};
+    final results = <String, List<ScreeningResultsTableData>>{};
+    for (var i = 0; i < rows.length; i += chunkSize) {
+      final end = i + chunkSize < rows.length ? i + chunkSize : rows.length;
+      final ids = [for (final r in rows.sublist(i, end)) r.screenId];
+      final historyRows = await (db.select(db.screeningHistoriesTable)
+            ..where((t) => t.screeningId.isIn(ids)))
           .get();
-      final results = await (db.select(db.screeningResultsTable)
-            ..where((t) => t.screeningId.equals(row.screenId)))
+      for (final h in historyRows) {
+        histories.putIfAbsent(h.screeningId, () => []).add(h);
+      }
+      final resultRows = await (db.select(db.screeningResultsTable)
+            ..where((t) => t.screeningId.isIn(ids)))
           .get();
-      screenings.add(_mapScreening(row, histories, results));
+      for (final r in resultRows) {
+        results.putIfAbsent(r.screeningId, () => []).add(r);
+      }
     }
-    return screenings;
+    return [
+      for (final row in rows)
+        _mapScreening(
+          row,
+          histories[row.screenId] ?? const [],
+          results[row.screenId] ?? const [],
+        ),
+    ];
   }
 
   @override

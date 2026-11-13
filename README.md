@@ -4,7 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.10+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![BLoC](https://img.shields.io/badge/State-BLoC_v9-8A2BE2)](https://bloclibrary.dev)
 [![Drift](https://img.shields.io/badge/DB-Drift_SQLite-008080)](https://drift.simonbinder.eu/)
-[![Tests](https://img.shields.io/badge/Tests-340_Passing-success)](#-เริ่มต้นใช้งาน)
+[![Tests](https://img.shields.io/badge/Tests-349_Passing-success)](#-เริ่มต้นใช้งาน)
 
 แอป Flutter แบบ **Offline-First** สำหรับคัดกรองความเสี่ยง 4 โรคไม่ติดต่อเรื้อรัง (NCDs) ของ รพ.สต.แม่อาย จ.เชียงใหม่ — ใช้งานได้แม้ไม่มีอินเทอร์เน็ต พร้อมแดชบอร์ดสถิติรายหมู่บ้านและรายงาน PDF ภาษาไทย
 

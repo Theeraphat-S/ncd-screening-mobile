@@ -4,7 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.10+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![BLoC](https://img.shields.io/badge/State-BLoC_v9-8A2BE2)](https://bloclibrary.dev)
 [![Drift](https://img.shields.io/badge/DB-Drift_SQLite-008080)](https://drift.simonbinder.eu/)
-[![Tests](https://img.shields.io/badge/Tests-355_Passing-success)](#-เริ่มต้นใช้งาน)
+[![CI](https://github.com/Theeraphat-S/ncd-screening-mobile/actions/workflows/ci.yml/badge.svg)](https://github.com/Theeraphat-S/ncd-screening-mobile/actions/workflows/ci.yml)
 
 แอป Flutter แบบ **Offline-First** สำหรับคัดกรองความเสี่ยง 4 โรคไม่ติดต่อเรื้อรัง (NCDs) ของ รพ.สต.แม่อาย จ.เชียงใหม่ — ใช้งานได้แม้ไม่มีอินเทอร์เน็ต พร้อมแดชบอร์ดสถิติรายหมู่บ้านและรายงาน PDF ภาษาไทย
 
@@ -34,7 +34,7 @@ Design system: **Nordic Clinical Precision** — ดู [DESIGN.md](DESIGN.md)
 
 ## <img src="assets/readme/getting-started.gif" width="28" height="28" alt="" align="top"> เริ่มต้นใช้งาน
 
-ต้องการ Flutter SDK 3.10.8+
+ต้องการ Flutter SDK 3.47.9 (ตาม `.fvmrc`)
 
 ```bash
 flutter pub get
@@ -90,7 +90,7 @@ lib/
 
 ## <img src="assets/readme/docs.gif" width="28" height="28" alt="" align="top"> เอกสาร
 
-[CONTEXT.md](CONTEXT.md) (Glossary) · [DESIGN.md](DESIGN.md) (Design System) · ADRs: [0001](docs/adr/0001-offline-mock-repository-architecture.md) · [0002](docs/adr/0002-client-side-ncd-risk-calculator.md) · [0003](docs/adr/0003-drift-sqlite-offline-persistence.md) · [0004](docs/adr/0004-thai-pdf-clinical-report-generation.md) · [0005](docs/adr/0005-village-health-analytics-engine.md) · [0006](docs/adr/0006-nordic-clinical-ui-redesign.md)
+[CONTEXT.md](CONTEXT.md) (Glossary) · [DESIGN.md](DESIGN.md) (Design System) · SRS: [docs/SRS.pdf](docs/SRS.pdf) · Backlog: [docs/backlog/](docs/backlog/) · ADRs: [0001](docs/adr/0001-offline-mock-repository-architecture.md) · [0002](docs/adr/0002-client-side-ncd-risk-calculator.md) · [0003](docs/adr/0003-drift-sqlite-offline-persistence.md) · [0004](docs/adr/0004-thai-pdf-clinical-report-generation.md) · [0005](docs/adr/0005-village-health-analytics-engine.md) · [0006](docs/adr/0006-nordic-clinical-ui-redesign.md)
 
 ---
 

@@ -1,8 +1,11 @@
 import 'dart:convert';
+
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
+import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/locator.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -111,8 +114,11 @@ void main() {
     });
 
     test('PdfReportServiceInterface is registered in GetIt locator', () async {
-      locator.reset();
-      await initLocator();
+      await locator.reset();
+      await initLocator(
+        database: NativeDatabase.memory(),
+        secureStore: InMemorySecureStore(),
+      );
       expect(locator.isRegistered<PdfReportServiceInterface>(), isTrue);
       final resolved = locator<PdfReportServiceInterface>();
       expect(resolved, isNotNull);

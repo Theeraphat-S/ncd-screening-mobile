@@ -65,9 +65,12 @@ class PinService {
   Future<PinResult> verifyPin(String userId, String pin) async {
     final stored = await _store.read(_pinKey(userId));
     if (stored == null) return PinResult.notSet;
-    return await PasswordHasher.verifyAsync(pin, stored)
-        ? PinResult.ok
-        : PinResult.wrong;
+    if (!await PasswordHasher.verifyAsync(pin, stored)) return PinResult.wrong;
+    // PINs set before the iteration count was raised are upgraded now.
+    if (PasswordHasher.needsRehash(stored)) {
+      await _store.write(_pinKey(userId), await PasswordHasher.hashAsync(pin));
+    }
+    return PinResult.ok;
   }
 
   Future<void> clearPin(String userId) async {

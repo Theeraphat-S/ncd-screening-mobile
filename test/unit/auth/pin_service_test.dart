@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 
 void main() {
@@ -60,6 +61,15 @@ void main() {
         expect(await pins.verifyPin('vhv-1', '000001'), PinResult.wrong);
       }
       expect(await pins.hasPin('vhv-1'), isTrue);
+      expect(await pins.verifyPin('vhv-1', '482913'), PinResult.ok);
+    });
+
+    test('a PIN hashed with the old iteration count is upgraded on use',
+        () async {
+      await store.write('pin_hash_vhv-1', PasswordHasher.hash('482913', iterations: 10000));
+      expect(await pins.verifyPin('vhv-1', '482913'), PinResult.ok);
+      final upgraded = (await store.read('pin_hash_vhv-1'))!;
+      expect(PasswordHasher.needsRehash(upgraded), isFalse);
       expect(await pins.verifyPin('vhv-1', '482913'), PinResult.ok);
     });
 

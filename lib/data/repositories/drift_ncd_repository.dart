@@ -47,7 +47,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       if (row == null || !await _passwordMatches(password, row.vhvPassword)) {
         throw const InvalidCredentialsException(message);
       }
-      if (!PasswordHasher.isHashed(row.vhvPassword)) {
+      if (PasswordHasher.needsRehash(row.vhvPassword)) {
         await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals(row.vhvId)))
             .write(VhvsTableCompanion(
           vhvPassword: Value(await PasswordHasher.hashAsync(password!)),
@@ -65,7 +65,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       if (row == null || !await _passwordMatches(password, row.nursePassword)) {
         throw const InvalidCredentialsException(message);
       }
-      if (!PasswordHasher.isHashed(row.nursePassword)) {
+      if (PasswordHasher.needsRehash(row.nursePassword)) {
         await (db.update(db.nursesTable)
               ..where((t) => t.nurseId.equals(row.nurseId)))
             .write(NursesTableCompanion(
@@ -78,7 +78,8 @@ class DriftNcdRepository implements NcdRepositoryInterface {
   }
 
   /// Hashed values are verified with PBKDF2. Legacy plaintext rows (written
-  /// before hashing existed) are compared once and upgraded by the caller.
+  /// before hashing existed) and hashes with fewer iterations than today's
+  /// default are upgraded by the caller after a successful sign-in.
   Future<bool> _passwordMatches(String? supplied, String stored) async {
     if (supplied == null || supplied.isEmpty) return false;
     return PasswordHasher.isHashed(stored)

@@ -4,6 +4,10 @@
 //
 // Targets (see README): login / PIN unlock <= 1000 ms with no UI jank,
 // analytics load+compute <= 2000 ms, PDF <= 3000 ms.
+//
+// M1 raised PBKDF2 to PasswordHasher.defaultIterations (100k). If "verify on
+// isolate" is over 1000 ms on the pilot's slowest phone, lower the count
+// there (never below what ADR 0011 allows) and record the result.
 import 'dart:async';
 
 import 'package:drift/native.dart';
@@ -49,6 +53,7 @@ Future<(int ms, int maxGapMs)> _measure(Future<void> Function() body) async {
 }
 
 Future<void> _run() async {
+  _log('PBKDF2 iterations: ${PasswordHasher.defaultIterations}');
   final stored = PasswordHasher.hash('password123');
 
   // Baseline first: how long a gap does the watcher see when nothing runs?

@@ -112,6 +112,26 @@ void main() {
       );
     });
 
+    test('a 10k-iteration hash from before M1 is upgraded on sign-in',
+        () async {
+      await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals('VHV001')))
+          .write(VhvsTableCompanion(
+        vhvPassword: Value(PasswordHasher.hash('password123', iterations: 10000)),
+      ));
+
+      await repo.login(
+        role: UserRole.vhv,
+        identifier: '0800000001',
+        password: 'password123',
+      );
+
+      final row = await (db.select(db.vhvsTable)
+            ..where((t) => t.vhvId.equals('VHV001')))
+          .getSingle();
+      expect(PasswordHasher.needsRehash(row.vhvPassword), isFalse);
+      expect(PasswordHasher.verify('password123', row.vhvPassword), isTrue);
+    });
+
     test('legacy plaintext rows still log in once and are upgraded to a hash',
         () async {
       await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals('VHV001')))

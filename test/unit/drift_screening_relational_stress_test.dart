@@ -10,7 +10,7 @@ void main() {
   late DriftNcdRepository repository;
 
   setUp(() async {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     repository = DriftNcdRepository(db);
   });
 
@@ -527,7 +527,7 @@ void main() {
       // 3. Add Patient P011 to Village V003 with ZERO screenings
       await repository.addPatient(Patient(
         patientId: 'P011',
-        patientCitizenId: '1100223344557',
+        patientCitizenId: '1100223344572',
         patientTitle: 'นาง',
         patientFname: 'ดาว',
         patientLname: 'ห้วยปู',

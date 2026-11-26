@@ -54,11 +54,15 @@ Future<void> completeLogin(BuildContext context, UserRole role, dynamic user) as
     MaterialPageRoute(
       builder: (_) => hasPin
           ? home
-          : PinSetupPage(userId: userId, onFinished: (ctx) {
-              Navigator.of(ctx).pushReplacement(
-                MaterialPageRoute(builder: (_) => home),
-              );
-            }),
+          : PinSetupPage(
+              userId: userId,
+              onSignOut: signOut,
+              onFinished: (ctx) {
+                Navigator.of(ctx).pushReplacement(
+                  MaterialPageRoute(builder: (_) => home),
+                );
+              },
+            ),
     ),
   );
 }
@@ -76,6 +80,21 @@ void signOut() {
   locator<AppLockCubit>().endSession();
   appNavigatorKey.currentState?.pushAndRemoveUntil(
     MaterialPageRoute(builder: (_) => const UserTypeSelectionPage()),
+    (route) => false,
+  );
+}
+
+/// After the attempt limit wiped or locked the device: ends the session and
+/// drops every page, so no patient data stays in memory behind the final
+/// screen. Unlike [signOut] it does not reopen role selection, which would
+/// read the (possibly erased) database.
+void endSessionAfterLockout() {
+  if (locator.isRegistered<AuthBloc>()) {
+    locator<AuthBloc>().add(AuthLogoutRequested());
+  }
+  if (locator.isRegistered<AppLockCubit>()) locator<AppLockCubit>().endSession();
+  appNavigatorKey.currentState?.pushAndRemoveUntil(
+    MaterialPageRoute(builder: (_) => const SizedBox.shrink()),
     (route) => false,
   );
 }

@@ -74,7 +74,7 @@ void main() {
       );
 
   Future<void> fillValid(WidgetTester tester) async {
-    await tester.enterText(field('เลขบัตรประชาชน'), '1234567890121');
+    await tester.enterText(field('เลขบัตรประชาชน'), '1103700123458');
     await tester.enterText(field('ชื่อ'), 'สมชาย');
     await tester.enterText(field('นามสกุล'), 'ใจดี');
     await tester.enterText(field('ที่อยู่'), '60 หมู่ 1');
@@ -140,6 +140,19 @@ void main() {
     expect(find.byType(InlineAlert), findsOneWidget);
     expect(find.text('สมชาย'), findsOneWidget);
     expect(find.text('บันทึก'), findsOneWidget);
+  });
+
+  testWidgets('a citizen ID that is already registered says so on the form',
+      (tester) async {
+    await openForm(tester);
+    await fillValid(tester);
+    // P001 in the mock repository.
+    await tester.enterText(field('เลขบัตรประชาชน'), '1234567890121');
+    await tapSave(tester);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AddEditPatientPage), findsOneWidget);
+    expect(find.textContaining('เลขบัตรประชาชนนี้มีอยู่ในระบบแล้ว'), findsOneWidget);
   });
 
   testWidgets('leaving with unsaved input asks first', (tester) async {

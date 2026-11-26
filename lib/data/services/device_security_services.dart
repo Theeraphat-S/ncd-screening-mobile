@@ -23,6 +23,9 @@ class PlatformSecureStore implements SecureStore {
 
   @override
   Future<void> delete(String key) => _storage.delete(key: key);
+
+  @override
+  Future<void> deleteAll() => _storage.deleteAll();
 }
 
 abstract class BiometricService {
@@ -33,8 +36,18 @@ abstract class BiometricService {
 class LocalAuthBiometricService implements BiometricService {
   final LocalAuthentication _auth;
 
-  LocalAuthBiometricService([LocalAuthentication? auth])
-      : _auth = auth ?? LocalAuthentication();
+  /// Phones accept biometrics only (no fallback to the device PIN, which
+  /// would bypass the app PIN). On Windows `local_auth` throws when
+  /// `biometricOnly` is true, so the Hub uses Windows Hello, which may fall
+  /// back to the Windows Hello PIN.
+  final bool biometricOnly;
+
+  LocalAuthBiometricService({LocalAuthentication? auth, TargetPlatform? platform})
+      : _auth = auth ?? LocalAuthentication(),
+        biometricOnly = (platform ?? defaultTargetPlatform) != TargetPlatform.windows;
+
+  AuthenticationOptions get options =>
+      AuthenticationOptions(biometricOnly: biometricOnly, stickyAuth: true);
 
   @override
   Future<bool> isAvailable() async {
@@ -52,10 +65,7 @@ class LocalAuthBiometricService implements BiometricService {
     try {
       return await _auth.authenticate(
         localizedReason: reason,
-        options: const AuthenticationOptions(
-          biometricOnly: true,
-          stickyAuth: true,
-        ),
+        options: options,
       );
     } catch (e) {
       debugPrint('Biometric authentication failed: $e');

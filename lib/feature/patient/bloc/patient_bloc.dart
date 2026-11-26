@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 
 // EVENTS
 abstract class PatientEvent extends Equatable {
@@ -179,6 +180,8 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
           selectedPatient: newPatient,
           message: 'บันทึกข้อมูลผู้ป่วยสำเร็จ',
         ));
+      } on RepositoryError catch (e) {
+        emit(state.copyWith(status: PatientStatus.failure, errorMessage: e.message));
       } catch (e) {
         emit(state.copyWith(
           status: PatientStatus.failure,
@@ -200,6 +203,8 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
           selectedPatient: updated,
           message: 'แก้ไขข้อมูลผู้ป่วยสำเร็จ',
         ));
+      } on RepositoryError catch (e) {
+        emit(state.copyWith(status: PatientStatus.failure, errorMessage: e.message));
       } catch (e) {
         emit(state.copyWith(
           status: PatientStatus.failure,

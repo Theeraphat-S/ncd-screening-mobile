@@ -131,7 +131,7 @@ void main() {
       final bloc = PatientBloc(repository);
       final newPatient = Patient(
         patientId: '',
-        patientCitizenId: '7777777777777',
+        patientCitizenId: '7777777777778',
         patientTitle: 'นาย',
         patientFname: 'ทดสอบบล็อก',
         patientLname: 'ใจดี',

@@ -1,6 +1,8 @@
 import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/domain/services/record_rules.dart';
 
 abstract class NcdRepositoryInterface {
   // Session & Auth
@@ -335,14 +337,14 @@ class MockNcdRepository implements NcdRepositoryInterface {
     if (role == UserRole.patient) {
       final patient = _patients.firstWhere(
         (p) => p.patientCitizenId == trimmedId,
-        orElse: () => throw Exception('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง'),
+        orElse: () => throw const InvalidCredentialsException('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง'),
       );
       final dob = patient.patientBirthDate;
       if (birthDate == null ||
           birthDate.year != dob.year ||
           birthDate.month != dob.month ||
           birthDate.day != dob.day) {
-        throw Exception('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง');
+        throw const InvalidCredentialsException('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง');
       }
       return patient;
     } else if (role == UserRole.vhv) {
@@ -351,10 +353,10 @@ class MockNcdRepository implements NcdRepositoryInterface {
             v.vhvCitizenId == trimmedId ||
             v.vhvMobile == trimmedId ||
             v.vhvId == trimmedId,
-        orElse: () => throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'),
+        orElse: () => throw const InvalidCredentialsException('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'),
       );
       if (password == null || password.isEmpty || vhv.vhvPassword != password) {
-        throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        throw const InvalidCredentialsException('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }
       return vhv;
     } else if (role == UserRole.nurse) {
@@ -363,12 +365,12 @@ class MockNcdRepository implements NcdRepositoryInterface {
             n.nurseId == trimmedId ||
             n.nurseMobile == trimmedId ||
             n.nurseEmail == trimmedId,
-        orElse: () => throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง'),
+        orElse: () => throw const InvalidCredentialsException('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง'),
       );
       if (password == null ||
           password.isEmpty ||
           nurse.nursePassword != password) {
-        throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
+        throw const InvalidCredentialsException('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
       }
       return nurse;
     }
@@ -423,17 +425,32 @@ class MockNcdRepository implements NcdRepositoryInterface {
   @override
   Future<Patient> addPatient(Patient patient) async {
     await Future.delayed(const Duration(milliseconds: 250));
+    RecordRules.checkPatient(patient);
+    final citizenId = RecordRules.normalizeCitizenId(patient.patientCitizenId);
+    if (_patients.any((p) => p.patientCitizenId == citizenId)) {
+      throw const DuplicateCitizenIdException();
+    }
     final newId = 'P${(_patients.length + 1).toString().padLeft(3, '0')}';
-    final created = patient.copyWith(patientId: newId);
+    final created = patient.copyWith(patientId: newId, patientCitizenId: citizenId);
     _patients.insert(0, created);
     return created;
   }
 
   @override
-  Future<Patient> updatePatient(Patient patient) async {
+  Future<Patient> updatePatient(Patient input) async {
     await Future.delayed(const Duration(milliseconds: 250));
+    final patient = input.copyWith(
+      patientCitizenId: RecordRules.normalizeCitizenId(input.patientCitizenId),
+    );
     final index = _patients.indexWhere((p) => p.patientId == patient.patientId);
     if (index >= 0) {
+      RecordRules.checkPatient(patient,
+          previousCitizenId: _patients[index].patientCitizenId);
+      if (_patients.any((p) =>
+          p.patientId != patient.patientId &&
+          p.patientCitizenId == patient.patientCitizenId)) {
+        throw const DuplicateCitizenIdException();
+      }
       _patients[index] = patient;
       return patient;
     }
@@ -533,6 +550,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
   @override
   Future<Screening> saveScreening(Screening screening) async {
     await Future.delayed(const Duration(milliseconds: 300));
+    RecordRules.checkScreening(screening);
     final newId = 'S${(_screenings.length + 1).toString().padLeft(3, '0')}';
     final created = screening.copyWith(screenId: newId);
     _screenings.insert(0, created);

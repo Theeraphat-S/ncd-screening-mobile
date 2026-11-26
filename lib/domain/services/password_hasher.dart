@@ -3,19 +3,28 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:ncd_screening_mobile/domain/services/pbkdf2_sha256.dart';
 
 /// Salted PBKDF2-HMAC-SHA256 password hashing.
 ///
 /// Stored format: `pbkdf2$<iterations>$<saltBase64>$<hashBase64>`.
 /// Anything that does not match this format (e.g. legacy plaintext) is
 /// never accepted by [verify]; callers decide how to migrate such values.
+///
+/// The iteration count is stored with each hash, so hashes made with an
+/// older, lower count still verify; [needsRehash] tells callers to replace
+/// them after the next successful sign-in.
 class PasswordHasher {
   PasswordHasher._();
 
   static const _prefix = 'pbkdf2';
-  static const _defaultIterations = 10000;
+
+  /// ADR 0011: at least 100k while verification stays ≤ 1 s on the pilot's
+  /// slowest phone. 100k takes ~0.14 s on a desktop (AOT); confirm on a real
+  /// อสม. phone with `tool/device_bench.dart` before the pilot.
+  static const defaultIterations = 100000;
+  static const _defaultIterations = defaultIterations;
   static const _saltLength = 16;
   static const _keyLength = 32;
 
@@ -28,6 +37,14 @@ class PasswordHasher {
   static bool runInIsolate = true;
 
   static bool isHashed(String stored) => stored.startsWith('$_prefix\$');
+
+  /// True for plaintext and for hashes made with fewer iterations than
+  /// [defaultIterations].
+  static bool needsRehash(String stored) {
+    if (!isHashed(stored)) return true;
+    final iterations = int.tryParse(stored.split(r'$')[1]) ?? 0;
+    return iterations < _defaultIterations;
+  }
 
   /// Same as [hash] but off the UI thread. Prefer this in app code.
   static Future<String> hashAsync(
@@ -85,27 +102,6 @@ class PasswordHasher {
     List<int> salt,
     int iterations,
     int length,
-  ) {
-    final hmac = Hmac(sha256, password);
-    final blocks = (length / 32).ceil();
-    final out = <int>[];
-    for (var block = 1; block <= blocks; block++) {
-      var u = hmac.convert([
-        ...salt,
-        (block >> 24) & 0xff,
-        (block >> 16) & 0xff,
-        (block >> 8) & 0xff,
-        block & 0xff,
-      ]).bytes;
-      final t = List<int>.from(u);
-      for (var i = 1; i < iterations; i++) {
-        u = hmac.convert(u).bytes;
-        for (var j = 0; j < t.length; j++) {
-          t[j] ^= u[j];
-        }
-      }
-      out.addAll(t);
-    }
-    return out.sublist(0, length);
-  }
+  ) =>
+      pbkdf2HmacSha256(password, salt, iterations, length);
 }

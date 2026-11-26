@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import '../helpers/citizen_ids.dart';
 
 final _uuidV4 = RegExp(
   r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
@@ -18,24 +19,24 @@ Future<Set<String>> _tableNames(AppDatabase db) async {
 }
 
 Patient _newPatient(String citizenId) => Patient(
-      patientId: '',
-      patientCitizenId: citizenId,
-      patientTitle: 'นาย',
-      patientFname: 'ทดสอบ',
-      patientLname: 'ระบบ',
-      patientGender: 'ชาย',
-      patientBirthDate: DateTime(1960, 1, 1),
-      patientAddress: '1 หมู่ 1',
-      villageId: 'V001',
-    );
+  patientId: '',
+  patientCitizenId: citizenId,
+  patientTitle: 'นาย',
+  patientFname: 'ทดสอบ',
+  patientLname: 'ระบบ',
+  patientGender: 'ชาย',
+  patientBirthDate: DateTime(1960, 1, 1),
+  patientAddress: '1 หมู่ 1',
+  villageId: 'V001',
+);
 
 void main() {
-  group('Schema v4 additions (current schema is v5)', () {
-    test('schema version is 5 and v4 tables exist', () async {
-      final db = AppDatabase(NativeDatabase.memory());
+  group('Schema v4 additions (current schema is v6)', () {
+    test('schema version is 6 and v4 tables exist', () async {
+      final db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
       addTearDown(db.close);
 
-      expect(db.schemaVersion, equals(5));
+      expect(db.schemaVersion, equals(6));
       final tables = await _tableNames(db);
       expect(tables, containsAll(['sync_queue', 'screening_drafts']));
     });
@@ -52,14 +53,14 @@ void main() {
       });
 
       // Build a database, then rewind it to look like a v3 install.
-      final first = AppDatabase(NativeDatabase(file));
+      final first = AppDatabase(NativeDatabase(file), seedDemoData: true);
       await first.customSelect('SELECT 1').get(); // forces open + seed
       await first.customStatement('DROP TABLE sync_queue');
       await first.customStatement('DROP TABLE screening_drafts');
       await first.customStatement('PRAGMA user_version = 3');
       await first.close();
 
-      final upgraded = AppDatabase(NativeDatabase(file));
+      final upgraded = AppDatabase(NativeDatabase(file), seedDemoData: true);
       addTearDown(upgraded.close);
 
       final tables = await _tableNames(upgraded);
@@ -69,7 +70,7 @@ void main() {
       final version = await upgraded
           .customSelect('PRAGMA user_version')
           .getSingle();
-      expect(version.read<int>('user_version'), equals(5));
+      expect(version.read<int>('user_version'), equals(6));
     });
   });
 
@@ -78,21 +79,29 @@ void main() {
     late DriftNcdRepository repo;
 
     setUp(() {
-      db = AppDatabase(NativeDatabase.memory());
+      db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
       repo = DriftNcdRepository(db);
     });
     tearDown(() => db.close());
 
     test('new patient gets a UUID v4 id', () async {
-      final created = await repo.addPatient(_newPatient('9999999999991'));
+      final created = await repo.addPatient(
+        _newPatient(withCheckDigit('999999999991')),
+      );
       expect(created.patientId, matches(_uuidV4));
     });
 
     test('ids stay unique after a delete (no count+1 reuse)', () async {
-      final a = await repo.addPatient(_newPatient('9999999999991'));
-      final b = await repo.addPatient(_newPatient('9999999999992'));
+      final a = await repo.addPatient(
+        _newPatient(withCheckDigit('999999999991')),
+      );
+      final b = await repo.addPatient(
+        _newPatient(withCheckDigit('999999999992')),
+      );
       await repo.deletePatient(a.patientId);
-      final c = await repo.addPatient(_newPatient('9999999999993'));
+      final c = await repo.addPatient(
+        _newPatient(withCheckDigit('999999999993')),
+      );
       expect({a.patientId, b.patientId, c.patientId}.length, equals(3));
     });
 

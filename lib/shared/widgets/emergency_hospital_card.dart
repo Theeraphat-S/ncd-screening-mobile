@@ -1,21 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:ncd_screening_mobile/domain/services/clinical_triage_service.dart';
+import 'package:ncd_screening_mobile/shared/config/contacts.dart';
+import 'package:ncd_screening_mobile/shared/services/phone_dialer.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_radius.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_typography.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_spacing.dart';
 
+/// Urgent-case card on the result pages. Both buttons place a real phone
+/// call; on a device that cannot call (the Windows Hub) the number is shown
+/// instead so it can be dialled from a phone.
 class EmergencyHospitalCard extends StatelessWidget {
   final ClinicalTriageAssessment triage;
   final String hospitalPhone;
   final String hospitalName;
+  final PhoneDialer dialer;
 
   const EmergencyHospitalCard({
     super.key,
     required this.triage,
-    this.hospitalPhone = ClinicalTriageService.defaultHospitalPhone,
-    this.hospitalName = 'รพ.สต.แม่อาย',
+    this.hospitalPhone = HealthCenterContacts.healthCenterPhone,
+    this.hospitalName = HealthCenterContacts.healthCenterName,
+    this.dialer = dialPhoneNumber,
   });
+
+  Future<void> _call(BuildContext context, String number, String label) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final started = await dialer(number);
+    if (started) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text('เครื่องนี้โทรออกไม่ได้ กรุณาโทร $number ($label) จากโทรศัพท์'),
+        backgroundColor: PColor.riskHigh,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,15 +161,7 @@ class EmergencyHospitalCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: PTypography.onPrimaryLabel,
                   ),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('กำลังต่อสายโทรออก: $hospitalPhone ($hospitalName)'),
-                        backgroundColor: cardColor,
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  },
+                  onPressed: () => _call(context, hospitalPhone, hospitalName),
                 ),
               ),
               PSpacing.gapHorizontalMd,
@@ -164,19 +176,15 @@ class EmergencyHospitalCard extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.support_agent_rounded, size: 18),
                   label: const Text(
-                    'สายด่วนกู้ชีพ\n(1669)',
+                    'สายด่วนกู้ชีพ\n(${HealthCenterContacts.emergencyHotline})',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('กำลังต่อสายโทรออก: 1669 (ศูนย์รับแจ้งเหตุฉุกเฉิน)'),
-                        backgroundColor: PColor.riskHigh,
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  },
+                  onPressed: () => _call(
+                    context,
+                    HealthCenterContacts.emergencyHotline,
+                    'ศูนย์รับแจ้งเหตุฉุกเฉิน',
+                  ),
                 ),
               ),
             ],

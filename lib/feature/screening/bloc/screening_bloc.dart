@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/models/sync_queue_item.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
+import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/sync_queue_service.dart';
 import 'package:ncd_screening_mobile/locator.dart';
@@ -236,6 +237,8 @@ class ScreeningBloc extends Bloc<ScreeningEvent, ScreeningState> {
           historyList: [saved, ...state.historyList],
           message: 'บันทึกการคัดกรองสำเร็จ',
         ));
+      } on RepositoryError catch (e) {
+        emit(state.copyWith(status: ScreeningStatus.failure, errorMessage: e.message));
       } catch (e) {
         emit(state.copyWith(
           status: ScreeningStatus.failure,

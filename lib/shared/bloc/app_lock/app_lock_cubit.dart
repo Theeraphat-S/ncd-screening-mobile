@@ -15,7 +15,8 @@ class AppLockState extends Equatable {
 
 /// Locks the app after a period of inactivity while a staff user is signed in.
 class AppLockCubit extends Cubit<AppLockState> {
-  static const defaultIdleTimeout = Duration(minutes: 15);
+  /// ADR 0011: 5 minutes idle.
+  static const defaultIdleTimeout = Duration(minutes: 5);
 
   final Duration idleTimeout;
   final DateTime Function() _now;

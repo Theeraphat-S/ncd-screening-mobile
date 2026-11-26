@@ -12,7 +12,7 @@ fi
 # fvm ใช้เวอร์ชัน Flutter ตาม .fvmrc
 
 # build iOS (ipa) — ไม่ใส่ flavor
-fvm flutter build ipa --release
+fvm flutter build ipa --release --dart-define=flavor=dev
 
 BUILD_STATUS=$?
 

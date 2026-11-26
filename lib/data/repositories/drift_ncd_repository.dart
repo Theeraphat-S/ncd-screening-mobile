@@ -2,8 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
 import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
+import 'package:ncd_screening_mobile/domain/services/record_rules.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 
 class DriftNcdRepository implements NcdRepositoryInterface {
@@ -26,50 +28,59 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         ..where((t) => t.patientCitizenId.equals(trimmedId));
       final row = await query.getSingleOrNull();
       if (row == null || birthDate == null) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
       final dob = row.patientBirthDate;
       if (birthDate.year != dob.year ||
           birthDate.month != dob.month ||
           birthDate.day != dob.day) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
       return _mapPatient(row);
     } else if (role == UserRole.vhv) {
       const message = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
       final query = db.select(db.vhvsTable)
-        ..where((t) =>
-            t.vhvCitizenId.equals(trimmedId) |
-            t.vhvMobile.equals(trimmedId) |
-            t.vhvId.equals(trimmedId));
+        ..where(
+          (t) =>
+              t.vhvCitizenId.equals(trimmedId) |
+              t.vhvMobile.equals(trimmedId) |
+              t.vhvId.equals(trimmedId),
+        );
       final row = await query.getSingleOrNull();
       if (row == null || !await _passwordMatches(password, row.vhvPassword)) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
-      if (!PasswordHasher.isHashed(row.vhvPassword)) {
-        await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals(row.vhvId)))
-            .write(VhvsTableCompanion(
-          vhvPassword: Value(await PasswordHasher.hashAsync(password!)),
-        ));
+      if (PasswordHasher.needsRehash(row.vhvPassword)) {
+        await (db.update(
+          db.vhvsTable,
+        )..where((t) => t.vhvId.equals(row.vhvId))).write(
+          VhvsTableCompanion(
+            vhvPassword: Value(await PasswordHasher.hashAsync(password!)),
+          ),
+        );
       }
       return _mapVhv(row);
     } else if (role == UserRole.nurse) {
       const message = 'รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง';
       final query = db.select(db.nursesTable)
-        ..where((t) =>
-            t.nurseId.equals(trimmedId) |
-            t.nurseMobile.equals(trimmedId) |
-            t.nurseEmail.equals(trimmedId));
+        ..where(
+          (t) =>
+              t.nurseId.equals(trimmedId) |
+              t.nurseMobile.equals(trimmedId) |
+              t.nurseEmail.equals(trimmedId),
+        );
       final row = await query.getSingleOrNull();
       if (row == null || !await _passwordMatches(password, row.nursePassword)) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
-      if (!PasswordHasher.isHashed(row.nursePassword)) {
-        await (db.update(db.nursesTable)
-              ..where((t) => t.nurseId.equals(row.nurseId)))
-            .write(NursesTableCompanion(
-          nursePassword: Value(await PasswordHasher.hashAsync(password!)),
-        ));
+      if (PasswordHasher.needsRehash(row.nursePassword)) {
+        await (db.update(
+          db.nursesTable,
+        )..where((t) => t.nurseId.equals(row.nurseId))).write(
+          NursesTableCompanion(
+            nursePassword: Value(await PasswordHasher.hashAsync(password!)),
+          ),
+        );
       }
       return _mapNurse(row);
     }
@@ -77,7 +88,8 @@ class DriftNcdRepository implements NcdRepositoryInterface {
   }
 
   /// Hashed values are verified with PBKDF2. Legacy plaintext rows (written
-  /// before hashing existed) are compared once and upgraded by the caller.
+  /// before hashing existed) and hashes with fewer iterations than today's
+  /// default are upgraded by the caller after a successful sign-in.
   Future<bool> _passwordMatches(String? supplied, String stored) async {
     if (supplied == null || supplied.isEmpty) return false;
     return PasswordHasher.isHashed(stored)
@@ -87,7 +99,9 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   /// Keeps an already-hashed value as is; hashes anything else.
   Future<String> _hashIfNeeded(String value) async =>
-      PasswordHasher.isHashed(value) ? value : await PasswordHasher.hashAsync(value);
+      PasswordHasher.isHashed(value)
+      ? value
+      : await PasswordHasher.hashAsync(value);
 
   // Villages
   @override
@@ -138,49 +152,97 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     return row != null ? _mapPatient(row) : null;
   }
 
+  /// Throws [DuplicateCitizenIdException] if a patient other than
+  /// [exceptPatientId] already has [citizenId]. Runs inside the write's
+  /// transaction; the unique index is the backstop.
+  Future<void> _ensureCitizenIdFree(
+    String citizenId, {
+    String? exceptPatientId,
+  }) async {
+    final query = db.select(db.patientsTable)
+      ..where((t) => t.patientCitizenId.equals(citizenId))
+      ..limit(1);
+    if (exceptPatientId != null) {
+      query.where((t) => t.patientId.equals(exceptPatientId).not());
+    }
+    if (await query.getSingleOrNull() != null) {
+      throw const DuplicateCitizenIdException();
+    }
+  }
+
   @override
   Future<Patient> addPatient(Patient patient) async {
+    RecordRules.checkPatient(patient);
     String newId = patient.patientId;
     if (newId.isEmpty) {
       newId = generateId();
     }
-    final created = patient.copyWith(patientId: newId);
-    await db.into(db.patientsTable).insert(
-          PatientsTableCompanion(
-            patientId: Value(created.patientId),
-            patientCitizenId: Value(created.patientCitizenId),
-            patientTitle: Value(created.patientTitle),
-            patientFname: Value(created.patientFname),
-            patientLname: Value(created.patientLname),
-            patientGender: Value(created.patientGender),
-            patientBirthDate: Value(created.patientBirthDate),
-            patientAddress: Value(created.patientAddress),
-            patientMobile: Value(created.patientMobile),
-            patientImg: Value(created.patientImg),
-            villageId: Value(created.villageId),
-          ),
-        );
+    final created = patient.copyWith(
+      patientId: newId,
+      patientCitizenId: RecordRules.normalizeCitizenId(
+        patient.patientCitizenId,
+      ),
+    );
+    await db.transaction(() async {
+      await _ensureCitizenIdFree(created.patientCitizenId);
+      await db
+          .into(db.patientsTable)
+          .insert(
+            PatientsTableCompanion(
+              patientId: Value(created.patientId),
+              patientCitizenId: Value(created.patientCitizenId),
+              patientTitle: Value(created.patientTitle),
+              patientFname: Value(created.patientFname),
+              patientLname: Value(created.patientLname),
+              patientGender: Value(created.patientGender),
+              patientBirthDate: Value(created.patientBirthDate),
+              patientAddress: Value(created.patientAddress),
+              patientMobile: Value(created.patientMobile),
+              patientImg: Value(created.patientImg),
+              villageId: Value(created.villageId),
+            ),
+          );
+    });
     return created;
   }
 
   @override
-  Future<Patient> updatePatient(Patient patient) async {
-    final rowsAffected = await (db.update(db.patientsTable)
-          ..where((t) => t.patientId.equals(patient.patientId)))
-        .write(
-      PatientsTableCompanion(
-        patientCitizenId: Value(patient.patientCitizenId),
-        patientTitle: Value(patient.patientTitle),
-        patientFname: Value(patient.patientFname),
-        patientLname: Value(patient.patientLname),
-        patientGender: Value(patient.patientGender),
-        patientBirthDate: Value(patient.patientBirthDate),
-        patientAddress: Value(patient.patientAddress),
-        patientMobile: Value(patient.patientMobile),
-        patientImg: Value(patient.patientImg),
-        villageId: Value(patient.villageId),
-      ),
+  Future<Patient> updatePatient(Patient input) async {
+    final patient = input.copyWith(
+      patientCitizenId: RecordRules.normalizeCitizenId(input.patientCitizenId),
     );
+    final rowsAffected = await db.transaction(() async {
+      final stored = await (db.select(
+        db.patientsTable,
+      )..where((t) => t.patientId.equals(patient.patientId))).getSingleOrNull();
+      if (stored == null) return 0;
+      RecordRules.checkPatient(
+        patient,
+        previousCitizenId: stored.patientCitizenId,
+      );
+      if (patient.patientCitizenId != stored.patientCitizenId) {
+        await _ensureCitizenIdFree(
+          patient.patientCitizenId,
+          exceptPatientId: patient.patientId,
+        );
+      }
+      return (db.update(
+        db.patientsTable,
+      )..where((t) => t.patientId.equals(patient.patientId))).write(
+        PatientsTableCompanion(
+          patientCitizenId: Value(patient.patientCitizenId),
+          patientTitle: Value(patient.patientTitle),
+          patientFname: Value(patient.patientFname),
+          patientLname: Value(patient.patientLname),
+          patientGender: Value(patient.patientGender),
+          patientBirthDate: Value(patient.patientBirthDate),
+          patientAddress: Value(patient.patientAddress),
+          patientMobile: Value(patient.patientMobile),
+          patientImg: Value(patient.patientImg),
+          villageId: Value(patient.villageId),
+        ),
+      );
+    });
     if (rowsAffected == 0) {
       throw Exception('แก้ไขผู้ป่วย ไม่สำเร็จ');
     }
@@ -189,9 +251,9 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   @override
   Future<bool> deletePatient(String patientId) async {
-    final rows = await (db.delete(db.patientsTable)
-          ..where((t) => t.patientId.equals(patientId)))
-        .go();
+    final rows = await (db.delete(
+      db.patientsTable,
+    )..where((t) => t.patientId.equals(patientId))).go();
     return rows > 0;
   }
 
@@ -208,8 +270,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
 
   @override
   Future<VHV?> getVhvById(String vhvId) async {
-    final query = db.select(db.vhvsTable)
-      ..where((t) => t.vhvId.equals(vhvId));
+    final query = db.select(db.vhvsTable)..where((t) => t.vhvId.equals(vhvId));
     final row = await query.getSingleOrNull();
     return row != null ? _mapVhv(row) : null;
   }
@@ -222,7 +283,9 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     }
     final created = vhv.copyWith(vhvId: newId);
     final passwordHash = await _hashIfNeeded(created.vhvPassword);
-    await db.into(db.vhvsTable).insert(
+    await db
+        .into(db.vhvsTable)
+        .insert(
           VhvsTableCompanion(
             vhvId: Value(created.vhvId),
             vhvCitizenId: Value(created.vhvCitizenId),
@@ -245,24 +308,25 @@ class DriftNcdRepository implements NcdRepositoryInterface {
   @override
   Future<VHV> updateVhv(VHV vhv) async {
     final passwordHash = await _hashIfNeeded(vhv.vhvPassword);
-    final rowsAffected = await (db.update(db.vhvsTable)
-          ..where((t) => t.vhvId.equals(vhv.vhvId)))
-        .write(
-      VhvsTableCompanion(
-        vhvCitizenId: Value(vhv.vhvCitizenId),
-        vhvTitle: Value(vhv.vhvTitle),
-        vhvFname: Value(vhv.vhvFname),
-        vhvLname: Value(vhv.vhvLname),
-        vhvMobile: Value(vhv.vhvMobile),
-        vhvEmail: Value(vhv.vhvEmail),
-        vhvPassword: Value(passwordHash),
-        vhvBirthDate: Value(vhv.vhvBirthDate),
-        vhvGender: Value(vhv.vhvGender),
-        vhvAddress: Value(vhv.vhvAddress),
-        vhvImg: Value(vhv.vhvImg),
-        villageId: Value(vhv.villageId),
-      ),
-    );
+    final rowsAffected =
+        await (db.update(
+          db.vhvsTable,
+        )..where((t) => t.vhvId.equals(vhv.vhvId))).write(
+          VhvsTableCompanion(
+            vhvCitizenId: Value(vhv.vhvCitizenId),
+            vhvTitle: Value(vhv.vhvTitle),
+            vhvFname: Value(vhv.vhvFname),
+            vhvLname: Value(vhv.vhvLname),
+            vhvMobile: Value(vhv.vhvMobile),
+            vhvEmail: Value(vhv.vhvEmail),
+            vhvPassword: Value(passwordHash),
+            vhvBirthDate: Value(vhv.vhvBirthDate),
+            vhvGender: Value(vhv.vhvGender),
+            vhvAddress: Value(vhv.vhvAddress),
+            vhvImg: Value(vhv.vhvImg),
+            villageId: Value(vhv.villageId),
+          ),
+        );
     if (rowsAffected == 0) {
       throw Exception('แก้ไขอสม ไม่สำเร็จ');
     }
@@ -315,15 +379,15 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     for (var i = 0; i < rows.length; i += chunkSize) {
       final end = i + chunkSize < rows.length ? i + chunkSize : rows.length;
       final ids = [for (final r in rows.sublist(i, end)) r.screenId];
-      final historyRows = await (db.select(db.screeningHistoriesTable)
-            ..where((t) => t.screeningId.isIn(ids)))
-          .get();
+      final historyRows = await (db.select(
+        db.screeningHistoriesTable,
+      )..where((t) => t.screeningId.isIn(ids))).get();
       for (final h in historyRows) {
         histories.putIfAbsent(h.screeningId, () => []).add(h);
       }
-      final resultRows = await (db.select(db.screeningResultsTable)
-            ..where((t) => t.screeningId.isIn(ids)))
-          .get();
+      final resultRows = await (db.select(
+        db.screeningResultsTable,
+      )..where((t) => t.screeningId.isIn(ids))).get();
       for (final r in resultRows) {
         results.putIfAbsent(r.screeningId, () => []).add(r);
       }
@@ -344,17 +408,18 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       ..where((t) => t.screenId.equals(screeningId));
     final row = await query.getSingleOrNull();
     if (row == null) return null;
-    final histories = await (db.select(db.screeningHistoriesTable)
-          ..where((t) => t.screeningId.equals(row.screenId)))
-        .get();
-    final results = await (db.select(db.screeningResultsTable)
-          ..where((t) => t.screeningId.equals(row.screenId)))
-        .get();
+    final histories = await (db.select(
+      db.screeningHistoriesTable,
+    )..where((t) => t.screeningId.equals(row.screenId))).get();
+    final results = await (db.select(
+      db.screeningResultsTable,
+    )..where((t) => t.screeningId.equals(row.screenId))).get();
     return _mapScreening(row, histories, results);
   }
 
   @override
   Future<Screening> saveScreening(Screening screening) async {
+    RecordRules.checkScreening(screening);
     String newId = screening.screenId;
     if (newId.isEmpty) {
       newId = generateId();
@@ -362,7 +427,9 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     final created = screening.copyWith(screenId: newId);
 
     await db.transaction(() async {
-      await db.into(db.screeningsTable).insert(
+      await db
+          .into(db.screeningsTable)
+          .insert(
             ScreeningsTableCompanion(
               screenId: Value(created.screenId),
               patientId: Value(created.patientId),
@@ -388,16 +455,19 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         final historyCompanions = <ScreeningHistoriesTableCompanion>[];
         for (var i = 0; i < created.histories.length; i++) {
           final h = created.histories[i];
-          final hid =
-              h.historyId.isNotEmpty ? h.historyId : 'H_${newId}_${i + 1}';
-          historyCompanions.add(ScreeningHistoriesTableCompanion(
-            historyId: Value(hid),
-            screeningId: Value(newId),
-            questionId: Value(h.questionId),
-            questionText: Value(h.questionText),
-            answerValue: Value(h.answerValue),
-            answerText: Value(h.answerText),
-          ));
+          final hid = h.historyId.isNotEmpty
+              ? h.historyId
+              : 'H_${newId}_${i + 1}';
+          historyCompanions.add(
+            ScreeningHistoriesTableCompanion(
+              historyId: Value(hid),
+              screeningId: Value(newId),
+              questionId: Value(h.questionId),
+              questionText: Value(h.questionText),
+              answerValue: Value(h.answerValue),
+              answerText: Value(h.answerText),
+            ),
+          );
         }
         await db.batch((b) {
           b.insertAll(db.screeningHistoriesTable, historyCompanions);
@@ -408,18 +478,21 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         final resultCompanions = <ScreeningResultsTableCompanion>[];
         for (var i = 0; i < created.results.length; i++) {
           final r = created.results[i];
-          final rid =
-              r.resultId.isNotEmpty ? r.resultId : 'R_${newId}_${i + 1}';
-          resultCompanions.add(ScreeningResultsTableCompanion(
-            resultId: Value(rid),
-            screeningId: Value(newId),
-            diseaseName: Value(r.diseaseName),
-            diseaseCode: Value(r.diseaseCode),
-            score: Value(r.score),
-            riskLevel: Value(r.riskLevel.name),
-            adviceText: Value(r.adviceText),
-            criteriaText: Value(r.criteriaText),
-          ));
+          final rid = r.resultId.isNotEmpty
+              ? r.resultId
+              : 'R_${newId}_${i + 1}';
+          resultCompanions.add(
+            ScreeningResultsTableCompanion(
+              resultId: Value(rid),
+              screeningId: Value(newId),
+              diseaseName: Value(r.diseaseName),
+              diseaseCode: Value(r.diseaseCode),
+              score: Value(r.score),
+              riskLevel: Value(r.riskLevel.name),
+              adviceText: Value(r.adviceText),
+              criteriaText: Value(r.criteriaText),
+            ),
+          );
         }
         await db.batch((b) {
           b.insertAll(db.screeningResultsTable, resultCompanions);
@@ -444,9 +517,9 @@ class DriftNcdRepository implements NcdRepositoryInterface {
     final now = DateTime.now();
 
     await db.transaction(() async {
-      await (db.update(db.screeningsTable)
-            ..where((t) => t.screenId.equals(screeningId)))
-          .write(
+      await (db.update(
+        db.screeningsTable,
+      )..where((t) => t.screenId.equals(screeningId))).write(
         ScreeningsTableCompanion(
           reviewStatus: Value(status.code),
           reviewedByNurseId: Value(nurseId),
@@ -455,25 +528,28 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       );
 
       if (updatedResults != null) {
-        await (db.delete(db.screeningResultsTable)
-              ..where((t) => t.screeningId.equals(screeningId)))
-            .go();
+        await (db.delete(
+          db.screeningResultsTable,
+        )..where((t) => t.screeningId.equals(screeningId))).go();
 
         final resultCompanions = <ScreeningResultsTableCompanion>[];
         for (var i = 0; i < updatedResults.length; i++) {
           final r = updatedResults[i];
-          final rid =
-              r.resultId.isNotEmpty ? r.resultId : 'R_${screeningId}_${i + 1}';
-          resultCompanions.add(ScreeningResultsTableCompanion(
-            resultId: Value(rid),
-            screeningId: Value(screeningId),
-            diseaseName: Value(r.diseaseName),
-            diseaseCode: Value(r.diseaseCode),
-            score: Value(r.score),
-            riskLevel: Value(r.riskLevel.name),
-            adviceText: Value(r.adviceText),
-            criteriaText: Value(r.criteriaText),
-          ));
+          final rid = r.resultId.isNotEmpty
+              ? r.resultId
+              : 'R_${screeningId}_${i + 1}';
+          resultCompanions.add(
+            ScreeningResultsTableCompanion(
+              resultId: Value(rid),
+              screeningId: Value(screeningId),
+              diseaseName: Value(r.diseaseName),
+              diseaseCode: Value(r.diseaseCode),
+              score: Value(r.score),
+              riskLevel: Value(r.riskLevel.name),
+              adviceText: Value(r.adviceText),
+              criteriaText: Value(r.criteriaText),
+            ),
+          );
         }
         await db.batch((b) {
           b.insertAll(db.screeningResultsTable, resultCompanions);
@@ -572,26 +648,30 @@ class DriftNcdRepository implements NcdRepositoryInterface {
       pulse: row.pulse,
       bloodSugar: row.bloodSugar,
       histories: histories
-          .map((h) => ScreeningHistory(
-                historyId: h.historyId,
-                screeningId: h.screeningId,
-                questionId: h.questionId,
-                questionText: h.questionText,
-                answerValue: h.answerValue,
-                answerText: h.answerText,
-              ))
+          .map(
+            (h) => ScreeningHistory(
+              historyId: h.historyId,
+              screeningId: h.screeningId,
+              questionId: h.questionId,
+              questionText: h.questionText,
+              answerValue: h.answerValue,
+              answerText: h.answerText,
+            ),
+          )
           .toList(),
       results: results
-          .map((r) => ScreeningResult(
-                resultId: r.resultId,
-                screeningId: r.screeningId,
-                diseaseName: r.diseaseName,
-                diseaseCode: r.diseaseCode,
-                score: r.score,
-                riskLevel: RiskLevel.fromString(r.riskLevel),
-                adviceText: r.adviceText,
-                criteriaText: r.criteriaText,
-              ))
+          .map(
+            (r) => ScreeningResult(
+              resultId: r.resultId,
+              screeningId: r.screeningId,
+              diseaseName: r.diseaseName,
+              diseaseCode: r.diseaseCode,
+              score: r.score,
+              riskLevel: RiskLevel.fromString(r.riskLevel),
+              adviceText: r.adviceText,
+              criteriaText: r.criteriaText,
+            ),
+          )
           .toList(),
     );
   }

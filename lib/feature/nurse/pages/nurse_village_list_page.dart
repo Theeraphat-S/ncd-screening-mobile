@@ -13,6 +13,7 @@ import 'package:ncd_screening_mobile/feature/nurse/widgets/export_health_data_di
 import 'package:ncd_screening_mobile/feature/nurse/widgets/high_risk_queue_list.dart';
 import 'package:ncd_screening_mobile/feature/nurse/widgets/village_comparison_table.dart';
 import 'package:ncd_screening_mobile/feature/nurse/widgets/village_management_tab.dart';
+import 'package:ncd_screening_mobile/shared/config/app_config.dart';
 import 'package:ncd_screening_mobile/shared/tokens/p_colors.dart';
 import 'package:ncd_screening_mobile/shared/widgets/sync_badge_widget.dart';
 import 'package:ncd_screening_mobile/shared/widgets/app_feedback.dart';
@@ -62,12 +63,15 @@ class _NurseVillageListPageState extends State<NurseVillageListPage>
         title: const Text('ระบบพยาบาล รพ.สต.แม่อาย'),
         actions: [
           const SyncBadgeWidget(),
-          IconButton(
-            icon: const Icon(Icons.file_download_outlined, color: Colors.white),
-            tooltip: 'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
-            onPressed: () =>
-                ExportHealthDataDialog.show(context, nurse: widget.nurse),
-          ),
+          // Hidden until export is rebuilt (file via share sheet, real
+          // de-identification); see ADR 0014.
+          if (FeatureFlags.export)
+            IconButton(
+              icon: const Icon(Icons.file_download_outlined, color: Colors.white),
+              tooltip: 'ส่งออกข้อมูลสุขภาพ (Excel/CSV)',
+              onPressed: () =>
+                  ExportHealthDataDialog.show(context, nurse: widget.nurse),
+            ),
           IconButton(
             icon:
                 const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),

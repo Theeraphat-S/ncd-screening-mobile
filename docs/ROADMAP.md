@@ -35,7 +35,7 @@
 | M2 | เกณฑ์ทางการแพทย์ | Thai CV Risk Score (เพิ่มคำถามสูบบุหรี่) · อ้วนลงพุงใช้รอบเอว > ส่วนสูง/2 · ถามว่าอดอาหารหรือไม่ และถ้าไม่ได้ตรวจให้แสดง "ไม่ได้ตรวจ" · ผู้ที่ป่วยแล้วแสดง "ติดตามการรักษา" · กฎ triage (น้ำตาลต่ำ ความดันต่ำ ชีพจร) · บันทึกเวอร์ชันเกณฑ์ · เก็บประวัติเมื่อพยาบาลปรับผล · golden test | M1 | ⏳ |
 | 🗣️ | ประชุม รพ.สต. | ใช้ [รายการคำถาม](pilot-meeting-questions.md) และ APK ข้อมูลสมมติ · ยืนยันเครื่อง hub, JHCIS/HOSxP, ผู้ควบคุมข้อมูล, เกณฑ์ทางการแพทย์, เบอร์ รพ.สต., รูปแบบไฟล์ export | M2 (นัดได้ระหว่างทำ M0–M2 · ผลด้านเกณฑ์นำไปปรับก่อน M6) | ⏳ |
 | M3 | PatientViewMode | ตัด login ผู้ป่วย · ปุ่ม "แสดงให้ผู้ป่วยดู" · ต้องใส่ PIN เจ้าหน้าที่ก่อนออก · แก้ PRODUCT/CONTEXT/README | M1, ผลประชุม | ⏳ |
-| M4 | Sync แบบไฟล์ | schema v6 (`updatedAt`, origin, tombstone, devices, assignment, import log) · ย้าย outbox เข้า transaction และส่ง record ครบ · `FileTransport` + SyncPackage `.ncd` · ตั้งค่าเครื่องผ่าน QR · DeviceKey ที่เพิกถอนได้ · VhvAssignment · รวมข้อมูลแบบ idempotent | M3 | ⏳ |
+| M4 | Sync แบบไฟล์ | schema v7 (v6 คือ UNIQUE เลขบัตรใน M1) (`updatedAt`, origin, tombstone, devices, assignment, import log) · ย้าย outbox เข้า transaction และส่ง record ครบ · `FileTransport` + SyncPackage `.ncd` · ตั้งค่าเครื่องผ่าน QR · DeviceKey ที่เพิกถอนได้ · VhvAssignment · รวมข้อมูลแบบ idempotent | M3 | ⏳ |
 | M5 | Hub บน Windows | ย้ายที่เก็บ DB ไป app-support · dashboard สำหรับจอใหญ่ · สำรองข้อมูลแบบเข้ารหัสทุกวันและกู้คืน · ทะเบียนเครื่อง · CI build Windows และ Android release · export ตามรูปแบบที่ได้จากการประชุม | M4 | ⏳ |
 | M6 | นำร่อง | วัด benchmark บนมือถือ อสม. จริงให้ผ่านเกณฑ์ใน README · ใช้ข้อมูลสมมติ 2–4 สัปดาห์ · เก็บ feedback และเวลาต่อราย · เดินเรื่องขอใช้ข้อมูลจริง พร้อม privacy notice และ consent | M5 | ⏳ |
 

@@ -7,7 +7,7 @@ if [ -z "$VERSION" ]; then
     exit 1
 fi
 
-fvm flutter build apk --flavor prod || { echo "<| build APK failed |>"; exit 1; }
+fvm flutter build apk --flavor prod --dart-define=flavor=prod || { echo "<| build APK failed |>"; exit 1; }
 
 OUT_DIR=build/app/outputs/flutter-apk/prod
 mkdir -p "$OUT_DIR"

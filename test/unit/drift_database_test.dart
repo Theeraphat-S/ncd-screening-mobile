@@ -10,7 +10,7 @@ void main() {
   late DriftNcdRepository repository;
 
   setUp(() async {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     repository = DriftNcdRepository(db);
   });
 
@@ -19,8 +19,8 @@ void main() {
   });
 
   group('Drift Database - Initialization & Seeding', () {
-    test('Schema version is 5', () {
-      expect(db.schemaVersion, equals(5));
+    test('Schema version is 6', () {
+      expect(db.schemaVersion, equals(6));
     });
 
     test('Initial automatic demo seeding populates all 7 tables correctly',
@@ -174,7 +174,7 @@ void main() {
     test('addPatient inserts a new patient and assigns an ID', () async {
       final newPatient = Patient(
         patientId: '',
-        patientCitizenId: '9876543210123',
+        patientCitizenId: '9876543210121',
         patientTitle: 'นาย',
         patientFname: 'ทดสอบ',
         patientLname: 'ระบบ',
@@ -191,7 +191,7 @@ void main() {
 
       final fetched = await repository.getPatientById(added.patientId);
       expect(fetched, isNotNull);
-      expect(fetched!.patientCitizenId, equals('9876543210123'));
+      expect(fetched!.patientCitizenId, equals('9876543210121'));
     });
 
     test('updatePatient updates patient details successfully', () async {

@@ -122,7 +122,7 @@ void main() {
     test('addPatient inserts a new patient and assigns an ID', () async {
       final newPatient = Patient(
         patientId: '',
-        patientCitizenId: '9876543210123',
+        patientCitizenId: '9876543210121',
         patientTitle: 'นาย',
         patientFname: 'ทดสอบ',
         patientLname: 'ระบบ',
@@ -139,7 +139,7 @@ void main() {
 
       final fetched = await repository.getPatientById(added.patientId);
       expect(fetched, isNotNull);
-      expect(fetched!.patientCitizenId, equals('9876543210123'));
+      expect(fetched!.patientCitizenId, equals('9876543210121'));
     });
 
     test('updatePatient updates patient details successfully', () async {

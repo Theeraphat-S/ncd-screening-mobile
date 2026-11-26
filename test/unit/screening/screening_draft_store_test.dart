@@ -9,7 +9,7 @@ void main() {
   late ScreeningDraftStore store;
 
   setUp(() {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     now = DateTime(2026, 11, 12, 9);
     store = ScreeningDraftStore(db, now: () => now);
   });

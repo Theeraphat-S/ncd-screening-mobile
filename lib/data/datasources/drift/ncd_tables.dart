@@ -1,5 +1,10 @@
 import 'package:drift/drift.dart';
 
+class AppDatabaseIndexes {
+  AppDatabaseIndexes._();
+  static const patientCitizenIdUnique = 'patients_citizen_id_unique';
+}
+
 class VillagesTable extends Table {
   @override
   String get tableName => 'villages';
@@ -63,6 +68,13 @@ class VhvsTable extends Table {
   Set<Column> get primaryKey => {vhvId};
 }
 
+/// One patient per citizen ID (schema v6). Databases from before v6 get the
+/// index once their duplicates are merged; see AppDatabase.
+@TableIndex(
+  name: AppDatabaseIndexes.patientCitizenIdUnique,
+  columns: {#patientCitizenId},
+  unique: true,
+)
 class PatientsTable extends Table {
   @override
   String get tableName => 'patients';

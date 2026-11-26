@@ -32,11 +32,14 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  drift: ^2.23.1
-  drift_flutter: ^0.2.5
+  drift: ^2.34.0
+  drift_flutter: ^0.3.1
+  # SQLCipher is selected with the hooks user-define at the end of this file.
+  sqlite3: ^3.5.0
   pdf: ^3.11.1
   printing: ^5.13.2
   cupertino_icons: ^1.0.8
+  path: ^1.9.0
   path_provider: ^2.1.5
   get_it: ^8.0.3
   flutter_bloc: ^9.1.1
@@ -46,6 +49,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   local_auth: ^2.3.0
   intl: ^0.20.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -53,8 +57,8 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
   fake_async: ^1.3.3
-  drift_dev: ^2.23.1
-  build_runner: ^2.4.14
+  drift_dev: ^2.34.0
+  build_runner: ^2.10.0
   flutter_launcher_icons: ^0.14.3
 
 flutter_launcher_icons:
@@ -84,3 +88,11 @@ flutter:
           weight: 600
         - asset: assets/fonts/Sarabun-Bold.ttf
           weight: 700
+
+# The database is encrypted with SQLCipher (ADR 0011). package:sqlite3 downloads
+# a prebuilt, hash-checked SQLCipher library for every platform, Windows
+# included, at build time.
+hooks:
+  user_defines:
+    sqlite3:
+      source: sqlcipher

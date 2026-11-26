@@ -22,7 +22,7 @@
 
 ## <img src="assets/readme/users.gif" width="28" height="28" alt="" align="top"> ผู้ใช้งาน
 
-- **ผู้ป่วย** — เข้าสู่ระบบด้วยเลขบัตร 13 หลัก, ดูประวัติ/ผลคัดกรอง, ส่งออก PDF
+- **ผู้ป่วย** — ดูประวัติ/ผลคัดกรอง และรับรายงาน PDF (ปัจจุบัน login ด้วยเลขบัตร + วันเกิด · ในช่วงนำร่องจะเปลี่ยนเป็นโหมด "แสดงให้ผู้ป่วยดู" บนเครื่องเจ้าหน้าที่ ตาม [ADR 0013](docs/adr/0013-patient-view-mode-replaces-patient-login.md))
 - **อสม.** — จัดการข้อมูลผู้ป่วย (CRUD + ค้นหา), กรอกแบบคัดกรอง, ดูผลความเสี่ยงทันที
 - **พยาบาล** — แดชบอร์ดสถิติรายหมู่บ้าน + คิวกลุ่มเสี่ยงสูง, จัดการ อสม., รับรอง/ปรับผลประเมิน
 
@@ -88,9 +88,13 @@ lib/
 └── main.dart
 ```
 
+## <img src="assets/readme/limitations.gif" width="28" height="28" alt="" align="top"> แผนนำร่อง
+
+ส่งมินิโปรเจกต์แล้ว · กำลังพัฒนาต่อเพื่อนำร่องใช้จริงที่ รพ.สต.แม่อาย — ดู [ROADMAP](docs/ROADMAP.md) และ [คำถามประชุม รพ.สต.](docs/pilot-meeting-questions.md)
+
 ## <img src="assets/readme/docs.gif" width="28" height="28" alt="" align="top"> เอกสาร
 
-[CONTEXT.md](CONTEXT.md) (Glossary) · [DESIGN.md](DESIGN.md) (Design System) · SRS: [docs/SRS.pdf](docs/SRS.pdf) · Backlog: [docs/backlog/](docs/backlog/) · ADRs: [0001](docs/adr/0001-offline-mock-repository-architecture.md) · [0002](docs/adr/0002-client-side-ncd-risk-calculator.md) · [0003](docs/adr/0003-drift-sqlite-offline-persistence.md) · [0004](docs/adr/0004-thai-pdf-clinical-report-generation.md) · [0005](docs/adr/0005-village-health-analytics-engine.md) · [0006](docs/adr/0006-nordic-clinical-ui-redesign.md)
+[CONTEXT.md](CONTEXT.md) (Glossary) · [DESIGN.md](DESIGN.md) (Design System) · SRS: [docs/SRS.pdf](docs/SRS.pdf) · Backlog: [docs/backlog/](docs/backlog/) · ADRs: [0001](docs/adr/0001-offline-mock-repository-architecture.md) · [0002](docs/adr/0002-client-side-ncd-risk-calculator.md) · [0003](docs/adr/0003-drift-sqlite-offline-persistence.md) · [0004](docs/adr/0004-thai-pdf-clinical-report-generation.md) · [0005](docs/adr/0005-village-health-analytics-engine.md) · [0006](docs/adr/0006-nordic-clinical-ui-redesign.md) · [0007](docs/adr/0007-smart-field-ocr-and-elderly-ux.md) · [0008](docs/adr/0008-offline-sync-queue-and-triage-alerts.md) · [0009](docs/adr/0009-data-privacy-and-field-workflow.md) · [0010](docs/adr/0010-offline-hub-spoke-file-sync.md) · [0011](docs/adr/0011-device-security-model.md) · [0012](docs/adr/0012-thai-cv-risk-score.md) · [0013](docs/adr/0013-patient-view-mode-replaces-patient-login.md) · [0014](docs/adr/0014-feature-flags-export-and-emergency-call.md)
 
 ---
 

@@ -26,6 +26,9 @@
 | F12 | Comprehensive Automated Test Suite | Unit tests for Drift, PDF service, Analytics calculator, BLoCs, and widgets maintaining 100% pass | M4 | ORIGINAL_REQUEST §R4 |
 
 ## Milestones
+
+> These milestones were the mini-project phase and are complete. The pilot roadmap is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
 | M1 | Drift SQLite Persistence Layer | F1, F2, F3, F4, F9 (part) | none | DONE |

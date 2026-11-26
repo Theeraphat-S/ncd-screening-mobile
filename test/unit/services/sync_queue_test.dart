@@ -34,7 +34,7 @@ SyncQueueItem _item(String id, {DateTime? at, Map<String, dynamic>? payload}) =>
 void main() {
   late AppDatabase db;
 
-  setUp(() => db = AppDatabase(NativeDatabase.memory()));
+  setUp(() => db = AppDatabase(NativeDatabase.memory(), seedDemoData: true));
   tearDown(() => db.close());
 
   group('DriftSyncQueueService - persistence', () {

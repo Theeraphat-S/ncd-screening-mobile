@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/feature/auth/bloc/auth_bloc.dart';
 import 'package:ncd_screening_mobile/feature/auth/session_flow.dart';
+import 'package:ncd_screening_mobile/shared/config/app_config.dart';
 import 'package:ncd_screening_mobile/shared/tokens/tokens.dart';
 import 'package:ncd_screening_mobile/shared/utils/form_validators.dart';
 import 'package:ncd_screening_mobile/shared/utils/thai_birth_date.dart';
@@ -39,8 +40,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // Demo credentials are pre-filled in debug builds only, never in release.
-    if (kDebugMode) {
+    // Demo credentials are pre-filled only in debug builds of a flavor that
+    // seeds the demo accounts, never in release or prod.
+    if (kDebugMode && AppEnvironment.seedsDemoData) {
       if (widget.role == UserRole.patient) {
         _idController.text = '1234567890121';
         _dayController.text = '1';

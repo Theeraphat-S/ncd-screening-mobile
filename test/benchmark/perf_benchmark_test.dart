@@ -42,7 +42,7 @@ void main() {
   }, skip: !_bench);
 
   test('analytics, list and PDF on $_patients patients', () async {
-    final db = AppDatabase(NativeDatabase.memory());
+    final db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     addTearDown(db.close);
     final repo = DriftNcdRepository(db);
     final villages = await repo.getVillages();

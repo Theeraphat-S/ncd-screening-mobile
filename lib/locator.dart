@@ -1,3 +1,4 @@
+import 'package:drift_flutter/drift_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
@@ -23,7 +24,8 @@ final locator = GetIt.instance;
 
 Future<void> initLocator() async {
   // Register AppDatabase
-  locator.registerLazySingleton<AppDatabase>(AppDatabase.new);
+  locator.registerLazySingleton<AppDatabase>(
+      () => AppDatabase(driftDatabase(name: 'db')));
 
   // Register NCD Repository (Offline-first Drift SQLite database persistence)
   locator.registerLazySingleton<NcdRepositoryInterface>(

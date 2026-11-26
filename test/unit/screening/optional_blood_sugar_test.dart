@@ -123,7 +123,7 @@ void main() {
 
   group('persistence', () {
     test('a screening without blood sugar round-trips through Drift', () async {
-      final db = AppDatabase(NativeDatabase.memory());
+      final db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
       addTearDown(db.close);
       final repo = DriftNcdRepository(db);
 
@@ -150,7 +150,7 @@ void main() {
 
       // Build a current DB, then rewrite `screenings` the way v4 had it
       // (blood_sugar NOT NULL) and rewind the version.
-      final first = AppDatabase(NativeDatabase(file));
+      final first = AppDatabase(NativeDatabase(file), seedDemoData: true);
       await first.customSelect('SELECT 1').get();
       await first.customStatement('DROP TABLE screenings');
       await first.customStatement('''
@@ -180,7 +180,7 @@ void main() {
       await first.customStatement('PRAGMA user_version = 4');
       await first.close();
 
-      final upgraded = AppDatabase(NativeDatabase(file));
+      final upgraded = AppDatabase(NativeDatabase(file), seedDemoData: true);
       addTearDown(upgraded.close);
 
       final repo = DriftNcdRepository(upgraded);

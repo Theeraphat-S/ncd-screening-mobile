@@ -71,7 +71,7 @@ void main() {
 
   setUp(() async {
     await locator.reset();
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     drafts = ScreeningDraftStore(db);
     repo = _FakeRepo();
   });

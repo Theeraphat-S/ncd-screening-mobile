@@ -10,7 +10,7 @@ void main() {
   late DriftNcdRepository repository;
 
   setUp(() async {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     repository = DriftNcdRepository(db);
   });
 

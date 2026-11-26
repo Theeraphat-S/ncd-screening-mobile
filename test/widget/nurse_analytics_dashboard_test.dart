@@ -181,6 +181,9 @@ void main() {
       expect(find.text('ภาพรวมสถิติสุขภาพ'), findsOneWidget);
       expect(find.text('จัดการหมู่บ้านและ อสม.'), findsOneWidget);
 
+      // Export is behind FEATURE_EXPORT, which is off in this build.
+      expect(find.byTooltip('ส่งออกข้อมูลสุขภาพ (Excel/CSV)'), findsNothing);
+
       // Check Nurse header banner
       expect(find.text('พยาบาล: นางพยาบาลกานดา ใจดี'), findsOneWidget);
       expect(find.text('พื้นที่รับผิดชอบ: ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่'), findsOneWidget);

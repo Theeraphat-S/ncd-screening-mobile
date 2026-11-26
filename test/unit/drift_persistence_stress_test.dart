@@ -15,7 +15,7 @@ void main() {
     late DriftNcdRepository repository;
 
     setUp(() async {
-      db = AppDatabase(NativeDatabase.memory());
+      db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
       repository = DriftNcdRepository(db);
     });
 
@@ -489,7 +489,7 @@ void main() {
 
         try {
           // Session 1: Open DB, seed baseline, insert a custom patient and screening
-          final firstDb = AppDatabase(NativeDatabase(dbFile));
+          final firstDb = AppDatabase(NativeDatabase(dbFile), seedDemoData: true);
           final firstRepo = DriftNcdRepository(firstDb);
 
           final initialVillages = await firstRepo.getVillages();
@@ -531,7 +531,7 @@ void main() {
           await firstDb.close();
 
           // Session 2: Reopen DB file from disk
-          final secondDb = AppDatabase(NativeDatabase(dbFile));
+          final secondDb = AppDatabase(NativeDatabase(dbFile), seedDemoData: true);
           final secondRepo = DriftNcdRepository(secondDb);
 
           // Verify seeded data AND our newly created patient + screening persist intact
@@ -562,7 +562,7 @@ void main() {
           () async {
         await locator.reset();
         locator.registerLazySingleton<AppDatabase>(
-            () => AppDatabase(NativeDatabase.memory()));
+            () => AppDatabase(NativeDatabase.memory(), seedDemoData: true));
         locator.registerLazySingleton<NcdRepositoryInterface>(
             () => DriftNcdRepository(locator<AppDatabase>()));
 

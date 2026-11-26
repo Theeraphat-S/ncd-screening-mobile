@@ -84,7 +84,7 @@ Future<void> _run() async {
   });
   _log('PIN unlock (isolate): ${r.$1} ms, longest UI stall ${r.$2} ms');
 
-  final db = AppDatabase(NativeDatabase.memory());
+  final db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
   final repo = DriftNcdRepository(db);
   r = await _measure(() async {
     await repo.login(

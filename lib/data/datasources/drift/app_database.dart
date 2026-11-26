@@ -1,13 +1,13 @@
 import 'package:drift/drift.dart';
-import 'package:drift_flutter/drift_flutter.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/ncd_tables.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
+import 'package:ncd_screening_mobile/shared/config/app_config.dart';
 
 part 'app_database.g.dart';
 
-// Seeded demo accounts share one password, hashed once per seeding on a
-// worker isolate (PBKDF2 is deliberately slow).
+// Demo data (dev / local builds only) shares one password, hashed once per
+// seeding on a worker isolate (PBKDF2 is deliberately slow).
 @DriftDatabase(tables: [
   VillagesTable,
   NursesTable,
@@ -20,7 +20,12 @@ part 'app_database.g.dart';
   ScreeningDraftsTable,
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
+  /// [seedDemoData] defaults to the build flavor: dev and local builds get
+  /// the demo villages, accounts and patients, prod starts empty.
+  AppDatabase(super.e, {bool? seedDemoData})
+      : seedDemoData = seedDemoData ?? AppEnvironment.seedsDemoData;
+
+  final bool seedDemoData;
 
   @override
   int get schemaVersion => 5;
@@ -28,7 +33,7 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         beforeOpen: (details) async {
-          await _seedInitialDataIfEmpty();
+          if (seedDemoData) await _seedInitialDataIfEmpty();
         },
         onCreate: (Migrator m) async {
           await m.createAll();
@@ -429,11 +434,5 @@ class AppDatabase extends _$AppDatabase {
         b.insertAll(screeningResultsTable, resultCompanions);
       });
     });
-  }
-
-  static QueryExecutor _openConnection() {
-    return driftDatabase(
-      name: 'db',
-    );
   }
 }

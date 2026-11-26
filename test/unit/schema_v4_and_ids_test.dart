@@ -32,7 +32,7 @@ Patient _newPatient(String citizenId) => Patient(
 void main() {
   group('Schema v4 additions (current schema is v5)', () {
     test('schema version is 5 and v4 tables exist', () async {
-      final db = AppDatabase(NativeDatabase.memory());
+      final db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
       addTearDown(db.close);
 
       expect(db.schemaVersion, equals(5));
@@ -52,14 +52,14 @@ void main() {
       });
 
       // Build a database, then rewind it to look like a v3 install.
-      final first = AppDatabase(NativeDatabase(file));
+      final first = AppDatabase(NativeDatabase(file), seedDemoData: true);
       await first.customSelect('SELECT 1').get(); // forces open + seed
       await first.customStatement('DROP TABLE sync_queue');
       await first.customStatement('DROP TABLE screening_drafts');
       await first.customStatement('PRAGMA user_version = 3');
       await first.close();
 
-      final upgraded = AppDatabase(NativeDatabase(file));
+      final upgraded = AppDatabase(NativeDatabase(file), seedDemoData: true);
       addTearDown(upgraded.close);
 
       final tables = await _tableNames(upgraded);
@@ -78,7 +78,7 @@ void main() {
     late DriftNcdRepository repo;
 
     setUp(() {
-      db = AppDatabase(NativeDatabase.memory());
+      db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
       repo = DriftNcdRepository(db);
     });
     tearDown(() => db.close());

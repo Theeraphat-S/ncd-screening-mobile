@@ -99,38 +99,4 @@ class ClinicalTriageService {
       recommendedAction: 'ติดตามตรวจคัดกรองประจำปีตามรอบ อสม.',
     );
   }
-
-  /// Generate JSON payload formatted for LINE Notify / Health Center Webhook dispatch.
-  static Map<String, dynamic> generateLineWebhookPayload({
-    required Patient patient,
-    required Screening screening,
-    required ClinicalTriageAssessment triage,
-  }) {
-    return {
-      'event': 'CLINICAL_TRIAGE_ALERT',
-      'timestamp': DateTime.now().toIso8601String(),
-      'hospital': 'รพ.สต.แม่อาย',
-      'urgency': triage.urgencyLevel.name,
-      'patient': {
-        'id': patient.patientId,
-        'name': patient.fullName,
-        'citizenId': patient.patientCitizenId,
-        'villageId': patient.villageId,
-        'mobile': patient.patientMobile,
-      },
-      'vitals': {
-        'sbp': screening.sbp,
-        'dbp': screening.dbp,
-        'bloodSugar': screening.bloodSugar,
-        'bmi': screening.bmi,
-      },
-      'triage': {
-        'label': triage.urgencyLabel,
-        'rationale': triage.clinicalRationale,
-        'action': triage.recommendedAction,
-        'requiresImmediateVisit': triage.requiresImmediateVisit,
-      },
-      'message': '🚨 [แจ้งเตือนเคสด่วน] ${triage.urgencyLabel}\nผู้ป่วย: ${patient.fullName} (หมู่ ${patient.villageId})\nBP: ${screening.sbp.toInt()}/${screening.dbp.toInt()} mmHg, Sugar: ${screening.bloodSugar ?? 'ไม่ได้ตรวจ'} mg/dL\nการดำเนินการ: ${triage.recommendedAction}',
-    };
-  }
 }

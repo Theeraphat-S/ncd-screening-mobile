@@ -11,7 +11,7 @@ void main() {
   late DriftNcdRepository repo;
 
   setUp(() {
-    db = AppDatabase(NativeDatabase.memory());
+    db = AppDatabase(NativeDatabase.memory(), seedDemoData: true);
     repo = DriftNcdRepository(db);
   });
   tearDown(() => db.close());

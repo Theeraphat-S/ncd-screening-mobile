@@ -4,19 +4,6 @@ import 'package:ncd_screening_mobile/domain/services/clinical_triage_service.dar
 
 void main() {
   group('ClinicalTriageService', () {
-    final basePatient = Patient(
-      patientId: 'P001',
-      patientCitizenId: '1500200000010',
-      patientTitle: 'นาย',
-      patientFname: 'สมชาย',
-      patientLname: 'ใจดี',
-      patientGender: 'ชาย',
-      patientBirthDate: DateTime(1960, 1, 1),
-      patientAddress: '123 ม.1',
-      patientMobile: '0812345678',
-      villageId: 'V01',
-    );
-
     test('classifies hypertensive crisis (SBP >= 180) as Emergency with requiresImmediateVisit', () {
       final crisisScreening = Screening(
         screenId: 'SCR_CRISIS',
@@ -56,16 +43,7 @@ void main() {
       expect(triage.urgencyLevel, TriageUrgencyLevel.emergency);
       expect(triage.requiresImmediateVisit, isTrue);
       expect(triage.urgencyLabel, contains('วิกฤตความดันโลหิตสูง'));
-
-      final payload = ClinicalTriageService.generateLineWebhookPayload(
-        patient: basePatient,
-        screening: crisisScreening,
-        triage: triage,
-      );
-
-      expect(payload['event'], 'CLINICAL_TRIAGE_ALERT');
-      expect(payload['message'], contains('สมชาย ใจดี'));
-      expect(payload['message'], contains('185/115'));
+      expect(triage.clinicalRationale, contains('185/115'));
     });
 
     test('classifies multi-NCD high risk as Urgent triage', () {

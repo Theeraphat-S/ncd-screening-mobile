@@ -10,11 +10,11 @@ android
 
 ## Users
 
-Three roles share one app (confirmed: all three are primary):
+Three roles share one app. All three are primary, but patients use it through staff devices during the pilot:
 
 - **อสม. (village health volunteers)**: record patient data and run the 4-NCD screening form in the community, at patients' homes, often with weak or no connectivity.
 - **พยาบาล (nurses at รพ.สต.แม่อาย)**: review and approve or adjust risk results, manage อสม., read village-level analytics and the high-risk queue.
-- **ผู้ป่วย / บุคคลทั่วไป (patients)**: sign in with a 13-digit citizen ID to view their own history and results and export a PDF. Many are elderly.
+- **ผู้ป่วย / บุคคลทั่วไป (patients)**: see their own results in PatientViewMode on a staff device (opened by an อสม. or nurse, exit needs the staff PIN) and take home the PDF report. There is no patient login during the pilot ([ADR 0013](docs/adr/0013-patient-view-mode-replaces-patient-login.md)). Many are elderly.
 
 ## Product Purpose
 
@@ -26,8 +26,8 @@ A screening and triage tool built for one sub-district health unit's actual work
 
 ## Operating Context
 
-- Offline-first: data is stored locally (Drift SQLite) and synced when a connection returns (offline sync queue).
-- Field use on phones/tablets; ID-card OCR scan speeds up patient entry.
+- Offline-first: data is stored locally (Drift SQLite). There is no server: อสม. phones (Spokes) exchange encrypted SyncPackage files with a Hub PC at the รพ.สต. ([ADR 0010](docs/adr/0010-offline-hub-spoke-file-sync.md)).
+- Field use on phones and tablets. ID-card OCR is not part of the pilot.
 - Device is protected by app lock / PIN.
 - Reports are Thai clinical-summary PDFs (Sarabun font) with the nurse's approval status.
 - Patient-facing results offer an accessibility mode for elderly users (larger text, high contrast, plain-language explanations).
@@ -38,7 +38,7 @@ A screening and triage tool built for one sub-district health unit's actual work
 - Screening inputs: vitals, BMI, waist, BP, fasting blood sugar (optional), health and family history.
 - Domain terminology is defined in CONTEXT.md; use its terms and avoid the "Avoid" aliases.
 - Stack: Flutter (Material 3), BLoC, get_it, Drift; the project already exists.
-- Open, not decided: whether real patient data is in use, PDPA handling beyond the current lock, and any claims about clinical validation. Do not invent them.
+- Pilot plan: [docs/ROADMAP.md](docs/ROADMAP.md). The pilot starts with fake data; real data needs permission from the data controller plus a privacy notice and consent. No clinical-validation claims; criteria follow ADR 0012 and need nurse review.
 
 ## Brand Commitments
 

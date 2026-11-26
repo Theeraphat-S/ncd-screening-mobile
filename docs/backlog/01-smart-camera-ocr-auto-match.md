@@ -1,5 +1,7 @@
 # 01: Smart Camera OCR & Thai ID Auto-Matching Flow
 
+> **Status (2026-11-26)**: Not planned for the pilot. The simulated scanner page was removed (3e0a221). Revisit after the pilot.
+
 **What to build:** 
 A VillageHealthVolunteer (VHV) can tap a camera scan button in the app to capture a Thai National Citizen ID card. An on-device OCR engine extracts the 13-digit ID number and patient name without requiring internet connectivity. The app immediately queries local SQLite storage: if an existing patient matches, it opens the screening form directly with patient details pre-populated; if no match is found, it opens the patient registration form with the extracted citizen ID and name pre-filled. A manual fallback and lighting toggle are provided for low-light/damaged card conditions.
 

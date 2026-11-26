@@ -1,5 +1,7 @@
 # 05: PDPA-Compliant Health Data Export (Excel/CSV)
 
+> **Status (2026-11-26)**: To be hidden behind a feature flag in M1 (still reachable today); the current version leaks to the clipboard and its full-data password check is broken. To be rebuilt in M5 after the pilot meeting settles the format. See [ADR 0014](../adr/0014-feature-flags-export-and-emergency-call.md).
+
 **What to build:** 
 Nurses can export village screening records into MOPH/JHCIS-compatible Excel (.xlsx) and CSV spreadsheets. The export feature supports dual privacy modes: `ExportMode.anonymized` (masks Thai Citizen IDs and anonymizes patient names for public health epidemiology) and `ExportMode.clinicalFull` (unmasked full dataset for hospital HIS imports, protected by nurse credential verification).
 

@@ -1,6 +1,6 @@
 # 12. Validated Screening Criteria: Thai CV Risk Score, Abdominal Obesity, Known Disease
 
-**Status**: Accepted (2026-11-26). Amends ADR 0002. Exact coefficients and cut-offs must be taken from the published sources and reviewed by the รพ.สต. nurse in M2 ([pilot meeting](../pilot-meeting-questions.md) §4).
+**Status**: Accepted (2026-11-26). Amends ADR 0002. M2 implements these rules with coefficients and cut-offs taken from the published sources. The รพ.สต. nurse then reviews them at the [pilot meeting](../pilot-meeting-questions.md) (§4), and any changes are applied after the meeting, before M6.
 
 **Context**:
 A re-audit of `NcdRiskCalculator`, the lifestyle advisor and triage on origin/main (2026-11-26) found the following:

@@ -1,6 +1,6 @@
 # 9. Smart Field OCR Workflow, Dynamic Sync Badge & PDPA-Compliant Export
 
-**Status**: Partially superseded (2026-11-26). OCR was removed (see ADR 0007). The sync badge depends on ADR 0010. The export is hidden behind a feature flag until it is rebuilt (ADR 0014).
+**Status**: Partially superseded (2026-11-26). OCR was removed (see ADR 0007). The sync badge depends on ADR 0010. The export is to be hidden behind a feature flag in M1 and rebuilt later (ADR 0014); it is still reachable today.
 
 **Context & Decision**: 
 To maximize operational efficiency for field VHVs while maintaining rigorous data privacy and clinical compliance, we settled on an automated pipeline:

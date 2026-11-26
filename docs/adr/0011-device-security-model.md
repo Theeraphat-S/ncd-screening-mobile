@@ -30,7 +30,9 @@ A re-audit on 2026-11-26 found these gaps:
 - **App lock**:
   - The PIN becomes mandatory for staff.
   - Auto-lock after **5 minutes** idle; the screen is also hidden when the app goes to the background.
-  - One failure counter covers both PIN and password. **10 consecutive failures wipe local data** (database, secure storage and drafts). This is safe because the Hub holds the master copy; a wiped Spoke is re-provisioned.
+  - One failure counter covers both PIN and password, with increasing delays after 5 failures.
+  - **On a Spoke, 10 consecutive failures wipe local data** (database, secure storage and drafts), and the Spoke must be re-provisioned from the Hub. Screenings not yet sent in a SyncPackage are lost. This is an accepted risk, reduced by a reminder when the outbox holds items older than 7 days and by asking อสม. to sync at every visit to the รพ.สต. ([pilot meeting](../pilot-meeting-questions.md) §1.3).
+  - **The Hub never wipes itself**, because it holds the master copy. After 10 failures it stays locked until the nurse unlocks it with the password plus a recovery code made at setup.
   - Biometric unlock uses `biometricOnly: false` on Windows (Windows Hello).
 - **Screen and backup**: set `FLAG_SECURE` on screens that show patient data, and add `dataExtractionRules` that exclude the database and preferences.
 - **DeviceKey**:

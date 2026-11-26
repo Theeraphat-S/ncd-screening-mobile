@@ -8,7 +8,7 @@ On 2026-11-12/13, upstream hardened patient login rather than removing it. It no
 Under ADR 0010 there is no server, so patient data exists only on staff devices. A patient would therefore always log in on an อสม.'s phone. There, anyone who knows a neighbour's citizen ID and birth date, both easy to learn in a village, can open that neighbour's health record. The current flow also has:
 - no attempt limit;
 - no idle lock for patient sessions;
-- a default date of birth of 1980-01-01 for patients imported without one.
+- an add-patient form that pre-fills the date of birth with 1980-01-01, so a rushed entry silently gets a wrong date that then works as a login factor.
 
 Most patients are elderly and would not install an app or import files themselves.
 

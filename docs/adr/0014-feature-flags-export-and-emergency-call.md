@@ -21,6 +21,6 @@ Some features are presented as working but are simulated or broken:
 - **Sync badge**: kept, since it already says data is saved on this device (4b0f79c). It becomes meaningful with the FileTransport (ADR 0010).
 
 **Consequences**:
-- Staff no longer see controls that pretend to work, and the clipboard leak is closed immediately.
+- Once M1 ships, staff no longer see controls that pretend to work, and the clipboard leak is closed. Until then, the export and the fake call buttons are still live.
 - Nurses have no bulk export during the pilot. The Hub dashboard and PDFs cover the pilot's needs.
 - The flags are compile-time, so turning one on needs a new build. That is intentional.

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:ncd_screening_mobile/data/datasources/drift/ncd_tables.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
@@ -28,11 +29,12 @@ class AppDatabase extends _$AppDatabase {
   final bool seedDemoData;
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         beforeOpen: (details) async {
+          if (!details.wasCreated) await ensureCitizenIdUnique();
           if (seedDemoData) await _seedInitialDataIfEmpty();
         },
         onCreate: (Migrator m) async {
@@ -57,8 +59,47 @@ class AppDatabase extends _$AppDatabase {
             // ignore: experimental_member_use
             await m.alterTable(TableMigration(screeningsTable));
           }
+          // from < 6: the unique citizen-ID index is added by
+          // ensureCitizenIdUnique() in beforeOpen, which also retries it on
+          // later launches if duplicates blocked it.
         },
       );
+
+  /// Adds the unique citizen-ID index if it is missing and the data allows
+  /// it. Returns whether the index exists afterwards.
+  ///
+  /// A database upgraded from v5 can already hold two patients with the same
+  /// ID. Those are not merged automatically (screenings hang off each one);
+  /// the index is skipped and the repository's duplicate check still blocks
+  /// new ones, until a nurse resolves them and the next launch adds it.
+  Future<bool> ensureCitizenIdUnique() async {
+    const name = AppDatabaseIndexes.patientCitizenIdUnique;
+    final existing = await customSelect(
+      "SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = ?",
+      variables: [Variable.withString(name)],
+    ).get();
+    if (existing.isNotEmpty) return true;
+
+    final duplicates = await duplicateCitizenIds();
+    if (duplicates.isNotEmpty) {
+      debugPrint('Unique citizen-ID index not added: '
+          '${duplicates.length} citizen ID(s) are used by more than one patient');
+      return false;
+    }
+    await customStatement(
+      'CREATE UNIQUE INDEX IF NOT EXISTS $name ON patients (patient_citizen_id)',
+    );
+    return true;
+  }
+
+  /// Citizen IDs used by more than one patient.
+  Future<List<String>> duplicateCitizenIds() async {
+    final rows = await customSelect(
+      'SELECT patient_citizen_id AS id FROM patients '
+      'GROUP BY patient_citizen_id HAVING count(*) > 1',
+    ).get();
+    return [for (final r in rows) r.read<String>('id')];
+  }
 
   Future<void> _seedInitialDataIfEmpty() async {
     final existingVillages =

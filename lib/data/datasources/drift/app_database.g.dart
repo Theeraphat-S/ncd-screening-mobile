@@ -5521,6 +5521,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SyncQueueTableTable syncQueueTable = $SyncQueueTableTable(this);
   late final $ScreeningDraftsTableTable screeningDraftsTable =
       $ScreeningDraftsTableTable(this);
+  late final Index patientsCitizenIdUnique = Index(
+    'patients_citizen_id_unique',
+    'CREATE UNIQUE INDEX patients_citizen_id_unique ON patients (patient_citizen_id)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5535,6 +5539,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     screeningResultsTable,
     syncQueueTable,
     screeningDraftsTable,
+    patientsCitizenIdUnique,
   ];
 }
 

@@ -2,6 +2,7 @@ import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/domain/services/record_rules.dart';
 
 abstract class NcdRepositoryInterface {
   // Session & Auth
@@ -424,17 +425,32 @@ class MockNcdRepository implements NcdRepositoryInterface {
   @override
   Future<Patient> addPatient(Patient patient) async {
     await Future.delayed(const Duration(milliseconds: 250));
+    RecordRules.checkPatient(patient);
+    final citizenId = RecordRules.normalizeCitizenId(patient.patientCitizenId);
+    if (_patients.any((p) => p.patientCitizenId == citizenId)) {
+      throw const DuplicateCitizenIdException();
+    }
     final newId = 'P${(_patients.length + 1).toString().padLeft(3, '0')}';
-    final created = patient.copyWith(patientId: newId);
+    final created = patient.copyWith(patientId: newId, patientCitizenId: citizenId);
     _patients.insert(0, created);
     return created;
   }
 
   @override
-  Future<Patient> updatePatient(Patient patient) async {
+  Future<Patient> updatePatient(Patient input) async {
     await Future.delayed(const Duration(milliseconds: 250));
+    final patient = input.copyWith(
+      patientCitizenId: RecordRules.normalizeCitizenId(input.patientCitizenId),
+    );
     final index = _patients.indexWhere((p) => p.patientId == patient.patientId);
     if (index >= 0) {
+      RecordRules.checkPatient(patient,
+          previousCitizenId: _patients[index].patientCitizenId);
+      if (_patients.any((p) =>
+          p.patientId != patient.patientId &&
+          p.patientCitizenId == patient.patientCitizenId)) {
+        throw const DuplicateCitizenIdException();
+      }
       _patients[index] = patient;
       return patient;
     }
@@ -534,6 +550,7 @@ class MockNcdRepository implements NcdRepositoryInterface {
   @override
   Future<Screening> saveScreening(Screening screening) async {
     await Future.delayed(const Duration(milliseconds: 300));
+    RecordRules.checkScreening(screening);
     final newId = 'S${(_screenings.length + 1).toString().padLeft(3, '0')}';
     final created = screening.copyWith(screenId: newId);
     _screenings.insert(0, created);

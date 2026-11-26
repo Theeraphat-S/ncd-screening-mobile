@@ -34,9 +34,6 @@ class ClinicalTriageAssessment extends Equatable {
 }
 
 class ClinicalTriageService {
-  static const String defaultHospitalPhone = '053-459034';
-  static const String emergencyHotline = '1669';
-
   /// Evaluate screening metrics to classify clinical triage urgency.
   static ClinicalTriageAssessment assess({
     required Screening screening,

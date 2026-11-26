@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
+import 'package:ncd_screening_mobile/shared/config/contacts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
@@ -684,7 +685,7 @@ class PdfReportService implements PdfReportServiceInterface {
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
           pw.Text(
-            'โรงพยาบาลส่งเสริมสุขภาพตำบลแม่อาย ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่ | โทรศัพท์ 053-459-000',
+            'โรงพยาบาลส่งเสริมสุขภาพตำบลแม่อาย ต.ท่าตอน อ.แม่อาย จ.เชียงใหม่ | โทรศัพท์ ${HealthCenterContacts.healthCenterPhone}',
             style: const pw.TextStyle(
               fontSize: 7.5,
               color: PdfColor.fromInt(0xFF94A3B8),

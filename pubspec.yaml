@@ -8,19 +8,19 @@ flavors:
         name: "NCD Screening Local"
         identifier: com.fldp.mobileApp.local
       android:
-        applicationId: com.fldp.mobileApp.local
+        applicationId: io.github.theeraphats.ncdscreening.local
     dev:
       app:
         name: "NCD Screening Dev"
         identifier: com.fldp.mobileApp.dev
       android:
-        applicationId: com.fldp.mobileApp.dev
+        applicationId: io.github.theeraphats.ncdscreening.dev
     prod:
       app:
         name: "NCD Screening"
         identifier: com.fldp.mobileApp
       android:
-        applicationId: com.fldp.mobileApp
+        applicationId: io.github.theeraphats.ncdscreening
 
 version: 1.0.0+1
 

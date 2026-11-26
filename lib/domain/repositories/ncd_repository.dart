@@ -1,5 +1,6 @@
 import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 import 'package:ncd_screening_mobile/domain/services/ncd_risk_calculator.dart';
 
 abstract class NcdRepositoryInterface {
@@ -335,14 +336,14 @@ class MockNcdRepository implements NcdRepositoryInterface {
     if (role == UserRole.patient) {
       final patient = _patients.firstWhere(
         (p) => p.patientCitizenId == trimmedId,
-        orElse: () => throw Exception('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง'),
+        orElse: () => throw const InvalidCredentialsException('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง'),
       );
       final dob = patient.patientBirthDate;
       if (birthDate == null ||
           birthDate.year != dob.year ||
           birthDate.month != dob.month ||
           birthDate.day != dob.day) {
-        throw Exception('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง');
+        throw const InvalidCredentialsException('เลขบัตรประชาชนหรือวันเกิดไม่ถูกต้อง');
       }
       return patient;
     } else if (role == UserRole.vhv) {
@@ -351,10 +352,10 @@ class MockNcdRepository implements NcdRepositoryInterface {
             v.vhvCitizenId == trimmedId ||
             v.vhvMobile == trimmedId ||
             v.vhvId == trimmedId,
-        orElse: () => throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'),
+        orElse: () => throw const InvalidCredentialsException('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'),
       );
       if (password == null || password.isEmpty || vhv.vhvPassword != password) {
-        throw Exception('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        throw const InvalidCredentialsException('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }
       return vhv;
     } else if (role == UserRole.nurse) {
@@ -363,12 +364,12 @@ class MockNcdRepository implements NcdRepositoryInterface {
             n.nurseId == trimmedId ||
             n.nurseMobile == trimmedId ||
             n.nurseEmail == trimmedId,
-        orElse: () => throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง'),
+        orElse: () => throw const InvalidCredentialsException('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง'),
       );
       if (password == null ||
           password.isEmpty ||
           nurse.nursePassword != password) {
-        throw Exception('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
+        throw const InvalidCredentialsException('รหัสพยาบาลหรือรหัสผ่านไม่ถูกต้อง');
       }
       return nurse;
     }

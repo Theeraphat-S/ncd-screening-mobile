@@ -23,6 +23,9 @@ class PlatformSecureStore implements SecureStore {
 
   @override
   Future<void> delete(String key) => _storage.delete(key: key);
+
+  @override
+  Future<void> deleteAll() => _storage.deleteAll();
 }
 
 abstract class BiometricService {

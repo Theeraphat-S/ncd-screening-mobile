@@ -10,13 +10,17 @@ void main() {
       cubit.close();
     });
 
-    test('startSession unlocks; 15 min of inactivity locks', () {
+    test('the idle limit is 5 minutes (ADR 0011)', () {
+      expect(AppLockCubit.defaultIdleTimeout, const Duration(minutes: 5));
+    });
+
+    test('startSession unlocks; 5 min of inactivity locks', () {
       fakeAsync((async) {
         final cubit = AppLockCubit();
         cubit.startSession();
         expect(cubit.state.status, AppLockStatus.unlocked);
 
-        async.elapse(const Duration(minutes: 14, seconds: 59));
+        async.elapse(const Duration(minutes: 4, seconds: 59));
         expect(cubit.state.status, AppLockStatus.unlocked);
 
         async.elapse(const Duration(seconds: 2));
@@ -29,11 +33,11 @@ void main() {
       fakeAsync((async) {
         final cubit = AppLockCubit();
         cubit.startSession();
-        async.elapse(const Duration(minutes: 10));
+        async.elapse(const Duration(minutes: 4));
         cubit.onUserActivity();
-        async.elapse(const Duration(minutes: 10));
+        async.elapse(const Duration(minutes: 4));
         expect(cubit.state.status, AppLockStatus.unlocked);
-        async.elapse(const Duration(minutes: 6));
+        async.elapse(const Duration(minutes: 2));
         expect(cubit.state.status, AppLockStatus.locked);
         cubit.close();
       });
@@ -77,9 +81,9 @@ void main() {
 
     test('idle limit is configurable', () {
       fakeAsync((async) {
-        final cubit = AppLockCubit(idleTimeout: const Duration(minutes: 5));
+        final cubit = AppLockCubit(idleTimeout: const Duration(minutes: 2));
         cubit.startSession();
-        async.elapse(const Duration(minutes: 5, seconds: 1));
+        async.elapse(const Duration(minutes: 2, seconds: 1));
         expect(cubit.state.status, AppLockStatus.locked);
         cubit.close();
       });

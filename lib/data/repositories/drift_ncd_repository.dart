@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:ncd_screening_mobile/domain/services/patient_search.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
 import 'package:ncd_screening_mobile/domain/models/ncd_models.dart';
+import 'package:ncd_screening_mobile/domain/repositories/repository_errors.dart';
 import 'package:ncd_screening_mobile/domain/services/id_generator.dart';
 import 'package:ncd_screening_mobile/domain/services/password_hasher.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
@@ -26,13 +27,13 @@ class DriftNcdRepository implements NcdRepositoryInterface {
         ..where((t) => t.patientCitizenId.equals(trimmedId));
       final row = await query.getSingleOrNull();
       if (row == null || birthDate == null) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
       final dob = row.patientBirthDate;
       if (birthDate.year != dob.year ||
           birthDate.month != dob.month ||
           birthDate.day != dob.day) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
       return _mapPatient(row);
     } else if (role == UserRole.vhv) {
@@ -44,7 +45,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             t.vhvId.equals(trimmedId));
       final row = await query.getSingleOrNull();
       if (row == null || !await _passwordMatches(password, row.vhvPassword)) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
       if (!PasswordHasher.isHashed(row.vhvPassword)) {
         await (db.update(db.vhvsTable)..where((t) => t.vhvId.equals(row.vhvId)))
@@ -62,7 +63,7 @@ class DriftNcdRepository implements NcdRepositoryInterface {
             t.nurseEmail.equals(trimmedId));
       final row = await query.getSingleOrNull();
       if (row == null || !await _passwordMatches(password, row.nursePassword)) {
-        throw Exception(message);
+        throw const InvalidCredentialsException(message);
       }
       if (!PasswordHasher.isHashed(row.nursePassword)) {
         await (db.update(db.nursesTable)

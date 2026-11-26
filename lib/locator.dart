@@ -1,11 +1,15 @@
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ncd_screening_mobile/data/datasources/drift/app_database.dart';
+import 'package:ncd_screening_mobile/data/datasources/drift/database_location.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_ncd_repository.dart';
 import 'package:ncd_screening_mobile/data/repositories/drift_sync_queue_service.dart';
 import 'package:ncd_screening_mobile/data/repositories/screening_draft_store.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
+import 'package:ncd_screening_mobile/data/services/local_data_wiper.dart';
+import 'package:ncd_screening_mobile/domain/services/auth_attempt_guard.dart';
+import 'package:ncd_screening_mobile/shared/config/app_config.dart';
 import 'package:ncd_screening_mobile/domain/services/pdf_report_service.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/shared/bloc/app_lock/app_lock_cubit.dart';
@@ -46,6 +50,17 @@ Future<void> initLocator() async {
       () => DeviceSessionStore(locator<SecureStore>()));
   locator.registerLazySingleton<BiometricService>(LocalAuthBiometricService.new);
   locator.registerLazySingleton<AppLockCubit>(AppLockCubit.new);
+  // One failure counter for PIN and password; 10 failures wipe a Spoke and
+  // lock the Hub (ADR 0011).
+  locator.registerLazySingleton<AuthAttemptGuard>(() => AuthAttemptGuard(
+        store: locator<SecureStore>(),
+        role: DeviceRoleConfig.current,
+        wiper: LocalDataWiper(
+          store: locator<SecureStore>(),
+          closeDatabase: () => locator<AppDatabase>().close(),
+          databaseFile: appDatabaseFile,
+        ),
+      ));
 
   // Register Sync Queue Service
   locator.registerLazySingleton<SyncTransport>(() => const NoServerTransport());
@@ -53,8 +68,10 @@ Future<void> initLocator() async {
       () => DriftSyncQueueService(locator<AppDatabase>(), locator<SyncTransport>()));
 
   // Register NCD BLoCs
-  locator.registerLazySingleton<AuthBloc>(
-      () => AuthBloc(locator<NcdRepositoryInterface>()));
+  locator.registerLazySingleton<AuthBloc>(() => AuthBloc(
+        locator<NcdRepositoryInterface>(),
+        attemptGuard: locator<AuthAttemptGuard>(),
+      ));
   locator.registerLazySingleton<PatientBloc>(
       () => PatientBloc(locator<NcdRepositoryInterface>()));
   locator.registerLazySingleton<ScreeningBloc>(

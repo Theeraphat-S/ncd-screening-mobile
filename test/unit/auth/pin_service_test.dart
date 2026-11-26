@@ -53,29 +53,14 @@ void main() {
       expect(await pins.verifyPin('vhv-2', '482913'), PinResult.notSet);
     });
 
-    test('5 wrong attempts force full re-login and clear the PIN', () async {
+    test('wrong PINs are not counted here (AuthAttemptGuard does that)',
+        () async {
       await pins.setPin('vhv-1', '482913');
-      for (var i = 0; i < 4; i++) {
-        expect(await pins.verifyPin('vhv-1', '000001'), PinResult.wrong);
-      }
-      expect(
-        await pins.verifyPin('vhv-1', '000001'),
-        PinResult.tooManyAttempts,
-      );
-      expect(await pins.hasPin('vhv-1'), isFalse);
-      expect(await pins.verifyPin('vhv-1', '482913'), PinResult.notSet);
-    });
-
-    test('a correct PIN resets the failed-attempt counter', () async {
-      await pins.setPin('vhv-1', '482913');
-      for (var i = 0; i < 3; i++) {
-        await pins.verifyPin('vhv-1', '000001');
-      }
-      expect(await pins.verifyPin('vhv-1', '482913'), PinResult.ok);
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 12; i++) {
         expect(await pins.verifyPin('vhv-1', '000001'), PinResult.wrong);
       }
       expect(await pins.hasPin('vhv-1'), isTrue);
+      expect(await pins.verifyPin('vhv-1', '482913'), PinResult.ok);
     });
 
     test('clearPin removes the PIN', () async {

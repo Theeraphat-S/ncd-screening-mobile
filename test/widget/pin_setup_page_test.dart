@@ -81,16 +81,12 @@ void main() {
     expect(finished, 0);
   });
 
-  testWidgets('can be skipped without saving a PIN', (tester) async {
+  testWidgets('the PIN is mandatory: there is no way to skip it',
+      (tester) async {
     await pumpPage(tester);
-    final skip = find.text('ข้ามไปก่อน (ใช้รหัสผ่านครั้งหน้า)');
-    await tester.ensureVisible(skip);
-    await tester.pump();
-    await tester.tap(skip);
-    await tester.pump();
-
-    expect(finished, 1);
-    expect(await tester.runAsync(() => pins.hasPin('VHV001')), isFalse);
+    expect(find.textContaining('ข้าม'), findsNothing);
+    expect(find.byType(BackButton), findsNothing);
+    expect(finished, 0);
   });
 
   testWidgets('biometric switch is hidden when the device has none',

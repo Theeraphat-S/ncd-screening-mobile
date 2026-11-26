@@ -39,6 +39,7 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.2
   cupertino_icons: ^1.0.8
+  path: ^1.9.0
   path_provider: ^2.1.5
   get_it: ^8.0.3
   flutter_bloc: ^9.1.1

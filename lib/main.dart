@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ncd_screening_mobile/domain/services/auth_attempt_guard.dart';
 import 'package:ncd_screening_mobile/domain/services/pin_service.dart';
 import 'package:ncd_screening_mobile/domain/repositories/ncd_repository.dart';
 import 'package:ncd_screening_mobile/data/services/device_security_services.dart';
@@ -43,6 +44,9 @@ Future<void> main() async {
         ),
         RepositoryProvider<DeviceSessionStore>.value(
           value: locator<DeviceSessionStore>(),
+        ),
+        RepositoryProvider<AuthAttemptGuard>.value(
+          value: locator<AuthAttemptGuard>(),
         ),
       ],
       child: MultiBlocProvider(

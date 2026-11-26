@@ -5,6 +5,9 @@
 /// into a demo or debug mode on the device.
 library;
 
+import 'package:flutter/foundation.dart';
+import 'package:ncd_screening_mobile/domain/services/auth_attempt_guard.dart';
+
 enum AppFlavor { local, dev, prod }
 
 class AppEnvironment {
@@ -39,4 +42,28 @@ class FeatureFlags {
   /// through the share sheet in the format agreed at the pilot meeting
   /// (ADR 0014).
   static const bool export = bool.fromEnvironment('FEATURE_EXPORT');
+}
+
+/// Hub or Spoke, for the security rules that differ between them.
+class DeviceRoleConfig {
+  DeviceRoleConfig._();
+
+  /// `--dart-define=DEVICE_ROLE=hub|spoke` overrides the platform default,
+  /// e.g. for an Android tablet used as the Hub.
+  static const String roleOverride = String.fromEnvironment('DEVICE_ROLE');
+
+  static DeviceRole forPlatform(
+    TargetPlatform platform, {
+    String override = roleOverride,
+  }) {
+    switch (override.trim()) {
+      case 'hub':
+        return DeviceRole.hub;
+      case 'spoke':
+        return DeviceRole.spoke;
+    }
+    return platform == TargetPlatform.windows ? DeviceRole.hub : DeviceRole.spoke;
+  }
+
+  static DeviceRole get current => forPlatform(defaultTargetPlatform);
 }

@@ -187,41 +187,34 @@ class $VillagesTableTable extends VillagesTable
   VillagesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return VillagesTableData(
-      villageId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_id'],
-          )!,
-      villageName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_name'],
-          )!,
-      villageNumber:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_number'],
-          )!,
-      subdistrictId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}subdistrict_id'],
-          )!,
-      subdistrictName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}subdistrict_name'],
-          )!,
-      districtName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}district_name'],
-          )!,
-      provinceName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}province_name'],
-          )!,
+      villageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_id'],
+      )!,
+      villageName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_name'],
+      )!,
+      villageNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_number'],
+      )!,
+      subdistrictId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subdistrict_id'],
+      )!,
+      subdistrictName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subdistrict_name'],
+      )!,
+      districtName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}district_name'],
+      )!,
+      provinceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}province_name'],
+      )!,
     );
   }
 
@@ -323,28 +316,24 @@ class VillagesTableData extends DataClass
   VillagesTableData copyWithCompanion(VillagesTableCompanion data) {
     return VillagesTableData(
       villageId: data.villageId.present ? data.villageId.value : this.villageId,
-      villageName:
-          data.villageName.present ? data.villageName.value : this.villageName,
-      villageNumber:
-          data.villageNumber.present
-              ? data.villageNumber.value
-              : this.villageNumber,
-      subdistrictId:
-          data.subdistrictId.present
-              ? data.subdistrictId.value
-              : this.subdistrictId,
-      subdistrictName:
-          data.subdistrictName.present
-              ? data.subdistrictName.value
-              : this.subdistrictName,
-      districtName:
-          data.districtName.present
-              ? data.districtName.value
-              : this.districtName,
-      provinceName:
-          data.provinceName.present
-              ? data.provinceName.value
-              : this.provinceName,
+      villageName: data.villageName.present
+          ? data.villageName.value
+          : this.villageName,
+      villageNumber: data.villageNumber.present
+          ? data.villageNumber.value
+          : this.villageNumber,
+      subdistrictId: data.subdistrictId.present
+          ? data.subdistrictId.value
+          : this.subdistrictId,
+      subdistrictName: data.subdistrictName.present
+          ? data.subdistrictName.value
+          : this.subdistrictName,
+      districtName: data.districtName.present
+          ? data.districtName.value
+          : this.districtName,
+      provinceName: data.provinceName.present
+          ? data.provinceName.value
+          : this.provinceName,
     );
   }
 
@@ -769,60 +758,50 @@ class $NursesTableTable extends NursesTable
   NursesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NursesTableData(
-      nurseId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_id'],
-          )!,
-      nurseTitle:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_title'],
-          )!,
-      nurseFname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_fname'],
-          )!,
-      nurseLname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_lname'],
-          )!,
-      nurseMobile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_mobile'],
-          )!,
-      nurseEmail:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_email'],
-          )!,
-      nursePassword:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_password'],
-          )!,
-      nurseGender:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}nurse_gender'],
-          )!,
-      nurseBirthDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}nurse_birth_date'],
-          )!,
+      nurseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_id'],
+      )!,
+      nurseTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_title'],
+      )!,
+      nurseFname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_fname'],
+      )!,
+      nurseLname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_lname'],
+      )!,
+      nurseMobile: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_mobile'],
+      )!,
+      nurseEmail: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_email'],
+      )!,
+      nursePassword: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_password'],
+      )!,
+      nurseGender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nurse_gender'],
+      )!,
+      nurseBirthDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}nurse_birth_date'],
+      )!,
       nurseImg: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}nurse_img'],
       ),
-      subdistrictId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}subdistrict_id'],
-          )!,
+      subdistrictId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subdistrict_id'],
+      )!,
     );
   }
 
@@ -887,10 +866,9 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
       nursePassword: Value(nursePassword),
       nurseGender: Value(nurseGender),
       nurseBirthDate: Value(nurseBirthDate),
-      nurseImg:
-          nurseImg == null && nullToAbsent
-              ? const Value.absent()
-              : Value(nurseImg),
+      nurseImg: nurseImg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nurseImg),
       subdistrictId: Value(subdistrictId),
     );
   }
@@ -960,31 +938,34 @@ class NursesTableData extends DataClass implements Insertable<NursesTableData> {
   NursesTableData copyWithCompanion(NursesTableCompanion data) {
     return NursesTableData(
       nurseId: data.nurseId.present ? data.nurseId.value : this.nurseId,
-      nurseTitle:
-          data.nurseTitle.present ? data.nurseTitle.value : this.nurseTitle,
-      nurseFname:
-          data.nurseFname.present ? data.nurseFname.value : this.nurseFname,
-      nurseLname:
-          data.nurseLname.present ? data.nurseLname.value : this.nurseLname,
-      nurseMobile:
-          data.nurseMobile.present ? data.nurseMobile.value : this.nurseMobile,
-      nurseEmail:
-          data.nurseEmail.present ? data.nurseEmail.value : this.nurseEmail,
-      nursePassword:
-          data.nursePassword.present
-              ? data.nursePassword.value
-              : this.nursePassword,
-      nurseGender:
-          data.nurseGender.present ? data.nurseGender.value : this.nurseGender,
-      nurseBirthDate:
-          data.nurseBirthDate.present
-              ? data.nurseBirthDate.value
-              : this.nurseBirthDate,
+      nurseTitle: data.nurseTitle.present
+          ? data.nurseTitle.value
+          : this.nurseTitle,
+      nurseFname: data.nurseFname.present
+          ? data.nurseFname.value
+          : this.nurseFname,
+      nurseLname: data.nurseLname.present
+          ? data.nurseLname.value
+          : this.nurseLname,
+      nurseMobile: data.nurseMobile.present
+          ? data.nurseMobile.value
+          : this.nurseMobile,
+      nurseEmail: data.nurseEmail.present
+          ? data.nurseEmail.value
+          : this.nurseEmail,
+      nursePassword: data.nursePassword.present
+          ? data.nursePassword.value
+          : this.nursePassword,
+      nurseGender: data.nurseGender.present
+          ? data.nurseGender.value
+          : this.nurseGender,
+      nurseBirthDate: data.nurseBirthDate.present
+          ? data.nurseBirthDate.value
+          : this.nurseBirthDate,
       nurseImg: data.nurseImg.present ? data.nurseImg.value : this.nurseImg,
-      subdistrictId:
-          data.subdistrictId.present
-              ? data.subdistrictId.value
-              : this.subdistrictId,
+      subdistrictId: data.subdistrictId.present
+          ? data.subdistrictId.value
+          : this.subdistrictId,
     );
   }
 
@@ -1501,70 +1482,58 @@ class $VhvsTableTable extends VhvsTable
   VhvsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return VhvsTableData(
-      vhvId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_id'],
-          )!,
-      vhvCitizenId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_citizen_id'],
-          )!,
-      vhvTitle:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_title'],
-          )!,
-      vhvFname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_fname'],
-          )!,
-      vhvLname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_lname'],
-          )!,
-      vhvMobile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_mobile'],
-          )!,
-      vhvEmail:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_email'],
-          )!,
-      vhvPassword:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_password'],
-          )!,
-      vhvBirthDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}vhv_birth_date'],
-          )!,
-      vhvGender:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_gender'],
-          )!,
-      vhvAddress:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_address'],
-          )!,
+      vhvId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_id'],
+      )!,
+      vhvCitizenId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_citizen_id'],
+      )!,
+      vhvTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_title'],
+      )!,
+      vhvFname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_fname'],
+      )!,
+      vhvLname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_lname'],
+      )!,
+      vhvMobile: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_mobile'],
+      )!,
+      vhvEmail: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_email'],
+      )!,
+      vhvPassword: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_password'],
+      )!,
+      vhvBirthDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}vhv_birth_date'],
+      )!,
+      vhvGender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_gender'],
+      )!,
+      vhvAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_address'],
+      )!,
       vhvImg: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}vhv_img'],
       ),
-      villageId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_id'],
-          )!,
+      villageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_id'],
+      )!,
     );
   }
 
@@ -1637,8 +1606,9 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
       vhvBirthDate: Value(vhvBirthDate),
       vhvGender: Value(vhvGender),
       vhvAddress: Value(vhvAddress),
-      vhvImg:
-          vhvImg == null && nullToAbsent ? const Value.absent() : Value(vhvImg),
+      vhvImg: vhvImg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(vhvImg),
       villageId: Value(villageId),
     );
   }
@@ -1716,24 +1686,24 @@ class VhvsTableData extends DataClass implements Insertable<VhvsTableData> {
   VhvsTableData copyWithCompanion(VhvsTableCompanion data) {
     return VhvsTableData(
       vhvId: data.vhvId.present ? data.vhvId.value : this.vhvId,
-      vhvCitizenId:
-          data.vhvCitizenId.present
-              ? data.vhvCitizenId.value
-              : this.vhvCitizenId,
+      vhvCitizenId: data.vhvCitizenId.present
+          ? data.vhvCitizenId.value
+          : this.vhvCitizenId,
       vhvTitle: data.vhvTitle.present ? data.vhvTitle.value : this.vhvTitle,
       vhvFname: data.vhvFname.present ? data.vhvFname.value : this.vhvFname,
       vhvLname: data.vhvLname.present ? data.vhvLname.value : this.vhvLname,
       vhvMobile: data.vhvMobile.present ? data.vhvMobile.value : this.vhvMobile,
       vhvEmail: data.vhvEmail.present ? data.vhvEmail.value : this.vhvEmail,
-      vhvPassword:
-          data.vhvPassword.present ? data.vhvPassword.value : this.vhvPassword,
-      vhvBirthDate:
-          data.vhvBirthDate.present
-              ? data.vhvBirthDate.value
-              : this.vhvBirthDate,
+      vhvPassword: data.vhvPassword.present
+          ? data.vhvPassword.value
+          : this.vhvPassword,
+      vhvBirthDate: data.vhvBirthDate.present
+          ? data.vhvBirthDate.value
+          : this.vhvBirthDate,
       vhvGender: data.vhvGender.present ? data.vhvGender.value : this.vhvGender,
-      vhvAddress:
-          data.vhvAddress.present ? data.vhvAddress.value : this.vhvAddress,
+      vhvAddress: data.vhvAddress.present
+          ? data.vhvAddress.value
+          : this.vhvAddress,
       vhvImg: data.vhvImg.present ? data.vhvImg.value : this.vhvImg,
       villageId: data.villageId.present ? data.villageId.value : this.villageId,
     );
@@ -2262,60 +2232,50 @@ class $PatientsTableTable extends PatientsTable
   PatientsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PatientsTableData(
-      patientId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_id'],
-          )!,
-      patientCitizenId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_citizen_id'],
-          )!,
-      patientTitle:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_title'],
-          )!,
-      patientFname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_fname'],
-          )!,
-      patientLname:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_lname'],
-          )!,
-      patientGender:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_gender'],
-          )!,
-      patientBirthDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}patient_birth_date'],
-          )!,
-      patientAddress:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_address'],
-          )!,
-      patientMobile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_mobile'],
-          )!,
+      patientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_id'],
+      )!,
+      patientCitizenId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_citizen_id'],
+      )!,
+      patientTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_title'],
+      )!,
+      patientFname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_fname'],
+      )!,
+      patientLname: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_lname'],
+      )!,
+      patientGender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_gender'],
+      )!,
+      patientBirthDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}patient_birth_date'],
+      )!,
+      patientAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_address'],
+      )!,
+      patientMobile: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_mobile'],
+      )!,
       patientImg: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}patient_img'],
       ),
-      villageId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}village_id'],
-          )!,
+      villageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}village_id'],
+      )!,
     );
   }
 
@@ -2381,10 +2341,9 @@ class PatientsTableData extends DataClass
       patientBirthDate: Value(patientBirthDate),
       patientAddress: Value(patientAddress),
       patientMobile: Value(patientMobile),
-      patientImg:
-          patientImg == null && nullToAbsent
-              ? const Value.absent()
-              : Value(patientImg),
+      patientImg: patientImg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(patientImg),
       villageId: Value(villageId),
     );
   }
@@ -2454,40 +2413,33 @@ class PatientsTableData extends DataClass
   PatientsTableData copyWithCompanion(PatientsTableCompanion data) {
     return PatientsTableData(
       patientId: data.patientId.present ? data.patientId.value : this.patientId,
-      patientCitizenId:
-          data.patientCitizenId.present
-              ? data.patientCitizenId.value
-              : this.patientCitizenId,
-      patientTitle:
-          data.patientTitle.present
-              ? data.patientTitle.value
-              : this.patientTitle,
-      patientFname:
-          data.patientFname.present
-              ? data.patientFname.value
-              : this.patientFname,
-      patientLname:
-          data.patientLname.present
-              ? data.patientLname.value
-              : this.patientLname,
-      patientGender:
-          data.patientGender.present
-              ? data.patientGender.value
-              : this.patientGender,
-      patientBirthDate:
-          data.patientBirthDate.present
-              ? data.patientBirthDate.value
-              : this.patientBirthDate,
-      patientAddress:
-          data.patientAddress.present
-              ? data.patientAddress.value
-              : this.patientAddress,
-      patientMobile:
-          data.patientMobile.present
-              ? data.patientMobile.value
-              : this.patientMobile,
-      patientImg:
-          data.patientImg.present ? data.patientImg.value : this.patientImg,
+      patientCitizenId: data.patientCitizenId.present
+          ? data.patientCitizenId.value
+          : this.patientCitizenId,
+      patientTitle: data.patientTitle.present
+          ? data.patientTitle.value
+          : this.patientTitle,
+      patientFname: data.patientFname.present
+          ? data.patientFname.value
+          : this.patientFname,
+      patientLname: data.patientLname.present
+          ? data.patientLname.value
+          : this.patientLname,
+      patientGender: data.patientGender.present
+          ? data.patientGender.value
+          : this.patientGender,
+      patientBirthDate: data.patientBirthDate.present
+          ? data.patientBirthDate.value
+          : this.patientBirthDate,
+      patientAddress: data.patientAddress.present
+          ? data.patientAddress.value
+          : this.patientAddress,
+      patientMobile: data.patientMobile.present
+          ? data.patientMobile.value
+          : this.patientMobile,
+      patientImg: data.patientImg.present
+          ? data.patientImg.value
+          : this.patientImg,
       villageId: data.villageId.present ? data.villageId.value : this.villageId,
     );
   }
@@ -3075,41 +3027,34 @@ class $ScreeningsTableTable extends ScreeningsTable
   ScreeningsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningsTableData(
-      screenId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}screen_id'],
-          )!,
-      patientId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_id'],
-          )!,
-      vhvId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_id'],
-          )!,
-      screeningDate:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}screening_date'],
-          )!,
-      ageAtScreening:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}age_at_screening'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
-      reviewStatus:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}review_status'],
-          )!,
+      screenId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}screen_id'],
+      )!,
+      patientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_id'],
+      )!,
+      vhvId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_id'],
+      )!,
+      screeningDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}screening_date'],
+      )!,
+      ageAtScreening: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}age_at_screening'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      reviewStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}review_status'],
+      )!,
       reviewedByNurseId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}reviewed_by_nurse_id'],
@@ -3118,41 +3063,34 @@ class $ScreeningsTableTable extends ScreeningsTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}reviewed_at'],
       ),
-      weight:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}weight'],
-          )!,
-      height:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}height'],
-          )!,
-      bmi:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}bmi'],
-          )!,
-      waistCm:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}waist_cm'],
-          )!,
-      sbp:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}sbp'],
-          )!,
-      dbp:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}dbp'],
-          )!,
-      pulse:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.double,
-            data['${effectivePrefix}pulse'],
-          )!,
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight'],
+      )!,
+      height: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}height'],
+      )!,
+      bmi: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}bmi'],
+      )!,
+      waistCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}waist_cm'],
+      )!,
+      sbp: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}sbp'],
+      )!,
+      dbp: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}dbp'],
+      )!,
+      pulse: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}pulse'],
+      )!,
       bloodSugar: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}blood_sugar'],
@@ -3242,14 +3180,12 @@ class ScreeningsTableData extends DataClass
       ageAtScreening: Value(ageAtScreening),
       createdAt: Value(createdAt),
       reviewStatus: Value(reviewStatus),
-      reviewedByNurseId:
-          reviewedByNurseId == null && nullToAbsent
-              ? const Value.absent()
-              : Value(reviewedByNurseId),
-      reviewedAt:
-          reviewedAt == null && nullToAbsent
-              ? const Value.absent()
-              : Value(reviewedAt),
+      reviewedByNurseId: reviewedByNurseId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reviewedByNurseId),
+      reviewedAt: reviewedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reviewedAt),
       weight: Value(weight),
       height: Value(height),
       bmi: Value(bmi),
@@ -3257,10 +3193,9 @@ class ScreeningsTableData extends DataClass
       sbp: Value(sbp),
       dbp: Value(dbp),
       pulse: Value(pulse),
-      bloodSugar:
-          bloodSugar == null && nullToAbsent
-              ? const Value.absent()
-              : Value(bloodSugar),
+      bloodSugar: bloodSugar == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bloodSugar),
     );
   }
 
@@ -3341,10 +3276,9 @@ class ScreeningsTableData extends DataClass
     ageAtScreening: ageAtScreening ?? this.ageAtScreening,
     createdAt: createdAt ?? this.createdAt,
     reviewStatus: reviewStatus ?? this.reviewStatus,
-    reviewedByNurseId:
-        reviewedByNurseId.present
-            ? reviewedByNurseId.value
-            : this.reviewedByNurseId,
+    reviewedByNurseId: reviewedByNurseId.present
+        ? reviewedByNurseId.value
+        : this.reviewedByNurseId,
     reviewedAt: reviewedAt.present ? reviewedAt.value : this.reviewedAt,
     weight: weight ?? this.weight,
     height: height ?? this.height,
@@ -3360,25 +3294,22 @@ class ScreeningsTableData extends DataClass
       screenId: data.screenId.present ? data.screenId.value : this.screenId,
       patientId: data.patientId.present ? data.patientId.value : this.patientId,
       vhvId: data.vhvId.present ? data.vhvId.value : this.vhvId,
-      screeningDate:
-          data.screeningDate.present
-              ? data.screeningDate.value
-              : this.screeningDate,
-      ageAtScreening:
-          data.ageAtScreening.present
-              ? data.ageAtScreening.value
-              : this.ageAtScreening,
+      screeningDate: data.screeningDate.present
+          ? data.screeningDate.value
+          : this.screeningDate,
+      ageAtScreening: data.ageAtScreening.present
+          ? data.ageAtScreening.value
+          : this.ageAtScreening,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      reviewStatus:
-          data.reviewStatus.present
-              ? data.reviewStatus.value
-              : this.reviewStatus,
-      reviewedByNurseId:
-          data.reviewedByNurseId.present
-              ? data.reviewedByNurseId.value
-              : this.reviewedByNurseId,
-      reviewedAt:
-          data.reviewedAt.present ? data.reviewedAt.value : this.reviewedAt,
+      reviewStatus: data.reviewStatus.present
+          ? data.reviewStatus.value
+          : this.reviewStatus,
+      reviewedByNurseId: data.reviewedByNurseId.present
+          ? data.reviewedByNurseId.value
+          : this.reviewedByNurseId,
+      reviewedAt: data.reviewedAt.present
+          ? data.reviewedAt.value
+          : this.reviewedAt,
       weight: data.weight.present ? data.weight.value : this.weight,
       height: data.height.present ? data.height.value : this.height,
       bmi: data.bmi.present ? data.bmi.value : this.bmi,
@@ -3386,8 +3317,9 @@ class ScreeningsTableData extends DataClass
       sbp: data.sbp.present ? data.sbp.value : this.sbp,
       dbp: data.dbp.present ? data.dbp.value : this.dbp,
       pulse: data.pulse.present ? data.pulse.value : this.pulse,
-      bloodSugar:
-          data.bloodSugar.present ? data.bloodSugar.value : this.bloodSugar,
+      bloodSugar: data.bloodSugar.present
+          ? data.bloodSugar.value
+          : this.bloodSugar,
     );
   }
 
@@ -3859,35 +3791,30 @@ class $ScreeningHistoriesTableTable extends ScreeningHistoriesTable
   }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningHistoriesTableData(
-      historyId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}history_id'],
-          )!,
-      screeningId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}screening_id'],
-          )!,
-      questionId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}question_id'],
-          )!,
-      questionText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}question_text'],
-          )!,
+      historyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}history_id'],
+      )!,
+      screeningId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}screening_id'],
+      )!,
+      questionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}question_id'],
+      )!,
+      questionText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}question_text'],
+      )!,
       answerValue: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}answer_value'],
       ),
-      answerText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}answer_text'],
-          )!,
+      answerText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}answer_text'],
+      )!,
     );
   }
 
@@ -3933,10 +3860,9 @@ class ScreeningHistoriesTableData extends DataClass
       screeningId: Value(screeningId),
       questionId: Value(questionId),
       questionText: Value(questionText),
-      answerValue:
-          answerValue == null && nullToAbsent
-              ? const Value.absent()
-              : Value(answerValue),
+      answerValue: answerValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answerValue),
       answerText: Value(answerText),
     );
   }
@@ -3988,18 +3914,21 @@ class ScreeningHistoriesTableData extends DataClass
   ) {
     return ScreeningHistoriesTableData(
       historyId: data.historyId.present ? data.historyId.value : this.historyId,
-      screeningId:
-          data.screeningId.present ? data.screeningId.value : this.screeningId,
-      questionId:
-          data.questionId.present ? data.questionId.value : this.questionId,
-      questionText:
-          data.questionText.present
-              ? data.questionText.value
-              : this.questionText,
-      answerValue:
-          data.answerValue.present ? data.answerValue.value : this.answerValue,
-      answerText:
-          data.answerText.present ? data.answerText.value : this.answerText,
+      screeningId: data.screeningId.present
+          ? data.screeningId.value
+          : this.screeningId,
+      questionId: data.questionId.present
+          ? data.questionId.value
+          : this.questionId,
+      questionText: data.questionText.present
+          ? data.questionText.value
+          : this.questionText,
+      answerValue: data.answerValue.present
+          ? data.answerValue.value
+          : this.answerValue,
+      answerText: data.answerText.present
+          ? data.answerText.value
+          : this.answerText,
     );
   }
 
@@ -4352,46 +4281,38 @@ class $ScreeningResultsTableTable extends ScreeningResultsTable
   }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningResultsTableData(
-      resultId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}result_id'],
-          )!,
-      screeningId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}screening_id'],
-          )!,
-      diseaseName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}disease_name'],
-          )!,
-      diseaseCode:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}disease_code'],
-          )!,
-      score:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}score'],
-          )!,
-      riskLevel:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}risk_level'],
-          )!,
-      adviceText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}advice_text'],
-          )!,
-      criteriaText:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}criteria_text'],
-          )!,
+      resultId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}result_id'],
+      )!,
+      screeningId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}screening_id'],
+      )!,
+      diseaseName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}disease_name'],
+      )!,
+      diseaseCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}disease_code'],
+      )!,
+      score: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}score'],
+      )!,
+      riskLevel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}risk_level'],
+      )!,
+      adviceText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}advice_text'],
+      )!,
+      criteriaText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}criteria_text'],
+      )!,
     );
   }
 
@@ -4503,20 +4424,23 @@ class ScreeningResultsTableData extends DataClass
   ) {
     return ScreeningResultsTableData(
       resultId: data.resultId.present ? data.resultId.value : this.resultId,
-      screeningId:
-          data.screeningId.present ? data.screeningId.value : this.screeningId,
-      diseaseName:
-          data.diseaseName.present ? data.diseaseName.value : this.diseaseName,
-      diseaseCode:
-          data.diseaseCode.present ? data.diseaseCode.value : this.diseaseCode,
+      screeningId: data.screeningId.present
+          ? data.screeningId.value
+          : this.screeningId,
+      diseaseName: data.diseaseName.present
+          ? data.diseaseName.value
+          : this.diseaseName,
+      diseaseCode: data.diseaseCode.present
+          ? data.diseaseCode.value
+          : this.diseaseCode,
       score: data.score.present ? data.score.value : this.score,
       riskLevel: data.riskLevel.present ? data.riskLevel.value : this.riskLevel,
-      adviceText:
-          data.adviceText.present ? data.adviceText.value : this.adviceText,
-      criteriaText:
-          data.criteriaText.present
-              ? data.criteriaText.value
-              : this.criteriaText,
+      adviceText: data.adviceText.present
+          ? data.adviceText.value
+          : this.adviceText,
+      criteriaText: data.criteriaText.present
+          ? data.criteriaText.value
+          : this.criteriaText,
     );
   }
 
@@ -4897,46 +4821,38 @@ class $SyncQueueTableTable extends SyncQueueTable
   SyncQueueTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return SyncQueueTableData(
-      id:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}id'],
-          )!,
-      entityType:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}entity_type'],
-          )!,
-      entityId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}entity_id'],
-          )!,
-      action:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}action'],
-          )!,
-      payload:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}payload'],
-          )!,
-      createdAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}created_at'],
-          )!,
-      retryCount:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}retry_count'],
-          )!,
-      status:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}status'],
-          )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      entityType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_type'],
+      )!,
+      entityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_id'],
+      )!,
+      action: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}action'],
+      )!,
+      payload: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      retryCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}retry_count'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
       errorMessage: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}error_message'],
@@ -4999,10 +4915,9 @@ class SyncQueueTableData extends DataClass
       createdAt: Value(createdAt),
       retryCount: Value(retryCount),
       status: Value(status),
-      errorMessage:
-          errorMessage == null && nullToAbsent
-              ? const Value.absent()
-              : Value(errorMessage),
+      errorMessage: errorMessage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorMessage),
     );
   }
 
@@ -5063,19 +4978,20 @@ class SyncQueueTableData extends DataClass
   SyncQueueTableData copyWithCompanion(SyncQueueTableCompanion data) {
     return SyncQueueTableData(
       id: data.id.present ? data.id.value : this.id,
-      entityType:
-          data.entityType.present ? data.entityType.value : this.entityType,
+      entityType: data.entityType.present
+          ? data.entityType.value
+          : this.entityType,
       entityId: data.entityId.present ? data.entityId.value : this.entityId,
       action: data.action.present ? data.action.value : this.action,
       payload: data.payload.present ? data.payload.value : this.payload,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      retryCount:
-          data.retryCount.present ? data.retryCount.value : this.retryCount,
+      retryCount: data.retryCount.present
+          ? data.retryCount.value
+          : this.retryCount,
       status: data.status.present ? data.status.value : this.status,
-      errorMessage:
-          data.errorMessage.present
-              ? data.errorMessage.value
-              : this.errorMessage,
+      errorMessage: data.errorMessage.present
+          ? data.errorMessage.value
+          : this.errorMessage,
     );
   }
 
@@ -5374,26 +5290,22 @@ class $ScreeningDraftsTableTable extends ScreeningDraftsTable
   }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScreeningDraftsTableData(
-      patientId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}patient_id'],
-          )!,
-      vhvId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}vhv_id'],
-          )!,
-      payload:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}payload'],
-          )!,
-      updatedAt:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.dateTime,
-            data['${effectivePrefix}updated_at'],
-          )!,
+      patientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}patient_id'],
+      )!,
+      vhvId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}vhv_id'],
+      )!,
+      payload: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -5809,16 +5721,12 @@ class $$VillagesTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$VillagesTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$VillagesTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$VillagesTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$VillagesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VillagesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VillagesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> villageId = const Value.absent(),
@@ -5859,16 +5767,18 @@ class $$VillagesTableTableTableManager
                 provinceName: provinceName,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$VillagesTableTable, VillagesTableData>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $VillagesTableTable,
+                    VillagesTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -6136,13 +6046,12 @@ class $$NursesTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$NursesTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$NursesTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$NursesTableTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$NursesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NursesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NursesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> nurseId = const Value.absent(),
@@ -6199,16 +6108,18 @@ class $$NursesTableTableTableManager
                 subdistrictId: subdistrictId,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$NursesTableTable, NursesTableData>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $NursesTableTable,
+                    NursesTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -6496,12 +6407,12 @@ class $$VhvsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$VhvsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$VhvsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$VhvsTableTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$VhvsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VhvsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VhvsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> vhvId = const Value.absent(),
@@ -6566,16 +6477,18 @@ class $$VhvsTableTableTableManager
                 villageId: villageId,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$VhvsTableTable, VhvsTableData>(table),
+                  BaseReferences<_$AppDatabase, $VhvsTableTable, VhvsTableData>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -6847,16 +6760,12 @@ class $$PatientsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$PatientsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$PatientsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$PatientsTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$PatientsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PatientsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PatientsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> patientId = const Value.absent(),
@@ -6913,16 +6822,18 @@ class $$PatientsTableTableTableManager
                 villageId: villageId,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$PatientsTableTable, PatientsTableData>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $PatientsTableTable,
+                    PatientsTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -7280,19 +7191,12 @@ class $$ScreeningsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () =>
-                  $$ScreeningsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$ScreeningsTableTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$ScreeningsTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$ScreeningsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ScreeningsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ScreeningsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> screenId = const Value.absent(),
@@ -7373,16 +7277,20 @@ class $$ScreeningsTableTableTableManager
                 bloodSugar: bloodSugar,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ScreeningsTableTable, ScreeningsTableData>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ScreeningsTableTable,
+                    ScreeningsTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -7577,18 +7485,18 @@ class $$ScreeningHistoriesTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ScreeningHistoriesTableTableFilterComposer(
+          createFilteringComposer: () =>
+              $$ScreeningHistoriesTableTableFilterComposer(
                 $db: db,
                 $table: table,
               ),
-          createOrderingComposer:
-              () => $$ScreeningHistoriesTableTableOrderingComposer(
+          createOrderingComposer: () =>
+              $$ScreeningHistoriesTableTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
-          createComputedFieldComposer:
-              () => $$ScreeningHistoriesTableTableAnnotationComposer(
+          createComputedFieldComposer: () =>
+              $$ScreeningHistoriesTableTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -7628,16 +7536,21 @@ class $$ScreeningHistoriesTableTableTableManager
                 answerText: answerText,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $ScreeningHistoriesTableTable,
+                    ScreeningHistoriesTableData
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ScreeningHistoriesTableTable,
+                    ScreeningHistoriesTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -7862,18 +7775,18 @@ class $$ScreeningResultsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ScreeningResultsTableTableFilterComposer(
+          createFilteringComposer: () =>
+              $$ScreeningResultsTableTableFilterComposer(
                 $db: db,
                 $table: table,
               ),
-          createOrderingComposer:
-              () => $$ScreeningResultsTableTableOrderingComposer(
+          createOrderingComposer: () =>
+              $$ScreeningResultsTableTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
-          createComputedFieldComposer:
-              () => $$ScreeningResultsTableTableAnnotationComposer(
+          createComputedFieldComposer: () =>
+              $$ScreeningResultsTableTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -7921,16 +7834,21 @@ class $$ScreeningResultsTableTableTableManager
                 criteriaText: criteriaText,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $ScreeningResultsTableTable,
+                    ScreeningResultsTableData
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ScreeningResultsTableTable,
+                    ScreeningResultsTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -8166,16 +8084,12 @@ class $$SyncQueueTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$SyncQueueTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$SyncQueueTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$SyncQueueTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$SyncQueueTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncQueueTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncQueueTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
@@ -8224,16 +8138,18 @@ class $$SyncQueueTableTableTableManager
                 errorMessage: errorMessage,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$SyncQueueTableTable, SyncQueueTableData>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $SyncQueueTableTable,
+                    SyncQueueTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -8384,18 +8300,15 @@ class $$ScreeningDraftsTableTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ScreeningDraftsTableTableFilterComposer(
+          createFilteringComposer: () =>
+              $$ScreeningDraftsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ScreeningDraftsTableTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
-          createOrderingComposer:
-              () => $$ScreeningDraftsTableTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$ScreeningDraftsTableTableAnnotationComposer(
+          createComputedFieldComposer: () =>
+              $$ScreeningDraftsTableTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -8427,16 +8340,21 @@ class $$ScreeningDraftsTableTableTableManager
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $ScreeningDraftsTableTable,
+                    ScreeningDraftsTableData
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ScreeningDraftsTableTable,
+                    ScreeningDraftsTableData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );

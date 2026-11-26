@@ -1,0 +1,5 @@
+# Copy to android/key.properties (git-ignored) and fill in. See docs/RELEASE.md.
+storeFile=C:/Users/<you>/keys/ncd-screening-upload.jks
+storePassword=
+keyAlias=upload
+keyPassword=

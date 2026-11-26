@@ -64,3 +64,10 @@ android/fastlane/build/.last_build_id
 .agents/
 # Android build output
 android/build/
+
+# Env files (the app no longer reads .env) and Android signing secrets
+.env.*
+/android/key.properties
+*.jks
+*.keystore
+skills-lock.json

@@ -1,4 +1,4 @@
-package com.fldp.mobileApp_standard
+package io.github.theeraphats.ncdscreening
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

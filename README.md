@@ -41,7 +41,7 @@ flutter pub get
 ```
 
 ```bash
-flutter run
+flutter run --flavor dev
 ```
 
 ```bash

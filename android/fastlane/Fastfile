@@ -5,9 +5,9 @@ platform :android do
   # 🔧 CONFIG
   ############################################################
   PACKAGE_NAMES = {
-    "local" => "com.fldp.mobileApp.local",
-    "dev"   => "com.fldp.mobileApp.dev",
-    "prod"  => "com.fldp.mobileApp"
+    "local" => "io.github.theeraphats.ncdscreening.local",
+    "dev"   => "io.github.theeraphats.ncdscreening.dev",
+    "prod"  => "io.github.theeraphats.ncdscreening"
   }
 
   TRACKS = {

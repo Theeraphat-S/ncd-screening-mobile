@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo  Building Pinto App - Windows (Prod)
+echo  Building NCD Screening - Windows (Prod)
 echo ========================================
 
 :: Read version from pubspec.yaml
@@ -10,19 +10,9 @@ echo  Version: %VERSION%
 echo ========================================
 
 echo.
-echo [1/5] Killing existing pinto_app.exe...
-taskkill /f /im pinto_app.exe >nul 2>&1
+echo [1/5] Killing existing ncd_screening_mobile.exe...
+taskkill /f /im ncd_screening_mobile.exe >nul 2>&1
 
-echo.
-echo [Setup] Preparing Prod Environment...
-if exist .env copy /Y .env .env.bak >nul
-if exist .env.prod (
-    copy /Y .env.prod .env >nul
-) else (
-    echo .env.prod not found!
-    pause
-    exit /b 1
-)
 
 echo.
 echo [4/5] Building Windows release...
@@ -30,18 +20,13 @@ call fvm flutter build windows --dart-define=flavor=prod
 if %errorlevel% neq 0 (
     echo.
     echo BUILD FAILED!
-    if exist .env.bak (
-        move /Y .env.bak .env >nul
-    ) else (
-        if exist .env del .env
-    )
     pause
     exit /b 1
 )
 
 echo.
 echo [5/5] Creating zip...
-set ZIP_NAME=Pinto-Windows-v%VERSION%.zip
+set ZIP_NAME=NCD-Screening-Windows-v%VERSION%.zip
 set RELEASE_DIR=%~dp0build\windows\x64\runner\Release
 set OUTPUT_ZIP=%~dp0build\%ZIP_NAME%
 
@@ -54,11 +39,6 @@ powershell -Command "Compress-Archive -Path '%RELEASE_DIR%\*' -DestinationPath '
 if %errorlevel% neq 0 (
     echo.
     echo ZIP FAILED!
-    if exist .env.bak (
-        move /Y .env.bak .env >nul
-    ) else (
-        if exist .env del .env
-    )
     pause
     exit /b 1
 )
@@ -68,11 +48,5 @@ echo ========================================
 echo  BUILD SUCCESS!
 echo  Output: build\%ZIP_NAME%
 echo ========================================
-
-if exist .env.bak (
-    move /Y .env.bak .env >nul
-) else (
-    if exist .env del .env
-)
 
 pause

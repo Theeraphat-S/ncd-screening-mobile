@@ -1,2 +1,2 @@
 json_key_file("../service-account-google-for-upload/service-account-dev.json")
-package_name("com.fldp.mobileApp.dev")
+package_name("io.github.theeraphats.ncdscreening.dev")

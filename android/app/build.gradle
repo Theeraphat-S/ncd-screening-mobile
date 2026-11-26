@@ -5,26 +5,35 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+// Release signing: copy android/key.properties.example to android/key.properties
+// (git-ignored) and point it at the upload keystore. See docs/RELEASE.md.
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+def hasReleaseKeystore = keystorePropertiesFile.exists()
+if (hasReleaseKeystore) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
 android {
     flavorDimensions "app"
     productFlavors {
         local {
             dimension "app"
-            applicationId "com.fldp.mobileApp.local"
+            applicationId "io.github.theeraphats.ncdscreening.local"
             resValue "string", "app_name", "NCD Screening Local"
         }
         dev {
             dimension "app"
-            applicationId "com.fldp.mobileApp.dev"
+            applicationId "io.github.theeraphats.ncdscreening.dev"
             resValue "string", "app_name", "NCD Screening Dev"
         }
         prod {
             dimension "app"
-            applicationId "com.fldp.mobileApp"
+            applicationId "io.github.theeraphats.ncdscreening"
             resValue "string", "app_name", "NCD Screening"
         }
     }
-    namespace = "com.fldp.mobileApp_standard"
+    namespace = "io.github.theeraphats.ncdscreening"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -38,8 +47,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.fldp.mobileApp_standard"
+        applicationId = "io.github.theeraphats.ncdscreening"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = Math.max(flutter.minSdkVersion, 23) // flutter_secure_storage (encrypted prefs) needs API 23
@@ -48,11 +56,27 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            release {
+                keyAlias = keystoreProperties["keyAlias"]
+                keyPassword = keystoreProperties["keyPassword"]
+                storeFile = file(keystoreProperties["storeFile"])
+                storePassword = keystoreProperties["storePassword"]
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            if (hasReleaseKeystore) {
+                signingConfig = signingConfigs.release
+            } else {
+                // Local convenience only: an APK signed with the debug key must
+                // never be handed to pilot users (see docs/RELEASE.md).
+                logger.warn("android/key.properties not found - release build is signed with the DEBUG key")
+                signingConfig = signingConfigs.debug
+            }
         }
     }
 }
